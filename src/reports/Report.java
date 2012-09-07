@@ -1,7 +1,9 @@
-package model;
+package reports;
 
 import java.util.Date;
 import java.util.List;
+
+import model.Item;
 
 public abstract class Report {
 	private String name;

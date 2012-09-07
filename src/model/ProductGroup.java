@@ -1,8 +1,6 @@
 package model;
 
-import java.io.Serializable;
-
-/* ProductGroup
+/** ProductGroup
  * A user-defined group of Products.  Product Groups 
  * are used by users to aggregate related
  * Products so they can be managed as a collection.  
@@ -12,30 +10,40 @@ import java.io.Serializable;
  * and put all of the toothpaste Products in that Product Group.
  */
 
-public class ProductGroup extends ProductContainer implements Serializable{
+public class ProductGroup extends ProductContainer implements PersistentItem{
 	private String name;
 	private Size threeMonthSupply;
 	private ProductContainer parent;
 	
-	public void addProductGroup(ProductGroup group){
+	public ProductGroup(String name, Size threeMonthSupply, ProductContainer parent){
+		this.setName(name);
+		this.setThreeMonthSupply(threeMonthSupply);
+		this.setParent(parent);
+	}
+	
+	public void addProductGroup(){
 		
 	}
 	
-	public void addProduct(Product product){
-		
-	}
 	
-	public void create(){
-		
-	}
 	
 	public void edit(String name, Size threeMonthSupply){
 		setName(name);
 		setThreeMonthSupply(threeMonthSupply);
 	}
 	
-	public void delete(){
+	public void delete(PersistentStore store){
 		
+	}
+	
+	public String sqlCreateStatement() {
+		String query = "CREATE TABLE product_groups(" +
+				"product_group_id INTEGER PRIMARY KEY AUTOINCREMENT," +
+				"name TEXT," +
+				"threeMonthSupply TEXT," +
+				"parent_id INTEGER" + 
+				");";
+		return query;
 	}
 	
 	

@@ -1,8 +1,12 @@
-package model;
+package reports;
 
 import java.util.List;
 
-public class RemovedItemsReport extends Report {
+import model.Item;
+
+
+
+public class NMonthSupplyReport extends ProductReport {
 
 	public List<Item> getItems() {
 		// TODO Auto-generated method stub

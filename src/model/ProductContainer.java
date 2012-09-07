@@ -3,14 +3,14 @@ package model;
 import java.io.Serializable;
 import java.util.Set;
 
-/* ProductContainer
+/** ProductContainer
  * A generic term for Storage Units and Product Groups.  
  * These objects can “contain” Products and Items, 
  * and are referred to generically as “product containers”.
  */
 
 
-public abstract class ProductContainer implements Serializable{
+public abstract class ProductContainer{
 	private Set<Product> products;
 	private Set<Item> items;
 	private Set<ProductGroup> productGroups;
@@ -23,6 +23,10 @@ public abstract class ProductContainer implements Serializable{
 		return products;
 	}
 
+	public void addItem(Item item){
+		
+	}
+	
 	public void setItems(Set<Item> items) {
 		this.items = items;
 	}

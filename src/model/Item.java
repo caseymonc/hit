@@ -3,7 +3,7 @@ package model;
 import java.io.Serializable;
 import java.util.Date;
 
-/* Item
+/** Item
  * A physical instance of a particular Product.  
  * An Item corresponds to a physical container
  * with a barcode on it.  For example, a case of 
@@ -12,13 +12,22 @@ import java.util.Date;
  * while each physical can is a distinct Item.
  */
 
-public class Item implements Serializable{
+public class Item implements PersistentItem{
 	private String barCode;
 	private Date entryDate;
 	private Date exitDate;
 	private Date expirationDate;
 	private Product product;
 	private ProductContainer parent;
+	
+	public Item(String barCode, Date expirationDate, Product product, 
+										ProductContainer parent){
+		this.setBarCode(barCode);
+		this.setEntryDate(new Date());
+		this.setExpirationDate(expirationDate);
+		this.setProduct(product);
+		this.setParent(parent);
+	}
 	
 	public void setExpirationDate(Date expirationDate) {
 		this.expirationDate = expirationDate;
@@ -32,18 +41,23 @@ public class Item implements Serializable{
 		
 	}
 	
-	public void create(){
+	public void delete(PersistentStore store){
 		
 	}
 	
-	public void edit(){
-		
-	}
 	
-	public void delete(){
-		
+	public String sqlCreateStatement() {
+		String query = "CREATE TABLE items(" +
+				"items_id INTEGER PRIMARY KEY AUTOINCREMENT," +
+				"barCode TEXT," +
+				"entryDate DATETIME," +
+				"exitDate DATETIME," +
+				"expirationDate DATETIME," +
+				"product_id INTEGER" + 
+				"parent_id INTEGER" +
+				");";
+		return query;
 	}
-	
 	
 	/*
 	 * Getters and Setters
@@ -92,4 +106,6 @@ public class Item implements Serializable{
 	public ProductContainer getParent() {
 		return parent;
 	}
+
+	
 }
