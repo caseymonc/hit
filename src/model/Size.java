@@ -8,8 +8,21 @@ import java.io.Serializable;
  */
 public class Size implements Serializable {
 	
-	
+	/** 
+	 * @Constraint The unit of
+	 * measurement can be any of the
+	 * following: count, pounds, ounces, grams,
+	 * kilograms, gallons, quarts, pints, fluid
+	 * ounces, liters. */
 	private Unit units;
+	
+	/**
+	 * @Constraint The magnitude can be any positive float
+	 * value (zero is not allowed). 
+	 * 
+	 * @Constraint If the unit of measurement is "count", the magnitude
+	 * must be "1".
+	 */
 	private float size;
 	
 	/**

@@ -7,6 +7,9 @@ package model;
  */
 
 public class StorageUnit extends ProductContainer implements PersistentItem{
+	/** Name of the Storage Unit. 
+	 * @Constraint Must be non-empty. Must be unique among all Storage Units.
+	 **/
 	private String name;
 
 	public StorageUnit(String name){
@@ -28,6 +31,24 @@ public class StorageUnit extends ProductContainer implements PersistentItem{
 				"name TEXT," + 
 				");";
 		return query;
+	}
+
+	@Override
+	public void addItem(Item item) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void addProduct(Product product) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void deleteProduct(Product product) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }

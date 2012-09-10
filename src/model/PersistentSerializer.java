@@ -1,5 +1,14 @@
 package model;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.util.List;
 
 /**
@@ -10,9 +19,24 @@ import java.util.List;
  */
 public class PersistentSerializer extends PersistentStore {
 
+	private static final String PERSISTENT_STORE = "persistent_store.txt";
+
 	@Override
 	public ProductContainer getRoot() {
-		// TODO Auto-generated method stub
+		try {
+			InputStream is = new FileInputStream(PERSISTENT_STORE);
+			ObjectInputStream ois = new ObjectInputStream(is);
+			Object o = ois.readObject();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return null;
 	}
 
@@ -36,7 +60,14 @@ public class PersistentSerializer extends PersistentStore {
 
 	@Override
 	public void save(PersistentItem item) {
-		// TODO Auto-generated method stub
+		try {
+			OutputStream os = new FileOutputStream(PERSISTENT_STORE);
+			ObjectOutputStream oos = new ObjectOutputStream(os);
+			oos.writeObject(item);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 	}
 
