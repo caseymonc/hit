@@ -5,10 +5,10 @@ import java.util.HashMap;
 import java.util.Set;
 
 /** Product
- * A bar-coded product that can be stored in a Storage Unit.  
+ * A bar-coded product that can be stored in a Storage Unit.
  * Example Products are:
  * Town House Light Buttery Crackers, 13 oz, Barcode 030100169079
- * Colgate Toothpaste - Cavity Protection, 6.40 oz, Barcode 035000509000
+ * Colgate Toothpaste-Cavity Protection, 6.40 oz, Barcode 035000509000
  * Alcon Lens Drops, 0.17 fl oz, Barcode 300650192057
  * 
  * Singleton

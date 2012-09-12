@@ -4,11 +4,11 @@ import java.io.Serializable;
 import java.util.Date;
 
 /** Item
- * A physical instance of a particular Product.  
+ * A physical instance of a particular Product.
  * An Item corresponds to a physical container
- * with a barcode on it.  For example, a case of 
- * soda might contain 24 cans of Diet Coke.  In
- * this case, the Product is “Diet Coke, 12 fl oz”, 
+ * with a barcode on it.For example, a case of 
+ * soda might contain 24 cans of Diet Coke.In
+ * this case, the Product is Diet Coke, 12 fl oz, 
  * while each physical can is a distinct Item.
  */
 
@@ -29,12 +29,12 @@ public class Item implements PersistentItem{
 	
 	/** The date and time at which the Item was removed from the system.
 	 * @Constraint This attribute is defined only if the Item has been removed from storage.
-	 * Cannot be in the future or prior to 12 AM on the Item’s Entry Date.*/
+	 * Cannot be in the future or prior to 12 AM on the Items Entry Date.*/
 	private Date exitDate;
 	
 	/** The date on which this Item will expire. This is calculated
-	 * based on this Item’s Entry Date and the Product’s Shelf Life.
-	 * @Constraint This attribute is defined only if the Product’s 
+	 * based on this Items Entry Date and the Products Shelf Life.
+	 * @Constraint This attribute is defined only if the Products 
 	 * Shelf Life attribute has been specified.*/
 	private Date expirationDate;
 	
@@ -73,7 +73,7 @@ public class Item implements PersistentItem{
 	 * @Constraint When an Item is dragged into a Product Container, the logic is as follows:
 	 * 		Target Product Container = the Product Container the user dropped the Item on
 	 * 		Target Storage Unit = the Storage Unit containing the Target Product Container
-	 * 		If the Item’s Product is already in a Product Container in the Target Storage Unit
+	 * 		If the Items Product is already in a Product Container in the Target Storage Unit
 	 * 				Move the Product and all associated Items from their 
 	 * 				old Product Container to the Target Product Container
 	 * 		Else

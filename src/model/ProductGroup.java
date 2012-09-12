@@ -1,12 +1,12 @@
 package model;
 
 /** ProductGroup
- * A user-defined group of Products.  Product Groups 
+ * A user-defined group of Products.Product Groups 
  * are used by users to aggregate related
- * Products so they can be managed as a collection.  
+ * Products so they can be managed as a collection.
  * For example, if a user has four different
  * kinds of toothpaste in storage, they could 
- * create a Product Group named “Toothpaste”,
+ * create a Product Group named Toothpaste,
  * and put all of the toothpaste Products in that Product Group.
  */
 
