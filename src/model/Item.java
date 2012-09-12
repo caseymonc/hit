@@ -51,7 +51,7 @@ public class Item implements PersistentItem{
 	
 	public Item(String barCode, Date expirationDate, Product product, 
 										ProductContainer container){
-		this.setBarCode(barCode);
+		this.barCode = barCode;
 		this.setEntryDate(new Date());
 		this.setExpirationDate(expirationDate);
 		this.setProduct(product);
