@@ -4,36 +4,51 @@ import java.io.Serializable;
 import java.util.Set;
 
 /** ProductContainer
+<<<<<<< HEAD
  * A generic term for Storage Units and Product Groups.
  * These objects can contain Products and Items, 
  * and are referred to generically as product containers.
+=======
+ * A generic term for Storage Units and Product Groups.��
+ * These objects can �contain� Products and Items, 
+ * and are referred to generically as �product containers�.
+>>>>>>> 671bee0f282ca3158b22eba06890a789199875fe
  */
 
 
 public abstract class ProductContainer{
 	/** Products that are in this container*/
-	private Set<Product> products;
+	private ProductMap products;
 	
 	/** Items that are in this container*/
-	private Set<Item> items;
+	private ItemMap items;
 	
 	/** Product groups that are in this container
 	 * @Constraint may not have two top level
 	 * Product Groups with the same
 	 * name.*/
-	private Set<ProductGroup> productGroups;
+	private ProductGroupMap productGroups;
 
 	/** Add an item to the ProductContainer
 	 * @param item - the Item to add
 	 * 
 	 * @Constraint When a new Item is added to the system, it is placed in a particular Storage Unit 
 	 * (called the "target Storage Unit"). The new Item is added to the same ProductContainer 
+<<<<<<< HEAD
 	 * that contains the Items Product within the target Storage Unit. 
 	 * If the Items Product is not already in a Product Container within the target 
 	 * StorageUnit, the Product is placed in the Storage Unit at the root level.
 	 * 
 	 * @Constraint New Items are added to the Product Container within the target 
 	 * Storage Unit that contains the Items Product. If the Items Product is not 
+=======
+	 * that contains the Item�s Product within the target Storage Unit. 
+	 * If the Item�s Product is not already in a Product Container within the target 
+	 * StorageUnit, the Product is placed in the Storage Unit at the root level.
+	 * 
+	 * @Constraint New Items are added to the Product Container within the target 
+	 * Storage Unit that contains the Item�s Product. If the Item�s Product is not 
+>>>>>>> 671bee0f282ca3158b22eba06890a789199875fe
 	 * already in the Storage Unit, it is automatically added to the Storage Unit 
 	 * at the top level before the Items are added.
 	 */
@@ -60,27 +75,30 @@ public abstract class ProductContainer{
 	 */
 	public abstract void deleteProduct(Product product);
 	
-	public void setProducts(Set<Product> products) {
+	public void setProducts(ProductMap products) {
 		this.products = products;
 	}
 
-	public Set<Product> getProducts() {
+	public ProductMap getAllProducts() {
 		return products;
 	}
 	
-	public void setItems(Set<Item> items) {
+	public void setItems(ItemMap items) {
 		this.items = items;
 	}
 
-	public Set<Item> getItems() {
+	public ItemMap getAllItems() {
 		return items;
 	}
 
-	public void setProductGroups(Set<ProductGroup> productGroups) {
+	public void setProductGroups(ProductGroupMap productGroups) {
 		this.productGroups = productGroups;
 	}
 
-	public Set<ProductGroup> getProductGroups() {
+	public ProductGroupMap getAllProductGroups() {
 		return productGroups;
 	}
+     
+     
+     
 }
