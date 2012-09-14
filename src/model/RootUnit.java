@@ -6,24 +6,35 @@ package model;
 
 import java.util.List;
 
-/**
+/** RootUnit
+ * RootUnit is a special ProductContainer that is the root of the tree 
+ * structure that contains all other ProductContainers, Products, and 
+ * Items in HIT. Only one instance of RootUnit can exist in the entire
+ * system.
  *
  * @author davidpatty
  */
 public class RootUnit extends ProductContainer {
      
 	/**
-	 *  singleton constructor
+	 *  Constructor
 	 */
      private RootUnit() {
 	
 	}
 	
-	/**
-	 * 
+	/** Stores the instance of RootUnit.
+	 * If _instance is set, the Instance() method will not be called.
+	 * This prevents the creation of multiple RootUnits.
 	 */
 	private static RootUnit _instance;
 	
+	/** Method that is called instead of the Constructor.
+	 * Calls the Constructor to build a new RootUnit only if _instance 
+	 * is not set.
+	 * 
+	 * @return the _instance of the RootUnit
+	 */
 	public static RootUnit Instance() {
 		
 		if(RootUnit._instance == null) {

@@ -25,45 +25,49 @@ public class ItemMap extends TreeMap<BarCode, Item> {
 		  
 	 }
 	 
-	 /**
-	  * @Constraint barcode must be unique
-	  * @param i Item to be added
+	 /** Adds an item to the Map.
+	  * 
+	  * @param barcode - the BarCode of the item to be added
+	  * @param i - Item to be added
+	  * @throws Exception if BarCode is not unique
 	  */
 	 public void addItem(BarCode barcode, Item i) {
 		 this.put(barcode,i);
 
 	 }
-	 /**
-	  * @Constraint barcode must be already stored in the ItemMap
-	  *   before using this method, you must first determine if
-	  *   the item is contained by using containsProduct(String)
+	 /** Removes an item from the Map.
+	  *	before using this method, you must first determine if the item is 
+	  * contained by using containsProduct(String).
+	  * 
 	  * @param barcode the barcode of the item to be removed
+	  * @throws exception if barcode is not already stored in the ItemMap.
 	  */
 	 public void removeItem(BarCode barcode) {
 		  this.remove(barcode);
 	 }
 	 
 	 /** Determines if the Item is in the Map.
+	  * 
 	  * @param barcode
-	  * @return 
+	  * @return true if Item is in the Map else false
 	  */
-	 public boolean containsProduct(BarCode barcode) {
+	 public boolean containsItem(BarCode barcode) {
 		  return this.containsKey(barcode);
 	 }
 	 
-	 /**
-	  * @Constraint barcode must be already stored in the ItemMap
-	  *   before using this method, you must first determine if
-	  *   the item is contained by using containsProduct(String)
+	 /** Gets an Item using its BarCode
+	  * Before using this method, you must first determine if
+	  * the item is contained by using containsProduct(String)
+	  * 
 	  * @param barcode
-	  * @return 
+	  * @return The Item associated with barcode
 	  */
 	 public Item getItemByBarCode(BarCode barcode) {
-//		  return this.get(barcode).;
 		  return null;
 	 }
 	 
-	 /**
+	 /** Gets the size of the ItemMap
+	  * 
 	  * @returns number of Items stored in the ItemMap
 	  */
 	 public int getSize() {

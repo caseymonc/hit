@@ -21,35 +21,38 @@ public class ProductGroupMap extends TreeMap<String, ProductGroup> {
 	 
 	 }
 		
-	 /**
+	 /** Adds a Product Group to the map
+	  * 
+	  * @param name - The name of the ProductGroup to be added
+	  * @param pg - ProductGroup to be added
 	  * @throws Exception if the product is already in the map.
-	  * @param pg ProductGroup to be added
 	  */
-	 public void addProduct(String name, ProductGroup pg) {
+	 public void addProductGroup(String name, ProductGroup pg) {
 		  this.put(name, pg);
 	 }
-	 /**
-	  * @throws Exception if the product is not in the map.
-	  * @param name 
+	 /** Removes a ProductGroup from the Map
+	  * 
+	  * @param name - the name of the ProductGroup
+	  * @throws Exception if the product is not in the map. 
 	  */
-	 public void removeProduct(String name) {
+	 public void removeProductGroup(String name) {
 		  
 	 }  
-	 /**
-	  * Returns true if the product is contained in the Map else false.
+	 /** Determines if a ProductGroup is contained in the Map.
+	  * 
 	  * @param name
-	  * @return 
+	  * @return Returns true if the product is contained in the Map else false.
 	  */
-	 public boolean containsProduct(String name) {
+	 public boolean containsProductGroup(String name) {
 		  return this.containsKey(name);
 	 }
 	 
 	 
-	 /**
+	 /** Gets a ProductGroup by its name
 	  * @param name
 	  * @return the Product Group else null
 	  */
-	 public ProductGroup getProductByName(String name) {
+	 public ProductGroup getProductGroupByName(String name) {
 		  return this.get(name);
 	 }
 }

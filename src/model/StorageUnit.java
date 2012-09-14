@@ -9,19 +9,32 @@ import java.util.List;
  */
 
 public class StorageUnit extends ProductContainer implements PersistentItem{
+	
 	/** Name of the Storage Unit. 
-	 * @Constraint Must be non-empty. Must be unique among all Storage Units.
+	 * Must be non-empty. Must be unique among all Storage Units.
 	 **/
 	private String name;
 
+	/** Constructor
+	 * 
+	 * @param name - The name of the StorageUnit
+	 */
 	public StorageUnit(String name){
 		this.setName(name);
 	}
 	
+	/** Sets the name of the StorageUnit
+	 * 
+	 * @param name - the new name of the StorageUnit
+	 */
 	public void setName(String name) {
 		this.name = name;
 	}
 
+	/** Gets the name of the StorageUnit
+	 * 
+	 * @return the name of the StorageUnit
+	 */
 	public String getName() {
 		return name;
 	}
