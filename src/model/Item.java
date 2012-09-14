@@ -10,6 +10,7 @@ import java.util.Date;
  * soda might contain 24 cans of Diet Coke.  In
  * this case, the Product is Diet Coke, 12 fl oz, 
  * while each physical can is a distinct Item.
+ * @author casey dmathis
  */
 
 public class Item implements PersistentItem{

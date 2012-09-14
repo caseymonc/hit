@@ -11,7 +11,8 @@ package model;
  */
 
 public class ProductGroup extends ProductContainer implements PersistentItem{
-	/** String provided by the user that describes the Product Group.
+
+     /** String provided by the user that describes the Product Group.
 	 * @Constraint Must be non-empty and unique within the parent Product Container.*/
 	private String name;
 	
