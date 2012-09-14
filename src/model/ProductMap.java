@@ -15,7 +15,7 @@ public class ProductMap extends TreeMap<String,Product> {
 	/**
 	 * 
 	 */
-	public ProductSet() {
+	public ProductMap() {
           
      }
      

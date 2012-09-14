@@ -4,12 +4,13 @@ import java.io.Serializable;
 import java.util.Date;
 
 /** Item
- * A physical instance of a particular Product.††
+ * A physical instance of a particular Product.
  * An Item corresponds to a physical container
- * with a barcode on it.††For example, a case of 
- * soda might contain 24 cans of Diet Coke.††In
- * this case, the Product is ìDiet Coke, 12 fl ozî, 
+ * with a barcode on it.  For example, a case of 
+ * soda might contain 24 cans of Diet Coke.  In
+ * this case, the Product is Diet Coke, 12 fl oz, 
  * while each physical can is a distinct Item.
+ * @author casey dmathis
  */
 
 public class Item implements PersistentItem{
@@ -21,7 +22,7 @@ public class Item implements PersistentItem{
 	 * manufacturer's barcode.
 	 * @Constraint Must be a valid UPC barcode and unique among all Items.
 	 */
-	private String barCode;
+	private BarCode barCode;
 	
 	/** The date on which the Item was entered into the system.
 	 * @Constraint Must be non-empty. Cannot be in the future or prior to 1/1/2000.*/
@@ -29,12 +30,12 @@ public class Item implements PersistentItem{
 	
 	/** The date and time at which the Item was removed from the system.
 	 * @Constraint This attribute is defined only if the Item has been removed from storage.
-	 * Cannot be in the future or prior to 12 AM on the Itemís Entry Date.*/
+	 * Cannot be in the future or prior to 12 AM on the ItemÔøΩs Entry Date.*/
 	private Date exitDate;
 	
 	/** The date on which this Item will expire. This is calculated
-	 * based on this Itemís Entry Date and the Productís Shelf Life.
-	 * @Constraint This attribute is defined only if the Productís 
+	 * based on this ItemÔøΩs Entry Date and the ProductÔøΩs Shelf Life.
+	 * @Constraint This attribute is defined only if the ProductÔøΩs 
 	 * Shelf Life attribute has been specified.*/
 	private Date expirationDate;
 	
@@ -49,17 +50,21 @@ public class Item implements PersistentItem{
 	 * Product Containers.)*/
 	private ProductContainer container;
 	
-	public Item(String barCode, Date expirationDate, Product product, 
-										ProductContainer container){
+	/** Constructor - creates a new Item using the following params:
+	 * 
+	 * @param barCode
+	 * @param expirationDate
+	 * @param product
+	 * @param container
+	 * 
+	 */
+	public Item(BarCode barCode, Date entryDate, Date expirationDate, Product product, 
+										ProductContainer container){		
 		this.barCode = barCode;
-		this.setEntryDate(new Date());
-		this.setExpirationDate(expirationDate);
-		this.setProduct(product);
-		this.setContainer(container);
-	}
-	
-	public void setExpirationDate(Date expirationDate) {
+		this.entryDate = entryDate;
 		this.expirationDate = expirationDate;
+		this.product = product;
+		this.container = container;
 	}
 	
 	/**
@@ -67,40 +72,21 @@ public class Item implements PersistentItem{
 	 * to the moveTo container
 	 * @param moveTo - the container to move this item to
 	 * 
-	 * @Constraint An Item is contained in exactly one Product Container at a time 
-	 * (until it is removed, at which point it belongs to no Product Container at all).
-	 * 
-	 * @Constraint When an Item is dragged into a Product Container, the logic is as follows:
-	 * 		Target Product Container = the Product Container the user dropped the Item on
-	 * 		Target Storage Unit = the Storage Unit containing the Target Product Container
-	 * 		If the Itemís Product is already in a Product Container in the Target Storage Unit
-	 * 				Move the Product and all associated Items from their 
-	 * 				old Product Container to the Target Product Container
-	 * 		Else
-	 * 			Add the Product to the Target Product Container
-	 * 			Move the selected Item from its old Product Container to 
-	 * 			the Target Product Container
+	 * @throws exception if moveTo is not a valid Product Container
 	 */
 	public void move(ProductContainer moveTo){
 		
 	}
 	
-	public void scanIn(){
-		
-	}
-	
-	public void scanOut(){
-		
-	}
-	
 	/** Remove the item from storage
-	 * @Constraint When an Item is removed,
-	 * 1. The Item is removed from its containing Storage Unit.
-	 * 2. The Exit Time is stored in the Item.
-	 * 3. The Item is retained for historical purposes (i.e., for calculating statistics and reporting).
-	 * @param store
+	 *  When an Item is removed,
+	 *  1. The Item is removed from its containing Storage Unit.
+	 *  2. The Exit Time is stored in the Item.
+	 *  3. The Item is retained for historical purposes (i.e., for calculating statistics and reporting).
+	 * 
+	 * @throws exception if the item has already been removed from a storage unit. 
 	 */
-	public void delete(PersistentStore store){
+	public void remove(){
 		
 	}
 	
@@ -118,50 +104,70 @@ public class Item implements PersistentItem{
 		return query;
 	}
 	
-	/*
-	 * Getters and Setters
+	/** Checks to see if newDate is a valid entry date
+	 * 
+	 * @param newDate
+	 * @return true if newDate is non‚Äêempty and is not in the future and
+	 * is not prior to 1/1/2000. Otherwise, returns false.
 	 */
+	public boolean canSetEntryDate(Date newDate){
+		return true;
+	}
 	
+	/** Sets items entryDate to newDate
+	 * 
+	 * @param newDate - The new entry date
+	 */
+	public void setEntryDate(Date newDate){
+		entryDate = newDate;
+	}
+	
+	// Getters
+	
+	/** Get the expriation date of the item
+	 * 
+	 * @return the expiration date of the item
+	 */
 	public Date getExpirationDate() {
 		return expirationDate;
 	}
 	
-	public void setExitDate(Date exitDate) {
-		this.exitDate = exitDate;
-	}
-	
+	/** Get the exit date of the item
+	 * 
+	 * @return the exit date of the item
+	 */
 	public Date getExitDate() {
 		return exitDate;
 	}
 	
-	public void setEntryDate(Date entryDate) {
-		this.entryDate = entryDate;
-	}
-	
+	/** Get the entry date of the item
+	 * 
+	 * @return the entry date of the item
+	 */
 	public Date getEntryDate() {
 		return entryDate;
 	}
 	
-	public void setBarCode(String barCode) {
-		this.barCode = barCode;
-	}
-	
-	public String getBarCode() {
+	/** Get the barCode of the item
+	 * 
+	 * @return the barCode of the item
+	 */
+	public BarCode getBarCode() {
 		return barCode;
 	}
 
-	public void setProduct(Product product) {
-		this.product = product;
-	}
-
+	/** Get the item's product
+	 * 
+	 * @return the item's product
+	 */
 	public Product getProduct() {
 		return product;
 	}
 
-	public void setContainer(ProductContainer parent) {
-		this.container = parent;
-	}
-
+	/** Get the item's container
+	 * 
+	 * @return the item's container
+	 */
 	public ProductContainer getContainer() {
 		return container;
 	}

@@ -5,10 +5,10 @@ import java.util.HashMap;
 import java.util.Set;
 
 /** Product
- * A bar-coded product that can be stored in a Storage Unit.  
+ * A bar-coded product that can be stored in a Storage Unit.
  * Example Products are:
  * Town House Light Buttery Crackers, 13 oz, Barcode 030100169079
- * Colgate Toothpaste - Cavity Protection, 6.40 oz, Barcode 035000509000
+ * Colgate Toothpaste-Cavity Protection, 6.40 oz, Barcode 035000509000
  * Alcon Lens Drops, 0.17 fl oz, Barcode 300650192057
  * 
  * Singleton
@@ -63,17 +63,16 @@ public class Product implements PersistentItem{
 	 */
 	private Product(String description, String barCode, int shelfLife,
 								int threeMonthSupply, Size size){
-		this.setDescription(description);
-		this.setBarCode(barCode);
-		this.setShelfLife(shelfLife);
-		this.setThreeMonthSupply(threeMonthSupply);
-		this.setSize(size);
-		this.setCreationDate(new Date());
+		this.description = description;
+		this.barCode = barCode;
+		this.shelfLife = shelfLife;
+		this.threeMonthSupply = threeMonthSupply;
+		this.size = size;
+		this.creationDate = new Date();
 		
 	}
 	
 	/**
-	 * 
 	 * @param description
 	 * @param barCode
 	 * @param shelfLife
@@ -86,23 +85,52 @@ public class Product implements PersistentItem{
 		return null;
 	}
 	
+	/** Checks to see if the product can be deleted.
+	 * 
+	 * @param store - The core model object
+	 * @return true if there are no items of the product remaining in the system.
+	 * Otherwise, return false.
+	 */
+	public boolean canDelete(PersistentStore store){
+		return true;
+	}
+	
 	/**
 	 * Delete the Product from the system
-	 * @param store
-	 * 
-	 * @Constraint A Product may be deleted from the system only if there are no 
-	 * Items of the Product remaining in the system.
+	 * @param store - The core model object
 	 */
 	public void delete(PersistentStore store){
 		
 	}
 	
+	/** Checks to see if the new information being used to edit a product is valid
+	 * 
+	 * @param description - The new description of the product
+	 * @param shelfLife - The new shelflife of the product
+	 * @param threeMonthSupply - The new threeMonthSupply of the product
+	 * @param size - The new size of the product
+	 * @return true if all of the parameters are valid.  Otherwise return false.
+	 */
+	public boolean canEdit(String description, int shelfLife, int threeMonthSupply, Size size){
+		return true;
+	}
+	
+	/** Edits the product
+	 * 
+	 * @param description - The new description of the product
+	 * @param shelfLife - The new shelflife of the product
+	 * @param threeMonthSupply - The new threeMonthSupply of the product
+	 * @param size - The new size of the product
+	 */
+	public void edit(String description, int shelfLife, int threeMonthSupply, Size size){
+		
+	}
 	
 	/**
-	 * Add an item to the parents set
-	 * @param parent the ProductContainer to add to the parents set
+	 * Add a container to the product's set of containers
+	 * @param container - The ProductContainer to add to the set of containers
 	 */
-	public void addProductContainer(ProductContainer parent){
+	public void addProductContainer(ProductContainer container){
 		
 	}
 	
@@ -118,67 +146,102 @@ public class Product implements PersistentItem{
 				");";
 		return query;
 	}
+
+	// Getters and Setters
 	
-	
-	/*
-	 * Getters and Setters
+	/** set the description of the product
+	 * 
+	 * @param description - the description of the product
 	 */
-	
-	
 	public void setDescription(String description) {
 		this.description = description;
 	}
 	
+	/** Get the description of the product
+	 * 
+	 * @return the description of the product
+	 */
 	public String getDescription() {
 		return description;
 	}
 
+	/** set the description of the product
+	 * 
+	 * @param description - the description of the product
+	 */
 	public void setCreationDate(Date creationDate) {
 		this.creationDate = creationDate;
 	}
 
+	/** Get the creation date of the product
+	 * 
+	 * @return the creation date of the product
+	 */
 	public Date getCreationDate() {
 		return creationDate;
 	}
 
-	public void setBarCode(String barCode) {
-		this.barCode = barCode;
-	}
-
+	/** Get the barcode of the product
+	 * 
+	 * @return the barcode of the product
+	 */
 	public String getBarCode() {
 		return barCode;
 	}
 
+	/** set the shelf life of the product
+	 * 
+	 * @param shelf life - the shelf life of the product
+	 */
 	public void setShelfLife(int shelfLife) {
 		this.shelfLife = shelfLife;
 	}
 
+	/** Get the shelf life of the product
+	 * 
+	 * @return the shelf life of the product
+	 */
 	public int getShelfLife() {
 		return shelfLife;
 	}
-
+	
+	/** set the three month supply of the product
+	 * 
+	 * @param three month supply - the three month supply of the product
+	 */
 	public void setThreeMonthSupply(int threeMonthSupply) {
 		this.threeMonthSupply = threeMonthSupply;
 	}
 
+	/** Get the three month supply of the product
+	 * 
+	 * @return the three month supply of the product
+	 */
 	public int getThreeMonthSupply() {
 		return threeMonthSupply;
 	}
 
+	/** set the size of the product
+	 * 
+	 * @param size - the size of the product
+	 */
 	public void setSize(Size size) {
 		this.size = size;
 	}
 
+	/** Get the size of the product
+	 * 
+	 * @return the size of the product
+	 */
 	public Size getSize() {
 		return size;
 	}
 
-	public void setContainers(Set<ProductContainer> containers) {
-		this.containers = containers;
-	}
-
+	/** Get the containers of the product
+	 * 
+	 * @return the containers of the product
+	 */
 	public Set<ProductContainer> getContainers() {
 		return containers;
 	}
-	
 }
