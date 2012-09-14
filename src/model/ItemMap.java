@@ -40,7 +40,7 @@ public class ItemMap extends TreeMap<BarCode, Item> {
       * @param barcode the barcode of the item to be removed
       */
      public void removeItem(BarCode barcode) {
-          this.poll(barcode);
+          this.remove(barcode);
      }
      
      /** Determines if the Item is in the Map.
