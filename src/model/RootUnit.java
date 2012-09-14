@@ -14,7 +14,7 @@ import java.util.List;
  *
  * @author davidpatty
  */
-public class RootUnit extends ProductContainer {
+public class RootUnit extends ProductContainer implements PersistentItem{
      
 	/**
 	 *  Constructor

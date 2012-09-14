@@ -16,7 +16,7 @@ import java.util.TreeMap;
  * a wrapper or in another class.
  * @author dpatty
  */
-public class ItemMap extends TreeMap<BarCode, Item> {
+public class ItemMap extends TreeMap<BarCode, Item> implements PersistentItem{
 
 	 /**
 	  * Constructor

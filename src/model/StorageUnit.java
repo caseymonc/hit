@@ -39,14 +39,13 @@ public class StorageUnit extends ProductContainer implements PersistentItem{
 		return name;
 	}
 
-	@Override
-	public String sqlCreateStatement() {
+	/*public String sqlCreateStatement() {
 		String query = "CREATE TABLE storage_units(" +
 				"storage_unit_id INTEGER PRIMARY KEY AUTOINCREMENT," +
 				"name TEXT," + 
 				");";
 		return query;
-	}
+	}*/
 
 	@Override
 	public void addItem(Item item) {

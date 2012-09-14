@@ -92,7 +92,7 @@ public class Item implements PersistentItem{
 	}
 	
 	
-	public String sqlCreateStatement() {
+	/*public String sqlCreateStatement() {
 		String query = "CREATE TABLE items(" +
 				"items_id INTEGER PRIMARY KEY AUTOINCREMENT," +
 				"barCode TEXT," +
@@ -103,7 +103,7 @@ public class Item implements PersistentItem{
 				"parent_id INTEGER" +
 				");";
 		return query;
-	}
+	}*/
 	
 	/** Checks to see if newDate is a valid entry date
 	 * 

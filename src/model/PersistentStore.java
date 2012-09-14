@@ -26,12 +26,12 @@ public abstract class PersistentStore {
 	 */
 	public abstract List<ProductContainer> getAllContainers();
 	
-	/**
+	/** Get a list of all of the products
 	 * @return A list of all Products
 	 */
 	public abstract List<Product> getAllProducts();
 	
-	/**
+	/** Get a list of all of the items
 	 * @return A list of all Items
 	 */
 	public abstract List<Item> getAllItems();

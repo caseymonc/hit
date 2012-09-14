@@ -10,12 +10,6 @@ import java.io.Serializable;
  */
 public interface PersistentItem extends Serializable{
 	
-	/**
-	 * @return A query string that will
-	 * create an SQLite table that represents
-	 * the PersistentItem
-	 */
-	String sqlCreateStatement();
 	
 	
 }

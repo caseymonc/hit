@@ -9,7 +9,7 @@ import java.util.TreeMap;
 /** Keeps a Map of products keyed by their descriptions.  
  * @author davidpatty
  */
-public class ProductMap extends TreeMap<String,Product> {
+public class ProductMap extends TreeMap<String,Product> implements PersistentItem{
 
 	/**
 	 * Constructor
