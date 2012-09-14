@@ -16,27 +16,27 @@ public class ProductMap extends TreeMap<String,Product> {
 	 * 
 	 */
 	public ProductMap() {
-          
-     }
-     
-     /**
-      * 
-      * @param p Product to be added
-      */
-     public void addProduct(String name, Product p) {
-          this.put(name,p);
-     }
-     
-     public boolean containsProduct(String name) {
-          return this.containsKey(name);
-     }
-     /**
-      * 
-      * @param name
-      * @return 
-      */
-     public Product getProductByName(String name) {
-          return this.get(name);
-     }
-     
+		  
+	 }
+	 
+	 /**
+	  * 
+	  * @param p Product to be added
+	  */
+	 public void addProduct(String name, Product p) {
+		  this.put(name,p);
+	 }
+	 
+	 public boolean containsProduct(String name) {
+		  return this.containsKey(name);
+	 }
+	 /**
+	  * 
+	  * @param name
+	  * @return 
+	  */
+	 public Product getProductByName(String name) {
+		  return this.get(name);
+	 }
+	 
 }

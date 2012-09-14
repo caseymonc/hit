@@ -4,32 +4,12 @@ import java.io.Serializable;
 
 public class BarCode implements Serializable {
 	private String barCode;
-
-    
 	
-        /**
-         *  The purpose of the barcode class is to generate a UPC-A barcode and
-         *  store for the barcode
-         */
-	public BarCode(){
+	public BarCode(String barCode){
 		
 	}
 	
-        /**
-         *  This method creates a UPC-A barcode
-         */
-	private void generate(){
-	
+	public String generate(){
+		return barCode;
 	}
-        
-        /**
-         * 
-         * @return The UPC-A barcode of the item
-         */
-        public String getBarCode() 
-        {
-             return barCode;
-        }
-        
-     
 }

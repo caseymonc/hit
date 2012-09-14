@@ -18,58 +18,58 @@ import java.util.TreeMap;
  */
 public class ItemMap extends TreeMap<BarCode, Item> {
 
-     /**
-      * Constructor
-      */
-     public ItemMap() {
-          
-     }
-     
-     /**
-      * @Constraint barcode must be unique
-      * @param i Item to be added
-      */
-     public void addItem(BarCode barcode, Item i) {
-         this.put(barcode,i);
+	 /**
+	  * Constructor
+	  */
+	 public ItemMap() {
+		  
+	 }
+	 
+	 /**
+	  * @Constraint barcode must be unique
+	  * @param i Item to be added
+	  */
+	 public void addItem(BarCode barcode, Item i) {
+		 this.put(barcode,i);
 
-     }
-     /**
-      * @Constraint barcode must be already stored in the ItemMap
-      *   before using this method, you must first determine if
-      *   the item is contained by using containsProduct(String)
-      * @param barcode the barcode of the item to be removed
-      */
-     public void removeItem(BarCode barcode) {
-          this.remove(barcode);
-     }
-     
-     /** Determines if the Item is in the Map.
-      * @param barcode
-      * @return 
-      */
-     public boolean containsProduct(BarCode barcode) {
-          return this.containsKey(barcode);
-     }
-     
-     /**
-      * @Constraint barcode must be already stored in the ItemMap
-      *   before using this method, you must first determine if
-      *   the item is contained by using containsProduct(String)
-      * @param barcode
-      * @return 
-      */
-     public Item getItemByBarCode(BarCode barcode) {
-//          return this.get(barcode).;
-          return null;
-     }
-     
-     /**
-      * @returns number of Items stored in the ItemMap
-      */
-     public int getSize() {
-          return this.size();
-     }
-     
-     
-     
+	 }
+	 /**
+	  * @Constraint barcode must be already stored in the ItemMap
+	  *   before using this method, you must first determine if
+	  *   the item is contained by using containsProduct(String)
+	  * @param barcode the barcode of the item to be removed
+	  */
+	 public void removeItem(BarCode barcode) {
+		  this.remove(barcode);
+	 }
+	 
+	 /** Determines if the Item is in the Map.
+	  * @param barcode
+	  * @return 
+	  */
+	 public boolean containsProduct(BarCode barcode) {
+		  return this.containsKey(barcode);
+	 }
+	 
+	 /**
+	  * @Constraint barcode must be already stored in the ItemMap
+	  *   before using this method, you must first determine if
+	  *   the item is contained by using containsProduct(String)
+	  * @param barcode
+	  * @return 
+	  */
+	 public Item getItemByBarCode(BarCode barcode) {
+//		  return this.get(barcode).;
+		  return null;
+	 }
+	 
+	 /**
+	  * @returns number of Items stored in the ItemMap
+	  */
+	 public int getSize() {
+		  return this.size();
+	 }
+	 
+	 
+	 
 }

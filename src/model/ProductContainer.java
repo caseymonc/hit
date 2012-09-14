@@ -13,7 +13,7 @@ import java.util.List;
  */
 public abstract class ProductContainer{
 
-     
+	 
 	/** Add an item to the ProductContainer
 	 * @param item - the Item to add
 	 * 
@@ -30,16 +30,16 @@ public abstract class ProductContainer{
 	 */
 	public abstract void addItem(Item item);
 	
-     /** Removes an item from the product container
-      * 
-      * @param item the item to remove
-      */
-     public abstract void removeItem(Item item);
+	 /** Removes an item from the product container
+	  * 
+	  * @param item the item to remove
+	  */
+	 public abstract void removeItem(Item item);
 
-     
-     
-     /** adds the product specified by product
-      * 
+	 
+	 
+	 /** adds the product specified by product
+	  * 
 	 * @Constraint When a Product is dragged into a Product Container, the logic is as follows:
 	 * 		Target Product Container = the Product Container the user dropped the Product on
 	 * 		Target Storage Unit = the Storage Unit containing the Target Product Container
@@ -60,13 +60,13 @@ public abstract class ProductContainer{
 	 */
 	public abstract void removeProduct(Product product);
 
-     
-     /** determines if it can add the product container
+	 
+	 /** determines if it can add the product container
 	 * @param ProductContainer
 	 */
 	public abstract boolean canAddProductContainer(ProductContainer productContainer);
 	  
-     /** adds the product container
+	 /** adds the product container
 	 * @param ProductContainer
 	 */
 	public abstract void addProductContainer(ProductContainer productContainer);
@@ -75,61 +75,61 @@ public abstract class ProductContainer{
 	 * @param ProductContainer
 	 */
 	public abstract void removeProductContainer(ProductContainer productContainer);
-     
-     
-     /** Get the product container by barcode
-      * 
-      * @param barcode
-      * @return the Item specified by barcode
-      */
-     public abstract Item getItemByBarCode(BarCode barcode);
+	 
+	 
+	 /** Get the product container by barcode
+	  * 
+	  * @param barcode
+	  * @return the Item specified by barcode
+	  */
+	 public abstract Item getItemByBarCode(BarCode barcode);
 
-     /** Get the Item by name
-      * 
-      * @param name
-      * @return the product specified by name
-      */
-     public abstract Product getItemByName(String name);
-     
-     /** Gets a list of all the items in this product container
-      * 
-      * @return List<Item> all of the items in this product container
-      */
-     public abstract List<Item> getAllItems();
-     
-     /** Gets a list of all the products in this product container
-      * 
-      * @return List<Product> all of the items in this product container
-      */
-     public abstract List<Product> getAllProducts();
-     
-     /** Gets a list of all the product containers that are children of this 
-      * product container
-      * 
-      * @return List<ProductContainer> all of the items in this product container
-      */
-     public abstract List<ProductContainer> getAllProductContainers();
-     
-     
-     /** Get the product container by name
-      * 
-      * @param name String the new name for this container      
-      * @return the ProductContainer specified by name
-      */
-     public abstract ProductContainer getProductContainerByName(String name);
-     
-     
-     
-     /** Used to get the name of the storage container
-      *   in the case of root, this is "StorageUnit"
-      * @return string name of the product Container.
-      */
-     public abstract String getName();
-     
-     /** sets the name of this product container
-      *  @param name String the new name for this container
-      */
-     public abstract void setName(String name);
-     
-     
+	 /** Get the Item by name
+	  * 
+	  * @param name
+	  * @return the product specified by name
+	  */
+	 public abstract Product getItemByName(String name);
+	 
+	 /** Gets a list of all the items in this product container
+	  * 
+	  * @return List<Item> all of the items in this product container
+	  */
+	 public abstract List<Item> getAllItems();
+	 
+	 /** Gets a list of all the products in this product container
+	  * 
+	  * @return List<Product> all of the items in this product container
+	  */
+	 public abstract List<Product> getAllProducts();
+	 
+	 /** Gets a list of all the product containers that are children of this 
+	  * product container
+	  * 
+	  * @return List<ProductContainer> all of the items in this product container
+	  */
+	 public abstract List<ProductContainer> getAllProductContainers();
+	 
+	 
+	 /** Get the product container by name
+	  * 
+	  * @param name String the new name for this container	  
+	  * @return the ProductContainer specified by name
+	  */
+	 public abstract ProductContainer getProductContainerByName(String name);
+	 
+	 
+	 
+	 /** Used to get the name of the storage container
+	  *   in the case of root, this is "StorageUnit"
+	  * @return string name of the product Container.
+	  */
+	 public abstract String getName();
+	 
+	 /** sets the name of this product container
+	  *  @param name String the new name for this container
+	  */
+	 public abstract void setName(String name);
+	 
+	 
 }

@@ -14,7 +14,7 @@ import java.util.List;
 
 public class ProductGroup extends ProductContainer implements PersistentItem{
 
-     /** String provided by the user that describes the Product Group.
+	 /** String provided by the user that describes the Product Group.
 	 * @Constraint Must be non-empty and unique within the parent Product Container.*/
 	private String name;
 	
@@ -70,7 +70,6 @@ public class ProductGroup extends ProductContainer implements PersistentItem{
 	
 	/*
 	 * Getters and Setters
-      *   these are all annotated and declared in ProductContainer.java
 	 */
 	
 	
