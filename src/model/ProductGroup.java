@@ -1,5 +1,7 @@
 package model;
 
+import java.util.List;
+
 /** ProductGroup
  * A user-defined group of Products.Product Groups 
  * are used by users to aggregate related
@@ -108,9 +110,69 @@ public class ProductGroup extends ProductContainer implements PersistentItem{
 	}
 
 	@Override
-	public void deleteProduct(Product product) {
+	public void removeItem(Item item) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public void removeProduct(Product product) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public boolean canAddProductContainer(ProductContainer productContainer) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void addProductContainer(ProductContainer productContainer) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void removeProductContainer(ProductContainer productContainer) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Item getItemByBarCode(BarCode barcode) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Product getItemByName(String name) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Item> getAllItems() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Product> getAllProducts() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<ProductContainer> getAllProductContainers() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ProductContainer getProductContainerByName(String name) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 	
