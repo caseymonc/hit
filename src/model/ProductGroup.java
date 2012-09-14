@@ -70,6 +70,7 @@ public class ProductGroup extends ProductContainer implements PersistentItem{
 	
 	/*
 	 * Getters and Setters
+      *   these are all annotated and declared in ProductContainer.java
 	 */
 	
 	
