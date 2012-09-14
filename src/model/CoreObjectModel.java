@@ -4,7 +4,12 @@
  */
 package model;
 
-/**
+/** CoreObjectModel
+ * This class stores the rootUnit which is the root of a tree 
+ * structure that points to every object in the HIT system. It
+ * also contains a Map of all Products and a Map of all Items.
+ * These maps make is easier to iterate through all products
+ * and items.
  *
  * @author davidpatty
  */
