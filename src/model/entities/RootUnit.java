@@ -7,6 +7,7 @@ package model.entities;
 import model.entities.ProductContainer;
 import model.entities.Item;
 import model.entities.Product;
+import model.persistence.PersistentItem;
 import java.util.List;
 
 /** RootUnit

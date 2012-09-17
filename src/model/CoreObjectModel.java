@@ -8,6 +8,7 @@ import model.entities.BarCode;
 import model.entities.RootUnit;
 import model.entities.Item;
 import model.entities.Product;
+import model.persistence.PersistentItem;
 
 /** CoreObjectModel
  * This class stores the rootUnit which is the root of a tree 

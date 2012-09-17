@@ -6,6 +6,8 @@ package model;
 
 import model.entities.Product;
 import java.util.TreeMap;
+import model.persistence.PersistentItem;
+
 
 /** Keeps a Map of products keyed by their descriptions.  
  * @author davidpatty

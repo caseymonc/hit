@@ -6,6 +6,8 @@ package model;
 
 import model.entities.ProductGroup;
 import java.util.TreeMap;
+import model.persistence.PersistentItem;
+
 
 /** ProductGroupMap
  * Maps the name of the product Group to the Product Group.  
