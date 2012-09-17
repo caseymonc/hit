@@ -67,7 +67,7 @@ public class ItemMap extends TreeMap<BarCode, Item> implements PersistentItem{
 	  * @return The Item associated with barcode
 	  */
 	 public Item getItemByBarCode(BarCode barcode) {
-		  return null;
+		  return this.get(barcode);
 	 }
 	 
 	 /** Gets the size of the ItemMap
