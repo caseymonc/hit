@@ -2,6 +2,7 @@ package model;
 
 import java.util.HashSet;
 import java.util.Set;
+import model.entities.BarCode;
 
 /**
  * Generates Valid UPC-A BarCodes
