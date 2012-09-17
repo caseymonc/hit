@@ -1,6 +1,8 @@
-package model;
+package model.entities;
 
+import model.entities.Product;
 import java.util.Date;
+import model.persistence.PersistentItem;
 
 /** Item
  * A physical instance of a particular Product. An Item 

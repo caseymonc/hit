@@ -1,4 +1,4 @@
-package model;
+package model.persistence;
 
 import java.io.Serializable;
 

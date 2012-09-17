@@ -4,6 +4,7 @@
  */
 package model;
 
+import model.entities.Product;
 import java.util.TreeMap;
 
 /** Keeps a Map of products keyed by their descriptions.  

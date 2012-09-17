@@ -1,6 +1,10 @@
-package model;
+package model.entities;
 
+import model.entities.ProductContainer;
+import model.entities.Item;
+import model.entities.Product;
 import java.util.List;
+import model.persistence.PersistentItem;
 
 /** StorageUnit
  * A Storage Unit is a room, closet, pantry, cupboard, 

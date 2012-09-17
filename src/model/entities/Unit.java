@@ -1,4 +1,4 @@
-package model;
+package model.entities;
 /**
  * Represents the units of a size
  * @author Casey Moncur

@@ -1,8 +1,9 @@
-package model;
+package model.entities;
 
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Set;
+import model.persistence.PersistentItem;
 
 /** Product
  * A bar-coded product that can be stored in a Storage Unit.

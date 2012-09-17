@@ -1,6 +1,9 @@
-package model;
+package model.entities;
 
+import model.entities.Item;
+import model.entities.Product;
 import java.util.List;
+import model.persistence.PersistentItem;
 
 /** ProductGroup
  * A user-defined group of Products.Product Groups are used by users to 

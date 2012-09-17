@@ -1,5 +1,8 @@
-package model;
+package model.persistence;
 
+import model.entities.ProductContainer;
+import model.entities.Item;
+import model.entities.Product;
 import java.util.List;
 
 

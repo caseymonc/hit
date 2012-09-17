@@ -1,5 +1,7 @@
-package model;
+package model.entities;
 
+import model.entities.Item;
+import model.entities.Product;
 import java.io.Serializable;
 import java.util.Set;
 import java.util.List;

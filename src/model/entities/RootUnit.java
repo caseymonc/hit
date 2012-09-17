@@ -2,8 +2,11 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package model;
+package model.entities;
 
+import model.entities.ProductContainer;
+import model.entities.Item;
+import model.entities.Product;
 import java.util.List;
 
 /** RootUnit

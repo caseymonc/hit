@@ -4,6 +4,8 @@
  */
 package model;
 
+import model.entities.BarCode;
+import model.entities.Item;
 import java.util.TreeMap;
 
 

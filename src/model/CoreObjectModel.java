@@ -4,6 +4,11 @@
  */
 package model;
 
+import model.entities.BarCode;
+import model.entities.RootUnit;
+import model.entities.Item;
+import model.entities.Product;
+
 /** CoreObjectModel
  * This class stores the rootUnit which is the root of a tree 
  * structure that points to every object in the HIT system. It

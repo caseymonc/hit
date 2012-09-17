@@ -4,6 +4,7 @@
  */
 package model;
 
+import model.entities.ProductGroup;
 import java.util.TreeMap;
 
 /** ProductGroupMap
