@@ -39,7 +39,7 @@ public class ProductGroupMap extends TreeMap<String, ProductGroup> implements Pe
 	  * @throws Exception if the product is not in the map. 
 	  */
 	 public void removeProductGroup(String name) {
-		  
+		  this.remove(name);
 	 }  
 	 /** Determines if a ProductGroup is contained in the Map.
 	  * 
