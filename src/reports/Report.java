@@ -3,7 +3,7 @@ package reports;
 import java.util.Date;
 import java.util.List;
 
-import model.Item;
+import model.entities.Item;
 
 public abstract class Report {
 	private String name;
