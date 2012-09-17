@@ -107,7 +107,7 @@ public class Product implements PersistentItem{
 		
 	}
 	
-	public String sqlCreateStatement() {
+	/*public String sqlCreateStatement() {
 		String query = "CREATE TABLE products(" +
 				"product_id INTEGER PRIMARY KEY AUTOINCREMENT," +
 				"description TEXT," +
@@ -118,7 +118,7 @@ public class Product implements PersistentItem{
 				"size TEXT" + 
 				");";
 		return query;
-	}
+	}*/
 
 	// Getters
 	

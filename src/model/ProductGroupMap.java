@@ -13,7 +13,7 @@ import java.util.TreeMap;
  *
  * @author davidpatty
  */
-public class ProductGroupMap extends TreeMap<String, ProductGroup> {
+public class ProductGroupMap extends TreeMap<String, ProductGroup> implements PersistentItem{
 
 	 /**
 	  * Constructor

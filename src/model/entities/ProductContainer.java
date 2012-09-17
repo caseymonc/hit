@@ -54,7 +54,7 @@ public abstract class ProductContainer{
 	 */
 	public abstract void addProduct(Product product);
 	
-	/**
+	/** Remove a Product from the container
 	 * @Constraint A Product may be deleted from a Product Container 
 	 * only if there are no Items of the Product remaining in the Product Container.
 	 * 

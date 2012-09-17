@@ -18,7 +18,7 @@ import model.entities.Product;
  *
  * @author davidpatty
  */
-public class CoreObjectModel {
+public class CoreObjectModel implements PersistentItem{
 	
 	/**
 	 *  This is the instance of the Root of the product tree

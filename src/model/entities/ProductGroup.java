@@ -62,7 +62,7 @@ public class ProductGroup extends ProductContainer implements PersistentItem{
 		setThreeMonthSupply(threeMonthSupply);
 	}
 	
-	public String sqlCreateStatement() {
+	/*public String sqlCreateStatement() {
 		String query = "CREATE TABLE product_groups(" +
 				"product_group_id INTEGER PRIMARY KEY AUTOINCREMENT," +
 				"name TEXT," +
@@ -70,7 +70,7 @@ public class ProductGroup extends ProductContainer implements PersistentItem{
 				"parent_id INTEGER" + 
 				");";
 		return query;
-	}
+	}*/
 	
 	
 	/*
