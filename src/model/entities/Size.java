@@ -1,32 +1,28 @@
-package model;
+package model.entities;
 
 import java.io.Serializable;
 /**
  * Represents the size of an Item, Product, or three month supply
+ * 
  * @author Casey Moncur
- *
  */
 public class Size implements Serializable {
 	
-	/** 
-	 * @Constraint The unit of
-	 * measurement can be any of the
-	 * following: count, pounds, ounces, grams,
-	 * kilograms, gallons, quarts, pints, fluid
-	 * ounces, liters. */
+	/** The unit of measurement.
+	 * Can be any of the following: count, pounds, ounces, grams, kilograms, 
+	 * gallons, quarts, pints, fluid, ounces, liters.
+	 */
 	private Unit units;
 	
-	/**
-	 * @Constraint The magnitude can be any positive float
-	 * value (zero is not allowed). 
-	 * 
-	 * @Constraint If the unit of measurement is "count", the magnitude
-	 * must be "1".
+	/** The float value of the size
+	 * Can be any positive float value (zero is not allowed). 
+	 * If the unit of measurement is "count", the magnitude must be "1".
 	 */
 	private float size;
 	
-	/**
+	/** Constructor
 	 * Create a size object
+	 * 
 	 * @param units - the units that this size object
 	 * @param size - the float value in units
 	 */
@@ -35,31 +31,32 @@ public class Size implements Serializable {
 		this.setSize(size);
 	}
 	
-	/**
-	 * Set the units of the size object
+	/** Set the units of the size object
+	 * 
 	 * @param units - the units that this size object
 	 */
 	public void setUnits(Unit units) {
 		this.units = units;
 	}
 	
-	/**
-	 * Get the units of the size object
+	/** Get the units of the size object
+	 * 
 	 * @return the units of the size
 	 */
 	public Unit getUnits() {
 		return units;
 	}
 
-	/**
-	 * Set the float value of the size
+	/** Set the float value of the size
+	 * 
 	 * @param size - the float value of the size
 	 */
 	public void setSize(float size) {
 		this.size = size;
 	}
 
-	/**
+	/** Get the float value of the size
+	 * 
 	 * @return the float value of the size
 	 */
 	public float getSize() {

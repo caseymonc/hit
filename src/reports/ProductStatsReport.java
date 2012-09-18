@@ -2,7 +2,7 @@ package reports;
 
 import java.util.List;
 
-import model.Item;
+import model.entities.Item;
 
 public class ProductStatsReport extends ProductReport {
 

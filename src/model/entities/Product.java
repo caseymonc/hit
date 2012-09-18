@@ -1,65 +1,69 @@
-package model;
+package model.entities;
 
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Set;
+import model.persistence.PersistentItem;
 
 /** Product
  * A bar-coded product that can be stored in a Storage Unit.
  * Example Products are:
  * Town House Light Buttery Crackers, 13 oz, Barcode 030100169079
  * Colgate Toothpaste-Cavity Protection, 6.40 oz, Barcode 035000509000
- * Alcon Lens Drops, 0.17 fl oz, Barcode 300650192057
+ *
+ * A Product may be in any number of Storage Units. However, a Product 
+ * may not be in multiple different Product Containers within the same
+ * Storage Unit at the same time. That is, a Product may appear at most
+ * once in a particular Storage Unit.
  * 
- * Singleton
- * 
- * @Constraint A Product may be in any number of Storage Units. 
- * However, a Product may not be in multiple different Product Containers 
- * within the same Storage Unit at the same time. 
- * That is, a Product may appear at most once in a particular Storage Unit.
+ * @author casey dmathis
  */
-
 public class Product implements PersistentItem{
-	private static HashMap<String,Product> singletons;
-	
-	/** Textual description of the Product.
-	 * @Constraint Must be non-empty.*/
+
+	/** Description of the Product.
+	 * Must be non-empty.
+	 */
 	private String description;
 	
 	/** The date this Product was added to the system.
-	 * @Constraint Equal to the earliest Entry Date for any
-	 * Item of this Product.*/
+	 * The creation date is equal to the earliest Entry Date for any
+	 * Item of this Product.
+	 */
 	private Date creationDate;
 	
 	/** Manufacturer's barcode for the Product.
-	 * @Constraint Must be non-empty.*/
+	 * Must be non-empty.
+	 */
 	private String barCode;
 	
-	/** The Product's shelf life, measured in months. A value
-	 * Must be non-negative.*/
+	/** The Product's shelf life, measured in months. 
+	 * Must be non-negative.
+	 */
 	private int shelfLife;
 	
 	/** The number of this Product required for a 3-month supply.
-	 * A value of zero means "unspecified".*/
+	 * A value of zero means "unspecified".
+	 */
 	private int threeMonthSupply;
 	
-	/** The size of the Product. For example, "13 oz", "5 lbs", "0.17 fl oz".
+	/** The size of the Product. 
+	 * A size has a quantity and a unit.
+	 * For example, "13 oz", "5 lbs", "0.17 fl oz".
 	 */
 	private Size size;
 	
 	/** Product Containers that contain this Product.
-	 * @Constraint At most one Product Container in a 
-	 * Storage Unit may contain a particular
-	 * Product.*/
+	 * At most one Product Container in a Storage Unit may contain a particular
+	 * Product.
+	 */
 	private Set<ProductContainer> containers;
 	
-	/**
-	 * @param description - a String description of the Product
-	 * @param barCode - the bar code that represents this Product
-	 * @param shelfLife - the time in seconds that this Product lasts
-	 * @param threeMonthSupply - how much of the Product that you need for a
-	 * 							 period of 3 months
-	 * @param size - The size of one Item of this Product
+	/** Constructor
+	 * @param description
+	 * @param barCode 
+	 * @param shelfLife
+	 * @param threeMonthSupply
+	 * @param size
 	 */
 	private Product(String description, String barCode, int shelfLife,
 								int threeMonthSupply, Size size){
@@ -69,37 +73,6 @@ public class Product implements PersistentItem{
 		this.threeMonthSupply = threeMonthSupply;
 		this.size = size;
 		this.creationDate = new Date();
-		
-	}
-	
-	/**
-	 * @param description
-	 * @param barCode
-	 * @param shelfLife
-	 * @param threeMonthSupply
-	 * @param size
-	 * @return a singleton instanceof the Product
-	 */
-	public static Product getSingleton(String description, String barCode, int shelfLife,
-														Size threeMonthSupply, Size size){
-		return null;
-	}
-	
-	/** Checks to see if the product can be deleted.
-	 * 
-	 * @param store - The core model object
-	 * @return true if there are no items of the product remaining in the system.
-	 * Otherwise, return false.
-	 */
-	public boolean canDelete(PersistentStore store){
-		return true;
-	}
-	
-	/**
-	 * Delete the Product from the system
-	 * @param store - The core model object
-	 */
-	public void delete(PersistentStore store){
 		
 	}
 	
@@ -134,7 +107,7 @@ public class Product implements PersistentItem{
 		
 	}
 	
-	public String sqlCreateStatement() {
+	/*public String sqlCreateStatement() {
 		String query = "CREATE TABLE products(" +
 				"product_id INTEGER PRIMARY KEY AUTOINCREMENT," +
 				"description TEXT," +
@@ -145,17 +118,9 @@ public class Product implements PersistentItem{
 				"size TEXT" + 
 				");";
 		return query;
-	}
+	}*/
 
-	// Getters and Setters
-	
-	/** set the description of the product
-	 * 
-	 * @param description - the description of the product
-	 */
-	public void setDescription(String description) {
-		this.description = description;
-	}
+	// Getters
 	
 	/** Get the description of the product
 	 * 
@@ -163,14 +128,6 @@ public class Product implements PersistentItem{
 	 */
 	public String getDescription() {
 		return description;
-	}
-
-	/** set the description of the product
-	 * 
-	 * @param description - the description of the product
-	 */
-	public void setCreationDate(Date creationDate) {
-		this.creationDate = creationDate;
 	}
 
 	/** Get the creation date of the product
@@ -181,20 +138,12 @@ public class Product implements PersistentItem{
 		return creationDate;
 	}
 
-	/** Get the barcode of the product
+	/** Get the BarCode of the product
 	 * 
-	 * @return the barcode of the product
+	 * @return the BarCode of the product
 	 */
 	public String getBarCode() {
 		return barCode;
-	}
-
-	/** set the shelf life of the product
-	 * 
-	 * @param shelf life - the shelf life of the product
-	 */
-	public void setShelfLife(int shelfLife) {
-		this.shelfLife = shelfLife;
 	}
 
 	/** Get the shelf life of the product
@@ -204,14 +153,6 @@ public class Product implements PersistentItem{
 	public int getShelfLife() {
 		return shelfLife;
 	}
-	
-	/** set the three month supply of the product
-	 * 
-	 * @param three month supply - the three month supply of the product
-	 */
-	public void setThreeMonthSupply(int threeMonthSupply) {
-		this.threeMonthSupply = threeMonthSupply;
-	}
 
 	/** Get the three month supply of the product
 	 * 
@@ -219,14 +160,6 @@ public class Product implements PersistentItem{
 	 */
 	public int getThreeMonthSupply() {
 		return threeMonthSupply;
-	}
-
-	/** set the size of the product
-	 * 
-	 * @param size - the size of the product
-	 */
-	public void setSize(Size size) {
-		this.size = size;
 	}
 
 	/** Get the size of the product
@@ -243,5 +176,39 @@ public class Product implements PersistentItem{
 	 */
 	public Set<ProductContainer> getContainers() {
 		return containers;
+	}
+	
+	// Setters
+	
+	/** set the description of the product
+	 * 
+	 * @param description - the description of the product
+	 */
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	/** set the shelf life of the product
+	 * 
+	 * @param shelf life - the shelf life of the product
+	 */
+	public void setShelfLife(int shelfLife) {
+		this.shelfLife = shelfLife;
+	}
+	
+	/** set the size of the product
+	 * 
+	 * @param size - the size of the product
+	 */
+	public void setSize(Size size) {
+		this.size = size;
+	}
+	
+	/** set the three month supply of the product
+	 * 
+	 * @param three month supply - the three month supply of the product
+	 */
+	public void setThreeMonthSupply(int threeMonthSupply) {
+		this.threeMonthSupply = threeMonthSupply;
 	}
 }

@@ -1,5 +1,8 @@
-package model;
+package model.persistence;
 
+import model.entities.ProductContainer;
+import model.entities.Item;
+import model.entities.Product;
 import java.util.List;
 
 
@@ -26,12 +29,12 @@ public abstract class PersistentStore {
 	 */
 	public abstract List<ProductContainer> getAllContainers();
 	
-	/**
+	/** Get a list of all of the products
 	 * @return A list of all Products
 	 */
 	public abstract List<Product> getAllProducts();
 	
-	/**
+	/** Get a list of all of the items
 	 * @return A list of all Items
 	 */
 	public abstract List<Item> getAllItems();

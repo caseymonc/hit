@@ -5,8 +5,8 @@ import gui.common.*;
 /**
  * Controller class for the edit item view.
  */
-public class EditItemController extends Controller 
-										implements IEditItemController {
+public class EditItemController extends Controller implements IEditItemController 
+{
 	
 	/**
 	 * Constructor.
@@ -14,7 +14,8 @@ public class EditItemController extends Controller
 	 * @param view Reference to edit item view
 	 * @param target Item that is being edited
 	 */
-	public EditItemController(IView view, ItemData target) {
+	public EditItemController(IView view, ItemData target) 
+        {
 		super(view);
 
 		construct();
