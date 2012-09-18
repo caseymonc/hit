@@ -5,6 +5,7 @@
 package model;
 
 import model.entities.Product;
+import model.entities.BarCode;
 import java.util.TreeMap;
 import model.persistence.PersistentItem;
 
@@ -42,11 +43,26 @@ public class ProductMap extends TreeMap<String,Product> implements PersistentIte
 	 
 	 /** Get the product by its description
 	  * 
-	  * @param namedescription of the product
+	  * @param description of the product
 	  * @return the product whose description is equal to description.
 	  */
 	 public Product getProductByDescription(String description) {
 		  return this.get(description);
+	 }
+	 
+	 /** Get the product by its BarCode
+	  * 
+	  * @param barcode - The BarCode of the product being retrieved
+	  * @return the product whose BarCode is equal to barcode. Otherwise, return null.
+	  */
+	 public Product getProductByBarCode(BarCode barcode){
+		  for(Product p : this.values()){
+			  if(p.getBarCode().getBarCode() == barcode.getBarCode()){
+				  return p;
+			  }
+		  }
+		  
+		  return null;
 	 }
 	 
 }

@@ -42,7 +42,8 @@ public class CoreObjectModel implements PersistentItem{
 	 * @return Product
 	 */
 	public Product findProductByBarCode(BarCode barcode) {
-		return null;
+		
+		return allTheProducts.getProductByBarCode(barcode);
 	}
 	
 	/** finds and returns the Item associated with the unique barcode
@@ -51,7 +52,7 @@ public class CoreObjectModel implements PersistentItem{
 	 * @return Item
 	 */
 	public Item findItemByBarCode(BarCode barcode) {
-		return null;
+		return allTheItems.getItemByBarCode(barcode);
 	}
 
 

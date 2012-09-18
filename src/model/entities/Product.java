@@ -34,7 +34,7 @@ public class Product implements PersistentItem{
 	/** Manufacturer's barcode for the Product.
 	 * Must be non-empty.
 	 */
-	private String barCode;
+	private BarCode barCode;
 	
 	/** The Product's shelf life, measured in months. 
 	 * Must be non-negative.
@@ -65,7 +65,7 @@ public class Product implements PersistentItem{
 	 * @param threeMonthSupply
 	 * @param size
 	 */
-	private Product(String description, String barCode, int shelfLife,
+	private Product(String description, BarCode barCode, int shelfLife,
 								int threeMonthSupply, Size size){
 		this.description = description;
 		this.barCode = barCode;
@@ -85,6 +85,34 @@ public class Product implements PersistentItem{
 	 * @return true if all of the parameters are valid.  Otherwise return false.
 	 */
 	public boolean canEdit(String description, int shelfLife, int threeMonthSupply, Size size){
+
+		// the description must be non-empty
+		if(description == ""){
+			return false;
+		}
+		
+		// the shelfLife must be non-negative
+		if(shelfLife < 0){
+			return false;
+		}
+		
+		// the threeMonthSupply must be non-negative
+		if(threeMonthSupply < 0){
+			return false;
+		}
+		
+		// the size should already be valid.  A valid size should never be created.
+		
+		// the size must be positive and cannot be zero
+		if(size.getSize() <= 0){
+			return false;
+		}
+		
+		// if the unit of the size is count, the magnitude must be 1
+		if(size.getUnits() == Unit.count && size.getSize() != 1){
+			return false;
+		}
+		
 		return true;
 	}
 	
@@ -96,7 +124,14 @@ public class Product implements PersistentItem{
 	 * @param size - The new size of the product
 	 */
 	public void edit(String description, int shelfLife, int threeMonthSupply, Size size){
+		assert(description != null);
+		assert(size != null);
+		assert(canEdit(description, shelfLife, threeMonthSupply, size));
 		
+		this.description = description;
+		this.shelfLife = shelfLife;
+		this.threeMonthSupply = threeMonthSupply;
+		this.size = size;
 	}
 	
 	/**
@@ -104,7 +139,7 @@ public class Product implements PersistentItem{
 	 * @param container - The ProductContainer to add to the set of containers
 	 */
 	public void addProductContainer(ProductContainer container){
-		
+		this.containers.add(container);
 	}
 	
 	/*public String sqlCreateStatement() {
@@ -142,7 +177,7 @@ public class Product implements PersistentItem{
 	 * 
 	 * @return the BarCode of the product
 	 */
-	public String getBarCode() {
+	public BarCode getBarCode() {
 		return barCode;
 	}
 
