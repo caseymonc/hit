@@ -43,6 +43,7 @@ public class BarCodeGenerator {
 //        adding the even-numbered digits (42 + (3 + 0 + 0 + 9 + 4) = 58),
 //        calculating modulo ten (58 mod 10 = 8),
 //        subtracting from ten (10 − 8 = 2).
+           
 		return null;
 	}
 	

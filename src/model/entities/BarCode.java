@@ -32,4 +32,16 @@ public class BarCode implements Serializable {
 	public String getBarCode(){
 		return barCode;
 	}
+        
+        public boolean equals(Object obj) 
+        {
+            if(obj instanceof BarCode)
+            {
+                BarCode objBCode = (BarCode)obj;
+                return this.barCode == objBCode.barCode;
+            }
+            else{
+                return false;
+            }
+        }
 }

@@ -246,4 +246,16 @@ public class Product implements PersistentItem{
 	public void setThreeMonthSupply(int threeMonthSupply) {
 		this.threeMonthSupply = threeMonthSupply;
 	}
+        
+        public boolean equals(Object obj) 
+        {
+            if(obj instanceof Product)
+            {
+                Product prod = (Product)obj;
+                return this.barCode == prod.barCode;
+            }
+            else{
+                return false;
+            }
+        }
 }
