@@ -4,6 +4,8 @@
  */
 package model;
 
+import model.managers.ItemMap;
+import model.managers.ProductMap;
 import model.entities.BarCode;
 import model.entities.RootUnit;
 import model.entities.Item;
