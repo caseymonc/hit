@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package model;
+package model.managers;
 
 import model.entities.ProductGroup;
 import java.util.TreeMap;
