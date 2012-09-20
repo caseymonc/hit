@@ -76,70 +76,20 @@ public class Product implements PersistentItem{
 		
 	}
 	
-	/** Checks to see if the new information being used to edit a product is valid
-	 * 
-	 * @param description - The new description of the product
-	 * @param shelfLife - The new shelflife of the product
-	 * @param threeMonthSupply - The new threeMonthSupply of the product
-	 * @param size - The new size of the product
-	 * @return true if all of the parameters are valid.  Otherwise return false.
-	 */
-	public boolean canEdit(String description, int shelfLife, int threeMonthSupply, Size size){
-
-		// the description must be non-empty
-		if(description == ""){
-			return false;
-		}
-		
-		// the shelfLife must be non-negative
-		if(shelfLife < 0){
-			return false;
-		}
-		
-		// the threeMonthSupply must be non-negative
-		if(threeMonthSupply < 0){
-			return false;
-		}
-		
-		// the size should already be valid.  A valid size should never be created.
-		
-		// the size must be positive and cannot be zero
-		if(size.getSize() <= 0){
-			return false;
-		}
-		
-		// if the unit of the size is count, the magnitude must be 1
-		if(size.getUnits() == Unit.count && size.getSize() != 1){
-			return false;
-		}
-		
-		return true;
-	}
-	
-	/** Edits the product
-	 * 
-	 * @param description - The new description of the product
-	 * @param shelfLife - The new shelflife of the product
-	 * @param threeMonthSupply - The new threeMonthSupply of the product
-	 * @param size - The new size of the product
-	 */
-	public void edit(String description, int shelfLife, int threeMonthSupply, Size size){
-		assert(description != null);
-		assert(size != null);
-		assert(canEdit(description, shelfLife, threeMonthSupply, size));
-		
-		this.description = description;
-		this.shelfLife = shelfLife;
-		this.threeMonthSupply = threeMonthSupply;
-		this.size = size;
-	}
-	
 	/**
 	 * Add a container to the product's set of containers
 	 * @param container - The ProductContainer to add to the set of containers
 	 */
 	public void addProductContainer(ProductContainer container){
 		this.containers.add(container);
+	}
+	
+	/**
+	 * Removes a container from the product's set of containers
+	 * @param container - The ProductContainer to remove from the set of containers
+	 */
+	public void removeProductContainer(ProductContainer container){
+		this.containers.remove(container);
 	}
 	
 	/*public String sqlCreateStatement() {
@@ -246,16 +196,21 @@ public class Product implements PersistentItem{
 	public void setThreeMonthSupply(int threeMonthSupply) {
 		this.threeMonthSupply = threeMonthSupply;
 	}
-        
-        public boolean equals(Object obj) 
+    
+	/** determines if an Object is equal to this Product
+	 * 
+	 * @param obj - the Object being compared with this Product
+	 * @return true if obj is equal to this Product, otherwise return false
+	 */
+    public boolean equals(Object obj) 
+    {
+        if(obj instanceof Product)
         {
-            if(obj instanceof Product)
-            {
-                Product prod = (Product)obj;
-                return this.barCode == prod.barCode;
-            }
-            else{
-                return false;
-            }
+            Product prod = (Product)obj;
+            return this.barCode == prod.barCode;
         }
+        else{
+            return false;
+        }
+    }
 }
