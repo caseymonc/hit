@@ -7,6 +7,7 @@ package model;
 import model.entities.BarCode;
 import model.entities.Item;
 import model.entities.Product;
+import model.managers.*;
 import model.persistence.PersistentItem;
 
 /** CoreObjectModel
@@ -27,7 +28,7 @@ public class CoreObjectModel implements PersistentItem{
 	 */
 	public Product findProductByBarCode(BarCode barcode) {
 		
-		return productManager.getProductByBarCode(barcode);
+		return ProductManager.getProductByBarCode(barcode);
 	}
 	
 	/** finds and returns the Item associated with the unique barcode
