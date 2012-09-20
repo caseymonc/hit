@@ -1,6 +1,7 @@
 package model.entities;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 /** BarCode
  * A Barcode must be a valid UPC-A barcode.  All products 
@@ -32,16 +33,24 @@ public class BarCode implements Serializable {
 	public String getBarCode(){
 		return barCode;
 	}
-        
-        public boolean equals(Object obj) 
-        {
-            if(obj instanceof BarCode)
-            {
-                BarCode objBCode = (BarCode)obj;
-                return this.barCode == objBCode.barCode;
-            }
-            else{
-                return false;
-            }
-        }
+     
+	@Override
+	public boolean equals(Object obj) 
+	{
+	    if(obj instanceof BarCode)
+	    {
+		   BarCode objBCode = (BarCode)obj;
+		   return this.barCode.equals(objBCode.barCode);
+	    }
+	    else{
+		   return false;
+	    }
+	}
+
+	@Override
+	public int hashCode() {
+		int hash = 7;
+		hash = 41 * hash + Objects.hashCode(this.barCode);
+		return hash;
+	}
 }

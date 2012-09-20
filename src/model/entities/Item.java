@@ -174,15 +174,16 @@ public class Item implements PersistentItem{
 	public ProductContainer getContainer() {
 		return container;
 	}
-        
-        public boolean equals(Object obj) 
-        {
-            if(obj instanceof Item){
-                Item objItem = (Item)obj;
-                return this.barCode == objItem.barCode;
-            }
-            else{
-                return false;
-            }    
-        }
+     
+	@Override
+	public boolean equals(Object obj) 
+	{
+	    if(obj instanceof Item){
+		   Item objItem = (Item)obj;
+		   return this.barCode == objItem.barCode;
+	    }
+	    else{
+		   return false;
+	    }    
+	}
 }
