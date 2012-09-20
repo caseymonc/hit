@@ -21,23 +21,46 @@ import model.persistence.PersistentItem;
  */
 public class CoreObjectModel implements PersistentItem{
 	
+	private static CoreObjectModel _instance;
+	private ProductManager productManager;
+	private ProductGroupManager productGroupManager;
+	private StorageUnitManager storageManager;
+	private ItemManager itemManager;
+  
+	public static CoreObjectModel getInstance()
+	{
+	   if(_instance == null)
+	   {
+		   _instance = new CoreObjectModel();
+	   }
+	   return _instance;
+	}
+	private CoreObjectModel()
+	{
+		productManager = new ProductManager();
+		productGroupManager = new ProductGroupManager();
+		storageManager = new StorageUnitManager();
+		itemManager = new ItemManager();
+	}
+	
+		
 	/** finds and returns the product associated with the unique barcode
 	 * 
 	 * @param barcode unique for each product
 	 * @return Product
 	 */
-	public Product findProductByBarCode(BarCode barcode) {
-		
-		return ProductManager.getProductByBarCode(barcode);
+	public Product findProductByBarCode(BarCode barcode) 
+	{
+			return productManager.getProductByBarCode(barcode);
 	}
-	
+
 	/** finds and returns the Item associated with the unique barcode
 	 * 
 	 * @param barcode unique for each item
 	 * @return Item
 	 */
 	public Item findItemByBarCode(BarCode barcode) {
-		return allTheItems.getItemByBarCode(barcode);
+			return itemManager.getItemByBarCode(barcode);
 	}
 
 
