@@ -24,7 +24,7 @@ public class CoreObjectModel implements PersistentItem{
 	private static CoreObjectModel _instance;
 	private ProductManager productManager;
 	private ProductGroupManager productGroupManager;
-	private StorageUnitManager storageManager;
+	private StorageUnitManager storageUnitManager;
 	private ItemManager itemManager;
   
 	public static CoreObjectModel getInstance()
@@ -39,7 +39,7 @@ public class CoreObjectModel implements PersistentItem{
 	{
 		productManager = new ProductManager();
 		productGroupManager = new ProductGroupManager();
-		storageManager = new StorageUnitManager();
+		storageUnitManager = new StorageUnitManager();
 		itemManager = new ItemManager();
 	}
 
@@ -51,8 +51,8 @@ public class CoreObjectModel implements PersistentItem{
 		return productGroupManager;
 	}
 
-	public StorageUnitManager getStorageManager() {
-		return storageManager;
+	public StorageUnitManager getStorageUnitManager() {
+		return storageUnitManager;
 	}
 
 	public ItemManager getItemManager() {
