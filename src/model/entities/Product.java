@@ -196,7 +196,12 @@ public class Product implements PersistentItem{
 	public void setThreeMonthSupply(int threeMonthSupply) {
 		this.threeMonthSupply = threeMonthSupply;
 	}
-        
+    
+	/** determines if an Object is equal to this Product
+	 * 
+	 * @param obj - the Object being compared with this Product
+	 * @return true if obj is equal to this Product, otherwise return false
+	 */
     public boolean equals(Object obj) 
     {
         if(obj instanceof Product)

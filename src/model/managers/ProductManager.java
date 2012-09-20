@@ -64,16 +64,25 @@ public class ProductManager {
 		if (p == null || c == null) {
 			throw new IllegalArgumentException();
 		}
-
-		ProductContainer unit = c;
 		
+		/*
 		// get the storageUnit of c
-		while(!(unit instanceof StorageUnit)){
-			
+		ProductContainer storageUnit = c;
+		
+		
+		while(!(storageUnit instanceof StorageUnit)){
+			storageUnit = c.getContainer();
 		}
 		
+		// make sure product isn't already in the storageUnit of c
+		if(storageUnit.hasProduct(p)){
+			throw new IllegalArgumentException();
+		} */
+		
 		// add product to productsByBarCode
-		productsByBarCode.put(p.getBarCode(), p);
+		if(!productsByBarCode.containsKey(p.getBarCode())){
+			productsByBarCode.put(p.getBarCode(), p);
+		}
 
 		// add product and container to productsByContainer
 		if (productsByContainer.containsKey(c)) {
@@ -103,7 +112,7 @@ public class ProductManager {
 	 * @param c
 	 * @return return true if p can be removed, else return true
 	 */
-	public boolean canRemoveProduct(Product p, ProductContainer c){
+	public boolean canRemoveProductFromContainer(Product p, ProductContainer c){
 		
 		// is no container selected
 		
@@ -130,7 +139,7 @@ public class ProductManager {
 	 * 
 	 * @throws IllegalArgumentException if p is null
 	 */
-	public void removeProduct(Product p, ProductContainer c) throws IllegalArgumentException{
+	public void removeProductFromContainer(Product p, ProductContainer c) throws IllegalArgumentException{
 		
 		if(p == null){
 			throw new IllegalArgumentException();
