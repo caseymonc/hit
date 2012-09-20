@@ -42,6 +42,22 @@ public class CoreObjectModel implements PersistentItem{
 		storageManager = new StorageUnitManager();
 		itemManager = new ItemManager();
 	}
+
+	public ProductManager getProductManager() {
+		return productManager;
+	}
+
+	public ProductGroupManager getProductGroupManager() {
+		return productGroupManager;
+	}
+
+	public StorageUnitManager getStorageManager() {
+		return storageManager;
+	}
+
+	public ItemManager getItemManager() {
+		return itemManager;
+	}
 	
 		
 	/** finds and returns the product associated with the unique barcode
