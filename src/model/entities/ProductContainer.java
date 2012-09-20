@@ -132,7 +132,6 @@ public abstract class ProductContainer{
 	 /** sets the name of this product container
 	  *  @param name String the new name for this container
 	  */
-	 public abstract void setName(String name);
-	 
+	 public abstract void setName(String name); 
 	 
 }

@@ -2,6 +2,7 @@ package model.entities;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.Set;
 import model.persistence.PersistentItem;
 
@@ -202,15 +203,25 @@ public class Product implements PersistentItem{
 	 * @param obj - the Object being compared with this Product
 	 * @return true if obj is equal to this Product, otherwise return false
 	 */
-    public boolean equals(Object obj) 
-    {
-        if(obj instanceof Product)
-        {
-            Product prod = (Product)obj;
-            return this.barCode == prod.barCode;
-        }
-        else{
-            return false;
-        }
-    }
+	@Override
+	public boolean equals(Object obj) 
+	{
+	    if(obj instanceof Product)
+	    {
+		   Product prod = (Product)obj;
+		   return this.barCode == prod.barCode;
+	    }
+	    else{
+		   return false;
+	    }
+	}
+
+	@Override
+	public int hashCode() {
+		int hash = 7;
+		hash = 29 * hash + Objects.hashCode(this.barCode);
+		return hash;
+	}
+	
+	
 }
