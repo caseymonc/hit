@@ -58,13 +58,20 @@ public class ProductManager {
 	 * 
 	 * @throws IllegalArgumentException
 	 */
-	public void addProduct(Product p, ProductContainer c)
+	public void addProductToContainer(Product p, ProductContainer c)
 			throws IllegalArgumentException {
 
 		if (p == null || c == null) {
 			throw new IllegalArgumentException();
 		}
 
+		ProductContainer unit = c;
+		
+		// get the storageUnit of c
+		while(!(unit instanceof StorageUnit)){
+			
+		}
+		
 		// add product to productsByBarCode
 		productsByBarCode.put(p.getBarCode(), p);
 
@@ -89,7 +96,7 @@ public class ProductManager {
 		// add container to the product's set of containers
 		p.addProductContainer(c);
 	}
-
+	
 	/** Checks to see if a product can be removed.
 	 * 
 	 * @param p
@@ -195,6 +202,8 @@ public class ProductManager {
 		product.setThreeMonthSupply(newProduct.getThreeMonthSupply());
 	}
 	
+	
+	
 	/** Determines if a product exists
 	 * 
 	 * @param barcode - the BarCode of the product being searched for.
@@ -205,15 +214,31 @@ public class ProductManager {
 		return productsByBarCode.containsKey(barcode);
 	}
 
-	/**
-	 * Get the product by its BarCode
+	/** Get the product by its BarCode
 	 * 
 	 * @param barcode
 	 *            - The BarCode of the product being retrieved
-	 * @return the product whose BarCode is equal to barcode. Otherwise, return
-	 *         null.
+	 * @return the product whose BarCode is equal to barcode.
 	 */
 	public Product getProductByBarCode(BarCode barcode) {
 		return productsByBarCode.get(barcode);
+	}
+	
+	/** Get the products in a ProductContainer
+	 * 
+	 * @param c - The ProductContainer whose products will be returned
+	 * @return the Products that belong to c
+	 */
+	public Set<Product> getProductsByContainer(ProductContainer c) {
+		return productsByContainer.get(c);
+	}
+	
+	/** Get the Containers that contain a Product
+	 * 
+	 * @param p - The Product whose containers will be returned
+	 * @return the ProductContainers that contain p
+	 */
+	public Set<ProductContainer> getContainersByProduct(Product p) {
+		return containersByProduct.get(p);
 	}
 }
