@@ -10,13 +10,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.HashMap;
 
-import model.entities.Item;
-import model.entities.ProductContainer;
-import model.entities.BarCode;
-import model.entities.Product;
-import model.entities.Size;
-import model.entities.StorageUnit;
-import model.entities.Unit;
+import model.entities.*;
 
 /**
  * 
@@ -222,6 +216,43 @@ public class ProductManager {
 	public boolean productExists(BarCode barcode) {
 		return productsByBarCode.containsKey(barcode);
 	}
+	/** Updates the 
+	 * @throws CantAddProductGroupException
+	 * @param p
+	 * @param pg 
+	 */
+	public void addProductGroupToProductsLocations(Product p, ProductGroup pg) {
+		//dmathis i need something like this, that will edit the containersByProduct index
+	}
+
+	/**
+	 * 
+	 * @param p
+	 * @param pg
+	 * @return 
+	 */
+	public boolean productIsInProductGroup(Product p, ProductGroup pg) {
+		return true; //dmathis can you give me something that will work like this?
+	}
+	/** Updates the 
+	 * @throws CantAddProductGroupException
+	 * @param p
+	 * @param pg 
+	 */
+	public void addStorageUnitToProductsLocations(Product p, StorageUnit su) {
+		//dmathis i need something like this, that will edit the containersByProduct index
+	}
+
+	/**
+	 * 
+	 * @param p
+	 * @param pg
+	 * @return 
+	 */
+	public boolean productIsInStorageUnit(Product p, StorageUnit pg) {
+		return true; //dmathis can you give me something that will work like this?
+	}
+	//You might be able to Generalize these methods to do a ProductContainer instead of split by SU and PG
 
 	/** Get the product by its BarCode
 	 * 
