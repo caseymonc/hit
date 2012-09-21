@@ -137,7 +137,7 @@ public class ItemController {
 	/** 
 	 * 
 	 */
-	public void removeItem(Item i) throws Exception {
+	public void removeItem(Item i) {
 		//where is the item?
 		//tell the IM to remove the item
 		IM.removeItem(i);
@@ -161,12 +161,33 @@ public class ItemController {
 		//who else needs to know about this change?
 	}
 	
-	/**
-	 *
+	/** The user can move an Item to a Product Container by selecting the Item 
+	 *  in the Item Table and dragging it to the target Product Container in 
+	 *  the Storage Unit / Product Group Tree. The effect of this operation  
+	 *  depends on whether or not the Item’s Product is already contained in  
+	 *  the destination Storage Unit. (Remember, a Product can be in only one 
+	 *  Product Container in a given Storage Unit. However, a Product may 
+	 *  appear in multiple Storage Units. Also, an Item is always contained in 
+	 *  exactly one Product Container.)
+	 * 
+	 * @param i
+	 * @param pc
+	 * @throws CannotMoveItemException 
 	 */
-	public void moveItem(Item i, ProductContainer pc) throws Exception {
+	public void moveItemToContainer(Item i, ProductContainer pc) {//throws CannotMoveItemException {
+		ProductContainer oldc = IM.getProductContainerByItem(i);
+		assert(oldc != null);
+		if(oldc instanceof StorageUnit) {
+			assert(SM.storageUnitHasItem((StorageUnit) oldc, i));
+			
+		} else {
+			assert(oldc instanceof ProductGroup);
+			assert(PGM.productGroupHasItem((ProductGroup) oldc, i));
+			
+		}
 
 		//have to look this one up, but it seems
+		
 //		if(pc instanceof StorageUnit) {
 //			if(!PM.productIsInStorageUnit(p, su)) {
 //				//add Product to SU first
@@ -182,15 +203,26 @@ public class ItemController {
 	}
 	
 	/**
+	 * 
+	 * @param i
+	 * @param pc 
+	 */
+	public void transferItemToContainer(Item i, ProductContainer pc) {// throws CannotTransferItemException {
+		
+	}
+	
+	/**
 	 * @throws CannotModifyItemException
 	 */
-	public void modifyItem(Item i) throws Exception {
+	public void modifyItem(Item i) {// throws CannotModifyItemException {
 		
 		Item oldItem = IM.getItemByBarCode(i.getBarCode());
 		
-		if(this.canModifyItem(i, oldItem) == false) {
-			
+		if(canModifyItem(i, oldItem) == false) {
+			//throw new CannotModifyItemException();
+			//does this subsequently disable the ok button?
 		} else {
+			
 			//code to remove...
 		}
 	}

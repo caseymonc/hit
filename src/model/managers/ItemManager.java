@@ -58,6 +58,14 @@ public class ItemManager
 		//can always add dont need to check if i can.
 	}
 
+	public ProductContainer getProductContainerByItem(Item i) {
+		ProductContainer pc = (ProductContainer) productGroupsByItem.get(i);
+		if(pc == null) {
+			pc = (ProductContainer) storageUnitsByItem.get(i);
+		}
+		return pc;
+	}
+
 	public StorageUnit getStorageUnitByItem(Item i) {
 		return storageUnitsByItem.get(i);
 	}
