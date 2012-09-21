@@ -33,8 +33,10 @@ public class BarCodeGenerator {
 	 * Private Constructor
 	 */
 	private BarCodeGenerator(){
-		//barCodes = new HashSet<BarCode>(); I don't think that we need this because we know that every code we generate is unique 
-		// because the barcodegenerator class is a singleton class and it starts with 1 as the starting barcode and will go up to 100 
+		// barCodes = new HashSet<BarCode>(); I don't think that we need this
+		// because we know that every code we generate is unique 
+		// because the barcodegenerator class is a singleton class and it starts
+		// with 1 as the starting barcode and will go up to 100 
 		lastBarCode = 0;
 	}
 	
@@ -43,7 +45,9 @@ public class BarCodeGenerator {
 	 * @return A unique BarCode
 	 */
 	public BarCode generateBarCode(){
-          lastBarCode++; //You can have 2.1 billion products before this ever goes bad do we need a reset if it reaches that number?
+          lastBarCode++; 
+		// We can have ~2.1 billion products before this ever 
+		// goes bad do we need a reset if it reaches that number?
 		int length = (lastBarCode == 0) ? 1 : (int)Math.log10(lastBarCode) + 1;
 		String barCodeBuilder= "" ;
 		for (int i=0; i<(11-length); i++) {
@@ -67,7 +71,8 @@ public class BarCodeGenerator {
 		// Add the digits in the even-numbered positions (second, fourth, sixth, etc.) to the result.
 		// Find the result modulo 10 (i.e. the remainder when divided by 10.. 10 goes into 58 5 times with 8 leftover).
 		// If the result is not zero, subtract the result from ten.
-		// For example, a UPC-A barcode (in this case, a UPC for a box of tissues) "03600029145X" where X is the check digit, X can be calculated by
+		// For example, a UPC-A barcode (in this case, a UPC for a box of tissues)
+		// "03600029145X" where X is the check digit, X can be calculated by
 		// adding the odd-numbered digits (0 + 6 + 0 + 2 + 1 + 5 = 14),
 		// multiplying by three (14 × 3 = 42),
 		// adding the even-numbered digits (42 + (3 + 0 + 0 + 9 + 4) = 58),
