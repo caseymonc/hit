@@ -1,20 +1,20 @@
 package model;
 
 import java.util.HashSet;
-import java.util.Set;
 import model.entities.BarCode;
+import model.persistence.PersistentItem;
 
 /**
  * Generates Valid UPC-A BarCodes
  * @author Casey Moncur
  *
  */
-public class BarCodeGenerator {
+public class BarCodeGenerator implements PersistentItem {
 	
 	/** Singleton instance of BarCodeGenerator*/
 	private static BarCodeGenerator _instance;
 	private HashSet<BarCode> barCodes;
-	int lastBarCode;
+	private int lastBarCode;
 	
 	/** 
 	 * Get an instance of BarCodeGenerator
@@ -33,21 +33,22 @@ public class BarCodeGenerator {
 	 * Private Constructor
 	 */
 	private BarCodeGenerator(){
-		// barCodes = new HashSet<BarCode>(); I don't think that we need this
-		// because we know that every code we generate is unique 
+		// We know that every code we generate is unique 
 		// because the barcodegenerator class is a singleton class and it starts
-		// with 1 as the starting barcode and will go up to 100 
+		// with 1 and increments everytime a new barcode is generated so it will never
+		// generate the same barCode twice;
 		lastBarCode = 0;
 	}
 	
 	/**
-	 * Get a unique bar code
+	 * Create a unique bar code
 	 * @return A unique BarCode
 	 */
 	public BarCode generateBarCode(){
           lastBarCode++; 
 		// We can have ~2.1 billion products before this ever 
 		// goes bad do we need a reset if it reaches that number?
+		// and thus have to keep track of which ones are still in the system?
 		int length = (lastBarCode == 0) ? 1 : (int)Math.log10(lastBarCode) + 1;
 		String barCodeBuilder= "" ;
 		for (int i=0; i<(11-length); i++) {
