@@ -1,6 +1,5 @@
 package model.entities;
 
-import model.entities.Product;
 import java.util.Date;
 import java.util.Objects;
 import model.persistence.PersistentItem;
