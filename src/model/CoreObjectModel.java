@@ -4,9 +4,8 @@
  */
 package model;
 
-import model.entities.BarCode;
-import model.entities.Item;
-import model.entities.Product;
+
+import model.entities.*;
 import model.managers.*;
 import model.controllers.*;
 import model.persistence.PersistentItem;
@@ -51,7 +50,7 @@ public class CoreObjectModel implements PersistentItem{
 		
 		itemController = new ItemController();
 		productController = new ProductController();
-		storageUnitController = new StorageUnitController();
+		//storageUnitController = new StorageUnitController();
 		productGroupController = new ProductGroupController();
 	}
 
