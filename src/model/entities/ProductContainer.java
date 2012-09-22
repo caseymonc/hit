@@ -424,6 +424,8 @@ public abstract class ProductContainer{
 	  * @param container
 	  */
 	 public void setContainer(ProductContainer container){
+		 if(container == this)
+			 throw new IllegalArgumentException("ProductContainer cannot be a parent of it's self");
 		 this.container = container;
 	 }
 	 
@@ -491,4 +493,13 @@ public abstract class ProductContainer{
 		
 	}
 
+	public int hashCode(){
+		if(container == null)
+			return getName().hashCode();
+		return getName().hashCode() + getContainer().hashCode();
+	}
+	
+	public String toString(){
+		return name;
+	}
 }

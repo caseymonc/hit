@@ -19,6 +19,10 @@ public class ProductGroupController {
 	 * 
 	 */
 	
+	public ProductGroupController(){
+		COM = CoreObjectModel.getInstance();
+	}
+	
 	public boolean canAddProductGroup(ProductGroup group, ProductContainer container) {
 		if(group == null)
 			return false;
@@ -38,8 +42,7 @@ public class ProductGroupController {
 			throw new IllegalArgumentException();
 		}
 		
-		container.addProductGroup(group);
-		COM.getProductGroupManager().addProductGroup(group, container);
+		COM.getProductGroupManager().addProductGroup(group);
 	}
 	
 	public boolean canEditProductGroup(ProductGroup group, ProductGroup oldUnit) {
@@ -50,7 +53,7 @@ public class ProductGroupController {
 			return true;
 		}
 		
-		return manager.canAddProductGroup(group, group.getContainer());
+		return manager.canAddProductGroup(group);
 	}
 	
 	public void editProductGroup(ProductGroup unit, ProductGroup oldUnit){
@@ -60,23 +63,23 @@ public class ProductGroupController {
 			throw new IllegalArgumentException();
 		}
 		
-		oldUnit = COM.getProductGroupManager().getProductGroupByName(oldUnit.getName());
+		oldUnit = COM.getProductGroupManager()
+					.getProductGroupByName(oldUnit.getName(), oldUnit.getContainer());
 		oldUnit.update(unit);
 	}
 	
-	public boolean canDeleteProductGroup(ProductGroup unit){
-		return unit.isEmpty();
+	public boolean canDeleteProductGroup(ProductGroup group){
+		return group.isEmpty() && COM.getProductGroupManager().canRemoveProductGroup(group);
 	}
 	
-	public void deleteProductGroup(ProductGroup unit){
-		assert(canDeleteProductGroup(unit));
+	public void deleteProductGroup(ProductGroup group){
+		assert(canDeleteProductGroup(group));
 		
-		if(!canDeleteProductGroup(unit)){
+		if(!canDeleteProductGroup(group)){
 			throw new IllegalArgumentException("This ProductGroup is not empty");
 		}
-		ProductGroupManager suManager = COM.getProductGroupManager();
 		ProductGroupManager pgManager = COM.getProductGroupManager();
-		suManager.removeProductGroup(unit);
+		pgManager.removeProductGroup(group);
 		//pgManager.removeProductGroups(unit);
 		
 	}

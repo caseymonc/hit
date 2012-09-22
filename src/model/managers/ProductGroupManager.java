@@ -21,40 +21,55 @@ import model.entities.StorageUnit;
  */
 public class ProductGroupManager {
 	
-	private Map<String,ProductGroup> productGroups;
+	private Map<ProductContainer, Map<String,ProductGroup>> productGroupsByProductContainer;
 	private Map<StorageUnit,Set<ProductGroup>> productGroupsByStorageUnit;
+	private Set<ProductGroup> productGroups;
 	
 	
 	
 	public ProductGroupManager(){
-		productGroups = new HashMap<String,ProductGroup>();
+		productGroupsByProductContainer = new HashMap<ProductContainer, Map<String,ProductGroup>>();
 		productGroupsByStorageUnit = new HashMap<StorageUnit,Set<ProductGroup>>();
+		productGroups = new HashSet<ProductGroup>();
 	}
 
-	public ProductGroup getProductGroupByName(String name) {
-		return productGroups.get(name);
+	public ProductGroup getProductGroupByName(String name, ProductContainer container) {
+		Map<String, ProductGroup> groups = productGroupsByProductContainer.get(container);
+		if(groups == null)
+			return null;
+		return groups.get(name);
 	}
 	
-	public boolean canAddProductGroup(ProductGroup group, ProductContainer container) {
-		return container.canAddProductGroup(group);
+	public boolean canAddProductGroup(ProductGroup group) {
+		return group.getContainer().canAddProductGroup(group);
 	}
 	
-	public void addProductGroup(ProductGroup group, ProductContainer container) {
-		assert(canAddProductGroup(group, container));
+	public void addProductGroup(ProductGroup group) {
+		assert(canAddProductGroup(group));
 		
-		if(!canAddProductGroup(group, container))
+		if(!canAddProductGroup(group))
 			throw new IllegalArgumentException();
 		
-		if(productGroupsByStorageUnit.get(group.getStorageUnit()) != null){
+		group.getContainer().addProductGroup(group);
+		
+		if(productGroupsByStorageUnit.get(group.getStorageUnit()) == null){
 			productGroupsByStorageUnit.put(group.getStorageUnit()
 											, new HashSet<ProductGroup>());
 		}
+		
 		productGroupsByStorageUnit.get(group.getStorageUnit()).add(group);
-		productGroups.put(group.getName(), group);
+		
+		Map<String, ProductGroup> groups = productGroupsByProductContainer.get(group.getContainer());
+		if(groups == null){
+			productGroupsByProductContainer.put(group.getContainer(), new HashMap<String, ProductGroup>());
+			groups = productGroupsByProductContainer.get(group.getContainer());
+		}
+		groups.put(group.getName(), group);
+		productGroups.add(group);
 	}
 	
-	public boolean canRemoveProductGroup(ProductGroup unit) {
-		if(contains(unit)) {
+	public boolean canRemoveProductGroup(ProductGroup group) {
+		if(this.contains(group) && group.isEmpty()) {
 			return true;
 		}
 		return false;
@@ -66,12 +81,16 @@ public class ProductGroupManager {
 		if(!canRemoveProductGroup(group))
 			throw new IllegalArgumentException();
 		
-		productGroups.remove(group.getName());
+		ProductContainer container = group.getContainer();
+		container.removeProductGroup(group);
+		
+		productGroupsByProductContainer.remove(group.getName());
 		productGroupsByStorageUnit.get(group.getStorageUnit()).remove(group);
+		productGroups.remove(group);
 	}
 	
 	public boolean contains(ProductGroup unit) {
-		if(productGroups.keySet().contains(unit.getName())) {
+		if(productGroups.contains(unit)) {
 			return true;
 		}
 		return false;
@@ -80,12 +99,20 @@ public class ProductGroupManager {
 	public Set<ProductGroup> getProductGroups(StorageUnit unit){
 		return productGroupsByStorageUnit.get(unit);
 	}
-	
+		
 	public void removeProductGroups(StorageUnit unit){
 		Set<ProductGroup> groups = productGroupsByStorageUnit.get(unit);
 		if(groups == null)
 			return;
+		
+		ProductGroup[] groupsArray = new ProductGroup[groups.size()];
+		int i = 0;
 		for(ProductGroup group : groups){
+			groupsArray[i] = group;
+			i++;
+		}
+		
+		for(ProductGroup group : groupsArray){
 			this.removeProductGroup(group);
 		}
 	}
