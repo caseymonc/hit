@@ -50,7 +50,7 @@ public class CoreObjectModel implements PersistentItem{
 		
 		itemController = new ItemController();
 		productController = new ProductController();
-		//storageUnitController = new StorageUnitController();
+		storageUnitController = new StorageUnitController();
 		productGroupController = new ProductGroupController();
 	}
 
