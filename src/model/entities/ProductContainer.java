@@ -5,6 +5,7 @@ import model.entities.Product;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.List;
@@ -20,6 +21,7 @@ public abstract class ProductContainer{
 	private Map<BarCode,Product> products;
 	private Map<BarCode,Item> items;
 	private Map<String,ProductGroup> productGroups;
+	private Map<Product,Set<Item>> itemsByProduct;
 	private ProductContainer container;
 	private StorageUnit storageUnit;
 	private String name; 
@@ -33,6 +35,7 @@ public abstract class ProductContainer{
 		products = new HashMap<BarCode, Product>();
 		items = new HashMap<BarCode,Item>();
 		productGroups = new HashMap<String,ProductGroup>();
+		itemsByProduct = new HashMap<Product,Set<Item>>();
 	}
 	
 	/**
@@ -77,9 +80,25 @@ public abstract class ProductContainer{
 		storageUnit.setProductForContainer(item.getProduct(), this);
 		products.put(item.getProduct().getBarCode(), item.getProduct());
 		items.put(item.getBarCode(), item);
+		putItemByProduct(item);
 		item.setContainer(this);
 	}
 	
+	private void putItemByProduct(Item item) {
+		Set<Item> items = itemsByProduct.get(item.getProduct());
+		if(items == null){
+			items = new HashSet<Item>();
+		}
+		
+		items.add(item);
+		itemsByProduct.put(item.getProduct(), items);
+	}
+	
+	public Set<Item> getItemsByProduct(Product product){
+		return itemsByProduct.get(product);
+	}
+	
+
 	/**
 	 * Asks if the item can be removed
 	 * @param item The item to be removed
