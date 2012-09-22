@@ -1,7 +1,6 @@
 package model.entities;
 
 import java.io.Serializable;
-import java.util.Objects;
 
 /** BarCode
  * A Barcode must be a valid UPC-A barcode.  All products 
@@ -49,8 +48,6 @@ public class BarCode implements Serializable {
 
 	@Override
 	public int hashCode() {
-		int hash = 7;
-		hash = 41 * hash + Objects.hashCode(this.barCode);
-		return hash;
+		return this.barCode.hashCode();
 	}
 }

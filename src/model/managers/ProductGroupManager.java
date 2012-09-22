@@ -5,11 +5,15 @@
 package model.managers;
 
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import model.entities.BarCode;
 import model.entities.Item;
 import model.entities.Product;
+import model.entities.ProductContainer;
 import model.entities.ProductGroup;
+import model.entities.StorageUnit;
 
 /**
  *
@@ -17,64 +21,73 @@ import model.entities.ProductGroup;
  */
 public class ProductGroupManager {
 	
-	private HashMap<BarCode, ProductGroup> productGroupsByBarCode;
+	private Map<String,ProductGroup> productGroups;
+	private Map<StorageUnit,Set<ProductGroup>> productGroupsByStorageUnit;
 	
-	private HashMap<ProductGroup, Set<Product>> productsByProductGroup;
+	
+	
+	public ProductGroupManager(){
+		productGroups = new HashMap<String,ProductGroup>();
+		productGroupsByStorageUnit = new HashMap<StorageUnit,Set<ProductGroup>>();
+	}
 
-	private HashMap<ProductGroup, Set<Item>> itemsByProductGroup;
-	
-	public ProductGroupManager() {
-
-		productGroupsByBarCode = new HashMap<BarCode, ProductGroup>();
-		productsByProductGroup = new HashMap<ProductGroup, Set<Product>>();
-		itemsByProductGroup = new HashMap<ProductGroup, Set<Item>>();
+	public ProductGroup getProductGroupByName(String name) {
+		return productGroups.get(name);
 	}
 	
-	/**
-	 * @throws CantAddItemException
-	 */
-	public void addItemToProductGroup(ProductGroup pg, Item i) {
-		//can always add dont need to check if i can.
-	}
-	
-	/**
-	 * @throws CantAddItemException
-	 */
-	public void addProductToProductGroup(ProductGroup pg, Product p) {
-		//can always add dont need to check if i can.
-		//updates productsByProductGroup.
-	}
-	
-	/** removes the Item from the Product Group
-	 * 
-	 * @throws IllegalArgumentException
-	 * @param i
-	 * @param pg 
-	 */
-	public void removeItemFromProductGroup(Item i, ProductGroup pg) {
-		if(i == null || pg == null) {
-			throw new IllegalArgumentException();
+	public boolean canAddProductGroup(ProductGroup unit) {
+		if(contains(unit)) {
+			return false;
 		}
-		
-		assert(itemsByProductGroup.containsKey(pg));
-		assert(itemsByProductGroup.get(pg).contains(i));
-		
-		itemsByProductGroup.get(pg).remove(i);
-	}
-	
-	public boolean productGroupHasProduct(ProductGroup pg, Product p) {
-		return true; //dpatty requesting this function.
-	}
-	
-	
-	
-	/**
-	 * 
-	 * @param pg
-	 * @param i
-	 * @return 
-	 */
-	public boolean productGroupHasItem(ProductGroup pg, Item i) {
 		return true;
+	}
+	
+	public void addProductGroup(ProductGroup group, ProductContainer container) {
+		assert(canAddProductGroup(group));
+		
+		if(!canAddProductGroup(group))
+			throw new IllegalArgumentException();
+		
+		if(productGroupsByStorageUnit.get(group.getStorageUnit()) != null){
+			productGroupsByStorageUnit.put(group.getStorageUnit()
+											, new HashSet<ProductGroup>());
+		}
+		productGroupsByStorageUnit.get(group.getStorageUnit()).add(group);
+		productGroups.put(group.getName(), group);
+	}
+	
+	public boolean canRemoveProductGroup(ProductGroup unit) {
+		if(contains(unit)) {
+			return true;
+		}
+		return false;
+	}
+	
+	public void removeProductGroup(ProductGroup group) {
+		assert(canRemoveProductGroup(group));
+		
+		if(!canRemoveProductGroup(group))
+			throw new IllegalArgumentException();
+		
+		productGroups.remove(group.getName());
+		productGroupsByStorageUnit.get(group.getStorageUnit()).remove(group);
+	}
+	
+	public boolean contains(ProductGroup unit) {
+		if(productGroups.keySet().contains(unit.getName())) {
+			return true;
+		}
+		return false;
+	}
+	
+	public Set<ProductGroup> getProductGroups(StorageUnit unit){
+		return productGroupsByStorageUnit.get(unit);
+	}
+	
+	public void removeProductGroups(StorageUnit unit){
+		Set<ProductGroup> groups = productGroupsByStorageUnit.get(unit);
+		for(ProductGroup group : groups){
+			this.removeProductGroup(group);
+		}
 	}
 }

@@ -2,7 +2,6 @@ package model.entities;
 
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Objects;
 import java.util.Set;
 import model.persistence.PersistentItem;
 
@@ -218,9 +217,7 @@ public class Product implements PersistentItem{
 
 	@Override
 	public int hashCode() {
-		int hash = 7;
-		hash = 29 * hash + Objects.hashCode(this.barCode);
-		return hash;
+		return this.barCode.hashCode();
 	}
 	
 	

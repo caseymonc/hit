@@ -4,6 +4,7 @@
  */
 package model.managers;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -113,7 +114,7 @@ public class ProductManager {
 		// is the product container the root?
 		
 		// does c have Items that point to p
-		List<Item> items = c.getAllItems();
+		Collection<Item> items = c.getAllItems();
 		
 		for(Item item : items){
 			if(item.getProduct().equals(p)){
