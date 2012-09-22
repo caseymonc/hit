@@ -48,6 +48,21 @@ public class ItemController {
 	private ProductGroupManager PGM;
 	
 	/**
+	 * Controls everything to do with products
+	 */
+	private ProductController PC;
+	
+	/**
+	 * Controls everything to do with Storage Units
+	 */
+	private StorageUnitController SC;
+	
+	/**
+	 * Controls everything to do with Product Groups
+	 */
+	private ProductGroupController PGC;
+
+	/**
 	 * Constructor
 	 */
 	public ItemController() {
@@ -56,6 +71,10 @@ public class ItemController {
 		IM = COM.getItemManager();
 		SM = COM.getStorageUnitManager();
 		PGM = COM.getProductGroupManager();
+		
+		PC = COM.getProductController();
+		SC = COM.getStorageUnitController();
+		PGC = COM.getProductGroupController();
 	}
 
 	/** 
@@ -65,74 +84,20 @@ public class ItemController {
 	 * 
 	 * @throws IllegalArgumentException
 	 */
-	public void addItem(Item i, ProductContainer pc) throws IllegalArgumentException {
+	public void addItem(Item i, StorageUnit su) throws IllegalArgumentException {
 		
-		if(i == null || pc ==  null) {
+		if(i == null || su ==  null) {
 			throw new IllegalArgumentException();
 		}
 
 		Product p = i.getProduct();
-		if(pc instanceof ProductGroup) {
-			ProductGroup pg = (ProductGroup) pc;
-			assert(PM.productIsInProductGroup(p,pg) == PGM.productGroupHasProduct(pg, p));
-
-			//ask PM if it knows p is in pg
-			if(!PM.productIsInProductGroup(p, pg)) {
-				//add Product to PGM first
-				//update _indexProductGroupByProduct
-				PM.addProductGroupToProductsLocations(p, pg);
-				//update _indexProductByProductGroup
-				PGM.addProductToProductGroup(pg, p);
-				//Make sure the SM and PM are synced
-				assert(PM.productIsInProductGroup(p,pg) == PGM.productGroupHasProduct(pg, p));
-			}
-			
-			//Make sure they are synced before
-			assert(IM.itemIsInProductGroup(i,pg) == PGM.productGroupHasItem(pg,i));
-
-			//add Item to SU next
-			//uses _indexItemByStorageUnit
-			PGM.addItemToProductGroup(pg, i);
-
-			//uses _indexStorageUnitByItem
-			IM.addProductGroupToItem(i, pg);
-
-			//Make sure they are synced after adding
-			assert(IM.itemIsInProductGroup(i,pg) == PGM.productGroupHasItem(pg,i));
 		
-		} else {
-			
-			assert(pc instanceof StorageUnit);
-
-			StorageUnit su = (StorageUnit) pc;
-			assert(PM.productIsInStorageUnit(p,su) == SM.storageUnitHasProduct(su, p));
-			
-			//ask PM if it knows p is in su
-			if(!PM.productIsInStorageUnit(p, su)) {
-				//add Product to SU first
-				//update _indexStorageUnitByProduct
-				PM.addStorageUnitToProductsLocations(p, su);
-				//update _indexProductByStorageUnit
-				SM.addProductToStorageUnit(su, p);
-				//Make sure the SM and PM are synced
-				assert(PM.productIsInStorageUnit(p,su) == SM.storageUnitHasProduct(su, p));
-			}
-
-			//Make sure they are synced before
-			assert(IM.itemIsInStorageUnit(i,su) == SM.storageUnitHasItem(su,i));
-
-			//add Item to SU next
-			//uses _indexItemByStorageUnit
-			SM.addItemToStorageUnit(su, i);
-
-			//uses _indexStorageUnitByItem
-			IM.addStorageUnitToItem(i, su);
-
-			//Make sure they are synced after adding
-			assert(IM.itemIsInStorageUnit(i,su) == SM.storageUnitHasItem(su,i));
+		if(su.getProductGroupByProduct(p) == null) {
+			su.addProduct(p);
 		}
+		su.addItem(i);
+		
 	}
-	
 
 	/** 
 	 * 
@@ -179,12 +144,6 @@ public class ItemController {
 		assert(oldc != null);
 		if(oldc instanceof StorageUnit) {
 			assert(SM.storageUnitHasItem((StorageUnit) oldc, i));
-			
-		} else {
-			assert(oldc instanceof ProductGroup);
-			assert(PGM.productGroupHasItem((ProductGroup) oldc, i));
-			
-		}
 
 		//have to look this one up, but it seems
 		
@@ -200,8 +159,8 @@ public class ItemController {
 //		//add Item to SU next
 //		//uses _indexItemToStorageUnit
 //		IM.addItem(i, su);
+		}
 	}
-	
 	/**
 	 * 
 	 * @param i
