@@ -1,7 +1,6 @@
 package model.entities;
 
 import java.util.Date;
-import java.util.Objects;
 import model.persistence.PersistentItem;
 
 /** Item
@@ -174,6 +173,10 @@ public class Item implements PersistentItem{
 	public ProductContainer getContainer() {
 		return container;
 	}
+	
+	public void setContainer(ProductContainer container){
+		this.container = container;
+	}
      
 	@Override
 	public boolean equals(Object obj) 
@@ -189,9 +192,7 @@ public class Item implements PersistentItem{
 
 	@Override
 	public int hashCode() {
-		int hash = 7;
-		hash = 17 * hash + Objects.hashCode(this.barCode);
-		return hash;
+		return barCode.hashCode();
 	}
 	
 	

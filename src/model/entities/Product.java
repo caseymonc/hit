@@ -1,8 +1,9 @@
 package model.entities;
 
 import java.util.Date;
-import java.util.Objects;
+import java.util.HashSet;
 import java.util.Set;
+
 import model.persistence.PersistentItem;
 
 /** Product
@@ -65,7 +66,7 @@ public class Product implements PersistentItem{
 	 * @param threeMonthSupply
 	 * @param size
 	 */
-	private Product(String description, BarCode barCode, int shelfLife,
+	public Product(String description, BarCode barCode, int shelfLife,
 								int threeMonthSupply, Size size){
 		this.description = description;
 		this.barCode = barCode;
@@ -73,6 +74,7 @@ public class Product implements PersistentItem{
 		this.threeMonthSupply = threeMonthSupply;
 		this.size = size;
 		this.creationDate = new Date();
+		this.containers = new HashSet<ProductContainer>();
 		
 	}
 	
@@ -217,9 +219,7 @@ public class Product implements PersistentItem{
 
 	@Override
 	public int hashCode() {
-		int hash = 7;
-		hash = 29 * hash + Objects.hashCode(this.barCode);
-		return hash;
+		return this.barCode.hashCode();
 	}
 	
 	

@@ -3,6 +3,10 @@ package model.entities;
 import model.entities.Item;
 import model.entities.Product;
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.List;
 
@@ -14,12 +18,49 @@ import java.util.List;
  * and are referred to generically as product containers.
  */
 public abstract class ProductContainer{
+	private Map<BarCode,Product> products;
+	private Map<BarCode,Item> items;
+	private Map<String,ProductGroup> productGroups;
+	private Map<Product,Set<Item>> itemsByProduct;
+	private ProductContainer container;
+	private StorageUnit storageUnit;
+	private String name; 
+	
+	public ProductContainer(String name, ProductContainer container) {
+		assert(name != null);
+		assert(!name.equals(""));
+		
+		if(name == null || name.equals(""))
+			throw new IllegalArgumentException("Name cannot be empty");
+		
+		this.name = name;
+		this.setContainer(container);
+		products = new HashMap<BarCode, Product>();
+		items = new HashMap<BarCode,Item>();
+		productGroups = new HashMap<String,ProductGroup>();
+		itemsByProduct = new HashMap<Product,Set<Item>>();
+	}
+	
+	/**
+	 * Asks if the item can be added
+	 * @param item The item that you want to add
+	 * @return true if the item can be added
+	 * @return false if the item cannot be added
+	 */
+	public boolean canAddItem(Item item) {
+		if(items.containsKey(item.getBarCode())) {
 
-	 
+			return false;
+		}
+		
+		return true;
+	}
+	
 	/** Add an item to the ProductContainer
 	 * @param item - the Item to add
 	 * 
-	 * @Constraint When a new Item is added to the system, it is placed in a particular Storage Unit 
+	 * @Constraint When a new Item is added to the system, it is placed in a particular
+	 * Storage Unit 
 	 * (called the "target Storage Unit"). The new Item is added to the same ProductContainer 
 	 * that contains the Item's Product within the target Storage Unit. 
 	 * If the Item's Product is not already in a Product Container within the target 
@@ -31,15 +72,90 @@ public abstract class ProductContainer{
 	 * at the top level before the Items are added.
 	 * 
 	 */
-	public abstract void addItem(Item item);
+	public void addItem(Item item) {
+		assert(item != null);
+		assert(canAddItem(item));
+		
+		if(!canAddItem(item)) {
+			throw new IllegalArgumentException("The Item is already in this container");
+		}
+		
+		putItem(item);
+	}
 	
+	private void putItem(Item item){
+		item.getProduct().addProductContainer(this);
+		getStorageUnit().setProductForContainer(item.getProduct(), this);
+		products.put(item.getProduct().getBarCode(), item.getProduct());
+		items.put(item.getBarCode(), item);
+		putItemByProduct(item);
+		item.setContainer(this);
+	}
+	
+	private void putItemByProduct(Item item) {
+		Set<Item> items = itemsByProduct.get(item.getProduct());
+		if(items == null){
+			items = new HashSet<Item>();
+		}
+		
+		items.add(item);
+		itemsByProduct.put(item.getProduct(), items);
+	}
+	
+	public Set<Item> getItemsByProduct(Product product){
+		assert(product != null);	
+		if(product == null)
+			throw new IllegalArgumentException("Product cannot be null");
+		return itemsByProduct.get(product);
+	}
+	
+
+	/**
+	 * Asks if the item can be removed
+	 * @param item The item to be removed
+	 * @return true if the item can be removed
+	 * @return false of the item cannot be removed
+	 */
+	public boolean canRemoveItem(Item item) {
+		if(items.containsKey(item.getBarCode())) {
+
+			return true;
+		}
+		
+		return false;
+	}
 	 /** Removes an item from the product container
 	  * 
 	  * @param item the item to remove
 	  */
-	 public abstract void removeItem(Item item);
+	public void removeItem(Item item) {
+		assert(item != null);
+		
+		if(item == null){
+			throw new IllegalArgumentException("Item cannot be null");
+		}
+		
+		assert(canRemoveItem(item));
+			
+		if(!canRemoveItem(item)) {
+			throw new IllegalArgumentException("The Item is not in this container");
+		}
+		
+		itemsByProduct.get(item.getProduct()).remove(item);
+		items.remove(item.getBarCode());
+		
+	 }
 
 	 
+	/**
+	 * Asks if the product can be added
+	 * @param product the product to be added
+	 * @return true if the Product can be added
+	 * @return false if the Product cannot be added 
+	 */
+	public boolean canAddProduct(Product product) {
+		 return true;
+	}
 	 
 	 /** adds the product specified by product
 	  * 
@@ -53,7 +169,52 @@ public abstract class ProductContainer{
 	 * 			Add the Product to the Target Product Container
 	 * @param product
 	 */
-	public abstract void addProduct(Product product);
+	public void addProduct(Product product) {
+		assert(product != null);
+		
+		if(product == null){
+			throw new IllegalArgumentException("Product cannot be null");
+		}
+		
+		assert(canAddProduct(product));
+		
+		if(!canAddProduct(product)) {
+
+			throw new IllegalArgumentException();
+		}
+		
+		ProductContainer targetContainer = this;
+		StorageUnit targetUnit = this.getStorageUnit();
+		ProductContainer oldContainer = targetUnit.getProductGroupByProduct(product);
+		if(oldContainer != null)
+			oldContainer.moveProduct(product, this);
+		products.put(product.getBarCode(), product);
+	}
+	
+	public void moveProduct(Product product, ProductContainer container){
+		Set<Item> items = this.getItemsByProduct(product);
+		this.itemsByProduct.remove(product);
+		this.products.remove(product.getBarCode());
+		for(Item item : items){
+			container.putItem(item);
+		}
+	}
+	
+	/**
+	 * Asks if the Product can be removed
+	 * @param product The product to be removed
+	 * @return true if the Product can be removed
+	 * @return false if the Product cannot be removed
+	 */
+	public boolean canRemoveProduct(Product product) {
+		if(products.containsKey(product.getBarCode())) {
+			Set<Item> items = this.getItemsByProduct(product);
+			if(items != null && items.size() > 0)
+				return false;
+			return true;
+		}
+		return false;
+	}
 	
 	/** Remove a Product from the container
 	 * @Constraint A Product may be deleted from a Product Container 
@@ -61,23 +222,101 @@ public abstract class ProductContainer{
 	 * 
 	 * @param product
 	 */
-	public abstract void removeProduct(Product product);
+	public void removeProduct(Product product) {
+		assert(product != null);
+		
+		if(product == null){
+			throw new IllegalArgumentException("Product cannot be null");
+		}
+		
+		assert(canRemoveProduct(product));
+		
+		if(!canRemoveProduct(product)) {
+
+			throw new IllegalArgumentException("The Product is not in this container");
+		}
+		
+		products.remove(product.getBarCode());
+		itemsByProduct.remove(product);
+	}
 
 	 
 	 /** determines if it can add the product container
 	 * @param ProductContainer
 	 */
-	public abstract boolean canAddProductContainer(ProductContainer productContainer);
+	public boolean canAddProductGroup(ProductGroup productGroup) {
+		if(productGroup == null)
+			return false;
+		if(productGroups.containsKey(productGroup.getName())) {
+			return false;
+		}
+		
+		return true;
+	}
 	  
 	 /** adds the product container
 	 * @param ProductContainer
 	 */
-	public abstract void addProductContainer(ProductContainer productContainer);
+	public void addProductGroup(ProductGroup productGroup) {
+		assert(productGroup != null);
+		
+		if(productGroup == null){
+			throw new IllegalArgumentException("ProductGroup cannot be null");
+		}
+		
+		assert(canAddProductGroup(productGroup));
+		
+		if(!canAddProductGroup(productGroup)) {
+
+			throw new IllegalArgumentException("There is already a ProductGroup in this container" +
+												"with name: " + productGroup.getName());
+		}
+		
+		
+		productGroup.setStorageUnit(this.getStorageUnit());
+
+		productGroups.put(productGroup.getName(), productGroup);
+	}
+	
+	/**
+	 * Ask whether the ProductGroup can be removed from it's parent
+	 * @param group the group to be removed
+	 * @return true if the ProductGroup can be removed
+	 * @return false if group is null
+	 * @return false if group is not in this
+	 * @return false if group is not empty
+	 */
+	public boolean canRemoveProductGroup(ProductGroup group){
+		if(group == null)
+			return false;
+		
+		if(!productGroups.containsKey(group.getName()))
+			return false;
+		
+		if(!group.isEmpty())
+			return false;
+		
+		return true;
+	}
 	
 	/** removes the productContainer specified by productContainer
 	 * @param ProductContainer
 	 */
-	public abstract void removeProductContainer(ProductContainer productContainer);
+	public void removeProductGroup(ProductGroup productGroup) {
+		assert(productGroup != null);
+		
+		if(productGroup == null){
+			throw new IllegalArgumentException("ProductGroup cannot be null");
+		}
+		
+		assert(canRemoveProductGroup(productGroup));
+		
+		if(!canRemoveProductGroup(productGroup)){
+			throw new IllegalArgumentException("This group cannot be removed");
+		}
+		
+		productGroups.remove(productGroup.getName());
+	}
 	 
 	 
 	 /** Get the product container by barcode
@@ -85,33 +324,46 @@ public abstract class ProductContainer{
 	  * @param barcode
 	  * @return the Item specified by barcode
 	  */
-	 public abstract Item getItemByBarCode(BarCode barcode);
+	 public Item getItemByBarCode(BarCode barcode) {
+		 assert(barcode != null);
+		 
+		 if(barcode == null){
+				throw new IllegalArgumentException("barcode cannot be null");
+		 } 
+		 
+		 if(barcode == null) {
 
-	 /** Get the Item by name
-	  * 
-	  * @param name
-	  * @return the product specified by name
-	  */
-	 public abstract Product getItemByName(String name);
+			 throw new IllegalArgumentException("Null Barcode");
+		 }
+		 
+		 return items.get(barcode);
+	 }
+
 	 
 	 /** Gets a list of all the items in this product container
 	  * 
 	  * @return List<Item> all of the items in this product container
 	  */
-	 public abstract List<Item> getAllItems();
+	 public Collection<Item> getAllItems() {
+		 return items.values();
+	 }
 	 
 	 /** Gets a list of all the products in this product container
 	  * 
 	  * @return List<Product> all of the items in this product container
 	  */
-	 public abstract List<Product> getAllProducts();
+	 public Collection<Product> getAllProducts() {
+		 return products.values();
+	 }
 	 
 	 /** Gets a list of all the product containers that are children of this 
 	  * product container
 	  * 
 	  * @return List<ProductContainer> all of the items in this product container
 	  */
-	 public abstract List<ProductContainer> getAllProductContainers();
+	 public Collection<ProductGroup> getAllProductGroup() {
+		 return productGroups.values();
+	 }
 	 
 	 
 	 /** Get the product container by name
@@ -119,7 +371,15 @@ public abstract class ProductContainer{
 	  * @param name String the new name for this container	  
 	  * @return the ProductContainer specified by name
 	  */
-	 public abstract ProductContainer getProductContainerByName(String name);
+	 public ProductGroup getProductGroupByName(String name) {
+		 assert(name != null);
+		 
+		 if(name == null){
+			 throw new IllegalArgumentException("Name cannot be null");
+		 }
+		 
+		 return productGroups.get(name);
+	 }
 	 
 	 
 	 
@@ -127,11 +387,119 @@ public abstract class ProductContainer{
 	  *   in the case of root, this is "StorageUnit"
 	  * @return string name of the product Container.
 	  */
-	 public abstract String getName();
+	 public String getName() {
+
+		 return name;
+	 }
+	 
+	 public boolean canSetName(String name){
+		 if(name == null || name.equals(""))
+			 return false;
+		 return true;
+	 }
 	 
 	 /** sets the name of this product container
 	  *  @param name String the new name for this container
 	  */
-	 public abstract void setName(String name); 
+	 public void setName(String name) {
+		 assert(canSetName(name));
+		 
+		 if(!canSetName(name)){
+			 throw new IllegalArgumentException("Name cannot be empty");
+		 }
+		 
+		 this.name = name;
+	 }
 	 
+	 /**
+	  * Get the ProductContainer in which this ProductContainer resides
+	  * @return container
+	  */
+	 public ProductContainer getContainer() {
+		 return container;
+	 }
+	 
+	 /**
+	  * Sets the ProductContainer in which this ProductContainer resides
+	  * @param container
+	  */
+	 public void setContainer(ProductContainer container){
+		 if(container == this)
+			 throw new IllegalArgumentException("ProductContainer cannot be a parent of it's self");
+		 this.container = container;
+	 }
+	 
+	 /**
+	  * @return true if obj is equal to this
+	  */
+	 public boolean equals(Object obj) {
+		 if(obj instanceof ProductContainer) {
+
+			 ProductContainer container = (ProductContainer)obj;
+			 return this.getName().equals(container.getName());
+		 }
+		 
+		 return false;
+	 }
+	 
+	 /**
+	  * Is this Container and it's children empty
+	  * @return
+	  */
+	 public boolean isEmpty() {
+		 boolean isEmpty = items.size() == 0;
+		 if(!isEmpty)
+			 return false;
+		 for(ProductGroup group : productGroups.values()){
+			 isEmpty |= group.isEmpty();
+			 if(!isEmpty)
+				 return false;
+		 }
+		 return items.size() == 0;
+	}
+
+	/**
+	 * Set the StorageUnit in which this ProductContainer resides
+	 * @param storageUnit
+	 */
+	public void setStorageUnit(StorageUnit storageUnit) {
+		
+		if(storageUnit == null){
+			throw new IllegalArgumentException("StorageUnit cannot be null");
+		}
+		
+		this.storageUnit = storageUnit;
+	}
+
+	/**
+	 * Get the StorageUnit in which this ProductContainer resides
+	 * @return
+	 */
+	public StorageUnit getStorageUnit() {
+		return storageUnit;
+	}
+
+	/**
+	 * Update this ProductContainer
+	 * @param unit
+	 */
+	public void update(ProductContainer unit) {
+		assert(unit != null);
+		
+		if(unit == null)
+			throw new IllegalArgumentException("Unit cannot be null");
+		
+		setName(unit.getName());
+		
+	}
+
+	public int hashCode(){
+		if(container == null)
+			return getName().hashCode();
+		return getName().hashCode() + getContainer().hashCode();
+	}
+	
+	public String toString(){
+		return name;
+	}
 }

@@ -27,8 +27,32 @@ public class Size implements Serializable {
 	 * @param size - the float value in units
 	 */
 	public Size(Unit units, float size){
+		assert(size >= 0);
+		
+		if(units == Unit.count){
+			assert(isInteger(size));
+			
+			if(!isInteger(size))
+				throw new IllegalArgumentException();
+		}
+		
+		if(size < 0) {
+			throw new IllegalArgumentException("Size must be non-negative");
+		}
+		
 		this.setUnits(units);
 		this.setSize(size);
+	}
+	
+	/**
+	 * Tests whether size is an integer
+	 * @param size
+	 * @return
+	 */
+	private boolean isInteger(float size){
+		int intSize = (int)size;
+		size -= intSize;
+		return size == 0;
 	}
 	
 	/** Set the units of the size object
@@ -52,6 +76,19 @@ public class Size implements Serializable {
 	 * @param size - the float value of the size
 	 */
 	public void setSize(float size) {
+		assert(size >= 0);
+		
+		if(units == Unit.count){
+			assert(isInteger(size));
+			
+			if(!isInteger(size))
+				throw new IllegalArgumentException();
+		}
+		
+		if(size < 0) {
+			throw new IllegalArgumentException("Size must be non-negative");
+		}
+		
 		this.size = size;
 	}
 

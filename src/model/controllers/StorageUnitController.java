@@ -3,16 +3,101 @@
  */
 package model.controllers;
 
+import java.util.List;
+
+import model.CoreObjectModel;
 import model.entities.*;
+import model.managers.ProductGroupManager;
+import model.managers.StorageUnitManager;
 
 /** Controller that communicates with the controller in the MVC structure
  *	Acts like a facade in dealing with the rest of the model. 
  * @author davidpatty
  */
-public abstract class StorageUnitController {
+public class StorageUnitController {
+	
+	private CoreObjectModel COM;
+	
+	public StorageUnitController(){
+		COM = CoreObjectModel.getInstance();
+	}
 	
 	/** Oversees moving an item from one container to another
 	 * 
 	 */
-	public abstract void moveItem(Item i, ProductContainer targetContainer);
+	public void moveItem(Item item, StorageUnit targetContainer) {
+		if(item.getContainer().canRemoveItem(item)){
+			item.getContainer().getStorageUnit().removeItem(item);
+			item.getContainer().removeItem(item);
+			item.move(targetContainer);
+		}
+		targetContainer.addItem(item);
+	}
+	
+	public List<StorageUnit> getAllStorageUnits(){
+		return COM.getStorageUnitManager().getAllStorageUnits();
+	}
+	
+	public StorageUnit getStorageUnitByName(String name){
+		return COM.getStorageUnitManager().getStorageUnitByName(name);
+	}
+	
+	public boolean canAddStorageUnit(StorageUnit unit) {
+		if(unit == null)
+			return false;
+		
+		StorageUnitManager manager = COM.getStorageUnitManager();
+		return manager.canAddStorageUnit(unit);
+	}
+	
+	public void addStorageUnit(StorageUnit unit){
+		assert(unit != null);
+		assert(canAddStorageUnit(unit));
+		
+		if(!canAddStorageUnit(unit)){
+			throw new IllegalArgumentException();
+		}
+		
+		COM.getStorageUnitManager().addStorageUnit(unit);
+	}
+	
+	public boolean canEditStorageUnit(StorageUnit unit, StorageUnit oldUnit) {
+		StorageUnitManager manager = COM.getStorageUnitManager();
+		
+		
+		if(oldUnit.getName().equals(unit.getName())){
+			return true;
+		}
+		
+		return manager.canAddStorageUnit(unit);
+	}
+	
+	public void editStorageUnit(StorageUnit unit, StorageUnit oldUnit){
+		assert(canEditStorageUnit(unit, oldUnit));
+		
+		if(!canEditStorageUnit(unit, oldUnit)){
+			throw new IllegalArgumentException();
+		}
+		
+		oldUnit = COM.getStorageUnitManager().getStorageUnitByName(oldUnit.getName());
+		oldUnit.update(unit);
+	}
+	
+	public boolean canDeleteStorageUnit(StorageUnit unit){
+		return unit.isEmpty() && COM.getStorageUnitManager().canRemoveStorageUnit(unit);
+	}
+	
+	public void deleteStorageUnit(StorageUnit unit){
+		assert(canDeleteStorageUnit(unit));
+		
+		if(!canDeleteStorageUnit(unit)){
+			throw new IllegalArgumentException("This StorageUnit is not empty");
+		}
+		StorageUnitManager suManager = COM.getStorageUnitManager();
+		ProductGroupManager pgManager = COM.getProductGroupManager();
+		suManager.removeStorageUnit(unit);
+		pgManager.removeProductGroups(unit);
+		
+	}
+
 }

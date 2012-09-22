@@ -4,10 +4,10 @@
  */
 package model;
 
-import model.entities.BarCode;
-import model.entities.Item;
-import model.entities.Product;
+
+import model.entities.*;
 import model.managers.*;
+import model.controllers.*;
 import model.persistence.PersistentItem;
 
 /** CoreObjectModel
@@ -22,11 +22,17 @@ import model.persistence.PersistentItem;
 public class CoreObjectModel implements PersistentItem{
 	
 	private static CoreObjectModel _instance;
+	
+	//private ItemController itemController;
+	//private ProductController productController;
+	//private StorageUnitController storageUnitController;
+	//private ProductGroupController productGroupController;
+
 	private ProductManager productManager;
 	private ProductGroupManager productGroupManager;
 	private StorageUnitManager storageUnitManager;
 	private ItemManager itemManager;
-  
+	  
 	public static CoreObjectModel getInstance()
 	{
 	   if(_instance == null)
@@ -57,6 +63,22 @@ public class CoreObjectModel implements PersistentItem{
 
 	public ItemManager getItemManager() {
 		return itemManager;
+	}
+	
+	public ProductController getProductController() {
+		return new ProductController();
+	}
+
+	public ProductGroupController getProductGroupController() {
+		return new ProductGroupController();
+	}
+
+	public StorageUnitController getStorageUnitController() {
+		return new StorageUnitController();
+	}
+
+	public ItemController getItemController() {
+		return new ItemController();
 	}
 	
 		

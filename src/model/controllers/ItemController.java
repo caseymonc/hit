@@ -4,14 +4,8 @@
  */
 package model.controllers;
 
-import model.entities.Item;
-import model.entities.Product;
-import model.entities.ProductGroup;
-import model.entities.ProductContainer;
-import model.entities.StorageUnit;
 import model.CoreObjectModel;
-
-import model.controllers.*;
+import model.entities.*;
 import model.managers.*;
 
 
@@ -48,6 +42,21 @@ public class ItemController {
 	private ProductGroupManager PGM;
 	
 	/**
+	 * Controls everything to do with products
+	 */
+	private ProductController PC;
+	
+	/**
+	 * Controls everything to do with Storage Units
+	 */
+	private StorageUnitController SC;
+	
+	/**
+	 * Controls everything to do with Product Groups
+	 */
+	private ProductGroupController PGC;
+
+	/**
 	 * Constructor
 	 */
 	public ItemController() {
@@ -56,6 +65,10 @@ public class ItemController {
 		IM = COM.getItemManager();
 		SM = COM.getStorageUnitManager();
 		PGM = COM.getProductGroupManager();
+		
+		PC = COM.getProductController();
+		SC = COM.getStorageUnitController();
+		PGC = COM.getProductGroupController();
 	}
 
 	/** 
@@ -65,100 +78,24 @@ public class ItemController {
 	 * 
 	 * @throws IllegalArgumentException
 	 */
-	public void addItem(Item i, ProductContainer pc) throws IllegalArgumentException {
+	public void addItem(Item i, StorageUnit su) throws IllegalArgumentException {
 		
-		if(i == null || pc ==  null) {
+		if(i == null || su ==  null) {
 			throw new IllegalArgumentException();
 		}
-
-		Product p = i.getProduct();
-		if(pc instanceof ProductGroup) {
-			ProductGroup pg = (ProductGroup) pc;
-			assert(PM.productIsInProductGroup(p,pg) == PGM.productGroupHasProduct(pg, p));
-
-			//ask PM if it knows p is in pg
-			if(!PM.productIsInProductGroup(p, pg)) {
-				//add Product to PGM first
-				//update _indexProductGroupByProduct
-				PM.addProductGroupToProductsLocations(p, pg);
-				//update _indexProductByProductGroup
-				PGM.addProductToProductGroup(pg, p);
-				//Make sure the SM and PM are synced
-				assert(PM.productIsInProductGroup(p,pg) == PGM.productGroupHasProduct(pg, p));
-			}
-			
-			//Make sure they are synced before
-			assert(IM.itemIsInProductGroup(i,pg) == PGM.productGroupHasItem(pg,i));
-
-			//add Item to SU next
-			//uses _indexItemByStorageUnit
-			PGM.addItemToProductGroup(pg, i);
-
-			//uses _indexStorageUnitByItem
-			IM.addProductGroupToItem(i, pg);
-
-			//Make sure they are synced after adding
-			assert(IM.itemIsInProductGroup(i,pg) == PGM.productGroupHasItem(pg,i));
-		
-		} else {
-			
-			assert(pc instanceof StorageUnit);
-
-			StorageUnit su = (StorageUnit) pc;
-			assert(PM.productIsInStorageUnit(p,su) == SM.storageUnitHasProduct(su, p));
-			
-			//ask PM if it knows p is in su
-			if(!PM.productIsInStorageUnit(p, su)) {
-				//add Product to SU first
-				//update _indexStorageUnitByProduct
-				PM.addStorageUnitToProductsLocations(p, su);
-				//update _indexProductByStorageUnit
-				SM.addProductToStorageUnit(su, p);
-				//Make sure the SM and PM are synced
-				assert(PM.productIsInStorageUnit(p,su) == SM.storageUnitHasProduct(su, p));
-			}
-
-			//Make sure they are synced before
-			assert(IM.itemIsInStorageUnit(i,su) == SM.storageUnitHasItem(su,i));
-
-			//add Item to SU next
-			//uses _indexItemByStorageUnit
-			SM.addItemToStorageUnit(su, i);
-
-			//uses _indexStorageUnitByItem
-			IM.addStorageUnitToItem(i, su);
-
-			//Make sure they are synced after adding
-			assert(IM.itemIsInStorageUnit(i,su) == SM.storageUnitHasItem(su,i));
-		}
+		su.addItem(i);
+		IM.addItem(i);
 	}
-	
 
-	/** 
+	/** Moves the item to removed items 
 	 * 
+	 * @throws IllegalArgumentException
 	 */
-	public void removeItem(Item i) {
-		//where is the item?
-		//tell the IM to remove the item
+	public void removeItem(Item i) throws IllegalArgumentException {
+		if(i == null) {
+			throw new IllegalArgumentException();
+		}
 		IM.removeItem(i);
-		assert(IM.itemIsInRemovedItems(i));
-
-		StorageUnit su = IM.getStorageUnitByItem(i);
-		if(su != null) {
-			//if the SM has the 
-			SM.removeItemFromStorageUnit(i, su);			
-		}
-		//regardless if these are null they still return same fals==false
-		assert(IM.itemIsInStorageUnit(i, su) == SM.storageUnitHasItem(su, i));
-
-		ProductGroup pg = IM.getProductGroupByItem(i);
-		if(pg != null) {
-			//if the PGM has the 
-			PGM.removeItemFromProductGroup(i, pg);
-		}
-		//regardless if these are null they still return same fals==false
-		assert(IM.itemIsInProductGroup(i, pg) == PGM.productGroupHasItem(pg, i));
-		//who else needs to know about this change?
 	}
 	
 	/** The user can move an Item to a Product Container by selecting the Item 
@@ -174,32 +111,19 @@ public class ItemController {
 	 * @param pc
 	 * @throws CannotMoveItemException 
 	 */
-	public void moveItemToContainer(Item i, ProductContainer pc) {//throws CannotMoveItemException {
-		ProductContainer oldc = IM.getProductContainerByItem(i);
-		assert(oldc != null);
-		if(oldc instanceof StorageUnit) {
-			assert(SM.storageUnitHasItem((StorageUnit) oldc, i));
-			
-		} else {
-			assert(oldc instanceof ProductGroup);
-			assert(PGM.productGroupHasItem((ProductGroup) oldc, i));
-			
-		}
-
-		//have to look this one up, but it seems
+	public void moveItem(Item i, ProductContainer target) {//throws CannotMoveItemException {
 		
-//		if(pc instanceof StorageUnit) {
-//			if(!PM.productIsInStorageUnit(p, su)) {
-//				//add Product to SU first
-//				//uses _indexProductToStorageUnit
-//				PM.addProduct(p, su);
-//			}
-//			
-//		}
-//
-//		//add Item to SU next
-//		//uses _indexItemToStorageUnit
-//		IM.addItem(i, su);
+		ProductContainer oldc = i.getContainer();		
+		assert(oldc != null);
+		
+		//remove the item from the old place
+		oldc.removeItem(i);
+
+		//get the top level SU
+		StorageUnit targetsu = target.getStorageUnit();
+		
+		//adds the product for me if its not there already
+		targetsu.addItem(i);
 	}
 	
 	/**
@@ -207,8 +131,8 @@ public class ItemController {
 	 * @param i
 	 * @param pc 
 	 */
-	public void transferItemToContainer(Item i, ProductContainer pc) {// throws CannotTransferItemException {
-		
+	public void transferItem(Item i, ProductContainer target) {// throws CannotTransferItemException {
+		moveItem(i, target);
 	}
 	
 	/**
@@ -226,13 +150,6 @@ public class ItemController {
 			//code to remove...
 		}
 	}
-
-//	/**
-//	 *  i dont think we need this.
-//	 */
-//	public boolean canRemoveItem(Item i) {
-//		if(COM.)
-//	}
 	
 	/**
 	 * 
