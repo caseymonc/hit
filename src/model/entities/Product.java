@@ -1,7 +1,6 @@
 package model.entities;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Objects;
 import java.util.Set;
 import model.persistence.PersistentItem;

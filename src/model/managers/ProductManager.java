@@ -40,8 +40,10 @@ public class ProductManager {
 	 */
 	public ProductManager() {
 		productsByBarCode = new HashMap<BarCode, Product>();
-		productsByContainer = new HashMap<ProductContainer, Set<Product>>();
-		containersByProduct = new HashMap<Product, Set<ProductContainer>>();
+	}
+	
+	public void canAddProduct(Product p){
+		if(p.getCreationDate())
 	}
 	
 	/**
@@ -76,24 +78,6 @@ public class ProductManager {
 		// add product to productsByBarCode
 		if(!productsByBarCode.containsKey(p.getBarCode())){
 			productsByBarCode.put(p.getBarCode(), p);
-		}
-
-		// add product and container to productsByContainer
-		if (productsByContainer.containsKey(c)) {
-			productsByContainer.get(c).add(p);
-		} else {
-			Set<Product> prodSet = new HashSet<Product>();
-			prodSet.add(p);
-			productsByContainer.put(c, prodSet);
-		}
-
-		// add product and container to containersByProduct
-		if (containersByProduct.containsKey(p)) {
-			containersByProduct.get(p).add(c);
-		} else {
-			Set<ProductContainer> contSet = new HashSet<ProductContainer>();
-			contSet.add(c);
-			containersByProduct.put(p, contSet);
 		}
 		
 		// add container to the product's set of containers
@@ -146,8 +130,10 @@ public class ProductManager {
 		// else
 		c.removeProduct(p);
 		p.removeProductContainer(c);
-		productsByContainer.get(c).remove(p); // may be redundant
-		containersByProduct.get(p).remove(c); // may be redundant
+		
+		if(p.getContainers().size() == 0){
+			productsByBarCode.remove(p.getBarCode());
+		}
 	}
 	
 	/** Checks to see if the new information being used to edit a product is valid
