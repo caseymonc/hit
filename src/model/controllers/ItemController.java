@@ -4,14 +4,8 @@
  */
 package model.controllers;
 
-import model.entities.Item;
-import model.entities.Product;
-import model.entities.ProductGroup;
-import model.entities.ProductContainer;
-import model.entities.StorageUnit;
 import model.CoreObjectModel;
-
-import model.controllers.*;
+import model.entities.*;
 import model.managers.*;
 
 
