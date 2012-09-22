@@ -29,21 +29,9 @@ public class ItemManager
 	 */
 	private HashMap<BarCode, Item> removedItemsByBarCode;
 	
-	/**
-	 * Maps each Item to its ProductGroup.
-	 */
-	private HashMap<Item, ProductGroup> productGroupsByItem;
-
-	/**
-	 * Maps each Item to its StorageUnit.
-	 */
-	private HashMap<Item, StorageUnit> storageUnitsByItem;
-	
-	
 	public ItemManager() {
-		productGroupsByItem = new HashMap<Item, ProductGroup>();
-		
-		storageUnitsByItem = new HashMap<Item, StorageUnit>();
+		itemsByBarCode = new HashMap<BarCode, Item>();
+		removedItemsByBarCode = new HashMap<BarCode, Item>();
 	}
 	
 	public Item getItemByBarCode(BarCode barcode)
@@ -57,29 +45,14 @@ public class ItemManager
 	public void addProductGroupToItem(Item i, ProductGroup pg) {
 		//can always add dont need to check if i can.
 	}
-
-	public ProductContainer getProductContainerByItem(Item i) {
-		ProductContainer pc = (ProductContainer) productGroupsByItem.get(i);
-		if(pc == null) {
-			pc = (ProductContainer) storageUnitsByItem.get(i);
-		}
-		return pc;
-	}
-
-	public StorageUnit getStorageUnitByItem(Item i) {
-		return storageUnitsByItem.get(i);
-	}
-
-	public ProductGroup getProductGroupByItem(Item i) {
-		return productGroupsByItem.get(i);
-	}
 	
 	/**
 	 * @throws CantAddItemException
 	 */
-	public void addStorageUnitToItem(Item i, StorageUnit su) {
-		
+	public void addItem(Item i) {
+		itemsByBarCode.put(i.getBarCode(), i);
 	}
+
 	/** Removes the Item from items by barcode, and puts it in the removed items index
 	 * 
 	 * @param i 

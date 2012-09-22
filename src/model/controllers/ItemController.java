@@ -83,41 +83,19 @@ public class ItemController {
 		if(i == null || su ==  null) {
 			throw new IllegalArgumentException();
 		}
-
-		Product p = i.getProduct();
-		
-		if(su.getProductGroupByProduct(p) == null) {
-			su.addProduct(p);
-		}
 		su.addItem(i);
-		
+		IM.addItem(i);
 	}
 
-	/** 
+	/** Moves the item to removed items 
 	 * 
+	 * @throws IllegalArgumentException
 	 */
-	public void removeItem(Item i) {
-		//where is the item?
-		//tell the IM to remove the item
+	public void removeItem(Item i) throws IllegalArgumentException {
+		if(i == null) {
+			throw new IllegalArgumentException();
+		}
 		IM.removeItem(i);
-		assert(IM.itemIsInRemovedItems(i));
-
-		StorageUnit su = IM.getStorageUnitByItem(i);
-		if(su != null) {
-			//if the SM has the 
-			SM.removeItemFromStorageUnit(i, su);			
-		}
-		//regardless if these are null they still return same fals==false
-		assert(IM.itemIsInStorageUnit(i, su) == SM.storageUnitHasItem(su, i));
-
-		ProductGroup pg = IM.getProductGroupByItem(i);
-		if(pg != null) {
-			//if the PGM has the 
-			PGM.removeItemFromProductGroup(i, pg);
-		}
-		//regardless if these are null they still return same fals==false
-		assert(IM.itemIsInProductGroup(i, pg) == PGM.productGroupHasItem(pg, i));
-		//who else needs to know about this change?
 	}
 	
 	/** The user can move an Item to a Product Container by selecting the Item 
@@ -133,35 +111,28 @@ public class ItemController {
 	 * @param pc
 	 * @throws CannotMoveItemException 
 	 */
-	public void moveItemToContainer(Item i, ProductContainer pc) {//throws CannotMoveItemException {
-		ProductContainer oldc = IM.getProductContainerByItem(i);
-		assert(oldc != null);
-		if(oldc instanceof StorageUnit) {
-			assert(SM.storageUnitHasItem((StorageUnit) oldc, i));
-
-		//have to look this one up, but it seems
+	public void moveItem(Item i, ProductContainer target) {//throws CannotMoveItemException {
 		
-//		if(pc instanceof StorageUnit) {
-//			if(!PM.productIsInStorageUnit(p, su)) {
-//				//add Product to SU first
-//				//uses _indexProductToStorageUnit
-//				PM.addProduct(p, su);
-//			}
-//			
-//		}
-//
-//		//add Item to SU next
-//		//uses _indexItemToStorageUnit
-//		IM.addItem(i, su);
-		}
+		ProductContainer oldc = i.getContainer();		
+		assert(oldc != null);
+		
+		//remove the item from the old place
+		oldc.removeItem(i);
+
+		//get the top level SU
+		StorageUnit targetsu = target.getStorageUnit();
+		
+		//adds the product for me if its not there already
+		targetsu.addItem(i);
 	}
+	
 	/**
 	 * 
 	 * @param i
 	 * @param pc 
 	 */
-	public void transferItemToContainer(Item i, ProductContainer pc) {// throws CannotTransferItemException {
-		
+	public void transferItem(Item i, ProductContainer target) {// throws CannotTransferItemException {
+		moveItem(i, target);
 	}
 	
 	/**
@@ -179,13 +150,6 @@ public class ItemController {
 			//code to remove...
 		}
 	}
-
-//	/**
-//	 *  i dont think we need this.
-//	 */
-//	public boolean canRemoveItem(Item i) {
-//		if(COM.)
-//	}
 	
 	/**
 	 * 
