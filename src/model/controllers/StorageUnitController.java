@@ -3,6 +3,8 @@
  */
 package model.controllers;
 
+import java.util.List;
+
 import model.CoreObjectModel;
 import model.entities.*;
 import model.managers.ProductGroupManager;
@@ -15,6 +17,11 @@ import model.managers.StorageUnitManager;
 public class StorageUnitController {
 	
 	private CoreObjectModel COM;
+	
+	public StorageUnitController(){
+		COM = CoreObjectModel.getInstance();
+	}
+	
 	/** Oversees moving an item from one container to another
 	 * 
 	 */
@@ -25,6 +32,14 @@ public class StorageUnitController {
 			item.move(targetContainer);
 		}
 		targetContainer.addItem(item);
+	}
+	
+	public List<StorageUnit> getAllStorageUnits(){
+		return COM.getStorageUnitManager().getAllStorageUnits();
+	}
+	
+	public StorageUnit getStorageUnitByName(String name){
+		return COM.getStorageUnitManager().getStorageUnitByName(name);
 	}
 	
 	public boolean canAddStorageUnit(StorageUnit unit) {
@@ -69,7 +84,7 @@ public class StorageUnitController {
 	}
 	
 	public boolean canDeleteStorageUnit(StorageUnit unit){
-		return unit.isEmpty();
+		return unit.isEmpty() && COM.getStorageUnitManager().canRemoveStorageUnit(unit);
 	}
 	
 	public void deleteStorageUnit(StorageUnit unit){

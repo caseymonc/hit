@@ -35,17 +35,14 @@ public class ProductGroupManager {
 		return productGroups.get(name);
 	}
 	
-	public boolean canAddProductGroup(ProductGroup unit) {
-		if(contains(unit)) {
-			return false;
-		}
-		return true;
+	public boolean canAddProductGroup(ProductGroup group, ProductContainer container) {
+		return container.canAddProductGroup(group);
 	}
 	
 	public void addProductGroup(ProductGroup group, ProductContainer container) {
-		assert(canAddProductGroup(group));
+		assert(canAddProductGroup(group, container));
 		
-		if(!canAddProductGroup(group))
+		if(!canAddProductGroup(group, container))
 			throw new IllegalArgumentException();
 		
 		if(productGroupsByStorageUnit.get(group.getStorageUnit()) != null){
@@ -86,6 +83,8 @@ public class ProductGroupManager {
 	
 	public void removeProductGroups(StorageUnit unit){
 		Set<ProductGroup> groups = productGroupsByStorageUnit.get(unit);
+		if(groups == null)
+			return;
 		for(ProductGroup group : groups){
 			this.removeProductGroup(group);
 		}

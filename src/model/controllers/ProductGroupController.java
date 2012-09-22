@@ -42,15 +42,15 @@ public class ProductGroupController {
 		COM.getProductGroupManager().addProductGroup(group, container);
 	}
 	
-	public boolean canEditProductGroup(ProductGroup unit, ProductGroup oldUnit) {
+	public boolean canEditProductGroup(ProductGroup group, ProductGroup oldUnit) {
 		ProductGroupManager manager = COM.getProductGroupManager();
 		
 		
-		if(oldUnit.getName().equals(unit.getName())){
+		if(oldUnit.getName().equals(group.getName())){
 			return true;
 		}
 		
-		return manager.canAddProductGroup(unit);
+		return manager.canAddProductGroup(group, group.getContainer());
 	}
 	
 	public void editProductGroup(ProductGroup unit, ProductGroup oldUnit){

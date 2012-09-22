@@ -3,7 +3,9 @@
  * and open the template in the editor.
  */
 package model.managers;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import model.entities.Item;
@@ -21,6 +23,19 @@ public class StorageUnitManager {
 	private Map<Item,StorageUnit> storageUnitByItem;
 	private Map<Product,Set<StorageUnit>> storageUnitsByProduct;
 	private Map<Product, ProductGroup> productByProductGroup;
+	
+	public StorageUnitManager(){
+		storageUnits = new HashMap<String, StorageUnit>();
+	}
+	
+	public List<StorageUnit> getAllStorageUnits(){
+		List<StorageUnit> units = new ArrayList<StorageUnit>();
+		
+		for(StorageUnit unit : storageUnits.values())
+			units.add(unit);
+		
+		return units;
+	}
 	
 	public StorageUnit getStorageUnitByName(String name) {
 		return storageUnits.get(name);
@@ -43,8 +58,11 @@ public class StorageUnitManager {
 	}
 	
 	public boolean canRemoveStorageUnit(StorageUnit unit) {
+		if(unit == null)
+			return false;
+		
 		if(contains(unit)) {
-			return true;
+			return unit.isEmpty();
 		}
 		return false;
 	}

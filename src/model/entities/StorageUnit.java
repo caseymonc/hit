@@ -32,12 +32,12 @@ private Map<Product, ProductContainer> productContainerByProduct;
 	}
 	
 	public void setStorageUnit(StorageUnit unit) {
-		throw new IllegalStateException();
+		throw new UnsupportedOperationException("StorageUnits cannot be in a StorageUnit");
 	}
 	
 	public void addItem(Item item){
 		ProductContainer container = productContainerByProduct.get(item.getProduct());
-		if(container == null){
+		if(container == null || container == this){
 			super.addItem(item);
 		}else{
 			container.addItem(item);
@@ -48,11 +48,6 @@ private Map<Product, ProductContainer> productContainerByProduct;
 		productContainerByProduct.put(product, productContainer);
 	}
 
-	public void update(StorageUnit unit) {
-		super.update(unit);
-		
-	}
-	
 	public ProductContainer getProductGroupByProduct(Product product){
 		assert(product != null);
 		
