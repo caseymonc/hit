@@ -1,6 +1,8 @@
 package model.entities;
 
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -68,6 +70,12 @@ public class Product implements PersistentItem{
 	 */
 	public Product(String description, BarCode barCode, int shelfLife,
 								int threeMonthSupply, Size size){
+		assert(description != null);
+		assert(!description.equals(""));
+		
+		if(description == null || description.equals(""))
+			throw new IllegalArgumentException("Description cannot be empty");
+		
 		this.description = description;
 		this.barCode = barCode;
 		this.shelfLife = shelfLife;
@@ -199,9 +207,30 @@ public class Product implements PersistentItem{
 		this.threeMonthSupply = threeMonthSupply;
 	}
     
+	
+	/** Sets the creation date of the product
+	 * @param date - the new creation date of the product
+	 * 
+	 * @throws IllegalArgumentException if date is null or in the future.
+	 */
+	public void setCreationDate(Date date) throws IllegalArgumentException{
+		assert(date != null);
+		
+		Calendar calendar = new GregorianCalendar();
+		
+		Date curDate = calendar.getTime();
+		
+		if(date.compareTo(curDate) >= 0){
+			throw new IllegalArgumentException("creation date cannot be in the future");
+		}
+		
+		this.creationDate = date;
+	}
+	
 	/** determines if an Object is equal to this Product
 	 * 
 	 * @param obj - the Object being compared with this Product
+	 * 
 	 * @return true if obj is equal to this Product, otherwise return false
 	 */
 	@Override

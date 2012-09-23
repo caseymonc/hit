@@ -24,16 +24,11 @@ public class ProductManager {
 	 */
 	Map<BarCode, Product> productsByBarCode;
 
-	/**
-	 * Map of Product Sets indexed by their Product Containers
+	/** 
+	 * Map of Item Collections indexed by their product
 	 */
-	Map<ProductContainer, Set<Product>> productsByContainer;
-
-	/**
-	 * Map of ProductContainer Sets indexed by Product
-	 */
-	Map<Product, Set<ProductContainer>> containersByProduct;
-
+	Map<Product, Set<Item>> itemsByProduct;
+	
 	/**
 	 * Constructor
 	 * 
@@ -41,68 +36,108 @@ public class ProductManager {
 	 */
 	public ProductManager() {
 		productsByBarCode = new HashMap<BarCode, Product>();
+		itemsByProduct = new HashMap<Product, Set<Item>>();
 	}
-	
-	public void canAddProduct(Product p){
-		if(p.getCreationDate())
-	}
-	
+
 	/**
 	 * Adds a product
 	 * 
-	 * @param p - Product to be added
-	 * @param c - The ProductContainer to which the product is being added.
+	 * @param p
+	 *            - Product to be added
+	 * @param c
+	 *            - The ProductContainer to which the product is being added.
 	 * 
 	 * @throws IllegalArgumentException
 	 */
 	public void addProductToContainer(Product p, ProductContainer c)
 			throws IllegalArgumentException {
 
+		assert(p != null);
+		assert(c != null);
+		
 		if (p == null || c == null) {
 			throw new IllegalArgumentException();
 		}
-		
-		/*
-		// get the storageUnit of c
-		ProductContainer storageUnit = c;
-		
-		
-		while(!(storageUnit instanceof StorageUnit)){
-			storageUnit = c.getContainer();
-		}
-		
-		// make sure product isn't already in the storageUnit of c
-		if(storageUnit.hasProduct(p)){
-			throw new IllegalArgumentException();
-		} */
-		
+
 		// add product to productsByBarCode
-		if(!productsByBarCode.containsKey(p.getBarCode())){
+		if (!productsByBarCode.containsKey(p.getBarCode())) {
 			productsByBarCode.put(p.getBarCode(), p);
 		}
-		
+
 		// add container to the product's set of containers
 		p.addProductContainer(c);
 	}
 	
-	/** Checks to see if a product can be removed.
+	/**
+	 * Checks to see if a product can be removed.
 	 * 
 	 * @param p
+	 *            - The product being added to c
 	 * @param c
+	 *            - The container that p is being removed from
 	 * @return return true if p can be removed, else return true
 	 */
-	public boolean canRemoveProductFromContainer(Product p, ProductContainer c){
+	public boolean canRemoveProductFromContainer(Product p, ProductContainer c) {
 		
-		// is no container selected
-		
-		// is the product container the root?
+		assert(p != null);
+		assert(c != null);
 		
 		// does c have Items that point to p
 		Collection<Item> items = c.getAllItems();
-		
-		for(Item item : items){
-			if(item.getProduct().equals(p)){
+
+		for (Item item : items) {
+			if (item.getProduct().equals(p)) {
 				// their are items in c that point to p
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	/**
+	 * Checks to see if a product can be removed.
+	 * 
+	 * @param p
+	 *            - the product being removed from c
+	 * @param c
+	 *            - the ProductContainer from which p is being removed
+	 * @return return true if p can be removed, else return true
+	 * 
+	 * @throws IllegalArgumentException
+	 *             if p or c are null
+	 */
+	public void removeProductFromContainer(Product p, ProductContainer c)
+			throws IllegalArgumentException {
+
+		assert(p != null);
+		assert(c != null);
+		assert(canRemoveProductFromContainer(p, c));
+		
+		if (p == null || c == null) {
+			throw new IllegalArgumentException();
+		}
+
+		c.removeProduct(p);
+		p.removeProductContainer(c);
+
+		if (p.getContainers().size() == 0) {
+			removeProduct(p);
+		}
+	}
+
+	/** Determines if a product can be removed from the ProductManager
+	 * 
+	 * @param p
+	 * @return true if no items belong to p, otherwise return false.
+	 */
+	public boolean canRemoveProduct(Product p){
+		Set<Item> items = itemsByProduct.get(p);
+		
+		for(Item item: items){
+			if(item.getExitDate() == null){
+				// active items still belong to p so it cannot be 
+				// removed from the system
 				return false;
 			}
 		}
@@ -110,162 +145,166 @@ public class ProductManager {
 		return true;
 	}
 	
-	/** Checks to see if a product can be removed.
+	/** Removes a product from the ProductManager
 	 * 
-	 * @param p - the product being removed from c
-	 * @param c - the ProductContainer from which p is being removed
-	 * @return return true if p can be removed, else return true
-	 * 
-	 * @throws IllegalArgumentException if p is null
+	 * @param p - the product being removed
+	 * @throws IllegalArgumentException
 	 */
-	public void removeProductFromContainer(Product p, ProductContainer c) throws IllegalArgumentException{
+	public void removeProduct(Product p) throws IllegalArgumentException{
+		assert(p != null);
+		assert(canRemoveProduct(p));
 		
 		if(p == null){
 			throw new IllegalArgumentException();
 		}
 		
-		// if no container is selected
-		
-		// if the container is the root
-		
-		// else
-		c.removeProduct(p);
-		p.removeProductContainer(c);
-		
-		if(p.getContainers().size() == 0){
-			productsByBarCode.remove(p.getBarCode());
-		}
+		productsByBarCode.remove(p.getBarCode());
+		itemsByProduct.remove(p);
 	}
 	
-	/** Checks to see if the new information being used to edit a product is valid
+	/**
+	 * Checks to see if the new information being used to edit a product is
+	 * valid
 	 * 
 	 * @param product
 	 * @param newProduct
 	 * @return true if oldProduct can be updated to newProduct
 	 */
-	public boolean canEditProduct(Product product, Product newProduct){
+	public boolean canEditProduct(Product product, Product newProduct) {
 
+		assert(product != null);
+		assert(newProduct != null);
+		
 		// the description must be non-empty
-		if(newProduct.getDescription() == ""){
+		if (newProduct.getDescription() == "") {
 			return false;
 		}
-		
+
 		// the shelfLife must be non-negative
-		if(newProduct.getShelfLife() < 0){
+		if (newProduct.getShelfLife() < 0) {
 			return false;
 		}
-		
+
 		// the threeMonthSupply must be non-negative
-		if(newProduct.getThreeMonthSupply() < 0){
+		if (newProduct.getThreeMonthSupply() < 0) {
 			return false;
 		}
-		
-		// the size should already be valid.  A valid size should never be created.
-		
+
+		// the size should already be valid. A valid size should never be
+		// created.
+
 		Size size = newProduct.getSize();
 		// the size must be positive and cannot be zero
-		if(size.getSize() <= 0){
+		if (size.getSize() <= 0) {
 			return false;
 		}
-		
+
 		// if the unit of the size is count, the magnitude must be 1
-		if(size.getUnits() == Unit.count && size.getSize() != 1){
+		if (size.getUnits() == Unit.count && size.getSize() != 1) {
 			return false;
 		}
-		
+
 		return true;
 	}
-	
-	/** Edits a product by setting oldProduct to newProduct
+
+	/**
+	 * Edits a product by setting oldProduct to newProduct
 	 * 
-	 * @param product - the product being updated
-	 * @param newProduct - the new product with the updated values
+	 * @param product
+	 *            - the product being updated
+	 * @param newProduct
+	 *            - the new product with the updated values
 	 */
-	public void editProduct(Product product, Product newProduct) throws IllegalArgumentException{
-		if(product == null || newProduct == null){
+	public void editProduct(Product product, Product newProduct)
+			throws IllegalArgumentException {
+		assert (product != null);
+		assert (newProduct != null);
+		assert (canEditProduct(product, newProduct));
+
+		if (product == null || newProduct == null) {
 			throw new IllegalArgumentException();
 		}
-		
+
 		product.setDescription(newProduct.getDescription());
 		product.setShelfLife(newProduct.getShelfLife());
 		product.setSize(newProduct.getSize());
 		product.setThreeMonthSupply(newProduct.getThreeMonthSupply());
 	}
-	
-	
-	
-	/** Determines if a product exists
+
+	/** Adds an Item-Product relationship to itemsByProduct
 	 * 
-	 * @param barcode - the BarCode of the product being searched for.
+	 * @param p
+	 * @param i
+	 * 
+	 * @throws IllegalArgumentException
+	 */
+	public void addItemToProduct(Product p, Item i) throws IllegalArgumentException{
+		if(p == null || i == null){
+			throw new IllegalArgumentException();
+		}
+		
+		if(itemsByProduct.containsKey(p)){
+			itemsByProduct.get(p).add(i);
+		}
+		else{
+			Set<Item> itemSet = new HashSet<Item>();
+			itemSet.add(i);
+			itemsByProduct.put(p, itemSet);
+		}
+	}
+	
+	/**
+	 * Determines if a product exists
+	 * 
+	 * @param barcode
+	 *            - the BarCode of the product being searched for.
 	 * @return true if the product is contained in the ProductMap. Otherwise,
 	 *         return false.
 	 */
 	public boolean productExists(BarCode barcode) {
 		return productsByBarCode.containsKey(barcode);
 	}
-	/** Updates the 
-	 * @throws CantAddProductGroupException
-	 * @param p
-	 * @param pg 
-	 */
-	public void addProductGroupToProductsLocations(Product p, ProductGroup pg) {
-		//dmathis i need something like this, that will edit the containersByProduct index
-	}
 
 	/**
-	 * 
-	 * @param p
-	 * @param pg
-	 * @return 
-	 */
-	public boolean productIsInProductGroup(Product p, ProductGroup pg) {
-		return true; //dmathis can you give me something that will work like this?
-	}
-	/** Updates the 
-	 * @throws CantAddProductGroupException
-	 * @param p
-	 * @param pg 
-	 */
-	public void addStorageUnitToProductsLocations(Product p, StorageUnit su) {
-		//dmathis i need something like this, that will edit the containersByProduct index
-	}
-
-	/**
-	 * 
-	 * @param p
-	 * @param pg
-	 * @return 
-	 */
-	public boolean productIsInStorageUnit(Product p, StorageUnit pg) {
-		return true; //dmathis can you give me something that will work like this?
-	}
-	//You might be able to Generalize these methods to do a ProductContainer instead of split by SU and PG
-
-	/** Get the product by its BarCode
+	 * Get the product by its BarCode
 	 * 
 	 * @param barcode
 	 *            - The BarCode of the product being retrieved
-	 * @return the product whose BarCode is equal to barcode.
+	 * @return the product whose BarCode is equal to barcode or null 
+	 * 		   if such a product doesn't exist.
 	 */
 	public Product getProductByBarCode(BarCode barcode) {
+		
+		assert(barcode != null);
+		
 		return productsByBarCode.get(barcode);
 	}
-	
-	/** Get the products in a ProductContainer
+
+	/**
+	 * Get the products in a ProductContainer
 	 * 
-	 * @param c - The ProductContainer whose products will be returned
+	 * @param c
+	 *            - The ProductContainer whose products will be returned
 	 * @return the Products that belong to c
 	 */
-	public Set<Product> getProductsByContainer(ProductContainer c) {
-		return productsByContainer.get(c);
+	public Collection<Product> getProductsByContainer(ProductContainer c) {
+		
+		assert(c != null);
+		
+		return c.getAllProducts();
 	}
-	
-	/** Get the Containers that contain a Product
+
+	/**
+	 * Get the Containers that contain a Product
 	 * 
-	 * @param p - The Product whose containers will be returned
+	 * @param p
+	 *            - The Product whose containers will be returned
 	 * @return the ProductContainers that contain p
 	 */
 	public Set<ProductContainer> getContainersByProduct(Product p) {
-		return containersByProduct.get(p);
+		
+		assert(p != null);
+		
+		return p.getContainers();
 	}
 }

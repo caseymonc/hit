@@ -7,7 +7,6 @@ import model.entities.ProductContainer;
 import model.entities.StorageUnit;
 
 /** 
- *
  * @author davidmathis
  */
 public class ProductController {
@@ -23,6 +22,6 @@ public class ProductController {
 	 * creates a new ProductController
 	 */
 	public ProductController(){
-		//model = CoreObjectModel.getInstance();
+		model = CoreObjectModel.getInstance();
 	}
 }
