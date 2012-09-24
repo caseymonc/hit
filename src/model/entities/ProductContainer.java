@@ -272,9 +272,7 @@ public abstract class ProductContainer{
 												"with name: " + productGroup.getName());
 		}
 		
-		
 		productGroup.setStorageUnit(this.getStorageUnit());
-
 		productGroups.put(productGroup.getName(), productGroup);
 	}
 	
