@@ -1,5 +1,6 @@
 package model.entities;
 
+import java.util.Calendar;
 import java.util.Date;
 import model.persistence.PersistentItem;
 
@@ -63,9 +64,15 @@ public class Item implements PersistentItem{
 	 */
 	public Item(BarCode barCode, Date entryDate, Date expirationDate, 
 			Product product, ProductContainer container){		
-		this.barCode = barCode;
-		this.expirationDate = expirationDate;		
 		this.entryDate = entryDate;
+		//validate entryDate constraints
+		assert(hasValidEntryDate());
+		
+		//test constraint: Expiration Date only defined if the Product's Shelf life is defined	   
+		if(product.getShelfLife() != 0) { 
+			this.expirationDate = expirationDate;
+		}
+		this.barCode = barCode;
 		this.product = product;
 		this.container = container;
 	}
@@ -78,7 +85,12 @@ public class Item implements PersistentItem{
 	 * @throws exception if moveTo is not a valid Product Container
 	 */
 	public void move(ProductContainer moveTo){
+		if(moveTo == null) {
+			throw new IllegalArgumentException();
+		}
+		assert(this.container != null);
 		
+		this.container = moveTo;
 	}
 	
 	/** Remove the Item from storage
@@ -89,22 +101,36 @@ public class Item implements PersistentItem{
 	 * a storage unit. 
 	 */
 	public void remove(){
-		
+		//constraint exitTime is only defined if the Item has been removed
+		assert(exitDate == null); 
+		//Cannot be in the future
+		exitDate = new Date(); 
+		//Cannot be prior to 12AM on the Items Entry Date
+		assert(!exitDate.before(this.entryDate)); 
+		assert(this.container != null);// Non-empty if the item has not been removed from storage
+		this.container = null;
 	}
 	
-	
-	/*public String sqlCreateStatement() {
-		String query = "CREATE TABLE items(" +
-				"items_id INTEGER PRIMARY KEY AUTOINCREMENT," +
-				"barCode TEXT," +
-				"entryDate DATETIME," +
-				"exitDate DATETIME," +
-				"expirationDate DATETIME," +
-				"product_id INTEGER" + 
-				"parent_id INTEGER" +
-				");";
-		return query;
-	}*/
+	/**
+	 * 
+	 * @return true if pass constraints 
+	 */
+	public boolean hasValidEntryDate() {
+		
+		if(entryDate == null) {
+			return false;
+		}
+		if(!entryDate.before(new Date())) {
+			return false;
+		}
+		Calendar c = Calendar.getInstance();
+		c.set(2000,1,1);
+		if(!entryDate.after(c.getTime())) {
+			return false;
+		}
+		
+		return true;
+	}
 	
 	/** Checks to see if newDate is a valid entry date
 	 * 

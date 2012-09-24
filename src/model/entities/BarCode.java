@@ -50,4 +50,41 @@ public class BarCode implements Serializable {
 	public int hashCode() {
 		return this.barCode.hashCode();
 	}
+	
+	/**
+	 * Method test to make sure that the barcode is a valid UPC Barcode
+	 * Which it only wouldn't be if someone was using or source code it a way that 
+	 * they should not be.
+	 * @return boolean of whether the barcode is valid or not
+	 */
+	public boolean isValid()
+	{
+		return barCode.length()==12 & checkCheckDigit();
+	}
+	
+	/*
+	 * Private 
+	 */
+	private boolean checkCheckDigit()
+	{
+		int oddIndexDigits = 0;
+		int evenIndexDigits = 0;
+		for(int i = 0; i < barCode.length()-1; i+=2) {
+			oddIndexDigits += barCode.charAt(i);
+			if(i!=10) {
+				evenIndexDigits += barCode.charAt(i+1);
+			}	
+		}	
+		int result = oddIndexDigits * 3;
+		result += evenIndexDigits;
+		result = result % 10;
+		if(result != 0) {
+			result = 10 - result;
+		}
+		
+		String retVal = "";
+		retVal +=  result;
+		
+		return retVal.charAt(0) == barCode.charAt(11);
+	}
 }

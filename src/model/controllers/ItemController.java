@@ -63,12 +63,12 @@ public class ItemController {
 		COM = CoreObjectModel.getInstance();
 		PM = COM.getProductManager();
 		IM = COM.getItemManager();
-		SM = COM.getStorageUnitManager();
-		PGM = COM.getProductGroupManager();
-		
-		PC = COM.getProductController();
-		SC = COM.getStorageUnitController();
-		PGC = COM.getProductGroupController();
+//		SM = COM.getStorageUnitManager();
+//		PGM = COM.getProductGroupManager();
+//		
+//		PC = COM.getProductController();
+//		SC = COM.getStorageUnitController();
+//		PGC = COM.getProductGroupController();
 	}
 
 	/** 

@@ -26,13 +26,21 @@ public class ProductGroupManager {
 	private Set<ProductGroup> productGroups;
 	
 	
-	
+	/**
+	 * Constructor
+	 */
 	public ProductGroupManager(){
 		productGroupsByProductContainer = new HashMap<ProductContainer, Map<String,ProductGroup>>();
 		productGroupsByStorageUnit = new HashMap<StorageUnit,Set<ProductGroup>>();
 		productGroups = new HashSet<ProductGroup>();
 	}
 
+	/**
+	 * Get the ProductGroup associated with name in the container
+	 * @param name the name index
+	 * @param container the container index
+	 * @return the ProductGroup associated with name in the container
+	 */
 	public ProductGroup getProductGroupByName(String name, ProductContainer container) {
 		Map<String, ProductGroup> groups = productGroupsByProductContainer.get(container);
 		if(groups == null)
@@ -40,10 +48,20 @@ public class ProductGroupManager {
 		return groups.get(name);
 	}
 	
+	/**
+	 * Asks whether group can be added
+	 * @param group the group to be added
+	 * @return true if the group can be added
+	 * @return false if the group cannot be added
+	 */
 	public boolean canAddProductGroup(ProductGroup group) {
 		return group.getContainer().canAddProductGroup(group);
 	}
 	
+	/**
+	 * Adds the group to the manager
+	 * @param group the group to be added
+	 */
 	public void addProductGroup(ProductGroup group) {
 		assert(canAddProductGroup(group));
 		
@@ -70,6 +88,12 @@ public class ProductGroupManager {
 		productGroups.add(group);
 	}
 	
+	/**
+	 * Asks if the group can be removed
+	 * @param group The group to be removed
+	 * @return true if the group can be removed
+	 * @return false if the group cannot be removed
+	 */
 	public boolean canRemoveProductGroup(ProductGroup group) {
 		if(this.contains(group) && group.isEmpty()) {
 			return true;
@@ -77,6 +101,10 @@ public class ProductGroupManager {
 		return false;
 	}
 	
+	/**
+	 * Remove the group from the system
+	 * @param group The group to remove
+	 */
 	public void removeProductGroup(ProductGroup group) {
 		assert(canRemoveProductGroup(group));
 		
@@ -91,17 +119,32 @@ public class ProductGroupManager {
 		productGroups.remove(group);
 	}
 	
-	public boolean contains(ProductGroup unit) {
-		if(productGroups.contains(unit)) {
+	/**
+	 * Asks whether group is in the system
+	 * @param group
+	 * @return true if group is in the system
+	 * @return false if group in not in the system
+	 */
+	public boolean contains(ProductGroup group) {
+		if(productGroups.contains(group)) {
 			return true;
 		}
 		return false;
 	}
 	
+	/**
+	 * Get all of the product groups in unit
+	 * @param unit The unit to get the groups from
+	 * @return All of the ProductGroups in unit
+	 */
 	public Set<ProductGroup> getProductGroups(StorageUnit unit){
 		return productGroupsByStorageUnit.get(unit);
 	}
 		
+	/**
+	 * Remove all of the ProductGroups in unit
+	 * @param unit The unit to remove all of the ProductGroups from
+	 */
 	public void removeProductGroups(StorageUnit unit){
 		Set<ProductGroup> groups = productGroupsByStorageUnit.get(unit);
 		if(groups == null)

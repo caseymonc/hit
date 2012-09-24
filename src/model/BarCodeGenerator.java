@@ -1,6 +1,5 @@
 package model;
 
-import java.util.HashSet;
 import model.entities.BarCode;
 import model.persistence.PersistentItem;
 
