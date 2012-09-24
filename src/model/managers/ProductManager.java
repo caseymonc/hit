@@ -37,38 +37,6 @@ public class ProductManager {
         productsByBarCode = new HashMap<BarCode, Product>();
         itemsByProduct = new HashMap<Product, Set<Item>>();
     }
-
-    /** Determines if a product is valid
-     * 
-     * @param p - the product being checked
-     * 
-     * @return true if p is valid. Otherwise, return false.
-     */
-    public boolean isValidProduct(Product p){
-        if(p.getDescription().equals("")){
-            return false;
-        }
-        
-        if(p.getBarCode() == null || p.getBarCode().getBarCode().equals("")){
-            return false;
-        }
-        
-        if(p.getShelfLife() < 0){
-            return false;
-        }
-        
-        if(p.getThreeMonthSupply() < 0){
-            return false;
-        }
-        
-        Size size = p.getSize();
-        
-        if(!Size.isValidSize(size)){
-        	return false;
-        }
-        
-        return true;
-    }
     
     /** Determines if a product can be added to the Product Manager
      * 
@@ -76,11 +44,7 @@ public class ProductManager {
      * 
      * @return true if p can be added. Otherwise, return false.
      */
-    public boolean canAddProduct(Product p) {
-        if(isValidProduct(p) == false){
-            return false;
-        }
-        
+    public boolean canAddProduct(Product p) {        
         if (productsByBarCode.containsKey(p.getBarCode())) {
             return false;
         }
@@ -148,11 +112,7 @@ public class ProductManager {
         }
         
         if (productsByBarCode.containsKey(p.getBarCode()) == false) {
-            if(isValidProduct(p)){
-                addProduct(p);
-            } else{
-                throw new IllegalArgumentException("Product is not valid");
-            }
+            addProduct(p);
         }
 
         // Check to see if p is already contained somewhere in c's storage unit
@@ -261,48 +221,6 @@ public class ProductManager {
 
         productsByBarCode.remove(p.getBarCode());
         itemsByProduct.remove(p);
-    }
-
-    /**
-     * Checks to see if the new information being used to edit a product is
-     * valid
-     *
-     * @param product
-     * @param newProduct
-     * @return true if oldProduct can be updated to newProduct
-     */
-    public boolean canEditProduct(Product product, Product newProduct) {
-
-        assert (product != null);
-        assert (newProduct != null);
-
-        if(product == null || newProduct == null){
-            return false;
-        }
-        
-        return isValidProduct(newProduct);
-    }
-
-    /**
-     * Edits a product by setting oldProduct to newProduct
-     *
-     * @param product - the product being updated
-     * @param newProduct - the new product with the updated values
-     */
-    public void editProduct(Product product, Product newProduct)
-            throws IllegalArgumentException {
-        assert (product != null);
-        assert (newProduct != null);
-        assert (canEditProduct(product, newProduct));
-
-        if (product == null || newProduct == null) {
-            throw new IllegalArgumentException();
-        }
-
-        product.setDescription(newProduct.getDescription());
-        product.setShelfLife(newProduct.getShelfLife());
-        product.setSize(newProduct.getSize());
-        product.setThreeMonthSupply(newProduct.getThreeMonthSupply());
     }
 
     /**
