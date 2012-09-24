@@ -27,14 +27,40 @@ private Map<Product, ProductContainer> productContainerByProduct;
 		productContainerByProduct = new HashMap<Product, ProductContainer>();
 	}
 
+	/**
+	 * Asks whether a StorageUnit can be created with these values
+	 * @param name The name of the StorageUnit
+	 * @return true if a StorageUnit can be created with these values
+	 * @return false if a StorageUnit cannot be created with these values
+	 */
+	public static boolean canCreate(String name){
+		try{
+			new StorageUnit(name);
+			return true;
+		}catch(IllegalArgumentException e){
+			return false;
+		}
+	}
+	
+	/**
+	 * @return this
+	 */
 	public StorageUnit getStorageUnit() {
 		return this;
 	}
 	
+	/**
+	 * @throws UnsupportedOperationException
+	 * because a StorageUnit cannot be in a StorageUnit
+	 */
 	public void setStorageUnit(StorageUnit unit) {
 		throw new UnsupportedOperationException("StorageUnits cannot be in a StorageUnit");
 	}
 	
+	/**
+	 * Add an Item to this StorageUnit
+	 * @param The Item to be added
+	 */
 	public void addItem(Item item){
 		ProductContainer container = productContainerByProduct.get(item.getProduct());
 		if(container == null || container == this){
@@ -44,10 +70,20 @@ private Map<Product, ProductContainer> productContainerByProduct;
 		}
 	}
 
+	/**
+	 * Sets the productByContainer index
+	 * @param product
+	 * @param productContainer
+	 */
 	public void setProductForContainer(Product product, ProductContainer productContainer) {
 		productContainerByProduct.put(product, productContainer);
 	}
 
+	/**
+	 * Get the ProductContainer that is indexed by Product
+	 * @param product the index
+	 * @return the ProductContainer that is indexed by product
+	 */
 	public ProductContainer getProductGroupByProduct(Product product){
 		assert(product != null);
 		

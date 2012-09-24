@@ -27,6 +27,7 @@ public class Size implements Serializable {
 	 * @param size - the float value in units
 	 */
 	public Size(Unit units, float size){
+		assert(units != null);
 		assert(size >= 0);
 		
 		if(units == Unit.count){
@@ -34,6 +35,11 @@ public class Size implements Serializable {
 			
 			if(!isInteger(size))
 				throw new IllegalArgumentException();
+		}
+		
+		
+		if(units != null){
+			throw new IllegalArgumentException("Units cannot be null");
 		}
 		
 		if(size < 0) {
