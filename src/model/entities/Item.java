@@ -64,20 +64,15 @@ public class Item implements PersistentItem{
 	 */
 	public Item(BarCode barCode, Date entryDate, Date expirationDate, 
 			Product product, ProductContainer container){		
-		//test constraint: Must be non-empty
-		assert(entryDate != null); 
-		//test constraint: Must not be in the future
-		assert(entryDate.before(new Date())); 
-		Calendar c = Calendar.getInstance();
-		c.set(2000,1,1);
-		//test constraint: Must be after 2001/1/1
-		assert(entryDate.after(c.getTime())); 
+		this.entryDate = entryDate;
+		//validate entryDate constraints
+		assert(hasValidEntryDate());
+		
 		//test constraint: Expiration Date only defined if the Product's Shelf life is defined	   
 		if(product.getShelfLife() != 0) { 
 			this.expirationDate = expirationDate;
 		}
 		this.barCode = barCode;
-		this.entryDate = entryDate;
 		this.product = product;
 		this.container = container;
 	}
@@ -116,19 +111,26 @@ public class Item implements PersistentItem{
 		this.container = null;
 	}
 	
-	
-	/*public String sqlCreateStatement() {
-		String query = "CREATE TABLE items(" +
-				"items_id INTEGER PRIMARY KEY AUTOINCREMENT," +
-				"barCode TEXT," +
-				"entryDate DATETIME," +
-				"exitDate DATETIME," +
-				"expirationDate DATETIME," +
-				"product_id INTEGER" + 
-				"parent_id INTEGER" +
-				");";
-		return query;
-	}*/
+	/**
+	 * 
+	 * @return true if pass constraints 
+	 */
+	public boolean hasValidEntryDate() {
+		
+		if(entryDate == null) {
+			return false;
+		}
+		if(!entryDate.before(new Date())) {
+			return false;
+		}
+		Calendar c = Calendar.getInstance();
+		c.set(2000,1,1);
+		if(!entryDate.after(c.getTime())) {
+			return false;
+		}
+		
+		return true;
+	}
 	
 	/** Checks to see if newDate is a valid entry date
 	 * 

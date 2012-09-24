@@ -26,6 +26,7 @@ public class ItemTest {
 	
 	@BeforeClass
 	public static void setUpClass() {
+		
 	}
 	
 	@AfterClass
