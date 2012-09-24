@@ -34,8 +34,10 @@ public class BarCodeGenerator implements PersistentItem {
 	 */
 	private BarCodeGenerator(){
 		// We know that every code we generate is unique 
-		// because the barcodegenerator class is a singleton class and it starts
-		// with 1 and increments everytime a new barcode is generated. So, it will never
+		// because the barcodegenerator class is a singleton class and
+		// it starts
+		// with 1 and increments everytime a new barcode is generated. 
+		//So, it will never
 		// generate the same barCode twice;
 		lastBarCode = 0;
 	}
