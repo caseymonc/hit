@@ -34,14 +34,28 @@ public class StorageUnitController {
 		targetContainer.addItem(item);
 	}
 	
+	/**
+	 * Get a List of all StorageUnits
+	 * @return a List of all StorageUnits
+	 */
 	public List<StorageUnit> getAllStorageUnits(){
 		return COM.getStorageUnitManager().getAllStorageUnits();
 	}
 	
+	/**
+	 * Get a StorageUnit by name
+	 * @param name the index by which to get StorageUnit
+	 * @return the StorageUnit associated with name
+	 */
 	public StorageUnit getStorageUnitByName(String name){
 		return COM.getStorageUnitManager().getStorageUnitByName(name);
 	}
 	
+	/**
+	 * Asks whether unit can be added
+	 * @param unit the unit to add
+	 * @return true if the name of unit is unique
+	 */
 	public boolean canAddStorageUnit(StorageUnit unit) {
 		if(unit == null)
 			return false;
@@ -50,6 +64,10 @@ public class StorageUnitController {
 		return manager.canAddStorageUnit(unit);
 	}
 	
+	/**
+	 * Adds unit to the system
+	 * @param unit the StorageUnit to be added
+	 */
 	public void addStorageUnit(StorageUnit unit){
 		assert(unit != null);
 		assert(canAddStorageUnit(unit));
@@ -61,6 +79,14 @@ public class StorageUnitController {
 		COM.getStorageUnitManager().addStorageUnit(unit);
 	}
 	
+	/**
+	 * Asks whether a StorageUnit can be edited
+	 * @param unit The new StorageUnit
+	 * @param oldUnit The old StorageUnit
+	 * @return true if the values of oldUnit can be changed to the
+	 * values of unit
+	 * @return false of not
+	 */
 	public boolean canEditStorageUnit(StorageUnit unit, StorageUnit oldUnit) {
 		StorageUnitManager manager = COM.getStorageUnitManager();
 		
@@ -72,6 +98,11 @@ public class StorageUnitController {
 		return manager.canAddStorageUnit(unit);
 	}
 	
+	/**
+	 * Edit the StorageUnit
+	 * @param unit
+	 * @param oldUnit
+	 */
 	public void editStorageUnit(StorageUnit unit, StorageUnit oldUnit){
 		assert(canEditStorageUnit(unit, oldUnit));
 		
@@ -83,10 +114,20 @@ public class StorageUnitController {
 		oldUnit.update(unit);
 	}
 	
+	/**
+	 * Asks Whether you can remove the StorageUnit
+	 * @param unit the StorageUnit to remove
+	 * @return true if the StorageUnit isEmpty
+	 * @return false if the StorageUnit is not Empty
+	 */
 	public boolean canDeleteStorageUnit(StorageUnit unit){
 		return unit.isEmpty() && COM.getStorageUnitManager().canRemoveStorageUnit(unit);
 	}
 	
+	/**
+	 * Delete unit
+	 * @param unit
+	 */
 	public void deleteStorageUnit(StorageUnit unit){
 		assert(canDeleteStorageUnit(unit));
 		

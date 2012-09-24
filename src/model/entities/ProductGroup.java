@@ -16,6 +16,12 @@ import model.persistence.PersistentItem;
 public class ProductGroup extends ProductContainer implements PersistentItem{
 	private Size threeMonthSupply;
 
+	/**
+	 * Constructor
+	 * @param name The name of the ProductGroup
+	 * @param container The container of the ProductGroup resides in
+	 * @param threeMonthSupply The three month supply of the ProductGroup
+	 */
 	public ProductGroup(String name, ProductContainer container, Size threeMonthSupply){
 		super(name, container);
 		
@@ -24,10 +30,35 @@ public class ProductGroup extends ProductContainer implements PersistentItem{
 		this.setThreeMonthSupply(threeMonthSupply);
 	}
 	
+	/**
+	 * Asks whether a ProductGroup can be created with these values
+	 * @param name The name of the ProductGroup
+	 * @param container The container of the ProductGroup resides in
+	 * @param threeMonthSupply The three month supply of the ProductGroup
+	 * @return true if a ProductGroup can be created with these values
+	 * @return false if a ProductGroup cannot be created with these values
+	 */
+	public static boolean canCreate(String name, ProductContainer container, Size threeMonthSupply){
+		try{
+			new ProductGroup(name, container, threeMonthSupply);
+			return true;
+		}catch(IllegalArgumentException e){
+			return false;
+		}
+	}
+	
+	/**
+	 * Set the threeMonthSupply of this ProductGroup
+	 * @param threeMonthSupply
+	 */
 	public void setThreeMonthSupply(Size threeMonthSupply) {
 		this.threeMonthSupply = threeMonthSupply;
 	}
 
+	/**
+	 * Get the Three month supply
+	 * @return
+	 */
 	public Size getThreeMonthSupply() {
 		return threeMonthSupply;
 	}
