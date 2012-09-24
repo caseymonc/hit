@@ -288,38 +288,11 @@ public class ProductManager {
         assert (product != null);
         assert (newProduct != null);
 
-        // the description must be non-empty
-        if (newProduct.getDescription().equals("")) {
-            return false;
-        }
-
-        // the shelfLife must be non-negative
-        if (newProduct.getShelfLife() < 0) {
-            return false;
-        }
-
-        // the threeMonthSupply must be non-negative
-        if (newProduct.getThreeMonthSupply() < 0) {
-            return false;
-        }
-
-        Size size = newProduct.getSize();
-        
-        if(size == null){
+        if(product == null || newProduct == null){
             return false;
         }
         
-        // the size must be positive and cannot be zero
-        if (size.getSize() <= 0) {
-            return false;
-        }
-
-        // if the unit of the size is count, the magnitude must be 1
-        if (size.getUnits() == Unit.count && size.getSize() != 1) {
-            return false;
-        }
-
-        return true;
+        return isValidProduct(newProduct);
     }
 
     /**
@@ -354,6 +327,11 @@ public class ProductManager {
      */
     public void addItemToProduct(Product p, Item i) 
             throws IllegalArgumentException {
+        
+        assert(p != null);
+        assert(i != null);
+        assert(itemsByProduct.containsKey(p));
+        
         if (p == null || i == null) {
             throw new IllegalArgumentException();
         }
@@ -380,6 +358,8 @@ public class ProductManager {
      * return false.
      */
     public boolean productExists(BarCode barcode) {
+        assert(barcode != null);
+        
         return productsByBarCode.containsKey(barcode);
     }
 

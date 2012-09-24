@@ -62,34 +62,34 @@ public class ProductTest {
         Size badSize2 = new Size(Unit.count, 2);
         
         Product p1 = new Product("", goodCode, 3, 3, goodSize);
-        assertFalse(productManager.canAddProduct(p1));
+        assertFalse(productManager.isValidProduct(p1));
         
         Product p2 = new Product("Bad BarCode", badCode, 3, 3, new Size(Unit.count, 1));
-        assertFalse(productManager.canAddProduct(p2));
+        assertFalse(productManager.isValidProduct(p2));
         
         Product p3 = new Product("Bad Size", goodCode, 3, 3, badSize1);
-        assertFalse(productManager.canAddProduct(p3));
+        assertFalse(productManager.isValidProduct(p3));
         
         p3.getSize().setSize(1);
-        assertTrue(productManager.canAddProduct(p3));
+        assertTrue(productManager.isValidProduct(p3));
         
         Product p4 = new Product("Bad Size", goodCode, 3, 3, badSize2);
-        assertFalse(productManager.canAddProduct(p4));
+        assertFalse(productManager.isValidProduct(p4));
         
         p4.getSize().setSize(1);
-        assertTrue(productManager.canAddProduct(p4));
+        assertTrue(productManager.isValidProduct(p4));
         
         Product p5 = new Product("Bad Shelf Life", goodCode, -1, 3, goodSize);
-        assertFalse(productManager.canAddProduct(p5));
+        assertFalse(productManager.isValidProduct(p5));
         
         p5.setShelfLife(0);
-        assertTrue(productManager.canAddProduct(p5));
+        assertTrue(productManager.isValidProduct(p5));
         
         Product p6 = new Product("Bad 3-Month Supply", goodCode, 3, -1, goodSize);
-        assertFalse(productManager.canAddProduct(p6));
+        assertFalse(productManager.isValidProduct(p6));
         
         p6.setThreeMonthSupply(0);
-        assertTrue(productManager.canAddProduct(p6));
+        assertTrue(productManager.isValidProduct(p6));
     }
     
     @Test
