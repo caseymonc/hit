@@ -68,14 +68,7 @@ public class Product implements PersistentItem{
 	 * @param threeMonthSupply
 	 * @param size
 	 */
-	public Product(String description, BarCode barCode, int shelfLife,
-								int threeMonthSupply, Size size){
-		assert(description != null);
-		assert(!description.equals(""));
-		
-		if(description == null || description.equals(""))
-			throw new IllegalArgumentException("Description cannot be empty");
-		
+	public Product(String description, BarCode barCode, int shelfLife, int threeMonthSupply, Size size){
 		this.description = description;
 		this.barCode = barCode;
 		this.shelfLife = shelfLife;

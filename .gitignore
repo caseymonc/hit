@@ -2,3 +2,6 @@
 ########################
 *.class
 *.jar
+/nbproject/private/
+/build/
+/nbdist/

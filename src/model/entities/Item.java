@@ -64,14 +64,7 @@ public class Item implements PersistentItem{
 	public Item(BarCode barCode, Date entryDate, Date expirationDate, 
 			Product product, ProductContainer container){		
 		this.barCode = barCode;
-		this.expirationDate = expirationDate;
-		
-		// A product's creation date is equal to the earliest entry
-		// date of any its items.
-		if(product.getCreationDate().compareTo(entryDate) > 0){
-			product.setCreationDate(entryDate);
-		}
-		
+		this.expirationDate = expirationDate;		
 		this.entryDate = entryDate;
 		this.product = product;
 		this.container = container;
