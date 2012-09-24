@@ -47,7 +47,8 @@ public class Size implements Serializable {
 	/**
 	 * Tests whether size is an integer
 	 * @param size
-	 * @return
+	 * @return true if size is an integer
+	 * @return false if size is not an 
 	 */
 	private boolean isInteger(float size){
 		int intSize = (int)size;
@@ -98,5 +99,24 @@ public class Size implements Serializable {
 	 */
 	public float getSize() {
 		return size;
+	}
+	
+	public static boolean isValidSize(Size size){
+		if(size == null){
+            return false;
+        }
+        
+        if(!(size.getUnits() instanceof Unit)){
+            return false;
+        }
+        
+        if(size.getSize() < 1){
+            return false;
+        }
+        
+        if(size.getUnits() == Unit.count && size.getSize() != 1){
+            return false;
+        }
+        return true;
 	}
 }

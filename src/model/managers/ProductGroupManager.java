@@ -59,9 +59,11 @@ public class ProductGroupManager {
 		
 		productGroupsByStorageUnit.get(group.getStorageUnit()).add(group);
 		
-		Map<String, ProductGroup> groups = productGroupsByProductContainer.get(group.getContainer());
+		Map<String, ProductGroup> groups = productGroupsByProductContainer
+																.get(group.getContainer());
 		if(groups == null){
-			productGroupsByProductContainer.put(group.getContainer(), new HashMap<String, ProductGroup>());
+			productGroupsByProductContainer.put(group.getContainer(), 
+														new HashMap<String, ProductGroup>());
 			groups = productGroupsByProductContainer.get(group.getContainer());
 		}
 		groups.put(group.getName(), group);

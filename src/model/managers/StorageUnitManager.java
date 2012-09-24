@@ -24,10 +24,15 @@ public class StorageUnitManager {
 	private Map<Product,Set<StorageUnit>> storageUnitsByProduct;
 	private Map<Product, ProductGroup> productByProductGroup;
 	
+	/** Constructor */
 	public StorageUnitManager(){
 		storageUnits = new HashMap<String, StorageUnit>();
 	}
 	
+	/**
+	 * Gets a list of all the StorageUnits in the system
+	 * @return list of all StorageUnits
+	 */
 	public List<StorageUnit> getAllStorageUnits(){
 		List<StorageUnit> units = new ArrayList<StorageUnit>();
 		
@@ -37,10 +42,21 @@ public class StorageUnitManager {
 		return units;
 	}
 	
+	/**
+	 * Get a StorageUnit by it's name
+	 * @param name The name of the StorageUnit
+	 * @return the StorageUnit associated with name
+	 */
 	public StorageUnit getStorageUnitByName(String name) {
 		return storageUnits.get(name);
 	}
 	
+	/**
+	 * Ask whether the StorageUnit can be added
+	 * @param unit The StorageUnit to add
+	 * @return true if the StorageUnit can be added
+	 * @return false if the StorageUnit cannot be added
+	 */
 	public boolean canAddStorageUnit(StorageUnit unit) {
 		if(contains(unit)) {
 			return false;
@@ -48,6 +64,11 @@ public class StorageUnitManager {
 		return true;
 	}
 	
+	/**
+	 * Add a StorageUnit to the system
+	 * @param unit The StorageUnit to be added
+	 * @throws IllegalArgumentException if the StorageUnit cannot be added
+	 */
 	public void addStorageUnit(StorageUnit unit) {
 		assert(canAddStorageUnit(unit));
 		
@@ -57,6 +78,12 @@ public class StorageUnitManager {
 		storageUnits.put(unit.getName(), unit);
 	}
 	
+	/**
+	 * Asks whether the StorageUnit can be removed
+	 * @param unit The StorageUnit to be removed
+	 * @return true if the StorageUnit can be removed
+	 * @return false if the StorageUnit cannot be removed
+	 */
 	public boolean canRemoveStorageUnit(StorageUnit unit) {
 		if(unit == null)
 			return false;
@@ -67,6 +94,11 @@ public class StorageUnitManager {
 		return false;
 	}
 	
+	/**
+	 * Remove the StorageUnit from the system
+	 * @param unit The StorageUnit to be removed
+	 * @throws IllegalArgumentException if the StorageUnit cannot be removed
+	 */
 	public void removeStorageUnit(StorageUnit unit) {
 		assert(canRemoveStorageUnit(unit));
 		
@@ -76,6 +108,12 @@ public class StorageUnitManager {
 		storageUnits.remove(unit.getName());
 	}
 	
+	/**
+	 * Asks whether the Manager contains the StorageUnit
+	 * @param unit The unit we are asking about
+	 * @return true if the StorageUnit is in the manager
+	 * @return false if the StorageUnit is not in the manager
+	 */
 	public boolean contains(StorageUnit unit) {
 		if(storageUnits.keySet().contains(unit.getName())) {
 			return true;

@@ -18,14 +18,36 @@ import java.util.List;
  * and are referred to generically as product containers.
  */
 public abstract class ProductContainer{
+	/** Index from BarCode to Product
+	 * Stores the Products that have items in this Container*/	
 	private Map<BarCode,Product> products;
+	
+	/** Index from BarCode to Item
+	 * Stores the Items in this Container*/
 	private Map<BarCode,Item> items;
+	
+	/** Index from ProductGroup name to ProductGoup
+	 * Stores the ProductGroups in this Container*/
 	private Map<String,ProductGroup> productGroups;
+	
+	/** Index from Product to set of Items associated 
+	 * with it in this Container*/
 	private Map<Product,Set<Item>> itemsByProduct;
+	
+	/** The ProductContainer in which this resides*/
 	private ProductContainer container;
+	
+	/** The StorageUnit in which this ProductContainer resides*/
 	private StorageUnit storageUnit;
+	
+	/** The name of this ProductContainer*/
 	private String name; 
 	
+	/**
+	 * Constructor
+	 * @param name the name of ProductContainer
+	 * @param container the ProductContainer in which this container will reside
+	 */
 	public ProductContainer(String name, ProductContainer container) {
 		assert(name != null);
 		assert(!name.equals(""));
@@ -83,6 +105,10 @@ public abstract class ProductContainer{
 		putItem(item);
 	}
 	
+	/**
+	 * Do the actual add
+	 * @param item The item to add
+	 */
 	private void putItem(Item item){
 		item.getProduct().addProductContainer(this);
 		getStorageUnit().setProductForContainer(item.getProduct(), this);
@@ -92,6 +118,10 @@ public abstract class ProductContainer{
 		item.setContainer(this);
 	}
 	
+	/**
+	 * Index the item by 
+	 * @param item
+	 */
 	private void putItemByProduct(Item item) {
 		Set<Item> items = itemsByProduct.get(item.getProduct());
 		if(items == null){

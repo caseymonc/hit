@@ -24,7 +24,6 @@ public class ProductGroup extends ProductContainer implements PersistentItem{
 		this.setThreeMonthSupply(threeMonthSupply);
 	}
 	
-
 	public void setThreeMonthSupply(Size threeMonthSupply) {
 		this.threeMonthSupply = threeMonthSupply;
 	}

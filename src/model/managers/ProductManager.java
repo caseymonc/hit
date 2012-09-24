@@ -63,20 +63,8 @@ public class ProductManager {
         
         Size size = p.getSize();
         
-        if(size == null){
-            return false;
-        }
-        
-        if(!(size.getUnits() instanceof Unit)){
-            return false;
-        }
-        
-        if(size.getSize() < 1){
-            return false;
-        }
-        
-        if(size.getUnits() == Unit.count && size.getSize() != 1){
-            return false;
+        if(!Size.isValidSize(size)){
+        	return false;
         }
         
         return true;
