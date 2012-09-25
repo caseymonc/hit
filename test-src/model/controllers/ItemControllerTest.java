@@ -49,7 +49,13 @@ public class ItemControllerTest {
 	
 	@Before
 	public void setUp() {
-	
+		b = BarCodeGenerator.getInstance().generateBarCode();
+		su = new StorageUnit("Unit 1");
+		
+		g = new ProductGroup("Group 1", su, new Size(Unit.gallons, 5));
+
+		p = new Product("Product", BarCodeGenerator.getInstance().generateBarCode(),
+			    0, 0, new Size(Unit.count, 1));
 	}
 	
 	@After
@@ -78,55 +84,40 @@ public class ItemControllerTest {
 		p = new Product("Product", BarCodeGenerator.getInstance().generateBarCode(),
 			    0, 0, new Size(Unit.count, 1));
 		//test empty date
-		try {			
-			new Item(b, null, new Date(), p, g);
-			//only passes if throws an exception
-			assertTrue(false);
-		} catch(IllegalArgumentException e) {
-			assertTrue(e != null);
-		}
+		assertFalse(Item.canCreate(b, null, new Date(), p, g));
+
 		//Entry Date	cannot be in the future
-		try {
-			Calendar c = Calendar.getInstance();
-			c.set(2014,1,1);
-			new Item(b, c.getTime(), null, p, g);
-			assertTrue(false);
-		} catch(IllegalArgumentException e) {
-			assertTrue(e != null);
-		}
+		Calendar c = Calendar.getInstance();
+		c.set(2014,1,1);
+		assertFalse(Item.canCreate(b, c.getTime(), null, p, g));
 		
-		try {
-			//Entry Date	Cannot be prior to 1/1/2000
-			Calendar c = Calendar.getInstance();
-			c.set(1999,1,1);
-			new Item(b, c.getTime(), null, p, g);
-			//only passes if throws an exception
-			assertTrue(false);
-		} catch(IllegalArgumentException e) {
-			assertTrue(e != null);
-		}
-		//everything is valid
-		try {
-			//Entry Date	Cannot be prior to 1/1/2000
-			Calendar c = Calendar.getInstance();
-			c.set(2002,1,1);
-			new Item(b, c.getTime(), null, p, g);
-			//only passes if throws an exception
-		} catch(IllegalArgumentException e) {
-			assertTrue(false);
-		}
+		//Entry Date	Cannot be prior to 1/1/2000
+		c.set(1999,1,1);
+		assertFalse(Item.canCreate(b, c.getTime(), null, p, g));
 		
-		
+		//all is valid
+		c.set(2002,1,1);
+		assertTrue(Item.canCreate(b, c.getTime(), null, p, g));
 		
 	 } 
 	 
 	 @Test
 	 public void ItemHasValidExitDate() {
-	 
+		b = BarCodeGenerator.getInstance().generateBarCode();
+		su = new StorageUnit("Unit 1");
+
+		g = new ProductGroup("Group 1", su, new Size(Unit.gallons, 5));
+
+		p = new Product("Product", BarCodeGenerator.getInstance().generateBarCode(),
+			   0, 0, new Size(Unit.count, 1));
+
+		 Item i = new Item(b, new Date(), null, p, g);
+		 i.remove();
+		 assertTrue(i.hasValidExitDate());
 	 }
 	 
 	 @Test
 	 public void ItemHasValidContainer() {
-	 
+		 
 	 }
 }
