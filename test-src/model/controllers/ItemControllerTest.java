@@ -69,20 +69,14 @@ public class ItemControllerTest {
 	//Exit Time	Cannot be in the future or prior to 12 AM on the Item’s Entry Date
 	//Expiration Date	This attribute is defined only if the Product’s Shelf Life attribute has been specified.
 	//Container	Empty if the Item has been removed from storage.
-	//Container	Non-empty if the Item has not been removed from storage. (Before it is removed, an Item is contained in one Product Container. After it is removed, it is contained in no Product Containers.)
+	//Container	Non-empty if the Item has not been removed from storage. (Before it is removed, 
+	//             an Item is contained in one Product Container. After it is removed, it is contained in no Product Containers.)
 
 	
 	 @Test
 	 public void ItemHasValidEntryDate() {
 //		 BarCode barCode, Date entryDate, Date expirationDate, 
 //			Product product, ProductContainer container
-		b = BarCodeGenerator.getInstance().generateBarCode();
-		su = new StorageUnit("Unit 1");
-		
-		g = new ProductGroup("Group 1", su, new Size(Unit.gallons, 5));
-
-		p = new Product("Product", BarCodeGenerator.getInstance().generateBarCode(),
-			    0, 0, new Size(Unit.count, 1));
 		//test empty date
 		assertFalse(Item.canCreate(b, null, new Date(), p, g));
 
@@ -103,21 +97,21 @@ public class ItemControllerTest {
 	 
 	 @Test
 	 public void ItemHasValidExitDate() {
-		b = BarCodeGenerator.getInstance().generateBarCode();
-		su = new StorageUnit("Unit 1");
-
-		g = new ProductGroup("Group 1", su, new Size(Unit.gallons, 5));
-
-		p = new Product("Product", BarCodeGenerator.getInstance().generateBarCode(),
-			   0, 0, new Size(Unit.count, 1));
-
 		 Item i = new Item(b, new Date(), null, p, g);
 		 i.remove();
 		 assertTrue(i.hasValidExitDate());
 	 }
 	 
+	 
+	 //Container	Empty if the Item has been removed from storage.
+	//Container	Non-empty if the Item has not been removed from storage. (Before it is removed, 
+	 //             an Item is contained in one Product Container. After it is removed, it is contained
+	 //             in no Product Containers.)
 	 @Test
 	 public void ItemHasValidContainer() {
-		 
+		Item i = new Item(b, new Date(), null, p, g);
+		assertFalse(i.getContainer() == null);
+		i.remove();
+		assertTrue(i.getContainer() == null);
 	 }
 }
