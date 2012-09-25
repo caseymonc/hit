@@ -6,13 +6,13 @@ package model.entities;
 
 import java.util.Date;
 import model.BarCodeGenerator;
+import model.managers.ItemManager;
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.*;
-import model.managers.ItemManager;
 
 /**
  *
@@ -64,13 +64,4 @@ public class ItemTest {
 		assertTrue(item.getBarCode().isValid());
 		assertTrue(item2.getBarCode().isValid());
 	}
-	
-	
-	@Test
-	public void test()
-	{
-		
-	}
-	
-
 }
