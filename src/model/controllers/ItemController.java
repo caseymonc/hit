@@ -98,32 +98,14 @@ public class ItemController {
 		IM.removeItem(i);
 	}
 	
-	/** The user can move an Item to a Product Container by selecting the Item 
-	 *  in the Item Table and dragging it to the target Product Container in 
-	 *  the Storage Unit / Product Group Tree. The effect of this operation  
-	 *  depends on whether or not the Item’s Product is already contained in  
-	 *  the destination Storage Unit. (Remember, a Product can be in only one 
-	 *  Product Container in a given Storage Unit. However, a Product may 
-	 *  appear in multiple Storage Units. Also, an Item is always contained in 
-	 *  exactly one Product Container.)
+	/** The Storage Unit Controller will take care of the movement
 	 * 
 	 * @param i
 	 * @param pc
 	 * @throws CannotMoveItemException 
 	 */
 	public void moveItem(Item i, ProductContainer target) {//throws CannotMoveItemException {
-		
-		ProductContainer oldc = i.getContainer();		
-		assert(oldc != null);
-		
-		//remove the item from the old place
-		oldc.removeItem(i);
-
-		//get the top level SU
-		StorageUnit targetsu = target.getStorageUnit();
-		
-		//adds the product for me if its not there already
-		targetsu.addItem(i);
+		SC.moveItem(i,target.getStorageUnit());
 	}
 	
 	/**

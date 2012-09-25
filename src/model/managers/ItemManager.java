@@ -43,13 +43,6 @@ public class ItemManager
 	/**
 	 * @throws CantAddItemException
 	 */
-	public void addProductGroupToItem(Item i, ProductGroup pg) {
-		//can always add dont need to check if i can.
-	}
-	
-	/**
-	 * @throws CantAddItemException
-	 */
 	public void addItem(Item i) {
 		if(i == null) {
 			throw new IllegalArgumentException();
@@ -73,18 +66,13 @@ public class ItemManager
 		//add item to removed items history stuff.
 		removedItemsByBarCode.put(i.getBarCode(), i);
 	}
-	
+	/** 
+	 * 
+	 * @param i
+	 * @return true if the conditions are met and false otherwise
+	 */
 	public boolean canAddItem(Item i) {
-		/*	
-//Entry Date	Must be non-empty.
-//Entry Date	Cannot be in the future
-//Entry Date	Cannot be prior to 1/1/2000
-//Exit Time	This attribute is defined only if the Item has been removed from storage.
-//Exit Time	Cannot be in the future or prior to 12 AM on the Item’s Entry Date
-//Expiration Date	This attribute is defined only if the Product’s Shelf Life attribute has been specified.
-//Container	Empty if the Item has been removed from storage.
-//Container	Non-empty if the Item has not been removed from storage. (Before it is removed, an Item is contained in one Product Container. After it is removed, it is contained in no Product Containers.)
-*/		
+
 		if(i == null) {
 			return false;
 		} else if(i.getProduct() == null) {
@@ -96,41 +84,26 @@ public class ItemManager
 			return false;
 		} else if(i.getExitDate() != null) {
 			return false;
-		} else{
-			
+		} else if(!i.hasProductShelfLife() && i.getExpirationDate() != null) {
+			return false;
+
 		}
 		//Barcode	Unique among all Items.
 		assert(!itemsByBarCode.containsKey(i.getBarCode()));
 		assert(!removedItemsByBarCode.containsKey(i.getBarCode()));
 		
-		
 		return true;
 	}
 	
-	/** Determines if the specified Item is contained by the ProductGroup
-	 * 
-	 * @param i Item 
-	 * @param pg ProductGroup
-	 * @return 
-	 */
-	public boolean itemIsInProductGroup(Item i, ProductGroup pg) {
-		return true;
-	}
-	
-	/** Determines if the specified Item is contained by the StorageUnit
-	 * 
-	 * @param i Item 
-	 * @param su StorageUnit
-	 * @return 
-	 */
-	public boolean itemIsInStorageUnit(Item i, StorageUnit su) {
-		return true;
-	}
-	
-	/**
+	/** the item is 
 	 * @param i Item
 	 */
 	public boolean itemIsInRemovedItems(Item i) {
+		if(itemsByBarCode.containsKey(i.getBarCode())) {
+			assert(!removedItemsByBarCode.containsKey(i.getBarCode()));
+			return false;
+		}
+		
 		return (removedItemsByBarCode.containsKey(i.getBarCode())
 			   && removedItemsByBarCode.containsValue(i));
 	}
