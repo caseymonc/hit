@@ -99,12 +99,24 @@ public class ItemControllerTest {
 			//Entry Date	Cannot be prior to 1/1/2000
 			Calendar c = Calendar.getInstance();
 			c.set(1999,1,1);
-			Item i = new Item(b, c.getTime(), null, p, g);
+			new Item(b, c.getTime(), null, p, g);
 			//only passes if throws an exception
 			assertTrue(false);
 		} catch(IllegalArgumentException e) {
 			assertTrue(e != null);
 		}
+		//everything is valid
+		try {
+			//Entry Date	Cannot be prior to 1/1/2000
+			Calendar c = Calendar.getInstance();
+			c.set(2002,1,1);
+			new Item(b, c.getTime(), null, p, g);
+			//only passes if throws an exception
+		} catch(IllegalArgumentException e) {
+			assertTrue(false);
+		}
+		
+		
 		
 	 } 
 	 
