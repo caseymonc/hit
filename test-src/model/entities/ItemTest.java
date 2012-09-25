@@ -6,13 +6,13 @@ package model.entities;
 
 import java.util.Date;
 import model.BarCodeGenerator;
+import model.managers.ItemManager;
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.*;
-import model.managers.ItemManager;
 
 /**
  *
@@ -64,21 +64,4 @@ public class ItemTest {
 		assertTrue(item.getBarCode().isValid());
 		assertTrue(item2.getBarCode().isValid());
 	}
-	
-	
-	@Test
-	public void test()
-	{
-		
-	}
-	
-
-	//Entry Date	Must be non‐empty.
-	//Entry Date	Cannot be in the future
-	//Entry Date	Cannot be prior to 1/1/2000
-	//Exit Time	This attribute is defined only if the Item has been removed from storage.
-	//Exit Time	Cannot be in the future or prior to 12 AM on the Item’s Entry Date
-	//Expiration Date	This attribute is defined only if the Product’s Shelf Life attribute has been specified.
-	//Container	Empty if the Item has been removed from storage.
-	//Container	Non‐empty if the Item has not been removed from storage. (Before it is removed, an Item is contained in one Product Container. After it is removed, it is contained in no Product Containers.)
 }
