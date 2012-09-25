@@ -63,10 +63,12 @@ public class Item implements PersistentItem{
 	 * @param container
 	 */
 	public Item(BarCode barCode, Date entryDate, Date expirationDate, 
-			Product product, ProductContainer container){		
+			Product product, ProductContainer container) throws IllegalArgumentException {		
 		this.entryDate = entryDate;
 		//validate entryDate constraints
-		assert(hasValidEntryDate());
+		if(!hasValidEntryDate()) {
+			throw new IllegalArgumentException();
+		}
 		
 		//test constraint: Expiration Date only defined if the Product's Shelf life is defined	   
 		if(product.getShelfLife() != 0) { 
@@ -110,8 +112,22 @@ public class Item implements PersistentItem{
 		assert(this.container != null);// Non-empty if the item has not been removed from storage
 		this.container = null;
 	}
+	/** 
+	 * 
+	 * @return 
+	 */
+	public boolean hasProductShelfLife() {
+		assert(product != null);
+		if(product.getShelfLife() == 0) {
+			return false;
+		}
+		assert(product.getShelfLife() > 0);
+		return true;
+	}
 	
-	/**
+	/**	Entry Date	Must be non‐empty.
+	 *	Entry Date	Cannot be in the future
+	 *	Entry Date	Cannot be prior to 1/1/2000
 	 * 
 	 * @return true if pass constraints 
 	 */
@@ -132,6 +148,15 @@ public class Item implements PersistentItem{
 		return true;
 	}
 	
+	public static boolean canCreate(BarCode barCode, Date entryDate, Date expirationDate, 
+			Product product, ProductContainer container){
+		try{
+			new Item(barCode, entryDate, expirationDate, product, container);
+			return true;
+		}catch(IllegalArgumentException e){
+			return false;
+		}
+	}
 	/** Checks to see if newDate is a valid entry date
 	 * 
 	 * @param newDate
