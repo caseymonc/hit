@@ -125,7 +125,7 @@ public class Item implements PersistentItem{
 		return true;
 	}
 	
-	/**	Entry Date	Must be non‐empty.
+	/**	Entry Date	Must be non-empty.
 	 *	Entry Date	Cannot be in the future
 	 *	Entry Date	Cannot be prior to 1/1/2000
 	 * 
