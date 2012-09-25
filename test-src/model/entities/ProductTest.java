@@ -61,15 +61,11 @@ public class ProductTest {
         Size goodSize2 = new Size(Unit.gallons, 1);
         Size badSize1 = new Size(Unit.gallons, 0);
         Size badSize2 = new Size(Unit.count, 2);
-        Size badSize3 = new Size(null, 1);
-        Size badSize4 = new Size(Unit.gallons, -1);
         
         assertFalse(Product.canCreate("", goodCode, 3, 3, goodSize1));
         assertFalse(Product.canCreate("Bad BarCode", badCode, 3, 3, goodSize1));
         assertFalse(Product.canCreate("Bad Size", goodCode, 3, 3, badSize1));       
-        assertFalse(Product.canCreate("Bad Size", goodCode, 3, 3, badSize2));
-        assertFalse(Product.canCreate("Bad Size", goodCode, 3, 3, badSize3));
-        assertFalse(Product.canCreate("Bad Size", goodCode, 3, 3, badSize4));
+        assertFalse(Product.canCreate("Bad Size", goodCode, 3, 3, badSize2));        
         assertFalse(Product.canCreate("Bad Shelf Life", goodCode, -1, 3, goodSize1));
         assertFalse(Product.canCreate("Bad 3-Month Supply", goodCode, 3, -1, goodSize1));
         

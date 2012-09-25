@@ -76,19 +76,19 @@ public class ItemManager
 	
 	public boolean canAddItem(Item i) {
 		/*	
-//Entry Date	Must be non‐empty.
+//Entry Date	Must be non-empty.
 //Entry Date	Cannot be in the future
 //Entry Date	Cannot be prior to 1/1/2000
 //Exit Time	This attribute is defined only if the Item has been removed from storage.
 //Exit Time	Cannot be in the future or prior to 12 AM on the Item’s Entry Date
 //Expiration Date	This attribute is defined only if the Product’s Shelf Life attribute has been specified.
 //Container	Empty if the Item has been removed from storage.
-//Container	Non‐empty if the Item has not been removed from storage. (Before it is removed, an Item is contained in one Product Container. After it is removed, it is contained in no Product Containers.)
+//Container	Non-empty if the Item has not been removed from storage. (Before it is removed, an Item is contained in one Product Container. After it is removed, it is contained in no Product Containers.)
 */		
 		if(i == null) {
 			return false;
 		} else if(i.getProduct() == null) {
-			//Product	Must be non‐empty.
+			//Product	Must be non-empty.
 			return false;
 		} else if(!i.getBarCode().isValid()) {
 			return false;
@@ -96,7 +96,7 @@ public class ItemManager
 			return false;
 		} else if(i.getExitDate() != null) {
 			return false;
-		} else if() {
+		} else{
 			
 		}
 		//Barcode	Unique among all Items.

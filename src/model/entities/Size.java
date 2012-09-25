@@ -38,7 +38,7 @@ public class Size implements Serializable {
 		}
 		
 		
-		if(units != null){
+		if(units == null){
 			throw new IllegalArgumentException("Units cannot be null");
 		}
 		
