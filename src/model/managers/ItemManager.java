@@ -60,7 +60,8 @@ public class ItemManager
 	public void removeItem(Item i) {
 		
 		assert(itemsByBarCode.containsKey(i.getBarCode()));
-		
+		//tell the item to change its state
+		i.remove();
 		//pull out item from itemsByBarCode
 		itemsByBarCode.remove(i.getBarCode());
 		//add item to removed items history stuff.
