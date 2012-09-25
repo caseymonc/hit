@@ -72,9 +72,10 @@ public class ItemController {
 	}
 
 	/** 
-	 * New Items are added to the Product Container within the target Storage Unit that contains the Item’s
-	 * Product. If the Item’s Product is not already in the Storage Unit, it is automatically added to the Storage
-	 * Unit at the top level before the Items are added.
+	 * New Items are added to the Product Container within the target Storage 
+         * Unit that contains the Item’s Product. If the Item’s Product is not already
+         * in the Storage Unit, it is automatically added to the Storage Unit at the 
+         * top level before the Items are added.
 	 * 
 	 * @throws IllegalArgumentException
 	 */
@@ -104,7 +105,7 @@ public class ItemController {
 	 * @param pc
 	 * @throws CannotMoveItemException 
 	 */
-	public void moveItem(Item i, ProductContainer target) {//throws CannotMoveItemException {
+	public void moveItem(Item i, ProductContainer target) {
 		SC.moveItem(i,target.getStorageUnit());
 	}
 	
@@ -113,7 +114,7 @@ public class ItemController {
 	 * @param i
 	 * @param pc 
 	 */
-	public void transferItem(Item i, ProductContainer target) {// throws CannotTransferItemException {
+	public void transferItem(Item i, ProductContainer target) {
 		moveItem(i, target);
 	}
 	
