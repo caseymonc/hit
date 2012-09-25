@@ -49,7 +49,13 @@ public class ItemControllerTest {
 	
 	@Before
 	public void setUp() {
-	
+		b = BarCodeGenerator.getInstance().generateBarCode();
+		su = new StorageUnit("Unit 1");
+		
+		g = new ProductGroup("Group 1", su, new Size(Unit.gallons, 5));
+
+		p = new Product("Product", BarCodeGenerator.getInstance().generateBarCode(),
+			    0, 0, new Size(Unit.count, 1));
 	}
 	
 	@After
@@ -63,58 +69,49 @@ public class ItemControllerTest {
 	//Exit Time	Cannot be in the future or prior to 12 AM on the Item’s Entry Date
 	//Expiration Date	This attribute is defined only if the Product’s Shelf Life attribute has been specified.
 	//Container	Empty if the Item has been removed from storage.
-	//Container	Non-empty if the Item has not been removed from storage. (Before it is removed, an Item is contained in one Product Container. After it is removed, it is contained in no Product Containers.)
+	//Container	Non-empty if the Item has not been removed from storage. (Before it is removed, 
+	//             an Item is contained in one Product Container. After it is removed, it is contained in no Product Containers.)
 
 	
 	 @Test
 	 public void ItemHasValidEntryDate() {
 //		 BarCode barCode, Date entryDate, Date expirationDate, 
 //			Product product, ProductContainer container
-		b = BarCodeGenerator.getInstance().generateBarCode();
-		su = new StorageUnit("Unit 1");
-		
-		g = new ProductGroup("Group 1", su, new Size(Unit.gallons, 5));
-
-		p = new Product("Product", BarCodeGenerator.getInstance().generateBarCode(),
-			    0, 0, new Size(Unit.count, 1));
 		//test empty date
-		try {			
-			new Item(b, null, new Date(), p, g);
-			//only passes if throws an exception
-			assertTrue(false);
-		} catch(IllegalArgumentException e) {
-			assertTrue(e != null);
-		}
+		assertFalse(Item.canCreate(b, null, new Date(), p, g));
+
 		//Entry Date	cannot be in the future
-		try {
-			Calendar c = Calendar.getInstance();
-			c.set(2014,1,1);
-			new Item(b, c.getTime(), null, p, g);
-			assertTrue(false);
-		} catch(IllegalArgumentException e) {
-			assertTrue(e != null);
-		}
+		Calendar c = Calendar.getInstance();
+		c.set(2014,1,1);
+		assertFalse(Item.canCreate(b, c.getTime(), null, p, g));
 		
-		try {
-			//Entry Date	Cannot be prior to 1/1/2000
-			Calendar c = Calendar.getInstance();
-			c.set(1999,1,1);
-			Item i = new Item(b, c.getTime(), null, p, g);
-			//only passes if throws an exception
-			assertTrue(false);
-		} catch(IllegalArgumentException e) {
-			assertTrue(e != null);
-		}
+		//Entry Date	Cannot be prior to 1/1/2000
+		c.set(1999,1,1);
+		assertFalse(Item.canCreate(b, c.getTime(), null, p, g));
+		
+		//all is valid
+		c.set(2002,1,1);
+		assertTrue(Item.canCreate(b, c.getTime(), null, p, g));
 		
 	 } 
 	 
 	 @Test
 	 public void ItemHasValidExitDate() {
-	 
+		 Item i = new Item(b, new Date(), null, p, g);
+		 i.remove();
+		 assertTrue(i.hasValidExitDate());
 	 }
 	 
+	 
+	 //Container	Empty if the Item has been removed from storage.
+	//Container	Non-empty if the Item has not been removed from storage. (Before it is removed, 
+	 //             an Item is contained in one Product Container. After it is removed, it is contained
+	 //             in no Product Containers.)
 	 @Test
 	 public void ItemHasValidContainer() {
-	 
+		Item i = new Item(b, new Date(), null, p, g);
+		assertFalse(i.getContainer() == null);
+		i.remove();
+		assertTrue(i.getContainer() == null);
 	 }
 }

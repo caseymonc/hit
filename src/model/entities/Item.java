@@ -34,6 +34,11 @@ public class Item implements PersistentItem{
 	 */
 	private Date exitDate;
 	
+	/**
+	 * When an item is removed this flag is set
+	 */
+	private boolean removed;
+	
 	/** The date on which this Item will expire. This is calculated
 	 * based on this Item's Entry Date and the Product's Shelf Life.
 	 * This attribute is defined only if the Product's Shelf Life 
@@ -77,6 +82,7 @@ public class Item implements PersistentItem{
 		this.barCode = barCode;
 		this.product = product;
 		this.container = container;
+		this.removed = false;
 	}
 	
 	/**
@@ -104,13 +110,14 @@ public class Item implements PersistentItem{
 	 */
 	public void remove(){
 		//constraint exitTime is only defined if the Item has been removed
-		assert(exitDate == null); 
+		assert(exitDate == null);
 		//Cannot be in the future
 		exitDate = new Date(); 
 		//Cannot be prior to 12AM on the Items Entry Date
 		assert(!exitDate.before(this.entryDate)); 
 		assert(this.container != null);// Non-empty if the item has not been removed from storage
 		this.container = null;
+		this.removed = true;
 	}
 	/** 
 	 * 
@@ -145,6 +152,25 @@ public class Item implements PersistentItem{
 			return false;
 		}
 		
+		return true;
+	}
+	/**	Exit Time	This attribute is defined only if the Item has been removed from storage.
+	 *	Exit Time	Cannot be in the future or prior to 12 AM on the Item’s Entry Date
+	 * 
+	 * @return true if pass constraints
+	 */
+	public boolean hasValidExitDate() {
+		if(this.removed) {
+			if(this.exitDate == null) {
+				return false; 
+			} else if(this.exitDate.after(new Date())) {
+				return false;
+			} else if(this.exitDate.before(this.entryDate)) {
+				return false;
+			}
+		} else if(this.exitDate != null) {
+			return false;
+		}
 		return true;
 	}
 	
