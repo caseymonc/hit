@@ -124,6 +124,7 @@ public class ProductManager {
                 p.removeProductContainer(container);
             }
         }
+        assert(!p.getContainers().contains(c));
         
         p.addProductContainer(c);
         c.addProduct(p);
@@ -137,7 +138,6 @@ public class ProductManager {
      * @return return true if p can be removed, else return true
      */
     public boolean canRemoveProductFromContainer(Product p, ProductContainer c){
-
         assert (p != null);
         assert (c != null);
 

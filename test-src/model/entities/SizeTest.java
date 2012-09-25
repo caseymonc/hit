@@ -8,6 +8,13 @@ public class SizeTest {
 	@Test
 	public void testValidSize(){
 		try{
+			Size size = new Size(null, -1);
+			assertFalse(true);
+		}catch(IllegalArgumentException e){
+			assertTrue(true);
+		}
+            
+                try{
 			Size size = new Size(Unit.count, -1);
 			assertFalse(true);
 		}catch(IllegalArgumentException e){
