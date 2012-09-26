@@ -141,21 +141,27 @@ public class ItemControllerTest {
 		
 		Item i = new Item(b, new Date(), null, p, null);
 		IC.addItem(i,rootUnit);
-		assertFalse(i.getContainer() == rootUnit);//why does this fail?
-		assertFalse(rootUnit.getAllProducts().contains(p));
+		//i's container should not be rootUnit
+		assertFalse(i.getContainer() == rootUnit);
+		//i's container should be destination1
 		assertTrue(i.getContainer() == destination1);
+		//rootUnit should not contain the product
+		assertFalse(rootUnit.getAllProducts().contains(p));
+		//rootUnit should not contain the product
+		assertTrue(destination1.getAllProducts().contains(p));
 		
-		BarCode b2 = BarCodeGenerator.getInstance().generateBarCode();
-		Product p2 = new Product("NewProduct", BarCodeGenerator.getInstance().generateBarCode(),0,5,new Size(Unit.quarts, 5));
-		Item i2 = new Item(b2, new Date(), null, p2, rootUnit);
+		Product p2 = new Product("NewProduct", new BarCode("22222222222"),0,5,new Size(Unit.quarts, 5));
+		Item i2 = new Item(new BarCode("11111111111"), new Date(), null, p2, rootUnit);
 		rootUnit.setProductForContainer(p2,rootUnit);
-
-		//should be in the destination storage unit
 		IC.addItem(i2, rootUnit);
+		
+		//i2 should be in the destination storage unit
 		assertTrue(i2.getContainer() == rootUnit);
-		assertTrue(rootUnit.getAllProducts().contains(p2));
+		//i2 should not be in destianation1
 		assertFalse(i2.getContainer() == destination1);
+		//rootUnit should contain p2
+		assertTrue(rootUnit.getAllProducts().contains(p2));
+		//destination1 should not contain p2
+		assertFalse(destination1.getAllProducts().contains(p2));
 	}
-	
-	
 }
