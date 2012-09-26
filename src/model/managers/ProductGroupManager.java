@@ -43,8 +43,9 @@ public class ProductGroupManager {
 	 */
 	public ProductGroup getProductGroupByName(String name, ProductContainer container) {
 		Map<String, ProductGroup> groups = productGroupsByProductContainer.get(container);
-		if(groups == null)
+		if(groups == null) {
 			return null;
+		}
 		return groups.get(name);
 	}
 	
@@ -65,23 +66,21 @@ public class ProductGroupManager {
 	public void addProductGroup(ProductGroup group) {
 		assert(canAddProductGroup(group));
 		
-		if(!canAddProductGroup(group))
+		if(!canAddProductGroup(group)) {
 			throw new IllegalArgumentException();
+		}
 		
 		group.getContainer().addProductGroup(group);
 		
-		if(productGroupsByStorageUnit.get(group.getStorageUnit()) == null){
-			productGroupsByStorageUnit.put(group.getStorageUnit()
-											, new HashSet<ProductGroup>());
+		if(productGroupsByStorageUnit.get(group.getStorageUnit()) == null) {
+			productGroupsByStorageUnit.put(group.getStorageUnit(), new HashSet<ProductGroup>());
 		}
 		
 		productGroupsByStorageUnit.get(group.getStorageUnit()).add(group);
 		
-		Map<String, ProductGroup> groups = productGroupsByProductContainer
-																.get(group.getContainer());
-		if(groups == null){
-			productGroupsByProductContainer.put(group.getContainer(), 
-														new HashMap<String, ProductGroup>());
+		Map<String, ProductGroup> groups = productGroupsByProductContainer.get(group.getContainer());
+		if(groups == null) {
+			productGroupsByProductContainer.put(group.getContainer(), new HashMap<String, ProductGroup>());
 			groups = productGroupsByProductContainer.get(group.getContainer());
 		}
 		groups.put(group.getName(), group);
@@ -108,9 +107,10 @@ public class ProductGroupManager {
 	public void removeProductGroup(ProductGroup group) {
 		assert(canRemoveProductGroup(group));
 		
-		if(!canRemoveProductGroup(group))
+		if(!canRemoveProductGroup(group)) {
 			throw new IllegalArgumentException();
-		
+		}
+
 		ProductContainer container = group.getContainer();
 		container.removeProductGroup(group);
 		
@@ -147,17 +147,18 @@ public class ProductGroupManager {
 	 */
 	public void removeProductGroups(StorageUnit unit){
 		Set<ProductGroup> groups = productGroupsByStorageUnit.get(unit);
-		if(groups == null)
+		if(groups == null) {
 			return;
+		}
 		
 		ProductGroup[] groupsArray = new ProductGroup[groups.size()];
 		int i = 0;
-		for(ProductGroup group : groups){
+		for(ProductGroup group : groups) {
 			groupsArray[i] = group;
 			i++;
 		}
 		
-		for(ProductGroup group : groupsArray){
+		for(ProductGroup group : groupsArray) {
 			this.removeProductGroup(group);
 		}
 	}

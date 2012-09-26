@@ -62,8 +62,9 @@ public class StorageUnitController {
 	 * @return true if the name of unit is unique
 	 */
 	public boolean canAddStorageUnit(StorageUnit unit) {
-		if(unit == null)
+		if(unit == null) {
 			return false;
+		}
 		
 		StorageUnitManager manager = COM.getStorageUnitManager();
 		return manager.canAddStorageUnit(unit);

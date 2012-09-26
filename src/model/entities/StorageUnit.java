@@ -1,11 +1,7 @@
 package model.entities;
 
-import model.entities.ProductContainer;
-import model.entities.Item;
-import model.entities.Product;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import model.persistence.PersistentItem;
 
@@ -45,6 +41,7 @@ private Map<Product, ProductContainer> productContainerByProduct;
 	/**
 	 * @return this
 	 */
+	@Override
 	public StorageUnit getStorageUnit() {
 		return this;
 	}
@@ -53,6 +50,7 @@ private Map<Product, ProductContainer> productContainerByProduct;
 	 * @throws UnsupportedOperationException
 	 * because a StorageUnit cannot be in a StorageUnit
 	 */
+	@Override
 	public void setStorageUnit(StorageUnit unit) {
 		throw new UnsupportedOperationException("StorageUnits cannot be in a StorageUnit");
 	}
@@ -61,6 +59,7 @@ private Map<Product, ProductContainer> productContainerByProduct;
 	 * Add an Item to this StorageUnit
 	 * @param The Item to be added
 	 */
+	@Override
 	public void addItem(Item item){
 		ProductContainer container = productContainerByProduct.get(item.getProduct());
 		if(container == null || container == this){
