@@ -15,9 +15,15 @@ import model.managers.StorageUnitManager;
  * @author davidpatty
  */
 public class StorageUnitController {
-	
+
+	/**
+	 * CoreObjectModel singleton reference
+	 */
 	private CoreObjectModel COM;
 	
+	/** 
+	 * Constructor
+	 */
 	public StorageUnitController(){
 		COM = CoreObjectModel.getInstance();
 	}

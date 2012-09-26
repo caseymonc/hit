@@ -119,9 +119,9 @@ public class Item implements PersistentItem{
 		this.container = null;
 		this.removed = true;
 	}
-	/** 
+	/** does this item have a product shelf life?
 	 * 
-	 * @return 
+	 * @return true if the shelf life is set > 0
 	 */
 	public boolean hasProductShelfLife() {
 		assert(product != null);
@@ -174,6 +174,15 @@ public class Item implements PersistentItem{
 		return true;
 	}
 	
+	/** used in testing - can this item be created with these parameters?
+	 * 
+	 * @param barCode
+	 * @param entryDate
+	 * @param expirationDate
+	 * @param product
+	 * @param container
+	 * @return true if creation is allowed
+	 */
 	public static boolean canCreate(BarCode barCode, Date entryDate, Date expirationDate, 
 			Product product, ProductContainer container){
 		try{
@@ -200,9 +209,16 @@ public class Item implements PersistentItem{
 	public void setEntryDate(Date newDate){
 		entryDate = newDate;
 	}
-	
+
+	/**
+	 * sets the items container to container
+	 * @param container
+	 */
+	public void setContainer(ProductContainer container){
+		this.container = container;
+	}
+
 	// Getters
-	
 	/** Get the expiration date of the item
 	 * 
 	 * @return the expiration date of the item
@@ -249,10 +265,6 @@ public class Item implements PersistentItem{
 	 */
 	public ProductContainer getContainer() {
 		return container;
-	}
-	
-	public void setContainer(ProductContainer container){
-		this.container = container;
 	}
      
 	@Override

@@ -9,7 +9,7 @@ import model.entities.*;
 import model.managers.*;
 
 
-/**
+/** Oversees, controls or delegates everything to do with Items
  *
  * @author davidpatty
  */
@@ -22,29 +22,9 @@ public class ItemController {
 	private CoreObjectModel COM;
 	
 	/**
-	 * Manages Products and their indexes
-	 */
-	private ProductManager PM;
-
-	/**
 	 * Manages Items and their indexes
 	 */
 	private ItemManager IM;
-
-	/**
-	 * Manages the StorageUnits and their indexes
-	 */
-	private StorageUnitManager SM;
-	
-	/**
-	 * Manages the ProductGroups and their indexes
-	 */
-	private ProductGroupManager PGM;
-	
-	/**
-	 * Controls everything to do with products
-	 */
-	private ProductController PC;
 	
 	/**
 	 * Controls everything to do with Storage Units
@@ -52,23 +32,12 @@ public class ItemController {
 	private StorageUnitController SC;
 	
 	/**
-	 * Controls everything to do with Product Groups
-	 */
-	private ProductGroupController PGC;
-
-	/**
 	 * Constructor
 	 */
 	public ItemController() {
 		COM = CoreObjectModel.getInstance();
-		PM = COM.getProductManager();
 		IM = COM.getItemManager();
-//		SM = COM.getStorageUnitManager();
-//		PGM = COM.getProductGroupManager();
-//		
-//		PC = COM.getProductController();
 		SC = COM.getStorageUnitController();
-//		PGC = COM.getProductGroupController();
 	}
 
 	/** 
@@ -138,20 +107,24 @@ public class ItemController {
 		}
 	}
 	
-	/**
-	 * 
+	/** does the product container have this item alredy?
+	 * @return true if the product container has the item
 	 */
 	public boolean productContainerAlreadyHasItem(ProductContainer pc, Item i) {
 		return true;
 	}
 
-	/**
-	 * 
+	/** can we modify this item from oldItem to item
+	 * @return true if valid state change
 	 */
 	public boolean canModifyItem(Item item, Item oldItem) {
 		return true;
 	}
 	
+	/**
+	 * gets the Item Manager
+	 * @return IM the item manager
+	 */
 	public ItemManager getItemManager() {
 		return IM;
 	}

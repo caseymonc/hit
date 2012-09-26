@@ -30,6 +30,9 @@ public class ItemManager
 	 */
 	private HashMap<BarCode, Item> removedItemsByBarCode;
 	
+	/**
+	 * Constructor
+	 */
 	public ItemManager() {
 		itemsByBarCode = new HashMap<BarCode, Item>();
 		removedItemsByBarCode = new HashMap<BarCode, Item>();
@@ -40,7 +43,7 @@ public class ItemManager
 		return null;
 	}
 	
-	/**
+	/** adds the item
 	 * @throws CantAddItemException
 	 */
 	public void addItem(Item i) {
@@ -67,7 +70,7 @@ public class ItemManager
 		//add item to removed items history stuff.
 		removedItemsByBarCode.put(i.getBarCode(), i);
 	}
-	/** 
+	/**  can you add this item?
 	 * 
 	 * @param i
 	 * @return true if the conditions are met and false otherwise
@@ -96,8 +99,9 @@ public class ItemManager
 		return true;
 	}
 	
-	/** the item is 
+	/** has the item already been removed?
 	 * @param i Item
+	 * @return true if it has been removed. 
 	 */
 	public boolean itemIsInRemovedItems(Item i) {
 		if(itemsByBarCode.containsKey(i.getBarCode())) {
