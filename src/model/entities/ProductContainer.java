@@ -168,7 +168,7 @@ public abstract class ProductContainer{
 		assert(canRemoveItem(item));
 			
 		if(!canRemoveItem(item)) {
-			throw new IllegalArgumentException("The Item is not in this container");
+			throw new IllegalArgumentException("The Item is not in this container" + this.name);
 		}
 		
 		itemsByProduct.get(item.getProduct()).remove(item);
@@ -453,7 +453,7 @@ public abstract class ProductContainer{
 	  */
 	 public void setContainer(ProductContainer container){
 		 if(container == this)
-			 throw new IllegalArgumentException("ProductContainer cannot be a parent of it's self");
+			 throw new IllegalArgumentException("ProductContainer cannot be a parent of itself");
 		 this.container = container;
 	 }
 	 

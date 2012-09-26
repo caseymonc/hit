@@ -67,7 +67,7 @@ public class ItemController {
 //		PGM = COM.getProductGroupManager();
 //		
 //		PC = COM.getProductController();
-//		SC = COM.getStorageUnitController();
+		SC = COM.getStorageUnitController();
 //		PGC = COM.getProductGroupController();
 	}
 
@@ -85,6 +85,9 @@ public class ItemController {
 			throw new IllegalArgumentException();
 		}
 		su.addItem(i);
+		if(i.getContainer() == null) {
+			throw new IllegalArgumentException("Item still does not have a specified container");
+		}
 		IM.addItem(i);
 	}
 
@@ -96,6 +99,7 @@ public class ItemController {
 		if(i == null) {
 			throw new IllegalArgumentException();
 		}
+		i.getContainer().removeItem(i);
 		IM.removeItem(i);
 	}
 	
@@ -146,6 +150,10 @@ public class ItemController {
 	 */
 	public boolean canModifyItem(Item item, Item oldItem) {
 		return true;
+	}
+	
+	public ItemManager getItemManager() {
+		return IM;
 	}
 
 }

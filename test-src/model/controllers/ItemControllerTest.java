@@ -32,18 +32,25 @@ import model.controllers.*;
  */
 public class ItemControllerTest {
 	
-	BarCode b;
-	Product p;
-	StorageUnit su;
-	ProductGroup g;
+	private BarCode b;
+	private Product p;
+	private StorageUnit su;
+	private ProductGroup g;
+	private CoreObjectModel COM;
+	private StorageUnitController SC;
+	private ProductGroupController PGC;
+	private ItemController IC;
 	
 	public ItemControllerTest() {
-		
+		COM = CoreObjectModel.getInstance();
+		SC = COM.getStorageUnitController();
+		PGC = COM.getProductGroupController();
+		IC = COM.getItemController();
 	}
 	
 	@BeforeClass
 	public static void setUpClass() {
-
+		
 	}
 	
 	@AfterClass
@@ -125,13 +132,7 @@ public class ItemControllerTest {
 	 *  is placed in the Storage Unit at the root level.
 	 */	 
 	@Test
-	public void ItemAddsToCorrectPlace() {
-		CoreObjectModel COM = CoreObjectModel.getInstance();
-		StorageUnitController SC = COM.getStorageUnitController();
-		ProductGroupController PGC = COM.getProductGroupController();
-		ItemController IC = COM.getItemController();
-		
-		
+	public void ItemAddsToCorrectPlace() {		
 		StorageUnit rootUnit = new StorageUnit("SUnit");
 		SC.addStorageUnit(rootUnit);
 		ProductGroup destination1 = new ProductGroup("ContainsProduct",rootUnit, new Size(Unit.count, 2));
@@ -150,8 +151,8 @@ public class ItemControllerTest {
 		//rootUnit should not contain the product
 		assertTrue(destination1.getAllProducts().contains(p));
 		
-		Product p2 = new Product("NewProduct", new BarCode("22222222222"),0,5,new Size(Unit.quarts, 5));
-		Item i2 = new Item(new BarCode("11111111111"), new Date(), null, p2, rootUnit);
+		Product p2 = new Product("NewProduct", new BarCode("222222222222"),0,5,new Size(Unit.quarts, 5));
+		Item i2 = new Item(new BarCode("111111111111"), new Date(), null, p2, rootUnit);
 		rootUnit.setProductForContainer(p2,rootUnit);
 		IC.addItem(i2, rootUnit);
 		
@@ -163,5 +164,85 @@ public class ItemControllerTest {
 		assertTrue(rootUnit.getAllProducts().contains(p2));
 		//destination1 should not contain p2
 		assertFalse(destination1.getAllProducts().contains(p2));
+	}
+		
+	//An Item is contained in exactly one Product Container at a time (until it is removed, 
+	//at which point it belongs to no Product Container at all)."
+	@Test
+	public void testMoveItems() {
+		
+		
+		//set up original unit
+		StorageUnit originalUnit = new StorageUnit("ItemStartsHere");
+		SC.addStorageUnit(originalUnit);
+		Item i = new Item(b, new Date(), null, p, null);
+		IC.addItem(i,originalUnit);
+		//set up second unit
+		StorageUnit containingUnit = new StorageUnit("DropOn1");	
+		ProductGroup moveToGroup = new ProductGroup("ContainsProduct",containingUnit, new Size(Unit.count, 1));
+		SC.addStorageUnit(containingUnit);
+		PGC.addProductGroup(moveToGroup, containingUnit);
+		
+		//starts in the original Unit
+		assertTrue(i.getContainer() == originalUnit);
+		assertTrue(originalUnit.canRemoveItem(i));
+		assertTrue(moveToGroup.getContainer()!= null);
+		assertTrue(moveToGroup.getStorageUnit() == containingUnit);
+		
+		IC.moveItem(i, moveToGroup);
+		
+		//Target Product Container = the Product Container the user dropped the Item on
+		
+		assertTrue(i.getContainer() == containingUnit);
+		//Target Storage Unit = the Storage Unit containing the Target Product Container
+		assertTrue(moveToGroup.getContainer() == containingUnit);
+		
+		// product is in target productContainer
+		assertTrue(containingUnit.getAllProducts().contains(p));
+		
+		
+		//add a new product group to MoveToUnit
+		//add a new product to the new product group and to Original
+		//add new product to the new product group and to Original
+		//add some items of that product to the product group
+		Product p2 = new Product("Second Product", new BarCode("222222222223"),0,2,new Size(Unit.count, 1));
+		moveToGroup.addProduct(p2);
+		containingUnit.setProductForContainer(p2,moveToGroup);
+		originalUnit.addProduct(p2);
+		originalUnit.setProductForContainer(p2,originalUnit);
+
+		Item i2 = new Item(new BarCode("111111111112"), new Date(), null, p2, null);
+		IC.addItem(i2, originalUnit);
+		
+		//we want to start out with the product in the base. 
+		assertTrue(originalUnit.getAllProducts().contains(p2));
+
+
+		IC.moveItem(i2, moveToGroup);
+
+		//this time the product will end up in moveToGroup
+		assertTrue(i2.getContainer() == moveToGroup);
+		assertTrue(moveToGroup.getAllItems().contains(i2));
+		
+		//the product moved from the storageUnit base
+		assertFalse(moveToGroup.getContainer().getAllProducts().contains(p2));
+		assertTrue(moveToGroup.getAllProducts().contains(p2));
+	}
+	//When an item is removed
+	@Test
+	public void testRemoveItem() {
+		Item i = new Item(b, new Date(), null, p, su);
+		IC.addItem(i, su);
+		
+		IC.removeItem(i);
+		ItemManager IM = IC.getItemManager();
+		//1. The Item is removed from its containing Storage Unit.
+		assertTrue(i.getContainer() == null);
+		assertFalse(su.getAllItems().contains(i));
+		assertTrue(su.getAllProducts().contains(i.getProduct()));
+		//2. The Exit Time is stored in the Item.
+		assertFalse(i.getExitDate() == null);
+		//3. The Item is retained for historical purposes (i.e., for calculating statistics and reporting)."
+		assertTrue(IM.itemIsInRemovedItems(i));
 	}
 }
