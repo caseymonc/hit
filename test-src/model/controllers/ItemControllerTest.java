@@ -83,6 +83,10 @@ public class ItemControllerTest {
 	//Container	Non-empty if the Item has not been removed from storage. (Before it is removed, 
 	//             an Item is contained in one Product Container. After it is removed, it is contained in no Product Containers.)
 
+	@Test
+	public void ItemHasValidProduct() {
+		assertFalse(Item.canCreate(b, new Date(), null, null, g));
+	}
 	
 	@Test
 	public void ItemHasValidEntryDate() {
@@ -244,5 +248,5 @@ public class ItemControllerTest {
 		assertFalse(i.getExitDate() == null);
 		//3. The Item is retained for historical purposes (i.e., for calculating statistics and reporting)."
 		assertTrue(IM.itemIsInRemovedItems(i));
-	}
+	}	
 }
