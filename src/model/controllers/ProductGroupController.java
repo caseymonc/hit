@@ -56,7 +56,9 @@ public class ProductGroupController {
 		return manager.canAddProductGroup(group);
 	}
 	
-	public void editProductGroup(ProductGroup unit, ProductGroup oldUnit){
+	public void editProductGroup(ProductGroup unit, ProductGroup oldUnit) 
+		   throws IllegalArgumentException {
+
 		assert(canEditProductGroup(unit, oldUnit));
 		
 		if(!canEditProductGroup(unit, oldUnit)){

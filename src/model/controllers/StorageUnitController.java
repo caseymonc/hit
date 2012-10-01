@@ -12,7 +12,7 @@ import model.managers.StorageUnitManager;
 
 /** Controller that communicates with the controller in the MVC structure
  *	Acts like a facade in dealing with the rest of the model. 
- * @author davidpatty
+ * @author cmoncur
  */
 public class StorageUnitController {
 
