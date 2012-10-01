@@ -126,7 +126,7 @@ public class ItemControllerTest {
 	}
 	/**
 	 *  When a new Item is added to the system, it is placed in a particular Storage Unit 
-	 *  (called the “target Storage Unit”). The new Item is added to the same Product Container
+	 *  (called the "target Storage Unit"). The new Item is added to the same Product Container
 	 *  that contains the Item’s Product within the target Storage Unit. If the Item’s Product 
 	 *  is not already in a product Container within the target Storage Unit, the Product
 	 *  is placed in the Storage Unit at the root level.
