@@ -120,4 +120,10 @@ public class StorageUnitManager {
 		}
 		return false;
 	}
+
+	public void updateStorageUnitByName(String newName, String oldName) {
+		StorageUnit unit = storageUnits.get(oldName);
+		storageUnits.remove(oldName);
+		storageUnits.put(newName, unit);
+	}
 }

@@ -70,11 +70,11 @@ public class CoreObjectModel implements PersistentItem{
 	}
 
 	public ProductGroupController getProductGroupController() {
-		return new ProductGroupController();
+		return ProductGroupController.getInstance();
 	}
 
 	public StorageUnitController getStorageUnitController() {
-		return new StorageUnitController();
+		return StorageUnitController.getInstance();
 	}
 
 	public ItemController getItemController() {

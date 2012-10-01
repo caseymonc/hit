@@ -164,4 +164,30 @@ public class ProductGroupManager {
 			this.removeProductGroup(group);
 		}
 	}
+
+	private void updateProductGroupByName(String newName, String oldName,
+			ProductContainer container) {
+		Map<String, ProductGroup> groups = productGroupsByProductContainer.get(container);
+		if(groups == null) {
+			throw new IllegalArgumentException("The ProductContainer does not " +
+											"have any ProductGroups in it.");
+		}
+		
+		ProductGroup group = groups.get(oldName);
+		groups.remove(oldName);
+		groups.put(newName, group);
+		
+		
+	}
+
+	public void updateProductGroup(ProductGroup group, ProductGroup oldGroup) {
+		updateProductGroupByName(group.getName(), oldGroup.getName() , oldGroup.getContainer());
+		oldGroup.getContainer().updateProductGroupByName(group.getName(), oldGroup.getName());
+		productGroups.remove(oldGroup);
+		productGroupsByStorageUnit.get(oldGroup.getStorageUnit()).remove(oldGroup);
+		oldGroup.update(group);
+		productGroupsByStorageUnit.get(oldGroup.getStorageUnit()).add(oldGroup);
+		productGroups.add(oldGroup);
+		
+	}
 }

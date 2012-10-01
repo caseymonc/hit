@@ -13,7 +13,7 @@ import model.managers.ItemManager;
  *
  * @author davidpatty
  */
-public class ItemController {
+public class ItemController extends ModelController{
 
 	
 	/**
