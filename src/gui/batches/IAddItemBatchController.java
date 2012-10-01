@@ -1,6 +1,8 @@
 package gui.batches;
 
 import gui.common.IController;
+import java.io.IOException;
+import com.itextpdf.text.DocumentException;
 
 /**
  * Controller interface for add item batch view.
@@ -59,7 +61,7 @@ public interface IAddItemBatchController extends IController {
 	 * This method is called when the user clicks the "Done" button
 	 * in the add item batch view.
 	 */
-	void done();
+	void done() throws DocumentException, IOException;
 
 }
 

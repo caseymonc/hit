@@ -1,8 +1,17 @@
 package gui.batches;
 
+import com.itextpdf.text.Document;
 import gui.common.*;
 import gui.inventory.*;
 import gui.product.*;
+import java.io.IOException;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.pdf.Barcode;
+import com.itextpdf.text.pdf.BarcodeEAN;
+import com.itextpdf.text.pdf.PdfContentByte;
+import com.itextpdf.text.pdf.PdfWriter;
+import java.io.FileOutputStream;
 
 /**
  * Controller class for the add item batch view.
@@ -124,8 +133,19 @@ public class AddItemBatchController extends Controller implements
 	 * in the add item batch view.
 	 */
 	@Override
-	public void done() {
-		getView().close();
+	public void done()throws DocumentException, IOException{		
+		BarcodeEAN codeEAN = new BarcodeEAN();
+		codeEAN.setCodeType(Barcode.UPCA);
+		Document document = new Document(new Rectangle(340, 842));
+		PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream("JustA_Test.pdf"));
+		PdfContentByte cb = writer.getDirectContent();
+		document.open();
+		
+		//For all of the barcodes that need to be printed
+		codeEAN.setCode("785342304749"); //replace the string with the real barcode strings
+		document.add(codeEAN.createImageWithBarcode(cb, null, null));
+		//java.awt.Desktop.getDesktop().open(new File(filename));
+		//The above command will allow you to open a pdf and display it on the screen
 	}
 	
 }
