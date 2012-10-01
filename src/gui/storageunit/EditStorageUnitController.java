@@ -1,5 +1,7 @@
 package gui.storageunit;
 
+import model.controllers.StorageUnitController;
+import model.entities.StorageUnit;
 import gui.common.*;
 import gui.inventory.*;
 
@@ -9,6 +11,9 @@ import gui.inventory.*;
 public class EditStorageUnitController extends Controller 
 										implements IEditStorageUnitController {
 	
+	private StorageUnit unit;
+	private StorageUnitController suController;
+
 	/**
 	 * Constructor.
 	 * 
@@ -17,7 +22,8 @@ public class EditStorageUnitController extends Controller
 	 */
 	public EditStorageUnitController(IView view, ProductContainerData target) {
 		super(view);
-
+		unit = (StorageUnit)target.getTag();
+		suController = StorageUnitController.getInstance();
 		construct();
 	}
 
@@ -60,6 +66,8 @@ public class EditStorageUnitController extends Controller
 	 */
 	@Override
 	protected void loadValues() {
+		getView().setStorageUnitName(unit.getName());
+		valuesChanged();
 	}
 
 	//
@@ -72,6 +80,23 @@ public class EditStorageUnitController extends Controller
 	 */
 	@Override
 	public void valuesChanged() {
+		StorageUnit unit = getStorageUnit();
+		if(suController.canEditStorageUnit(unit, this.unit)){
+			getView().enableOK(true);
+		}else{
+			getView().enableOK(false);
+		}
+	}
+	
+	public StorageUnit getStorageUnit(){
+		String name = getView().getStorageUnitName();
+		StorageUnit unit = null;
+		try{
+			unit = new StorageUnit(name);
+			return unit;
+		}catch(IllegalArgumentException e){
+			return null;
+		}
 	}
 
 	/**
@@ -80,6 +105,8 @@ public class EditStorageUnitController extends Controller
 	 */
 	@Override
 	public void editStorageUnit() {
+		StorageUnit unit = getStorageUnit();
+		suController.editStorageUnit(unit, this.unit);
 	}
 
 }

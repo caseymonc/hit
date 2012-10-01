@@ -1,5 +1,8 @@
 package gui.storageunit;
 
+import model.CoreObjectModel;
+import model.controllers.StorageUnitController;
+import model.entities.StorageUnit;
 import gui.common.*;
 
 /**
@@ -8,6 +11,7 @@ import gui.common.*;
 public class AddStorageUnitController extends Controller implements
 		IAddStorageUnitController {
 	
+	private StorageUnitController suController;
 	/**
 	 * Constructor.
 	 * 
@@ -15,7 +19,8 @@ public class AddStorageUnitController extends Controller implements
 	 */
 	public AddStorageUnitController(IView view) {
 		super(view);
-		
+		CoreObjectModel COM = CoreObjectModel.getInstance();
+		suController = COM.getStorageUnitController();
 		construct();
 	}
 
@@ -58,6 +63,7 @@ public class AddStorageUnitController extends Controller implements
 	 */
 	@Override
 	protected void loadValues() {
+		valuesChanged();
 	}
 
 	//
@@ -70,6 +76,23 @@ public class AddStorageUnitController extends Controller implements
 	 */
 	@Override
 	public void valuesChanged() {
+		StorageUnit unit = getStorageUnit();
+		if(suController.canAddStorageUnit(unit)){
+			getView().enableOK(true);
+		}else{
+			getView().enableOK(false);
+		}
+	}
+	
+	public StorageUnit getStorageUnit(){
+		String name = getView().getStorageUnitName();
+		StorageUnit unit = null;
+		try{
+			unit = new StorageUnit(name);
+			return unit;
+		}catch(IllegalArgumentException e){
+			return null;
+		}
 	}
 	
 	/**
@@ -78,6 +101,8 @@ public class AddStorageUnitController extends Controller implements
 	 */
 	@Override
 	public void addStorageUnit() {
+		StorageUnit unit = getStorageUnit();
+		suController.addStorageUnit(unit);
 	}
 
 }

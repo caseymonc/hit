@@ -12,5 +12,7 @@ public enum Unit{
 	kilograms,
 	gallons,
 	quarts,
-	pints
+	pints,
+	liters,
+	fluidOunces;
 }

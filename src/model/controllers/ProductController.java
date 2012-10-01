@@ -9,7 +9,7 @@ import model.entities.StorageUnit;
 /** 
  * @author davidmathis
  */
-public class ProductController {
+public class ProductController extends ModelController{
 	
 	/** The CoreObjectModel used to manage all data
 	 * model implements the singleton that it can be shared
