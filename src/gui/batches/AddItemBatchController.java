@@ -134,18 +134,7 @@ public class AddItemBatchController extends Controller implements
 	 */
 	@Override
 	public void done()throws DocumentException, IOException{		
-		BarcodeEAN codeEAN = new BarcodeEAN();
-		codeEAN.setCodeType(Barcode.UPCA);
-		Document document = new Document(new Rectangle(340, 842));
-		PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream("JustA_Test.pdf"));
-		PdfContentByte cb = writer.getDirectContent();
-		document.open();
-		
-		//For all of the barcodes that need to be printed
-		codeEAN.setCode("785342304749"); //replace the string with the real barcode strings
-		document.add(codeEAN.createImageWithBarcode(cb, null, null));
-		//java.awt.Desktop.getDesktop().open(new File(filename));
-		//The above command will allow you to open a pdf and display it on the screen
+		//Tell the core object model to print the recently added items
 	}
 	
 }
