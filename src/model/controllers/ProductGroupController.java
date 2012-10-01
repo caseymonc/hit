@@ -5,6 +5,7 @@
 package model.controllers;
 
 import model.CoreObjectModel;
+import model.Hint;
 import model.entities.ProductContainer;
 import model.entities.ProductGroup;
 import model.managers.ProductGroupManager;
@@ -13,14 +14,23 @@ import model.managers.ProductGroupManager;
  *
  * @author davidpatty
  */
-public class ProductGroupController {
+public class ProductGroupController extends ModelController{
 	private CoreObjectModel COM;
+	private static ProductGroupController instance;
+	
 	/** Oversees moving an item from one container to another
 	 * 
 	 */
 	
-	public ProductGroupController(){
+	private ProductGroupController(){
 		COM = CoreObjectModel.getInstance();
+	}
+	
+	public static ProductGroupController getInstance(){
+		if(instance == null){
+			instance = new ProductGroupController();
+		}
+		return instance;
 	}
 	
 	public boolean canAddProductGroup(ProductGroup group, ProductContainer container) {
@@ -43,6 +53,8 @@ public class ProductGroupController {
 		}
 		
 		COM.getProductGroupManager().addProductGroup(group);
+		this.setChanged();
+		this.notifyObservers(new Hint(group, Hint.Value.Add));
 	}
 	
 	public boolean canEditProductGroup(ProductGroup group, ProductGroup oldUnit) {
@@ -56,16 +68,19 @@ public class ProductGroupController {
 		return manager.canAddProductGroup(group);
 	}
 	
-	public void editProductGroup(ProductGroup unit, ProductGroup oldUnit){
-		assert(canEditProductGroup(unit, oldUnit));
+	public void editProductGroup(ProductGroup group, ProductGroup oldUnit){
+		assert(canEditProductGroup(group, oldUnit));
 		
-		if(!canEditProductGroup(unit, oldUnit)){
+		if(!canEditProductGroup(group, oldUnit)){
 			throw new IllegalArgumentException();
 		}
 		
 		oldUnit = COM.getProductGroupManager()
 					.getProductGroupByName(oldUnit.getName(), oldUnit.getContainer());
-		oldUnit.update(unit);
+		COM.getProductGroupManager().updateProductGroup(group, oldUnit);
+		
+		this.setChanged();
+		this.notifyObservers(new Hint(group, Hint.Value.Edit));
 	}
 	
 	public boolean canDeleteProductGroup(ProductGroup group){
@@ -81,6 +96,8 @@ public class ProductGroupController {
 		ProductGroupManager pgManager = COM.getProductGroupManager();
 		pgManager.removeProductGroup(group);
 		//pgManager.removeProductGroups(unit);
+		this.setChanged();
+		this.notifyObservers(new Hint(group, Hint.Value.Delete));
 		
 	}
 }

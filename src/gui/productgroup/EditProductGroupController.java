@@ -1,5 +1,10 @@
 package gui.productgroup;
 
+import model.controllers.ProductGroupController;
+import model.entities.ProductContainer;
+import model.entities.ProductGroup;
+import model.entities.Size;
+import model.entities.Unit;
 import gui.common.*;
 import gui.inventory.*;
 
@@ -9,6 +14,9 @@ import gui.inventory.*;
 public class EditProductGroupController extends Controller 
 										implements IEditProductGroupController {
 	
+	private ProductGroup group;
+	private ProductGroupController pgController;
+	
 	/**
 	 * Constructor.
 	 * 
@@ -17,7 +25,8 @@ public class EditProductGroupController extends Controller
 	 */
 	public EditProductGroupController(IView view, ProductContainerData target) {
 		super(view);
-
+		group = (ProductGroup) target.getTag();
+		pgController = ProductGroupController.getInstance();
 		construct();
 	}
 
@@ -60,7 +69,12 @@ public class EditProductGroupController extends Controller
 	 */
 	@Override
 	protected void loadValues() {
+		getView().setProductGroupName(group.getName());
+		getView().setSupplyUnit(SizeUnits.fromUnit(group.getThreeMonthSupply().getUnits()));
+		getView().setSupplyValue(group.getThreeMonthSupply().getSize() + "");
 	}
+	
+	
 
 	//
 	// IEditProductGroupController overrides
@@ -72,6 +86,37 @@ public class EditProductGroupController extends Controller
 	 */
 	@Override
 	public void valuesChanged() {
+		ProductGroup group = getProductGroup();
+		if(group != null && pgController.canEditProductGroup(group, this.group)){
+			getView().enableOK(true);
+		}else{
+			getView().enableOK(false);
+		}
+	}
+	
+	private ProductGroup getProductGroup(){
+		String name = getView().getProductGroupName();
+		Unit units = getView().getSupplyUnit().toUnit();
+		String countString = getView().getSupplyValue();
+		
+		float count;
+		if(countString == null || countString.equals("")){
+			count = 0;
+		}else{
+			try{
+				count = Float.parseFloat(getView().getSupplyValue());
+			}catch(NumberFormatException e){
+				count = 0;
+			}
+		}
+		ProductContainer parent = this.group.getContainer();
+		ProductGroup group = null;
+		try{
+			group = new ProductGroup(name, parent, new Size(units, count));
+			return group;
+		}catch(IllegalArgumentException e){
+			return null;
+		}
 	}
 	
 	/**
@@ -80,6 +125,8 @@ public class EditProductGroupController extends Controller
 	 */
 	@Override
 	public void editProductGroup() {
+		ProductGroup group = getProductGroup();
+		pgController.editProductGroup(group, this.group);
 	}
 
 }

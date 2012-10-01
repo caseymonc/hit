@@ -4,8 +4,10 @@
 package model.controllers;
 
 import java.util.List;
+import java.util.Observable;
 
 import model.CoreObjectModel;
+import model.Hint;
 import model.entities.*;
 import model.managers.ProductGroupManager;
 import model.managers.StorageUnitManager;
@@ -14,18 +16,26 @@ import model.managers.StorageUnitManager;
  *	Acts like a facade in dealing with the rest of the model. 
  * @author davidpatty
  */
-public class StorageUnitController {
-
+public class StorageUnitController extends ModelController{
+	
 	/**
 	 * CoreObjectModel singleton reference
 	 */
 	private CoreObjectModel COM;
-	
+	private static StorageUnitController instance;
 	/** 
 	 * Constructor
 	 */
-	public StorageUnitController(){
+	private StorageUnitController(){
 		COM = CoreObjectModel.getInstance();
+	}
+	
+	public static StorageUnitController getInstance(){
+		if(instance == null){
+			instance = new StorageUnitController();
+		}
+		
+		return instance;
 	}
 	
 	/** Oversees moving an item from one container to another
@@ -81,8 +91,10 @@ public class StorageUnitController {
 		if(!canAddStorageUnit(unit)){
 			throw new IllegalArgumentException();
 		}
-		
 		COM.getStorageUnitManager().addStorageUnit(unit);
+		this.setChanged();
+		this.notifyObservers(new Hint(unit, Hint.Value.Add));
+		
 	}
 	
 	/**
@@ -117,7 +129,10 @@ public class StorageUnitController {
 		}
 		
 		oldUnit = COM.getStorageUnitManager().getStorageUnitByName(oldUnit.getName());
+		COM.getStorageUnitManager().updateStorageUnitByName(unit.getName(), oldUnit.getName());
 		oldUnit.update(unit);
+		this.setChanged();
+		this.notifyObservers(new Hint(oldUnit, Hint.Value.Edit));
 	}
 	
 	/**
@@ -144,7 +159,8 @@ public class StorageUnitController {
 		ProductGroupManager pgManager = COM.getProductGroupManager();
 		suManager.removeStorageUnit(unit);
 		pgManager.removeProductGroups(unit);
-		
+		this.setChanged();
+		this.notifyObservers(new Hint(unit, Hint.Value.Delete));
 	}
 
 }

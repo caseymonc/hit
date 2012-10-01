@@ -521,13 +521,20 @@ public abstract class ProductContainer{
 		
 	}
 
-	public int hashCode(){
+	/*public int hashCode(){
 		if(container == null)
 			return getName().hashCode();
 		return getName().hashCode() + getContainer().hashCode();
-	}
+	}*/
 	
 	public String toString(){
 		return name;
+	}
+
+	
+	public void updateProductGroupByName(String newName, String oldName) {
+		ProductGroup group = productGroups.get(oldName);
+		productGroups.remove(oldName);
+		productGroups.put(newName, group);
 	}
 }

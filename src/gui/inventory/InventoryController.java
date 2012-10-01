@@ -6,12 +6,28 @@ import gui.product.*;
 
 import java.util.*;
 
+import model.CoreObjectModel;
+import model.Hint;
+import model.controllers.ItemController;
+import model.controllers.ProductController;
+import model.controllers.ProductGroupController;
+import model.controllers.StorageUnitController;
+import model.entities.Product;
+import model.entities.ProductContainer;
+import model.entities.ProductGroup;
+import model.entities.Size;
+import model.entities.StorageUnit;
+
 /**
  * Controller class for inventory view.
  */
 public class InventoryController extends Controller 
-									implements IInventoryController {
+									implements IInventoryController, Observer {
 
+	private ProductController pController;
+	private ItemController iController;
+	private ProductGroupController pgController;
+	private StorageUnitController suController;
 	/**
 	 * Constructor.
 	 *  
@@ -20,6 +36,18 @@ public class InventoryController extends Controller
 	public InventoryController(IInventoryView view) {
 		super(view);
 
+		CoreObjectModel COM = CoreObjectModel.getInstance();
+		
+		suController = COM.getStorageUnitController();
+		pgController = COM.getProductGroupController();
+		iController = COM.getItemController();
+		pController = COM.getProductController();
+		
+		suController.addObserver(this);
+		pgController.addObserver(this);
+		iController.addObserver(this);
+		pController.addObserver(this);
+		
 		construct();
 	}
 
@@ -42,7 +70,25 @@ public class InventoryController extends Controller
 	protected void loadValues() {
 		ProductContainerData root = new ProductContainerData();
 		
-		ProductContainerData basementCloset = new ProductContainerData("Basement Closet");
+		List<StorageUnit> units = suController.getAllStorageUnits();
+		
+		StorageUnit[] unitsArray = new StorageUnit[units.size()];
+		
+		for(int i = 0; i < unitsArray.length; i++){
+			unitsArray[i] = units.get(i);
+		}
+		
+		Arrays.sort(unitsArray, new Comparator<StorageUnit>(){
+			public int compare(StorageUnit arg0, StorageUnit arg1) {
+				return arg0.getName().compareTo(arg1.getName());
+			}
+		});
+		
+		for(StorageUnit unit : unitsArray){
+			addProductContainer(unit, root);
+		}
+		
+		/*ProductContainerData basementCloset = new ProductContainerData("Basement Closet");
 		
 		ProductContainerData toothpaste = new ProductContainerData("Toothpaste");
 		toothpaste.addChild(new ProductContainerData("Kids"));
@@ -59,9 +105,40 @@ public class InventoryController extends Controller
 		soup.addChild(new ProductContainerData("Tomato"));
 		foodStorage.addChild(soup);
 		
-		root.addChild(foodStorage);
+		root.addChild(foodStorage);*/
 		
 		getView().setProductContainers(root);
+	}
+	
+	/** Build the ProductContainer Tree.  
+	 * Add the ProductContainers in container to the ProductContainerData object.
+	 * @param container
+	 * @param parent
+	 */
+	private void addProductContainer(ProductContainer container, ProductContainerData parent){
+		ProductContainerData unitData = new ProductContainerData(container.getName());
+		unitData.setTag(container);
+		
+		Collection<ProductGroup> groups = container.getAllProductGroup();
+		
+		ProductGroup[] groupsArray = new ProductGroup[groups.size()];
+		
+		int i = 0;
+		for(ProductGroup group : groups){
+			groupsArray[i] = group;
+			i++;
+		}
+		
+		Arrays.sort(groupsArray, new Comparator<ProductGroup>(){
+			public int compare(ProductGroup arg0, ProductGroup arg1) {
+				return arg0.getName().compareTo(arg1.getName());
+			}
+		});
+		
+		for(ProductGroup group : groupsArray){
+			addProductContainer(group, unitData);
+		}
+		parent.addChild(unitData);
 	}
 
 	/**
@@ -120,7 +197,8 @@ public class InventoryController extends Controller
 	 */
 	@Override
 	public boolean canDeleteStorageUnit() {
-		return true;
+		StorageUnit group = (StorageUnit) getView().getSelectedProductContainer().getTag();
+		return suController.canDeleteStorageUnit(group);
 	}
 	
 	/**
@@ -128,6 +206,8 @@ public class InventoryController extends Controller
 	 */
 	@Override
 	public void deleteStorageUnit() {
+		StorageUnit group = (StorageUnit) getView().getSelectedProductContainer().getTag();
+		suController.deleteStorageUnit(group);
 	}
 
 	/**
@@ -151,7 +231,8 @@ public class InventoryController extends Controller
 	 */
 	@Override
 	public boolean canDeleteProductGroup() {
-		return true;
+		ProductGroup group = (ProductGroup) getView().getSelectedProductContainer().getTag();
+		return pgController.canDeleteProductGroup(group);
 	}
 
 	/**
@@ -167,6 +248,8 @@ public class InventoryController extends Controller
 	 */
 	@Override
 	public void deleteProductGroup() {
+		ProductGroup group = (ProductGroup) getView().getSelectedProductContainer().getTag();
+		pgController.deleteProductGroup(group);
 	}
 
 	private Random rand = new Random();
@@ -185,18 +268,19 @@ public class InventoryController extends Controller
 	 */
 	@Override
 	public void productContainerSelectionChanged() {
+		ProductContainer selectedContainer = 
+						(ProductContainer)getView().getSelectedProductContainer().getTag();
 		List<ProductData> productDataList = new ArrayList<ProductData>();		
-		ProductContainerData selectedContainer = getView().getSelectedProductContainer();
 		if (selectedContainer != null) {
-			int productCount = rand.nextInt(20) + 1;
-			for (int i = 1; i <= productCount; ++i) {
+			Collection<Product> products = selectedContainer.getAllProducts();
+			for (Product product : products) {
 				ProductData productData = new ProductData();			
-				productData.setBarcode(getRandomBarcode());
-				int itemCount = rand.nextInt(25) + 1;
+				productData.setBarcode(product.getBarCode().toString());
+				int itemCount = selectedContainer.getItemsByProduct(product).size();
 				productData.setCount(Integer.toString(itemCount));
-				productData.setDescription("Item " + i);
-				productData.setShelfLife("3 months");
-				productData.setSize("1 pounds");
+				productData.setDescription(product.getDescription());
+				productData.setShelfLife(product.getShelfLife() + " months");
+				productData.setSize(SizeFormatter.format(product.getSize()));
 				productData.setSupply("10 count");
 				
 				productDataList.add(productData);
@@ -205,6 +289,19 @@ public class InventoryController extends Controller
 		getView().setProducts(productDataList.toArray(new ProductData[0]));
 		
 		getView().setItems(new ItemData[0]);
+		getView().setContextSupply("");
+		getView().setContextGroup("");
+		getView().setContextUnit("");
+		
+		if(selectedContainer != null){
+			StorageUnit unit = selectedContainer.getStorageUnit();
+			getView().setContextUnit(unit.getName());
+			if(selectedContainer instanceof ProductGroup){
+				getView().setContextGroup(selectedContainer.getName());
+				Size tmSupply = ((ProductGroup) selectedContainer).getThreeMonthSupply();
+				getView().setContextSupply(SizeFormatter.format(tmSupply));
+			}
+		}
 	}
 
 	/**
@@ -383,6 +480,40 @@ public class InventoryController extends Controller
 	@Override
 	public void moveItemToContainer(ItemData itemData,
 									ProductContainerData containerData) {
+	}
+
+	@Override
+	public void update(Observable oObj, Object hint) {
+		if((oObj instanceof StorageUnitController 
+				|| oObj instanceof ProductGroupController)){
+			updateProductContainer(hint);
+		}
+	}
+	
+	private void updateProductContainer(Object observerHint) {
+		ProductContainerData selectedData = getView().getSelectedProductContainer();
+		if(observerHint instanceof Hint){
+			Hint hint = (Hint)observerHint;
+			ProductContainer container = (ProductContainer)hint.getExtra();
+			if(hint.getHint() == Hint.Value.Add){
+				loadValues();
+				/*ProductContainerData unitData = new ProductContainerData(container.getName());
+				unitData.setTag(container);
+				selectedData.addChild(unitData);
+				getView().insertProductContainer(selectedData, unitData, 0);*/
+				
+			}else if(hint.getHint() == Hint.Value.Edit){
+				loadValues();
+				/*getView().renameProductContainer(selectedData, container.getName(), 0);*/
+				
+			}else if(hint.getHint() == Hint.Value.Delete){
+				getView().deleteProductContainer(selectedData);
+				selectedData = null;
+			}
+		}
+		if(selectedData != null){
+			getView().selectProductContainer(selectedData);
+		}
 	}
 
 }

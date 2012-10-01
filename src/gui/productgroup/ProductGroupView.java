@@ -5,6 +5,11 @@ import java.awt.event.*;
 
 import javax.swing.*;
 
+import model.entities.ProductContainer;
+import model.entities.ProductGroup;
+import model.entities.Size;
+import model.entities.Unit;
+
 import gui.common.*;
 import gui.main.*;
 
