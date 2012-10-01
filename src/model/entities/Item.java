@@ -71,7 +71,7 @@ public class Item implements PersistentItem{
 			Product product, ProductContainer container) throws IllegalArgumentException {		
 		this.entryDate = entryDate;
 		//validate entryDate constraints
-		if(!hasValidEntryDate()) {
+		if(!hasValidEntryDate() || product == null ) {
 			throw new IllegalArgumentException();
 		}
 		
@@ -80,6 +80,7 @@ public class Item implements PersistentItem{
 			this.expirationDate = expirationDate;
 		}
 		this.barCode = barCode;
+		
 		this.product = product;
 		this.container = container;
 		this.removed = false;

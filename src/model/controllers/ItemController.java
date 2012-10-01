@@ -6,7 +6,7 @@ package model.controllers;
 
 import model.CoreObjectModel;
 import model.entities.*;
-import model.managers.*;
+import model.managers.ItemManager;
 
 
 /** Oversees, controls or delegates everything to do with Items
@@ -66,10 +66,15 @@ public class ItemController extends ModelController{
 	 */
 	public void removeItem(Item i) throws IllegalArgumentException {
 		if(i == null) {
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException("Null item");
 		}
-		i.getContainer().removeItem(i);
-		IM.removeItem(i);
+		
+		if(!i.getContainer().canRemoveItem(i)) {
+			throw new IllegalArgumentException("Cannot Remove Item");
+		} else {
+			i.getContainer().removeItem(i);
+			IM.removeItem(i);
+		}
 	}
 	
 	/** The Storage Unit Controller will take care of the movement
@@ -107,12 +112,6 @@ public class ItemController extends ModelController{
 		}
 	}
 	
-	/** does the product container have this item alredy?
-	 * @return true if the product container has the item
-	 */
-	public boolean productContainerAlreadyHasItem(ProductContainer pc, Item i) {
-		return true;
-	}
 
 	/** can we modify this item from oldItem to item
 	 * @return true if valid state change
