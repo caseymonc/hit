@@ -5,6 +5,13 @@
 package model;
 
 
+import com.itextpdf.text.Document;
+import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.pdf.Barcode;
+import com.itextpdf.text.pdf.BarcodeEAN;
+import com.itextpdf.text.pdf.PdfContentByte;
+import com.itextpdf.text.pdf.PdfWriter;
+import java.io.FileOutputStream;
 import model.entities.*;
 import model.managers.*;
 import model.controllers.*;
@@ -101,5 +108,16 @@ public class CoreObjectModel implements PersistentItem{
 			return itemManager.getItemByBarCode(barcode);
 	}
 
+	//BarcodeEAN codeEAN = new BarcodeEAN();
+	//codeEAN.setCodeType(Barcode.UPCA);
+	//Document document = new Document(new Rectangle(340, 842));
+	//PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream("JustA_Test.pdf"));
+	//PdfContentByte cb = writer.getDirectContent();
+	//document.open();
+	//For all of the barcodes that need to be printed
+	//codeEAN.setCode("785342304749"); //replace the string with the real barcode strings
+	//document.add(codeEAN.createImageWithBarcode(cb, null, null));
+	//java.awt.Desktop.getDesktop().open(new File(filename));
+	//The above command will allow you to open a pdf and display it on the screen
 
 }
