@@ -144,7 +144,7 @@ public class ProductGroupController extends ModelController{
 	
 	/**
 	 * Deletes a ProductGroup.
-	 * @param group
+	 * @param group  The group that will be deleted
 	 * @throws IllegalArgumentException If the ProductGroup is not empty
 	 */
 	public void deleteProductGroup(ProductGroup group){
