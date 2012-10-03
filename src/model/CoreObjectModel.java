@@ -115,9 +115,13 @@ public class CoreObjectModel implements PersistentItem{
 	//PdfContentByte cb = writer.getDirectContent();
 	//document.open();
 	//For all of the barcodes that need to be printed
-	//codeEAN.setCode("785342304749"); //replace the string with the real barcode strings
-	//document.add(codeEAN.createImageWithBarcode(cb, null, null));
-	//java.awt.Desktop.getDesktop().open(new File(filename));
+//	for(int i=0; i < newItems.size(); ++i)
+//	{
+//		codeEAN.setCode(newItems.at(i).getBarCode()); //replace the string with the real barcode strings
+//		document.add(codeEAN.createImageWithBarcode(cb, null, null));
+//	}
+	
+	//java.awt.Desktop.getDesktop().open(new File("JustA_Test.pdf"));
 	//The above command will allow you to open a pdf and display it on the screen
 
 }
