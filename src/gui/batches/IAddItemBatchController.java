@@ -61,7 +61,7 @@ public interface IAddItemBatchController extends IController {
 	 * This method is called when the user clicks the "Done" button
 	 * in the add item batch view.
 	 */
-	void done() throws DocumentException, IOException;
+	void done();
 
 }
 

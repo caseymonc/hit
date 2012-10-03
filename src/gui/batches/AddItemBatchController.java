@@ -133,7 +133,7 @@ public class AddItemBatchController extends Controller implements
 	 * in the add item batch view.
 	 */
 	@Override
-	public void done()throws DocumentException, IOException{		
+	public void done(){		
 		//Tell the core object model to print the recently added items
 	}
 	
