@@ -1,14 +1,29 @@
 package gui.batches;
 
+import com.itextpdf.text.Document;
 import gui.common.*;
 import gui.inventory.*;
 import gui.product.*;
+import java.io.IOException;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.pdf.Barcode;
+import com.itextpdf.text.pdf.BarcodeEAN;
+import com.itextpdf.text.pdf.PdfContentByte;
+import com.itextpdf.text.pdf.PdfWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.util.ArrayList;
+import java.util.List;
+import model.entities.Item;
 
 /**
  * Controller class for the add item batch view.
  */
 public class AddItemBatchController extends Controller implements
 		IAddItemBatchController {
+	
+	private List<Item> newItems;
 
 	/**
 	 * Constructor.
@@ -20,6 +35,7 @@ public class AddItemBatchController extends Controller implements
 		super(view);
 		
 		construct();
+		newItems = new ArrayList<>();
 	}
 
 	/**
@@ -121,11 +137,30 @@ public class AddItemBatchController extends Controller implements
 
 	/**
 	 * This method is called when the user clicks the "Done" button
-	 * in the add item batch view.
+	 * in the add item batch view. The method itself iterates through all
+	 * the added items and adds their barcodes to a pdf that is then displayed
+	 * on the screen.
 	 */
 	@Override
-	public void done() {
-		getView().close();
+	public void done()throws DocumentException, IOException{		
+		//Print the newItem barcodes to a pdf
+		BarcodeEAN codeEAN = new BarcodeEAN();
+		codeEAN.setCodeType(Barcode.UPCA);
+		Document document = new Document(new Rectangle(340, 842));
+		PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream("ItemsAddedBarcodes.pdf"));
+		PdfContentByte cb = writer.getDirectContent();
+		document.open();
+		//For all of the barcodes that need to be printed
+		for(int i=0; i < newItems.size(); ++i)
+		{
+			codeEAN.setCode(newItems.get(i).getBarCode().getBarCode()); 
+			document.add(codeEAN.createImageWithBarcode(cb, null, null));
+		}
+
+		java.awt.Desktop.getDesktop().open(new File("ItemsAddedBarcodes.pdf"));
+		//The above command will allow you to open a pdf and display it on the screen
+
+		newItems.clear();
 	}
 	
 }

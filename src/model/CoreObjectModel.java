@@ -5,6 +5,13 @@
 package model;
 
 
+import com.itextpdf.text.Document;
+import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.pdf.Barcode;
+import com.itextpdf.text.pdf.BarcodeEAN;
+import com.itextpdf.text.pdf.PdfContentByte;
+import com.itextpdf.text.pdf.PdfWriter;
+import java.io.FileOutputStream;
 import model.entities.*;
 import model.managers.*;
 import model.controllers.*;
@@ -100,6 +107,5 @@ public class CoreObjectModel implements PersistentItem{
 	public Item findItemByBarCode(BarCode barcode) {
 			return itemManager.getItemByBarCode(barcode);
 	}
-
 
 }
