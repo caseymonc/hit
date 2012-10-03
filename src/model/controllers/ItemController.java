@@ -7,7 +7,7 @@ package model.controllers;
 import model.CoreObjectModel;
 import model.entities.*;
 import model.managers.ItemManager;
-
+import com.itextpdf.text.DocumentException;
 
 /** Oversees, controls or delegates everything to do with Items
  *

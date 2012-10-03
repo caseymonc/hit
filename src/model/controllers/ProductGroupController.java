@@ -68,10 +68,10 @@ public class ProductGroupController extends ModelController{
 		return manager.canAddProductGroup(group);
 	}
 	
-	public void editProductGroup(ProductGroup unit, ProductGroup oldUnit) 
+	public void editProductGroup(ProductGroup group, ProductGroup oldUnit) 
 		   throws IllegalArgumentException {
 
-		assert(canEditProductGroup(unit, oldUnit));
+		assert(canEditProductGroup(group, oldUnit));
 		
 		if(!canEditProductGroup(group, oldUnit)){
 			throw new IllegalArgumentException();
