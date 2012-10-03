@@ -20,9 +20,10 @@ import model.entities.StorageUnit;
 
 /**
  * Controller class for inventory view.
+ * 
+ * This class implements Observer.  It observes all of the model-level controllers.
  */
-public class InventoryController extends Controller 
-									implements IInventoryController, Observer {
+public class InventoryController extends Controller implements IInventoryController, Observer {
 
 	private ProductController pController;
 	private ItemController iController;
