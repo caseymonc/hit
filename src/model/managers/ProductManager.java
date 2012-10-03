@@ -250,7 +250,7 @@ public class ProductManager {
             if(p.getCreationDate().compareTo(i.getEntryDate()) > 0){
                     p.setCreationDate(i.getEntryDate());
             }
-            
+            assert(p.getCreationDate().compareTo(i.getEntryDate()) <= 0);
         } else{
             throw new IllegalArgumentException("The product doesn't exist");
         }
