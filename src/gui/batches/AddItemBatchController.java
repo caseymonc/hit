@@ -139,7 +139,7 @@ public class AddItemBatchController extends Controller implements
 	 * This method is called when the user clicks the "Done" button
 	 * in the add item batch view. The method itself iterates through all
 	 * the added items and adds their barcodes to a pdf that is then displayed
-	 * on the screen.
+	 * on the screen. After the pdf is displayed the list of items is cleared.
 	 */
 	@Override
 	public void done()throws DocumentException, IOException{		
