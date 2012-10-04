@@ -483,6 +483,12 @@ public class InventoryController extends Controller implements IInventoryControl
 									ProductContainerData containerData) {
 	}
 
+        /** Updates the InventoryController.  Called from the observers when there
+         * is a change.
+         * 
+         * @param oObj - the observable object that is notifying the observer
+         * @param hint - the hint about what what updated
+         */
 	@Override
 	public void update(Observable oObj, Object hint) {
 		if((oObj instanceof StorageUnitController 
