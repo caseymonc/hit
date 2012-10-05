@@ -1,5 +1,6 @@
 package gui.batches;
 
+import com.itextpdf.text.DocumentException;
 import java.text.ParseException;
 import java.util.*;
 import java.awt.*;
@@ -13,6 +14,7 @@ import gui.common.*;
 import gui.inventory.*;
 import gui.main.GUI;
 import gui.product.*;
+import java.io.IOException;
 
 @SuppressWarnings("serial")
 public class AddItemBatchView extends ItemBatchView implements
@@ -194,8 +196,9 @@ public class AddItemBatchView extends ItemBatchView implements
 	}
 
 	@Override
-	protected void done() {
-		//getController().done();
+	protected void done() throws DocumentException, IOException {
+		
+		getController().done();
 	}
 
 	@Override
@@ -257,9 +260,6 @@ public class AddItemBatchView extends ItemBatchView implements
 
 	@Override
 	public Date getEntryDate() {
-		
-		// return DateUtils.removeTimeFromDate((Date) entryDateSpinnerModel
-		// 		.getValue());
 
 		String entryDateText = entryDateSpinnerEditor.getTextField().getText();
 		if (entryDateText == null) {

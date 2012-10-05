@@ -14,8 +14,17 @@ import com.itextpdf.text.pdf.PdfWriter;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+
+import model.BarCodeGenerator;
+import model.CoreObjectModel;
+import model.controllers.*;
+import model.entities.BarCode;
 import model.entities.Item;
+import model.entities.Product;
+import model.entities.StorageUnit;
+
 
 /**
  * Controller class for the add item batch view.
@@ -23,8 +32,34 @@ import model.entities.Item;
 public class AddItemBatchController extends Controller implements
 		IAddItemBatchController {
 	
-	private List<Item> newItems;
+	private List<BarCode> newItemBarCodes;
 
+
+	/**
+	 *  The target for which product container was selected
+	 */
+	private ProductContainerData _target;
+	
+	/**
+	 * The facade interface to Model.  SIngleton class
+	 */
+	CoreObjectModel COM;
+	
+	/**
+	 * The facade in charge of Storage Units and moving items
+	 */
+	StorageUnitController storageUnitController;
+	
+	/**
+	 * The facade in charge of Storage Units and moving items
+	 */
+	ProductController productController;
+	
+	/**
+	 * The facade in charge of Storage Units and moving items
+	 */
+	ItemController itemController;
+	
 	/**
 	 * Constructor.
 	 * 
@@ -34,8 +69,14 @@ public class AddItemBatchController extends Controller implements
 	public AddItemBatchController(IView view, ProductContainerData target) {
 		super(view);
 		
+		_target = target;
+		COM = CoreObjectModel.getInstance();
+		storageUnitController = COM.getStorageUnitController();
+		productController = COM.getProductController();
+		itemController = COM.getItemController();
+		newItemBarCodes = new ArrayList<Item>();
+
 		construct();
-		newItems = new ArrayList<>();
 	}
 
 	/**
@@ -114,9 +155,46 @@ public class AddItemBatchController extends Controller implements
 	/**
 	 * This method is called when the user clicks the "Add Item" button
 	 * in the add item batch view.
+	 * note: the only time we can actually get here is if all of the fields in the AddItemBatchView 
+	 *	are correct
 	 */
 	@Override
 	public void addItem() {
+
+		String nameOfProductContainer = _target.getName();
+		BarCode productBarcode = new BarCode(getView().getBarcode());
+		
+		//assert(productBarcode.isValid());
+		
+		Product product = productController.getProductByBarCode(productBarcode);
+		if(product == null) {		
+			//open the other dialogue box to prompt for a new product.
+			getView().displayAddProductView();
+			product = productController.getProductByBarCode(productBarcode);
+			assert(product != null);
+			assert(product.getBarCode().isValid());
+		}
+		//we have a good product now
+		
+		StorageUnit storageUnit = storageUnitController.getStorageUnitByName(nameOfProductContainer);
+
+		for(int count = (int) Integer.valueOf(getView().getCount()); count > 0; --count)
+		{
+			Date entryDate = getView().getEntryDate();
+
+			BarCode itemBarcode = BarCodeGenerator.getInstance().generateBarCode();
+			
+			assert(Item.canCreate(itemBarcode, entryDate, null, product, storageUnit));
+			
+			Item i = new Item(itemBarcode, entryDate, null, product, storageUnit);
+			
+			itemController.addItem(i, storageUnit);//
+			
+			newItemBarCodes.add(itemBarcode);//for barcode printing
+		}
+		
+		//update view.
+		getView().notify();
 	}
 	
 	/**
@@ -151,16 +229,16 @@ public class AddItemBatchController extends Controller implements
 		PdfContentByte cb = writer.getDirectContent();
 		document.open();
 		//For all of the barcodes that need to be printed
-		for(int i=0; i < newItems.size(); ++i)
+		for(int i=0; i < newItemBarCodes.size(); ++i)
 		{
-			codeEAN.setCode(newItems.get(i).getBarCode().getBarCode()); 
+			codeEAN.setCode(newItemBarCodes.get(i).getBarCode().getBarCode()); 
 			document.add(codeEAN.createImageWithBarcode(cb, null, null));
 		}
 
 		java.awt.Desktop.getDesktop().open(new File("ItemsAddedBarcodes.pdf"));
 		//The above command will allow you to open a pdf and display it on the screen
 
-		newItems.clear();
+		newItemBarCodes.clear();
 	}
 	
 }

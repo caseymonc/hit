@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Set;
 import model.CoreObjectModel;
 import model.entities.*;
+import model.BarCodeGenerator;
 
 /** 
  * @author davidmathis
@@ -34,7 +35,7 @@ public class ProductController extends ModelController{
         * product doesn't exist.
         */
         public Product getProductByBarCode(BarCode barcode){
-            return null;
+            return model.getProductManager().getProductByBarCode(barcode);
         }
         
         /**

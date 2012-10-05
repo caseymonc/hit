@@ -15,6 +15,11 @@ public class ProductContainerData extends Tagable {
 	private String _name;
 	
 	/**
+	 * Something to do with tagable
+	 */
+	//private ProductContainer _modelProduct;
+	
+	/**
 	 * List of children.
 	 */
 	private List<ProductContainerData> _children;
