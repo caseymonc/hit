@@ -32,7 +32,7 @@ import model.entities.StorageUnit;
 public class AddItemBatchController extends Controller implements
 		IAddItemBatchController {
 	
-
+	
 
 	/**
 	 *  The target for which product container was selected
@@ -75,6 +75,7 @@ public class AddItemBatchController extends Controller implements
 		itemController = COM.getItemController();
 
 		construct();
+		getView().enableItemAction(false);
 	}
 
 	/**
@@ -94,6 +95,7 @@ public class AddItemBatchController extends Controller implements
 	 */
 	@Override
 	protected void loadValues() {
+
 	}
 
 	/**
@@ -108,14 +110,19 @@ public class AddItemBatchController extends Controller implements
 	 */
 	@Override
 	protected void enableComponents() {
+		String count = getView().getCount();
+		String barCode = getView().getBarcode(); //this is the product barcode
+		Date entryDate = getView().getEntryDate();
+		getView().enableItemAction(itemController.enableAddItem(count, entryDate, barCode));
 	}
-
+	
 	/**
 	 * This method is called when the "Entry Date" field in the
 	 * add item batch view is changed by the user.
 	 */
 	@Override
 	public void entryDateChanged() {
+		enableComponents();
 	}
 
 	/**
@@ -124,6 +131,7 @@ public class AddItemBatchController extends Controller implements
 	 */
 	@Override
 	public void countChanged() {
+		enableComponents();
 	}
 
 	/**
@@ -132,6 +140,7 @@ public class AddItemBatchController extends Controller implements
 	 */
 	@Override
 	public void barcodeChanged() {
+		enableComponents();
 	}
 
 	/**
@@ -140,6 +149,7 @@ public class AddItemBatchController extends Controller implements
 	 */
 	@Override
 	public void useScannerChanged() {
+		//
 	}
 
 	/**
@@ -148,6 +158,7 @@ public class AddItemBatchController extends Controller implements
 	 */
 	@Override
 	public void selectedProductChanged() {
+		
 	}
 
 	/**

@@ -9,6 +9,7 @@ import model.entities.*;
 import model.managers.ItemManager;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Date;
 import model.BarCodePrinter;
 
 /** Oversees, controls or delegates everything to do with Items
@@ -140,6 +141,25 @@ public class ItemController extends ModelController{
 	public void printItemLabelsOnAddBatchClose() {
 		BarCodePrinter bcp = new BarCodePrinter(newItemBarCodes);
 		newItemBarCodes.clear();
+	}
+	
+	public boolean enableAddItem(String count, Date entryDate, String productBarCode) {
+		
+		if(productBarCode.length() !=12) {
+			//invalid barcodes are allowed in HIT demo, but we might not want them...
+			return false;
+		}
+
+		try{
+			Integer.parseInt(count);
+		} catch(Exception e) {
+			return false;
+		}
+		
+		BarCode productB = new BarCode(productBarCode);
+		Product dummyProduct = new Product("dummy",productB, 1,1, new Size(Unit.count, 1));
+
+		return Item.canCreate(null, entryDate, null, dummyProduct, null);	
 	}
 
 }
