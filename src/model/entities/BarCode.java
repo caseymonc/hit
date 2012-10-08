@@ -59,7 +59,7 @@ public class BarCode implements Serializable {
 	 */
 	public boolean isValid()
 	{
-		return barCode.length()==12 & checkCheckDigit();
+		return barCode.length()==12 && checkCheckDigit();
 	}
 	
 	/*
