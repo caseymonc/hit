@@ -1,5 +1,6 @@
 package model.persistence;
 
+import model.CoreObjectModel;
 import model.entities.ProductContainer;
 import model.entities.Item;
 import model.entities.Product;
@@ -16,12 +17,22 @@ import java.util.List;
  */
 public abstract class PersistentStore {
 	
+	private static PersistentStore selectedPersistentStore;
+	
+	public static PersistentStore getSelectedStore(){
+		return selectedPersistentStore;
+	}
+	
+	public static void setSelectedStore(PersistentStore store){
+		selectedPersistentStore = store;
+	}
+	
 	/**
-	 * Get the root ProductContainer which has a connection to
+	 * Get the CoreObjectModel which has a connection to
 	 * the rest of the data structure
 	 * @return the root ProductContainer
 	 */
-	public abstract ProductContainer getRoot();
+	public abstract CoreObjectModel getCoreObjectModel();
 	
 	/**
 	 * Get all of the items that can hold Items

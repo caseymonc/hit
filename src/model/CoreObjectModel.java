@@ -16,6 +16,7 @@ import model.entities.*;
 import model.managers.*;
 import model.controllers.*;
 import model.persistence.PersistentItem;
+import model.persistence.PersistentStore;
 
 /** CoreObjectModel
  * This class stores the rootUnit which is the root of a tree 
@@ -29,7 +30,7 @@ import model.persistence.PersistentItem;
 public class CoreObjectModel implements PersistentItem{
 	
 	private static CoreObjectModel _instance;
-	
+	private int lastBarCode;
 	//private ItemController itemController;
 	//private ProductController productController;
 	//private StorageUnitController storageUnitController;
@@ -44,7 +45,13 @@ public class CoreObjectModel implements PersistentItem{
 	{
 	   if(_instance == null)
 	   {
-		   _instance = new CoreObjectModel();
+		   if(PersistentStore.getSelectedStore() != null){
+			   _instance = PersistentStore.getSelectedStore().getCoreObjectModel();
+		   }
+		   
+		   if(_instance == null){
+			   _instance = new CoreObjectModel();
+		   }
 	   }
 	   return _instance;
 	}
@@ -54,6 +61,7 @@ public class CoreObjectModel implements PersistentItem{
 		productGroupManager = new ProductGroupManager();
 		storageUnitManager = new StorageUnitManager();
 		itemManager = new ItemManager();
+		lastBarCode = 0;
 	}
 
 	public ProductManager getProductManager() {
@@ -106,6 +114,14 @@ public class CoreObjectModel implements PersistentItem{
 	 */
 	public Item findItemByBarCode(BarCode barcode) {
 			return itemManager.getItemByBarCode(barcode);
+	}
+	
+	public int getLastBarCode() {
+		return lastBarCode;
+	}
+	
+	public void incLastBarCode(){
+		lastBarCode++;
 	}
 
 }

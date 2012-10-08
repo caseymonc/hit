@@ -1,5 +1,6 @@
 package model.persistence;
 
+import model.CoreObjectModel;
 import model.entities.ProductContainer;
 import model.entities.Item;
 import model.entities.Product;
@@ -25,11 +26,14 @@ public class PersistentSerializer extends PersistentStore {
 	private static final String PERSISTENT_STORE = "persistent_store.txt";
 
 	@Override
-	public ProductContainer getRoot() {
+	public CoreObjectModel getCoreObjectModel() {
 		try {
 			InputStream is = new FileInputStream(PERSISTENT_STORE);
 			ObjectInputStream ois = new ObjectInputStream(is);
 			Object o = ois.readObject();
+			if(o instanceof CoreObjectModel){
+				return (CoreObjectModel)o;
+			}
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -63,13 +67,15 @@ public class PersistentSerializer extends PersistentStore {
 
 	@Override
 	public void save(PersistentItem item) {
-		try {
-			OutputStream os = new FileOutputStream(PERSISTENT_STORE);
-			ObjectOutputStream oos = new ObjectOutputStream(os);
-			oos.writeObject(item);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		if(item instanceof CoreObjectModel){
+			try {
+				OutputStream os = new FileOutputStream(PERSISTENT_STORE);
+				ObjectOutputStream oos = new ObjectOutputStream(os);
+				oos.writeObject(item);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 
 	}

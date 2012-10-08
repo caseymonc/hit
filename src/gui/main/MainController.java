@@ -1,5 +1,8 @@
 package gui.main;
 
+import model.CoreObjectModel;
+import model.persistence.PersistentSerializer;
+import model.persistence.PersistentStore;
 import gui.common.*;
 
 /**
@@ -8,6 +11,7 @@ import gui.common.*;
  */
 public class MainController extends Controller implements IMainController {
 
+	
 	/**
 	 * Constructor.
 	 *  
@@ -15,7 +19,7 @@ public class MainController extends Controller implements IMainController {
 	 */
 	public MainController(IMainView view) {
 		super(view);
-		
+		PersistentStore.setSelectedStore(new PersistentSerializer());
 		construct();
 	}
 	
@@ -44,6 +48,7 @@ public class MainController extends Controller implements IMainController {
 	 */
 	@Override
 	public void exit() {
+		PersistentStore.getSelectedStore().save(CoreObjectModel.getInstance());
 	}
 
 	/**

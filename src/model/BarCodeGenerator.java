@@ -12,7 +12,7 @@ public class BarCodeGenerator implements PersistentItem {
 	
 	/** Singleton instance of BarCodeGenerator*/
 	private static BarCodeGenerator _instance;
-	private int lastBarCode;
+	//private int lastBarCode;
 	
 	/** 
 	 * Get an instance of BarCodeGenerator
@@ -38,7 +38,9 @@ public class BarCodeGenerator implements PersistentItem {
 		// with 1 and increments everytime a new barcode is generated. 
 		//So, it will never
 		// generate the same barCode twice;
-		lastBarCode = 0;
+		
+		//NOTE:  The lastBarCode variable has been moved to CoreObjectModel 
+		//in order to make saving the lastBarCode easier in the persistent store
 	}
 	
 	/**
@@ -46,7 +48,9 @@ public class BarCodeGenerator implements PersistentItem {
 	 * @return A unique BarCode
 	 */
 	public BarCode generateBarCode(){
-          lastBarCode++; 
+		CoreObjectModel model = CoreObjectModel.getInstance();
+		model.incLastBarCode();
+		int lastBarCode = model.getLastBarCode();
 		// We can have ~2.1 billion products before this ever 
 		// goes bad do we need a reset if it reaches that number?
 		// and thus have to keep track of which ones are still in the system?
