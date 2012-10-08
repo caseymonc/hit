@@ -38,14 +38,14 @@ public class AddProductController extends Controller implements
                 COM = CoreObjectModel.getInstance();
                 productController = COM.getProductController();
                 
-                getView().enableOK(false);
 		construct();
+                loadValues();
 	}
 
 	//
 	// Controller overrides
 	//
-	
+        
 	/**
 	 * Returns a reference to the view for this controller.
 	 * 
@@ -81,6 +81,8 @@ public class AddProductController extends Controller implements
 	 */
 	@Override
 	protected void loadValues() {
+            getView().enableOK(false);
+            getView().setBarcode(barcode);
 	}
 
 	//
@@ -93,14 +95,55 @@ public class AddProductController extends Controller implements
 	 */
 	@Override
 	public void valuesChanged() {
-            BarCode barcode = new BarCode(getView().getBarcode());
+            BarCode barCode = new BarCode(barcode);
             String description = getView().getDescription();
-            Size size = new Size(getView().getSizeUnit().toUnit(), Float.valueOf(getView().getSizeValue()));
-            int shelflife = Integer.valueOf(getView().getShelfLife());
-            int supply = Integer.valueOf(getView().getSupply());
+            float sizeVal;
+            int supply;
+            int shelfLife;
+            boolean canAddProduct = true;
             
-            if(Product.canCreate(description, barcode, shelflife, supply, size)){
+            try {
+               sizeVal = Float.parseFloat(getView().getSizeValue()); 
+            }
+            catch(Exception e) {
+                sizeVal = 0;
+                canAddProduct = false;
+            }
+            
+            try {
+                shelfLife = Integer.parseInt(getView().getShelfLife());
+            }
+            catch(Exception e) {
+                shelfLife = 0;
+                canAddProduct = false;
+            }
+            
+            try {
+                supply = Integer.parseInt(getView().getSupply());
+            }
+            catch(Exception e) {
+                supply = 0;
+                canAddProduct = false;
+            }
+            
+            Size size = new Size(getView().getSizeUnit().toUnit(), sizeVal);
+            
+            if(size.getUnits() == Unit.count){
+                getView().setSizeValue("1");
+                getView().enableSizeValue(false);
+            } else {
+                getView().enableSizeValue(true);
+            }
+            
+            if(canAddProduct == false){
+                getView().enableOK(false);
+                return;
+            }
+            
+            if(Product.canCreate(description, barCode, shelfLife, supply, size)){
                 getView().enableOK(true);
+            } else {
+                getView().enableOK(false);
             }
 	}
 	
@@ -112,14 +155,16 @@ public class AddProductController extends Controller implements
 	public void addProduct() {
             BarCode barCode = new BarCode(barcode);
             String description = getView().getDescription();
-            Size size = new Size(getView().getSizeUnit().toUnit(), Float.valueOf(getView().getSizeValue()));
-            int shelflife = Integer.valueOf(getView().getShelfLife());
-            int supply = Integer.valueOf(getView().getSupply());
+            float sizeVal = Float.parseFloat(getView().getSizeValue());
+            int supply = Integer.parseInt(getView().getSupply());
+            int shelfLife = Integer.parseInt(getView().getShelfLife());
             
-            Product product = new Product(description, barCode, shelflife, supply, size);
+            Size size = new Size(getView().getSizeUnit().toUnit(), sizeVal);
+            
+            Product product = new Product(description, barCode, shelfLife, supply, size);
 
             productController.addProduct(product);
 	}
-
+        
 }
 
