@@ -38,6 +38,33 @@ public class ProductController extends ModelController{
             return model.getProductManager().getProductByBarCode(barcode);
         }
         
+        /** Determines if a product can be added to the Product Manager
+        * 
+        * @param p - the product being added
+        * 
+        * @return true if p can be added. Otherwise, return false.
+        */
+       public boolean canAddProduct(Product p) {        
+           return model.getProductManager().canAddProduct(p);
+       }
+
+       /** Adds a product to the Product Manager
+        * 
+        * @param p - the product being added
+        * 
+        * @throws IllegalArgumentException
+        */
+       public void addProduct(Product p) throws IllegalArgumentException {
+           assert (p != null);
+           assert (canAddProduct(p));
+
+           if(p == null || (canAddProduct(p) == false)){
+               throw new IllegalArgumentException("Not a valid Product");
+           }
+
+           model.getProductManager().addProduct(p);
+       }
+        
         /**
         * Adds a product to a container
         *
@@ -48,7 +75,7 @@ public class ProductController extends ModelController{
         */
         public void addProductToContainer(Product p, ProductContainer c)
                throws IllegalArgumentException {
-        
+            model.getProductManager().addProductToContainer(p, c);
         }
         
         /**
@@ -62,7 +89,7 @@ public class ProductController extends ModelController{
         */
         public void removeProductFromContainer(Product p, ProductContainer c)
                 throws IllegalArgumentException {
-
+            model.getProductManager().removeProductFromContainer(p, c);
         }
         
         /**
@@ -72,8 +99,7 @@ public class ProductController extends ModelController{
         * @return the Products that belong to c
         */
         public Collection<Product> getProductsByContainer(ProductContainer c) {
-
-            return null;
+            return model.getProductManager().getProductsByContainer(c);
         }
 
         /**
@@ -83,7 +109,6 @@ public class ProductController extends ModelController{
          * @return the ProductContainers that contain p
          */
         public Set<ProductContainer> getContainersByProduct(Product p) {
-
-            return null;
+            return model.getProductManager().getContainersByProduct(p);
         }
 }
