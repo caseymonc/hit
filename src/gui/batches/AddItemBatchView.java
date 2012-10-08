@@ -196,7 +196,7 @@ public class AddItemBatchView extends ItemBatchView implements
 	}
 
 	@Override
-	protected void done() throws DocumentException, IOException {
+	protected void done() {
 		
 		getController().done();
 	}

@@ -7,7 +7,9 @@ package model.controllers;
 import model.CoreObjectModel;
 import model.entities.*;
 import model.managers.ItemManager;
-import com.itextpdf.text.DocumentException;
+import java.util.List;
+import java.util.ArrayList;
+import model.BarCodePrinter;
 
 /** Oversees, controls or delegates everything to do with Items
  *
@@ -31,6 +33,8 @@ public class ItemController extends ModelController{
 	 */
 	private StorageUnitController SC;
 	
+	private List<String> newItemBarCodes;
+
 	/**
 	 * Constructor
 	 */
@@ -38,6 +42,7 @@ public class ItemController extends ModelController{
 		COM = CoreObjectModel.getInstance();
 		IM = COM.getItemManager();
 		SC = COM.getStorageUnitController();
+		newItemBarCodes = new ArrayList<String>();
 	}
 
 	/** 
@@ -58,6 +63,7 @@ public class ItemController extends ModelController{
 			throw new IllegalArgumentException("Item still does not have a specified container");
 		}
 		IM.addItem(i);
+		newItemBarCodes.add(i.getBarCode().getBarCode());
 	}
 
 	/** Moves the item to removed items 
@@ -126,6 +132,14 @@ public class ItemController extends ModelController{
 	 */
 	public ItemManager getItemManager() {
 		return IM;
+	}
+	/**
+	 * This method will print 
+	 * After the pdf is displayed the list of items is cleared.
+	 */
+	public void printItemLabelsOnAddBatchClose() {
+		BarCodePrinter bcp = new BarCodePrinter(newItemBarCodes);
+		newItemBarCodes.clear();
 	}
 
 }
