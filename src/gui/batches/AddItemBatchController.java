@@ -32,7 +32,6 @@ import model.entities.StorageUnit;
 public class AddItemBatchController extends Controller implements
 		IAddItemBatchController {
 	
-	private List<BarCode> newItemBarCodes;
 
 
 	/**
@@ -74,7 +73,6 @@ public class AddItemBatchController extends Controller implements
 		storageUnitController = COM.getStorageUnitController();
 		productController = COM.getProductController();
 		itemController = COM.getItemController();
-		newItemBarCodes = new ArrayList<Item>();
 
 		construct();
 	}
@@ -177,8 +175,9 @@ public class AddItemBatchController extends Controller implements
 		//we have a good product now
 		
 		StorageUnit storageUnit = storageUnitController.getStorageUnitByName(nameOfProductContainer);
-
-		for(int count = (int) Integer.valueOf(getView().getCount()); count > 0; --count)
+		System.out.println(getView().getCount());
+		int count = Integer.parseInt(getView().getCount());
+		for(; count > 0; --count)
 		{
 			Date entryDate = getView().getEntryDate();
 
@@ -189,8 +188,6 @@ public class AddItemBatchController extends Controller implements
 			Item i = new Item(itemBarcode, entryDate, null, product, storageUnit);
 			
 			itemController.addItem(i, storageUnit);//
-			
-			newItemBarCodes.add(itemBarcode);//for barcode printing
 		}
 		
 		//update view.
@@ -215,30 +212,11 @@ public class AddItemBatchController extends Controller implements
 
 	/**
 	 * This method is called when the user clicks the "Done" button
-	 * in the add item batch view. The method itself iterates through all
-	 * the added items and adds their barcodes to a pdf that is then displayed
-	 * on the screen. After the pdf is displayed the list of items is cleared.
+	 * in the add item batch view.
 	 */
 	@Override
-	public void done()throws DocumentException, IOException{		
-		//Print the newItem barcodes to a pdf
-		BarcodeEAN codeEAN = new BarcodeEAN();
-		codeEAN.setCodeType(Barcode.UPCA);
-		Document document = new Document(new Rectangle(340, 842));
-		PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream("ItemsAddedBarcodes.pdf"));
-		PdfContentByte cb = writer.getDirectContent();
-		document.open();
-		//For all of the barcodes that need to be printed
-		for(int i=0; i < newItemBarCodes.size(); ++i)
-		{
-			codeEAN.setCode(newItemBarCodes.get(i).getBarCode().getBarCode()); 
-			document.add(codeEAN.createImageWithBarcode(cb, null, null));
-		}
-
-		java.awt.Desktop.getDesktop().open(new File("ItemsAddedBarcodes.pdf"));
-		//The above command will allow you to open a pdf and display it on the screen
-
-		newItemBarCodes.clear();
+	public void done() {
+		itemController.printItemLabelsOnAddBatchClose();
 	}
 	
 }
