@@ -1,13 +1,31 @@
 package gui.product;
 
 import gui.common.*;
+import model.CoreObjectModel;
+import model.controllers.ProductController;
+import model.entities.BarCode;
+import model.entities.Product;
+import model.entities.Size;
+import model.entities.Unit;
 
 /**
  * Controller class for the add item view.
  */
 public class AddProductController extends Controller implements
 		IAddProductController {
-	
+	    
+        String barcode;
+    
+        /**
+	 * The facade interface to Model.  SIngleton class
+	 */
+	CoreObjectModel COM;
+    
+        /**
+	 * The facade in charge of Storage Units and moving items
+	 */
+        ProductController productController;
+    
 	/**
 	 * Constructor.
 	 * 
@@ -16,7 +34,9 @@ public class AddProductController extends Controller implements
 	 */
 	public AddProductController(IView view, String barcode) {
 		super(view);
-		
+		this.barcode = barcode;
+                productController = COM.getProductController();
+                
 		construct();
 	}
 
@@ -71,6 +91,15 @@ public class AddProductController extends Controller implements
 	 */
 	@Override
 	public void valuesChanged() {
+            BarCode barcode = new BarCode(getView().getBarcode());
+            String description = getView().getDescription();
+            Size size = new Size(getView().getSizeUnit().toUnit(), Float.valueOf(getView().getSizeValue()));
+            int shelflife = Integer.valueOf(getView().getShelfLife());
+            int supply = Integer.valueOf(getView().getSupply());
+            
+            if(Product.canCreate(description, barcode, shelflife, supply, size)){
+                getView().enableOK(true);
+            }
 	}
 	
 	/**
@@ -79,6 +108,15 @@ public class AddProductController extends Controller implements
 	 */
 	@Override
 	public void addProduct() {
+            BarCode barCode = new BarCode(barcode);
+            String description = getView().getDescription();
+            Size size = new Size(getView().getSizeUnit().toUnit(), Float.valueOf(getView().getSizeValue()));
+            int shelflife = Integer.valueOf(getView().getShelfLife());
+            int supply = Integer.valueOf(getView().getSupply());
+            
+            Product product = new Product(description, barCode, shelflife, supply, size);
+
+            productController.addProduct(product);
 	}
 
 }
