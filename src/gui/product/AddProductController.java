@@ -35,8 +35,10 @@ public class AddProductController extends Controller implements
 	public AddProductController(IView view, String barcode) {
 		super(view);
 		this.barcode = barcode;
+                COM = CoreObjectModel.getInstance();
                 productController = COM.getProductController();
                 
+                getView().enableOK(false);
 		construct();
 	}
 
