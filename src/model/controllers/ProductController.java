@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import model.CoreObjectModel;
+import model.Hint;
 import model.entities.*;
 import model.BarCodeGenerator;
 
@@ -17,14 +18,24 @@ public class ProductController extends ModelController{
 	 * model implements the singleton that it can be shared
 	 * between many different Controllers
 	 */
+	
+	private static ProductController instance;
 	private CoreObjectModel model;
 	
 	/** Constructor
 	 * 
 	 * creates a new ProductController
 	 */
-	public ProductController(){
+	private ProductController(){
 		model = CoreObjectModel.getInstance();
+	}
+	
+	public static ProductController getInstance(){
+		if(instance == null){
+			instance = new ProductController();
+		}
+		
+		return instance;
 	}
         
         /**
@@ -63,6 +74,8 @@ public class ProductController extends ModelController{
            }
 
            model.getProductManager().addProduct(p);
+           this.setChanged();
+           this.notifyObservers(new Hint(p, Hint.Value.Add));
        }
         
         /**

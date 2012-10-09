@@ -12,6 +12,7 @@ import model.controllers.ItemController;
 import model.controllers.ProductController;
 import model.controllers.ProductGroupController;
 import model.controllers.StorageUnitController;
+import model.entities.Item;
 import model.entities.Product;
 import model.entities.ProductContainer;
 import model.entities.ProductGroup;
@@ -261,9 +262,12 @@ public class InventoryController extends Controller implements IInventoryControl
 	public void productContainerSelectionChanged() {
 		ProductContainer selectedContainer = 
 						(ProductContainer)getView().getSelectedProductContainer().getTag();
+		System.out.println("Drawing Products");
 		List<ProductData> productDataList = new ArrayList<ProductData>();		
 		if (selectedContainer != null) {
+			System.out.println("Got Selected Container: " + selectedContainer.getName());
 			Collection<Product> products = selectedContainer.getAllProducts();
+			System.out.println(products.toString());
 			for (Product product : products) {
 				ProductData productData = new ProductData();			
 				productData.setBarcode(product.getBarCode().toString());
@@ -481,15 +485,50 @@ public class InventoryController extends Controller implements IInventoryControl
          */
 	@Override
 	public void update(Observable oObj, Object hint) {
+		System.out.println("Notified Observers");
 		if((oObj instanceof StorageUnitController 
 				|| oObj instanceof ProductGroupController)){
 			updateProductContainer(hint);
+		}else if(oObj instanceof ProductController){
+			upadateProduct(hint);
+		}else if(oObj instanceof ItemController){
+			upadateItem(hint);
+		}
+	}
+	
+	private void upadateProduct(Object observerHint){
+		ProductContainerData selectedData = getView().getSelectedProductContainer();
+		if(observerHint instanceof Hint){
+			Hint hint = (Hint)observerHint;
+			Product product = (Product)hint.getExtra();
+			if(hint.getHint() == Hint.Value.Add){
+				productContainerSelectionChanged();
+			}else if(hint.getHint() == Hint.Value.Edit){
+				productContainerSelectionChanged();
+			}else if(hint.getHint() == Hint.Value.Delete){
+				productContainerSelectionChanged();
+			}
+		}
+	}
+	
+	private void upadateItem(Object observerHint){
+		System.out.println("Notified Item Observers");
+		ProductContainerData selectedData = getView().getSelectedProductContainer();
+		if(observerHint instanceof Hint){
+			Hint hint = (Hint)observerHint;
+			Item product = (Item)hint.getExtra();
+			if(hint.getHint() == Hint.Value.Add){
+				productContainerSelectionChanged();
+			}else if(hint.getHint() == Hint.Value.Edit){
+				productContainerSelectionChanged();
+			}else if(hint.getHint() == Hint.Value.Delete){
+				productContainerSelectionChanged();
+			}
 		}
 	}
 	
 	private void updateProductContainer(Object observerHint) {
 		ProductContainerData selectedData = getView().getSelectedProductContainer();
-		System.out.println("Selected Child: " + selectedData.getName());
 		if(observerHint instanceof Hint){
 			Hint hint = (Hint)observerHint;
 			ProductContainer container = (ProductContainer)hint.getExtra();

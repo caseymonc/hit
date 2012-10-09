@@ -34,19 +34,26 @@ public class ItemController extends ModelController{
 	 * Controls everything to do with Storage Units
 	 */
 	private StorageUnitController SC;
-	
+	private static ItemController instance;
 	private List<String> newItemBarCodes;
 
 	/**
 	 * Constructor
 	 */
-	public ItemController() {
+	private ItemController() {
 		COM = CoreObjectModel.getInstance();
 		IM = COM.getItemManager();
 		SC = COM.getStorageUnitController();
 		newItemBarCodes = new ArrayList<String>();
 	}
 
+	public static ItemController getInstance() {
+		if(instance == null){
+			instance = new ItemController();
+		}
+		return instance;
+	}
+	
 	/** 
 	 * New Items are added to the Product Container within the target Storage 
          * Unit that contains the Item’s Product. If the Item’s Product is not already
@@ -66,8 +73,10 @@ public class ItemController extends ModelController{
 		}
 		IM.addItem(i);
 		newItemBarCodes.add(i.getBarCode().getBarCode());
-                
-                this.notifyObservers(new Hint(i, Hint.Value.Add));
+        
+		System.out.println("Notifying Item Observers");
+		this.setChanged();
+        this.notifyObservers(new Hint(i, Hint.Value.Add));
 	}
 
 	/** Moves the item to removed items 
@@ -164,5 +173,7 @@ public class ItemController extends ModelController{
 
 		return Item.canCreate(null, entryDate, null, dummyProduct, null);	
 	}
+
+	
 
 }

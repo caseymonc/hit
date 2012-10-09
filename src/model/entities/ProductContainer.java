@@ -118,6 +118,8 @@ public abstract class ProductContainer implements PersistentItem{
 		items.put(item.getBarCode(), item);
 		putItemByProduct(item);
 		item.setContainer(this);
+		
+		System.out.println(products.toString());
 	}
 	
 	/**

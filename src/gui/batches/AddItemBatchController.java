@@ -28,6 +28,7 @@ import model.controllers.*;
 import model.entities.BarCode;
 import model.entities.Item;
 import model.entities.Product;
+import model.entities.ProductContainer;
 import model.entities.ProductGroup;
 import model.entities.StorageUnit;
 
@@ -196,7 +197,6 @@ public class AddItemBatchController extends Controller implements
 	@Override
 	public void addItem() {
                 
-		String nameOfProductContainer = _target.getName();
 		BarCode productBarcode = new BarCode(getView().getBarcode());
 		
 		//assert(productBarcode.isValid());
@@ -211,9 +211,9 @@ public class AddItemBatchController extends Controller implements
 		}
 		//we have a good product now
 		ProductData prodData = new ProductData(product);
-                
-		StorageUnit storageUnit = 
-                        storageUnitController.getStorageUnitByName(nameOfProductContainer);
+        
+		ProductContainer container = (ProductContainer) _target.getTag();
+		StorageUnit storageUnit = container.getStorageUnit();
 
 		int count = Integer.parseInt(getView().getCount());
 		for(; count > 0; --count)

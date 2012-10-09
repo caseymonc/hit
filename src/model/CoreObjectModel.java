@@ -83,7 +83,7 @@ public class CoreObjectModel implements PersistentItem{
 	}
 	
 	public ProductController getProductController() {
-		return new ProductController();
+		return ProductController.getInstance();
 	}
 
 	public ProductGroupController getProductGroupController() {
@@ -95,7 +95,7 @@ public class CoreObjectModel implements PersistentItem{
 	}
 
 	public ItemController getItemController() {
-		return new ItemController();
+		return ItemController.getInstance();
 	}
 	
 		
