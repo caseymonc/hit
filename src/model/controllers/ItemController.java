@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Date;
 import model.BarCodePrinter;
+import model.Hint;
 
 /** Oversees, controls or delegates everything to do with Items
  *
@@ -65,6 +66,8 @@ public class ItemController extends ModelController{
 		}
 		IM.addItem(i);
 		newItemBarCodes.add(i.getBarCode().getBarCode());
+                
+                this.notifyObservers(new Hint(i, Hint.Value.Add));
 	}
 
 	/** Moves the item to removed items 

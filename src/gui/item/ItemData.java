@@ -3,6 +3,8 @@ package gui.item;
 import java.util.*;
 
 import gui.common.Tagable;
+import model.entities.Item;
+import model.entities.ProductGroup;
 
 /**
  * Display data class for items.
@@ -52,6 +54,22 @@ public class ItemData extends Tagable {
 		_storageUnit = "";
 		_productGroup = "";
 	}
+
+    public ItemData(Item item) {
+        _entryDate = item.getEntryDate();
+        _expirationDate = item.getExpirationDate();
+        _barcode = item.getBarCode().getBarCode();
+        _storageUnit = "";
+
+        if (item.getContainer() instanceof ProductGroup){
+            _productGroup = item.getContainer().getName();
+        }
+        else{
+            _productGroup = "";
+        }
+        
+        this.setTag(item);
+    }
 	
 	/**
 	 * Returns the value of the Barcode attribute.
@@ -151,6 +169,23 @@ public class ItemData extends Tagable {
 	 */
 	public void setProductGroup(String productGroup) {
 		this._productGroup = productGroup;
+	}
+        
+        @Override
+	public boolean equals(Object obj) 
+	{
+	    if(obj instanceof ItemData){
+		   ItemData objItem = (ItemData)obj;
+		   return _barcode.equals(objItem.getBarcode());
+	    }
+	    else{
+		   return false;
+	    }    
+	}
+
+	@Override
+	public int hashCode() {
+		return _barcode.hashCode();
 	}
 
 }

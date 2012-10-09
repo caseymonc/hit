@@ -11,11 +11,16 @@ import com.itextpdf.text.pdf.Barcode;
 import com.itextpdf.text.pdf.BarcodeEAN;
 import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfWriter;
+import gui.item.ItemData;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import model.BarCodeGenerator;
 import model.CoreObjectModel;
@@ -23,6 +28,7 @@ import model.controllers.*;
 import model.entities.BarCode;
 import model.entities.Item;
 import model.entities.Product;
+import model.entities.ProductGroup;
 import model.entities.StorageUnit;
 
 
@@ -58,7 +64,19 @@ public class AddItemBatchController extends Controller implements
 	 * The facade in charge of Storage Units and moving items
 	 */
 	ItemController itemController;
-	
+        
+        /**
+         * list of ItemDatas used by the GUI to show what items were added during 
+         * the batch.
+         */
+        List<ItemData> addedItems;
+        
+        /**
+         * list of ProductDatas used by the GUI to show what products were added
+         * during the batch.
+         */
+        List<ProductData> addedProducts;
+        
 	/**
 	 * Constructor.
 	 * 
@@ -74,6 +92,9 @@ public class AddItemBatchController extends Controller implements
 		productController = COM.getProductController();
 		itemController = COM.getItemController();
 
+                addedItems = new ArrayList<ItemData>();
+                addedProducts = new ArrayList<ProductData>();
+                
 		construct();
 		getView().enableItemAction(false);
 	}
@@ -113,7 +134,8 @@ public class AddItemBatchController extends Controller implements
 		String count = getView().getCount();
 		String barCode = getView().getBarcode(); //this is the product barcode
 		Date entryDate = getView().getEntryDate();
-		getView().enableItemAction(itemController.enableAddItem(count, entryDate, barCode));
+		getView().enableItemAction(itemController.enableAddItem(count, 
+                        entryDate, barCode));
 	}
 	
 	/**
@@ -158,18 +180,22 @@ public class AddItemBatchController extends Controller implements
 	 */
 	@Override
 	public void selectedProductChanged() {
-		
+		ProductData selectedProduct = getView().getSelectedProduct();
+                
+                if(selectedProduct != null){
+                    getView().setItems(getAddedItemsByProduct(selectedProduct));
+                }
 	}
 
 	/**
 	 * This method is called when the user clicks the "Add Item" button
 	 * in the add item batch view.
-	 * note: the only time we can actually get here is if all of the fields in the AddItemBatchView 
-	 *	are correct
+	 * note: the only time we can actually get here is if all of the fields in 
+         *  the AddItemBatchView are correct
 	 */
 	@Override
 	public void addItem() {
-
+                
 		String nameOfProductContainer = _target.getName();
 		BarCode productBarcode = new BarCode(getView().getBarcode());
 		
@@ -184,9 +210,11 @@ public class AddItemBatchController extends Controller implements
 			assert(product.getBarCode().isValid());
 		}
 		//we have a good product now
-		
-		StorageUnit storageUnit = storageUnitController.getStorageUnitByName(nameOfProductContainer);
-		System.out.println(getView().getCount());
+		ProductData prodData = new ProductData(product);
+                
+		StorageUnit storageUnit = 
+                        storageUnitController.getStorageUnitByName(nameOfProductContainer);
+
 		int count = Integer.parseInt(getView().getCount());
 		for(; count > 0; --count)
 		{
@@ -194,17 +222,64 @@ public class AddItemBatchController extends Controller implements
 
 			BarCode itemBarcode = BarCodeGenerator.getInstance().generateBarCode();
 			
-			assert(Item.canCreate(itemBarcode, entryDate, null, product, storageUnit));
+			assert(Item.canCreate(itemBarcode, entryDate, null, 
+                                product, storageUnit));
 			
 			Item i = new Item(itemBarcode, entryDate, null, product, storageUnit);
 			
-			itemController.addItem(i, storageUnit);//
+			itemController.addItem(i, storageUnit);
+                        
+                        addItemData(new ItemData(i), storageUnit);
+                        addProductData(prodData);
 		}
-		
-		//update view.
-		//getView().notify();
+                
+                getView().setProducts(getAddedProducts());
+                getView().selectProduct(prodData);
+                selectedProductChanged();
 	}
-	
+        
+        private void addProductData(ProductData prodData){
+            if(addedProducts.contains(prodData)){
+                int index = addedProducts.indexOf(prodData);
+                int count;
+                
+                try {
+                    count = Integer.parseInt(addedProducts.get(index).getCount());
+                }
+                catch (Exception e) {
+                    count = 0;
+                }
+                
+                count++;
+                addedProducts.get(index).setCount(Integer.toString(count));
+            } else {
+                addedProducts.add(prodData);
+            }
+        }
+        
+        private void addItemData(ItemData itemData, StorageUnit storageUnit) {
+            itemData.setStorageUnit(storageUnit.getName());
+            addedItems.add(itemData);
+        }
+        
+        private ProductData[] getAddedProducts() {
+            return addedProducts.toArray(new ProductData[addedProducts.size()]);
+        }
+        
+        private ItemData[] getAddedItemsByProduct(ProductData prodData) {
+            List<ItemData> itemDatas = new ArrayList<ItemData>();
+            
+            for(ItemData i : addedItems) {
+                Item item = (Item)i.getTag();
+                String barcode = item.getProduct().getBarCode().getBarCode();
+                if(barcode.equals(prodData.getBarcode())) {
+                    itemDatas.add(i);
+                }
+            }
+            
+            return itemDatas.toArray(new ItemData[itemDatas.size()]);
+        }
+        
 	/**
 	 * This method is called when the user clicks the "Redo" button
 	 * in the add item batch view.

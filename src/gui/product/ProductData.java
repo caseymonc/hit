@@ -1,6 +1,7 @@
 package gui.product;
 
 import gui.common.Tagable;
+import model.entities.Product;
 
 /**
  * Display data class for products.
@@ -57,6 +58,16 @@ public class ProductData extends Tagable {
 		_supply = "";
 		_barcode = "";
 	}
+
+    public ProductData(Product product) {
+            _barcode = product.getBarCode().getBarCode();
+            _count = "1";                                                       // this needs to be fixed.
+            _description = product.getDescription();
+            _shelfLife = Integer.toString(product.getShelfLife());
+            _supply = Integer.toString(product.getThreeMonthSupply());
+            _size = product.getSize().toString();
+            this.setTag(product);
+    }
 
 	/**
 	 * Returns the value of the Barcode attribute.
@@ -177,6 +188,27 @@ public class ProductData extends Tagable {
 	public void setSupply(String supply) {
 		this._supply = supply;
 	}
+        
+        /**
+	 * determines if an Object is equal to this Product
+	 *
+	 * @param obj - the Object being compared with this Product
+	 *
+	 * @return true if obj is equal to this Product, otherwise return false
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof ProductData) {
+			ProductData prod = (ProductData) obj;
+			return _barcode.equals(prod.getBarcode());
+		} else {
+			return false;
+		}
+	}
 
+	@Override
+	public int hashCode() {
+		return _barcode.hashCode();
+	}
 }
 

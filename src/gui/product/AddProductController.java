@@ -84,6 +84,7 @@ public class AddProductController extends Controller implements
             getView().enableOK(false);
             getView().setBarcode(barcode);
             if(getView().getSizeUnit() == SizeUnits.Count){
+                getView().setSizeValue("1");
                 getView().enableSizeValue(false);
             }
 	}
