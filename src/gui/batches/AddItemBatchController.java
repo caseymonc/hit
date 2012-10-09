@@ -202,7 +202,7 @@ public class AddItemBatchController extends Controller implements
 		}
 		
 		//update view.
-		getView().notify();
+		//getView().notify();
 	}
 	
 	/**

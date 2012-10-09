@@ -65,7 +65,6 @@ public class ProductManager {
         if(p == null || (canAddProduct(p) == false)){
             throw new IllegalArgumentException("Not a valid Product");
         }
-        
         productsByBarCode.put(p.getBarCode(), p);
         itemsByProduct.put(p, new HashSet<Item>());
     }
@@ -279,7 +278,6 @@ public class ProductManager {
     public Product getProductByBarCode(BarCode barcode) {
 
         assert (barcode != null);
-
         return productsByBarCode.get(barcode);
     }
 
