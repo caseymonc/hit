@@ -29,6 +29,8 @@ public class InventoryController extends Controller implements IInventoryControl
 	private ItemController iController;
 	private ProductGroupController pgController;
 	private StorageUnitController suController;
+	private Map<ProductContainer, ProductContainerData> dataForContainer;
+	private ProductContainerData root;
 	/**
 	 * Constructor.
 	 *  
@@ -68,8 +70,12 @@ public class InventoryController extends Controller implements IInventoryControl
 	 *  {@post The controller has loaded data into its view}
 	 */
 	@Override
-	protected void loadValues() {
+	public void loadValues(){
+		dataForContainer = new HashMap<ProductContainer, ProductContainerData>();
+		
 		ProductContainerData root = new ProductContainerData();
+		
+		this.root = root;
 		
 		List<StorageUnit> units = suController.getAllStorageUnits();
 		
@@ -89,24 +95,6 @@ public class InventoryController extends Controller implements IInventoryControl
 			addProductContainer(unit, root);
 		}
 		
-		/*ProductContainerData basementCloset = new ProductContainerData("Basement Closet");
-		
-		ProductContainerData toothpaste = new ProductContainerData("Toothpaste");
-		toothpaste.addChild(new ProductContainerData("Kids"));
-		toothpaste.addChild(new ProductContainerData("Parents"));
-		basementCloset.addChild(toothpaste);
-		
-		root.addChild(basementCloset);
-		
-		ProductContainerData foodStorage = new ProductContainerData("Food Storage Room");
-		
-		ProductContainerData soup = new ProductContainerData("Soup");
-		soup.addChild(new ProductContainerData("Chicken Noodle"));
-		soup.addChild(new ProductContainerData("Split Pea"));
-		soup.addChild(new ProductContainerData("Tomato"));
-		foodStorage.addChild(soup);
-		
-		root.addChild(foodStorage);*/
 		
 		getView().setProductContainers(root);
 	}
@@ -119,6 +107,8 @@ public class InventoryController extends Controller implements IInventoryControl
 	private void addProductContainer(ProductContainer container, ProductContainerData parent){
 		ProductContainerData unitData = new ProductContainerData(container.getName());
 		unitData.setTag(container);
+		
+		dataForContainer.put(container, unitData);
 		
 		Collection<ProductGroup> groups = container.getAllProductGroup();
 		
@@ -499,29 +489,19 @@ public class InventoryController extends Controller implements IInventoryControl
 	
 	private void updateProductContainer(Object observerHint) {
 		ProductContainerData selectedData = getView().getSelectedProductContainer();
+		System.out.println("Selected Child: " + selectedData.getName());
 		if(observerHint instanceof Hint){
 			Hint hint = (Hint)observerHint;
 			ProductContainer container = (ProductContainer)hint.getExtra();
-			if(hint.getHint() == Hint.Value.Add){
+			if(hint.getHint() == Hint.Value.Add || hint.getHint() == Hint.Value.Edit){
 				loadValues();
-				/*ProductContainerData unitData = new ProductContainerData(container.getName());
-				unitData.setTag(container);
-				selectedData.addChild(unitData);
-				getView().insertProductContainer(selectedData, unitData, 0);*/
-				
-			}else if(hint.getHint() == Hint.Value.Edit){
-				loadValues();
-				/*getView().renameProductContainer(selectedData, container.getName(), 0);*/
-				
+				ProductContainerData selectedContainer = dataForContainer.get(container);
+				getView().selectProductContainer(selectedContainer);
 			}else if(hint.getHint() == Hint.Value.Delete){
 				getView().deleteProductContainer(selectedData);
 				selectedData = null;
 			}
 		}
-		if(selectedData != null){
-			getView().selectProductContainer(selectedData);
-		}
 	}
-
 }
 

@@ -46,10 +46,12 @@ public class CoreObjectModel implements PersistentItem{
 	   if(_instance == null)
 	   {
 		   if(PersistentStore.getSelectedStore() != null){
+			   System.out.println("Get CoreObjectModel From Persistent Serializer");
 			   _instance = PersistentStore.getSelectedStore().getCoreObjectModel();
 		   }
 		   
 		   if(_instance == null){
+			   System.out.println("Get new CoreObjectModel");
 			   _instance = new CoreObjectModel();
 		   }
 	   }

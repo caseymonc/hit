@@ -2,6 +2,8 @@ package model.entities;
 
 import model.entities.Item;
 import model.entities.Product;
+import model.persistence.PersistentItem;
+
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
@@ -17,7 +19,7 @@ import java.util.List;
  * These objects can contain Products and Items, 
  * and are referred to generically as product containers.
  */
-public abstract class ProductContainer{
+public abstract class ProductContainer implements PersistentItem{
 	/** Index from BarCode to Product
 	 * Stores the Products that have items in this Container*/	
 	private Map<BarCode,Product> products;

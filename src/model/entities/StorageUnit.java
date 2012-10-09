@@ -11,7 +11,7 @@ import model.persistence.PersistentItem;
  * items can be stored.
  */
 
-public class StorageUnit extends ProductContainer implements PersistentItem{
+public class StorageUnit extends ProductContainer{
 	
 private Map<Product, ProductContainer> productContainerByProduct;
 	

@@ -12,12 +12,13 @@ import java.util.Set;
 import java.util.HashMap;
 
 import model.entities.*;
+import model.persistence.PersistentItem;
 
 /**
  *
  * @author davidpatty, davidmathis
  */
-public class ProductManager {
+public class ProductManager implements PersistentItem{
 
     /**
      * Map of products indexed by their BarCodes

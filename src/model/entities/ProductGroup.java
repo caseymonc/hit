@@ -10,7 +10,7 @@ import model.persistence.PersistentItem;
  * toothpaste Products in that Product Group.
  */
 
-public class ProductGroup extends ProductContainer implements PersistentItem{
+public class ProductGroup extends ProductContainer{
 	private Size threeMonthSupply;
 
 	/**
@@ -42,6 +42,16 @@ public class ProductGroup extends ProductContainer implements PersistentItem{
 		}catch(IllegalArgumentException e){
 			return false;
 		}
+	}
+	
+	public void update(ProductContainer unit) {
+		super.update(unit);
+		if(!(unit instanceof ProductGroup)){
+			throw new IllegalArgumentException();
+		}
+		
+		ProductGroup group = (ProductGroup)unit;
+		this.setThreeMonthSupply(group.getThreeMonthSupply());
 	}
 	
 	/**

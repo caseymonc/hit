@@ -19,7 +19,7 @@ public class MainController extends Controller implements IMainController {
 	 */
 	public MainController(IMainView view) {
 		super(view);
-		PersistentStore.setSelectedStore(new PersistentSerializer());
+		
 		construct();
 	}
 	

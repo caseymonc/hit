@@ -11,13 +11,14 @@ import model.entities.BarCode;
 import model.entities.ProductGroup;
 import model.entities.ProductContainer;
 import model.entities.StorageUnit;
+import model.persistence.PersistentItem;
 
 
 /**
  *
  * @author davidpatty
  */
-public class ItemManager 
+public class ItemManager implements PersistentItem
 {
 	
 	/**

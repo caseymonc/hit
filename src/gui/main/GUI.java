@@ -3,6 +3,9 @@ package gui.main;
 
 import javax.swing.*;
 
+import model.persistence.PersistentSerializer;
+import model.persistence.PersistentStore;
+
 import java.awt.event.*;
 
 import gui.common.*;
@@ -25,7 +28,7 @@ public final class GUI extends JFrame implements IMainView {
 
 	private GUI(String[] args) {
 		super("Home Inventory Tracker");		
-		
+		PersistentStore.setSelectedStore(new PersistentSerializer());
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent evt) {

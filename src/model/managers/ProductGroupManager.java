@@ -14,12 +14,13 @@ import model.entities.Product;
 import model.entities.ProductContainer;
 import model.entities.ProductGroup;
 import model.entities.StorageUnit;
+import model.persistence.PersistentItem;
 
 /**
  *
  * @author davidpatty
  */
-public class ProductGroupManager {
+public class ProductGroupManager implements PersistentItem{
 	
 	private Map<ProductContainer, Map<String,ProductGroup>> productGroupsByProductContainer;
 	private Map<StorageUnit,Set<ProductGroup>> productGroupsByStorageUnit;

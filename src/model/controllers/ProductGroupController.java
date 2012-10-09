@@ -129,7 +129,7 @@ public class ProductGroupController extends ModelController{
 		COM.getProductGroupManager().updateProductGroup(editedUnit, oldUnit);
 		
 		this.setChanged();
-		this.notifyObservers(new Hint(editedUnit, Hint.Value.Edit));
+		this.notifyObservers(new Hint(oldUnit, Hint.Value.Edit));
 	}
 	
 	/**
