@@ -32,13 +32,14 @@ public class BarCodePrinter {
 		
 		try {
 			
-			//Print the newItem barcodes to a pdf
+			//Print the newItem barcodes to a pdf			
 			BarcodeEAN codeEAN = new BarcodeEAN();
 			codeEAN.setCodeType(Barcode.UPCA);
 			Document document = new Document(new Rectangle(340, 842));
 			PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream("ItemsAddedBarcodes.pdf"));
-			PdfContentByte cb = writer.getDirectContent();
 			document.open();
+			PdfContentByte cb = writer.getDirectContent();
+
 			
 			//For all of the barcodes that need to be printed
 			for(int i=0; i < newItemBarCodes.size(); ++i)
@@ -47,8 +48,10 @@ public class BarCodePrinter {
 				document.add(codeEAN.createImageWithBarcode(cb, null, null));
 			}
 			
+			document.close();
 			//This will allow you to open a pdf and display it on the screen
 			java.awt.Desktop.getDesktop().open(new File("ItemsAddedBarcodes.pdf"));
+			
 			
 		} catch(DocumentException e) {
 			
