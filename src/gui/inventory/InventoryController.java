@@ -299,6 +299,7 @@ public class InventoryController extends Controller implements IInventoryControl
                         productDataList.add(productData);
                 }
                 
+
 		getView().setProducts(productDataList.toArray(new ProductData[0]));
 		
 		getView().setItems(new ItemData[0]);

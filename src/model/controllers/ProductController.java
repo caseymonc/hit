@@ -100,12 +100,15 @@ public class ProductController extends ModelController{
         	StorageUnit targetUnit = targetContainer.getStorageUnit();
         	ProductContainer currentContainer = targetUnit.getProductGroupByProduct(product);
         	if(currentContainer == null){
+        		System.out.println("No Product in targetUnit");
         		addProductToContainer(product, targetContainer);
         	}else{
+        		System.out.println("Product in targetUnit");
         		//Move the Product and all associated Items from 
         		//their old Product Container to the Target
         		//Product Container
         		targetUnit.moveProduct(product, targetContainer);
+        		addProductToContainer(product, targetContainer);
         	}
         }
         
