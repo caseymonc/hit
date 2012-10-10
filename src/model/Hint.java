@@ -11,7 +11,8 @@ public class Hint {
 	public enum Value{
 		Add,
 		Edit,
-		Delete
+		Delete, 
+		Move
 	}
 	private Object extra;
 	private Value hint;

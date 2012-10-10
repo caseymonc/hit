@@ -91,6 +91,19 @@ public class ProductController extends ModelController{
             model.getProductManager().addProductToContainer(p, c);
         }
         
+        public void moveProductToContainer(Product product, ProductContainer targetContainer){
+        	StorageUnit targetUnit = targetContainer.getStorageUnit();
+        	ProductContainer currentContainer = targetUnit.getProductGroupByProduct(product);
+        	if(currentContainer == null){
+        		addProductToContainer(product, targetContainer);
+        	}else{
+        		//Move the Product and all associated Items from 
+        		//their old Product Container to the Target
+        		//Product Container
+        		targetUnit.moveProduct(product, targetContainer);
+        	}
+        }
+        
         /**
         * Removes a product from a container.
         *

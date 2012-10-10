@@ -98,7 +98,6 @@ public class Item implements PersistentItem{
 			throw new IllegalArgumentException();
 		}
 		assert(this.container != null);
-		
 		this.container = moveTo;
 	}
 	
@@ -280,10 +279,10 @@ public class Item implements PersistentItem{
 	    }    
 	}
 
-	@Override
+	/*@Override
 	public int hashCode() {
 		return barCode.hashCode();
-	}
+	}*/
 	
 	
 }

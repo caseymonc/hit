@@ -47,6 +47,7 @@ public class StorageUnitController extends ModelController{
 			item.move(targetContainer);
 		}
 		targetContainer.addItem(item);
+		
 	}
 	
 	/**

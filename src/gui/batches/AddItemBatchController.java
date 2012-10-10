@@ -302,7 +302,7 @@ public class AddItemBatchController extends Controller implements
 	 */
 	@Override
 	public void done() {
-		itemController.printItemLabelsOnAddBatchClose();
+		//itemController.printItemLabelsOnAddBatchClose();
 	}
 	
 }
