@@ -1,12 +1,19 @@
 package gui.item;
 
 import gui.common.*;
+import java.util.Calendar;
+import java.util.Date;
+import model.entities.Item;
 
 /**
  * Controller class for the edit item view.
  */
 public class EditItemController extends Controller implements IEditItemController 
 {
+	/**
+	 * The item that was selected when Edit was clicked
+	 */
+	ItemData _target;
 	
 	/**
 	 * Constructor.
@@ -14,10 +21,11 @@ public class EditItemController extends Controller implements IEditItemControlle
 	 * @param view Reference to edit item view
 	 * @param target Item that is being edited
 	 */
-	public EditItemController(IView view, ItemData target) 
-        {
+	public EditItemController(IView view, ItemData target) {
 		super(view);
-
+		_target = target;
+		getView().enableDescription(false);
+		getView().enableBarcode(false);
 		construct();
 	}
 
@@ -49,6 +57,7 @@ public class EditItemController extends Controller implements IEditItemControlle
 	 */
 	@Override
 	protected void enableComponents() {
+		getView().enableOK(this.canClickOk());
 	}
 
 	/**
@@ -60,6 +69,10 @@ public class EditItemController extends Controller implements IEditItemControlle
 	 */
 	@Override
 	protected void loadValues() {
+		Item i = (Item) this._target.getTag();
+		getView().setDescription(i.getProduct().getDescription());
+		getView().setBarcode(_target.getBarcode());
+		this.enableComponents();
 	}
 
 	//
@@ -72,6 +85,7 @@ public class EditItemController extends Controller implements IEditItemControlle
 	 */
 	@Override
 	public void valuesChanged() {
+		this.enableComponents();
 	}
 	
 	/**
@@ -80,7 +94,33 @@ public class EditItemController extends Controller implements IEditItemControlle
 	 */
 	@Override
 	public void editItem() {
+		assert(this.canClickOk());
+		Item i = (Item) this._target.getTag();
+		i.setEntryDate(getView().getEntryDate());
 	}
-
+	
+	private boolean canClickOk() {
+		Date d = getView().getEntryDate();
+		
+		//cannot be a null date
+		if(d == null) {
+			return false;
+		}
+		
+		//cannot be in the future
+		if(d.after(new Date())) {
+			System.out.println("future");
+			return false;
+		}
+		//has to be after Jan. 1 2000
+		Calendar c = Calendar.getInstance();
+		c.set(2000,0,0);
+		if(d.before(c.getTime())) {
+			System.out.println("before 2000" + c.toString());
+			return false;
+		}
+		
+		return true;
+	}
 }
 

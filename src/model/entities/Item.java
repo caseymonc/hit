@@ -147,8 +147,8 @@ public class Item implements PersistentItem{
 			return false;
 		}
 		Calendar c = Calendar.getInstance();
-		c.set(2000,1,1);
-		if(!entryDate.after(c.getTime())) {
+		c.set(2000,0,0);
+		if(entryDate.before(c.getTime())) {
 			return false;
 		}
 		

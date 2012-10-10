@@ -355,7 +355,7 @@ public class InventoryController extends Controller implements IInventoryControl
 	 */
 	@Override
 	public boolean canEditItem() {
-		return true;
+		return (getView().getSelectedItem() != null);
 	}
 
 	/**
@@ -371,7 +371,7 @@ public class InventoryController extends Controller implements IInventoryControl
 	 */
 	@Override
 	public boolean canRemoveItem() {
-		return true;
+		return (getView().getSelectedItem() != null);
 	}
 
 	/**
@@ -379,6 +379,7 @@ public class InventoryController extends Controller implements IInventoryControl
 	 */
 	@Override
 	public void removeItem() {
+		
 	}
 
 	/**
