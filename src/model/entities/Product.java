@@ -293,8 +293,9 @@ public class Product implements PersistentItem {
 		}
 	}
 
-	@Override
+	/*@Override
 	public int hashCode() {
 		return this.barCode.hashCode();
-	}
+	}*/
+
 }

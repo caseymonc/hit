@@ -277,6 +277,7 @@ public class InventoryController extends Controller implements IInventoryControl
 				productData.setShelfLife(product.getShelfLife() + " months");
 				productData.setSize(SizeFormatter.format(product.getSize()));
 				productData.setSupply("10 count");
+				productData.setTag(product);
 				
 				productDataList.add(productData);
 			}
@@ -306,22 +307,21 @@ public class InventoryController extends Controller implements IInventoryControl
 	public void productSelectionChanged() {
 		List<ItemData> itemDataList = new ArrayList<ItemData>();		
 		ProductData selectedProduct = getView().getSelectedProduct();
+		ProductContainerData selectedContainer = getView().getSelectedProductContainer();
+		
+		Product product = (Product) selectedProduct.getTag();
+		ProductContainer container = (ProductContainer) selectedContainer.getTag();
 		if (selectedProduct != null) {
-			Date now = new Date();
-			GregorianCalendar cal = new GregorianCalendar();
-			int itemCount = Integer.parseInt(selectedProduct.getCount());
-			for (int i = 1; i <= itemCount; ++i) {
-				cal.setTime(now);
-				ItemData itemData = new ItemData();
-				itemData.setBarcode(getRandomBarcode());
-				cal.add(Calendar.MONTH, -rand.nextInt(12));
-				itemData.setEntryDate(cal.getTime());
-				cal.add(Calendar.MONTH, 3);
-				itemData.setExpirationDate(cal.getTime());
-				itemData.setProductGroup("Some Group");
-				itemData.setStorageUnit("Some Unit");
-				
-				itemDataList.add(itemData);
+			Set<Item> items = container.getItemsByProduct(product);
+			for (Item item : items) {
+				ItemData data = new ItemData();
+				data.setBarcode(item.getBarCode().getBarCode());
+				data.setEntryDate(item.getEntryDate());
+				data.setExpirationDate(item.getExpirationDate());
+				data.setProductGroup(container.getName());
+				data.setStorageUnit(container.getStorageUnit().getName());
+				data.setTag(item);
+				itemDataList.add(data);
 			}
 		}
 		getView().setItems(itemDataList.toArray(new ItemData[0]));
@@ -462,7 +462,12 @@ public class InventoryController extends Controller implements IInventoryControl
 	 */
 	@Override
 	public void addProductToContainer(ProductData productData, 
-										ProductContainerData containerData) {		
+										ProductContainerData containerData) {	
+		ProductContainer targetContainer = (ProductContainer) containerData.getTag();
+		Product product = (Product) productData.getTag();
+		StorageUnit targetUnit = targetContainer.getStorageUnit();
+		pController.moveProductToContainer(product, targetContainer);
+		
 	}
 
 	/**
@@ -475,6 +480,9 @@ public class InventoryController extends Controller implements IInventoryControl
 	@Override
 	public void moveItemToContainer(ItemData itemData,
 									ProductContainerData containerData) {
+		ProductContainer container = (ProductContainer) containerData.getTag();
+		Item item = (Item) itemData.getTag();
+		iController.moveItem(item, container.getStorageUnit());
 	}
 
         /** Updates the InventoryController.  Called from the observers when there
@@ -512,7 +520,6 @@ public class InventoryController extends Controller implements IInventoryControl
 	}
 	
 	private void upadateItem(Object observerHint){
-		System.out.println("Notified Item Observers");
 		ProductContainerData selectedData = getView().getSelectedProductContainer();
 		if(observerHint instanceof Hint){
 			Hint hint = (Hint)observerHint;
@@ -522,6 +529,8 @@ public class InventoryController extends Controller implements IInventoryControl
 			}else if(hint.getHint() == Hint.Value.Edit){
 				productContainerSelectionChanged();
 			}else if(hint.getHint() == Hint.Value.Delete){
+				productContainerSelectionChanged();
+			}else if(hint.getHint() == Hint.Value.Move){
 				productContainerSelectionChanged();
 			}
 		}

@@ -151,6 +151,7 @@ public abstract class ProductContainer implements PersistentItem{
 	 * @return false of the item cannot be removed
 	 */
 	public boolean canRemoveItem(Item item) {
+		System.out.println("PC canRemoveItem");
 		if(items.containsKey(item.getBarCode())) {
 
 			return true;
@@ -163,6 +164,7 @@ public abstract class ProductContainer implements PersistentItem{
 	  * @param item the item to remove
 	  */
 	public void removeItem(Item item) {
+		System.out.println("PC removeItem");
 		assert(item != null);
 		
 		if(item == null){

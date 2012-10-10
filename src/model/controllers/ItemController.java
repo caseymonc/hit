@@ -104,6 +104,8 @@ public class ItemController extends ModelController{
 	 */
 	public void moveItem(Item i, ProductContainer target) {
 		SC.moveItem(i,target.getStorageUnit());
+		this.setChanged();
+		this.notifyObservers(new Hint(i, Hint.Value.Move));
 	}
 	
 	/**
