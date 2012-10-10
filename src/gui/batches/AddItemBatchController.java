@@ -1,27 +1,12 @@
 package gui.batches;
 
-import com.itextpdf.text.Document;
 import gui.common.*;
 import gui.inventory.*;
-import gui.product.*;
-import java.io.IOException;
-import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Rectangle;
-import com.itextpdf.text.pdf.Barcode;
-import com.itextpdf.text.pdf.BarcodeEAN;
-import com.itextpdf.text.pdf.PdfContentByte;
-import com.itextpdf.text.pdf.PdfWriter;
 import gui.item.ItemData;
-import java.io.File;
-import java.io.FileOutputStream;
+import gui.product.*;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import model.BarCodeGenerator;
 import model.CoreObjectModel;
 import model.controllers.*;
@@ -29,7 +14,6 @@ import model.entities.BarCode;
 import model.entities.Item;
 import model.entities.Product;
 import model.entities.ProductContainer;
-import model.entities.ProductGroup;
 import model.entities.StorageUnit;
 
 
@@ -303,6 +287,7 @@ public class AddItemBatchController extends Controller implements
 	@Override
 	public void done() {
 		itemController.printItemLabelsOnAddBatchClose();
+		getView().close();
 	}
 	
 }

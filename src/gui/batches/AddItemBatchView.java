@@ -1,20 +1,15 @@
 package gui.batches;
-
-import com.itextpdf.text.DocumentException;
-import java.text.ParseException;
-import java.util.*;
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import javax.swing.event.*;
-
 import common.util.DateUtils;
-
 import gui.common.*;
 import gui.inventory.*;
 import gui.main.GUI;
 import gui.product.*;
-import java.io.IOException;
+import java.awt.*;
+import java.awt.event.*;
+import java.text.ParseException;
+import java.util.*;
+import javax.swing.*;
+import javax.swing.event.*;
 
 @SuppressWarnings("serial")
 public class AddItemBatchView extends ItemBatchView implements
@@ -197,8 +192,7 @@ public class AddItemBatchView extends ItemBatchView implements
 
 	@Override
 	protected void done() {
-		
-		getController().done();
+		getController().done();	
 	}
 
 	@Override
