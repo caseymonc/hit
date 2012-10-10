@@ -154,6 +154,7 @@ public class ProductController extends ModelController{
         	
         	if(needsToBeRemovedFromStorageUnit){
 	        	currentContainer.getStorageUnit().setContainerByProduct(product, null);
+
         	}
         	
         	this.setChanged();
