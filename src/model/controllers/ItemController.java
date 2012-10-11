@@ -176,6 +176,16 @@ public class ItemController extends ModelController{
 		return Item.canCreate(null, entryDate, null, dummyProduct, null);	
 	}
 
-	
+	/**
+	 * Updates the specified item with a new entry date
+	 * @param i The item to be modified
+	 * @param newEntryDate 
+	 */
+	public void updateItemsEntryDate(Item i, Date newEntryDate) {
+		assert(i.canSetEntryDate(newEntryDate));
+		i.setEntryDate(newEntryDate);
+		System.out.println("Notifycall");
+		this.notifyObservers(new Hint(i, Hint.Value.Edit));
+	}
 
 }

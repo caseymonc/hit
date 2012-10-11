@@ -358,7 +358,7 @@ public class InventoryController extends Controller implements IInventoryControl
 	 */
 	@Override
 	public boolean canEditItem() {
-		return true;
+		return (getView().getSelectedItem() != null);
 	}
 
 	/**
@@ -374,7 +374,7 @@ public class InventoryController extends Controller implements IInventoryControl
 	 */
 	@Override
 	public boolean canRemoveItem() {
-		return true;
+		return (getView().getSelectedItem() != null);
 	}
 
 	/**
@@ -382,6 +382,7 @@ public class InventoryController extends Controller implements IInventoryControl
 	 */
 	@Override
 	public void removeItem() {
+		
 	}
 
 	/**
@@ -501,13 +502,13 @@ public class InventoryController extends Controller implements IInventoryControl
 				|| oObj instanceof ProductGroupController)){
 			updateProductContainer(hint);
 		}else if(oObj instanceof ProductController){
-			upadateProduct(hint);
+			updateProduct(hint);
 		}else if(oObj instanceof ItemController){
-			upadateItem(hint);
+			updateItem(hint);
 		}
 	}
 	
-	private void upadateProduct(Object observerHint){
+	private void updateProduct(Object observerHint){
 		ProductContainerData selectedData = getView().getSelectedProductContainer();
 		if(observerHint instanceof Hint){
 			Hint hint = (Hint)observerHint;
@@ -522,15 +523,16 @@ public class InventoryController extends Controller implements IInventoryControl
 		}
 	}
 	
-	private void upadateItem(Object observerHint){
+	private void updateItem(Object observerHint){
 		ProductContainerData selectedData = getView().getSelectedProductContainer();
 		if(observerHint instanceof Hint){
 			Hint hint = (Hint)observerHint;
-			Item product = (Item)hint.getExtra();
+			Item item = (Item)hint.getExtra();
 			if(hint.getHint() == Hint.Value.Add){
 				productContainerSelectionChanged();
 			}else if(hint.getHint() == Hint.Value.Edit){
 				productContainerSelectionChanged();
+				System.out.println("Update");
 			}else if(hint.getHint() == Hint.Value.Delete){
 				productContainerSelectionChanged();
 			}else if(hint.getHint() == Hint.Value.Move){

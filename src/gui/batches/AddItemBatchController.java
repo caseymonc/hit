@@ -5,6 +5,7 @@ import gui.inventory.*;
 import gui.item.ItemData;
 import gui.product.*;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import model.BarCodeGenerator;
@@ -206,10 +207,16 @@ public class AddItemBatchController extends Controller implements
 
 			BarCode itemBarcode = BarCodeGenerator.getInstance().generateBarCode();
 			
-			assert(Item.canCreate(itemBarcode, entryDate, null, 
+			int shelfLife = product.getShelfLife();
+			double power = java.lang.Math.pow( 10, 9);
+			
+			Calendar calen = Calendar.getInstance();
+			calen.add(Calendar.MONTH, shelfLife);
+			Date expirationDate = calen.getTime();
+			assert(Item.canCreate(itemBarcode, entryDate, expirationDate, 
                                 product, storageUnit));
 			
-			Item i = new Item(itemBarcode, entryDate, null, product, storageUnit);
+			Item i = new Item(itemBarcode, entryDate, expirationDate, product, storageUnit);
 			
 			itemController.addItem(i, storageUnit);
                         

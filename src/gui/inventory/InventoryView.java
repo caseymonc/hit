@@ -643,6 +643,7 @@ public class InventoryView extends View implements IInventoryView {
 	}
 	
 	private void editItem() {
+		System.out.println("IV:editItem");
 		getController().editItem();
 	}
 	
