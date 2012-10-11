@@ -3,6 +3,8 @@ package gui.item;
 import gui.common.*;
 import java.util.Calendar;
 import java.util.Date;
+import model.CoreObjectModel;
+import model.controllers.ItemController;
 import model.entities.Item;
 
 /**
@@ -16,6 +18,16 @@ public class EditItemController extends Controller implements IEditItemControlle
 	ItemData _target;
 	
 	/**
+	 * the facade to the Model
+	 */
+	CoreObjectModel COM;
+	
+	/**
+	 * The model's controller
+	 */
+	ItemController IC;
+	
+	/**
 	 * Constructor.
 	 * 
 	 * @param view Reference to edit item view
@@ -27,6 +39,8 @@ public class EditItemController extends Controller implements IEditItemControlle
 		getView().enableDescription(false);
 		getView().enableBarcode(false);
 		construct();
+		COM = CoreObjectModel.getInstance();
+		IC = COM.getItemController();
 	}
 
 	//
@@ -96,7 +110,7 @@ public class EditItemController extends Controller implements IEditItemControlle
 	public void editItem() {
 		assert(this.canClickOk());
 		Item i = (Item) this._target.getTag();
-		i.setEntryDate(getView().getEntryDate());
+		IC.updateItemsEntryDate(i, this.getView().getEntryDate());		
 	}
 	
 	private boolean canClickOk() {

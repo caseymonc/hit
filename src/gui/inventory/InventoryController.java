@@ -499,13 +499,13 @@ public class InventoryController extends Controller implements IInventoryControl
 				|| oObj instanceof ProductGroupController)){
 			updateProductContainer(hint);
 		}else if(oObj instanceof ProductController){
-			upadateProduct(hint);
+			updateProduct(hint);
 		}else if(oObj instanceof ItemController){
-			upadateItem(hint);
+			updateItem(hint);
 		}
 	}
 	
-	private void upadateProduct(Object observerHint){
+	private void updateProduct(Object observerHint){
 		ProductContainerData selectedData = getView().getSelectedProductContainer();
 		if(observerHint instanceof Hint){
 			Hint hint = (Hint)observerHint;
@@ -520,15 +520,16 @@ public class InventoryController extends Controller implements IInventoryControl
 		}
 	}
 	
-	private void upadateItem(Object observerHint){
+	private void updateItem(Object observerHint){
 		ProductContainerData selectedData = getView().getSelectedProductContainer();
 		if(observerHint instanceof Hint){
 			Hint hint = (Hint)observerHint;
-			Item product = (Item)hint.getExtra();
+			Item item = (Item)hint.getExtra();
 			if(hint.getHint() == Hint.Value.Add){
 				productContainerSelectionChanged();
 			}else if(hint.getHint() == Hint.Value.Edit){
 				productContainerSelectionChanged();
+				System.out.println("Update");
 			}else if(hint.getHint() == Hint.Value.Delete){
 				productContainerSelectionChanged();
 			}else if(hint.getHint() == Hint.Value.Move){
