@@ -105,6 +105,17 @@ public class ProductController extends ModelController{
         }
         
         /**
+        * Checks to see if a product can be removed.
+        *
+        * @param p - The product being added to c
+        * @param c - The container that p is being removed from
+        * @return return true if p can be removed, else return true
+        */
+        public boolean canRemoveProductFromContainer(Product p, ProductContainer c){
+            return model.getProductManager().canRemoveProductFromContainer(p, c);
+        }
+        
+        /**
         * Removes a product from a container.
         *
         * @param p - the product being removed from c
@@ -116,6 +127,16 @@ public class ProductController extends ModelController{
         public void removeProductFromContainer(Product p, ProductContainer c)
                 throws IllegalArgumentException {
             model.getProductManager().removeProductFromContainer(p, c);
+        }
+        
+        public void EditProduct(BarCode productBarCode, Product newProduct) 
+                throws IllegalArgumentException {
+            model.getProductManager().editProduct(productBarCode, newProduct);
+            
+            Product p = model.getProductManager().getProductByBarCode(productBarCode);
+            System.out.println("Notifying observers...");
+            this.setChanged();
+            this.notifyObservers(new Hint(p, Hint.Value.Edit));
         }
         
         /**
@@ -136,5 +157,120 @@ public class ProductController extends ModelController{
          */
         public Set<ProductContainer> getContainersByProduct(Product p) {
             return model.getProductManager().getContainersByProduct(p);
+        }
+        
+        /**
+         * Tests whether or not a product can be edited.
+         * 
+         * @param _barcode
+         * @param _desc
+         * @param _sizeVal
+         * @param _sizeUnit
+         * @param _supply
+         * @param _shelfLife
+         * 
+         * @return true if a product can be edited. Otherwise return false.
+         */
+        public boolean canEditProduct(String _barcode, String _desc, String _sizeVal, 
+                Unit _sizeUnit, String _supply, String _shelfLife) {
+            
+            Product product = createProduct(_barcode, _desc, _sizeVal, 
+                    _sizeUnit, _supply, _shelfLife);
+            
+            if(product == null) {
+                return false;
+            }
+            
+            return true;
+        }
+        
+        /**
+         * Tests whether or not a product can be added.
+         * 
+         * @param _barcode
+         * @param _desc
+         * @param _sizeVal
+         * @param _sizeUnit
+         * @param _supply
+         * @param _shelfLife
+         * 
+         * @return true if a product can be added. Otherwise return false.
+         */
+        public boolean canAddProduct(String _barcode, String _desc, String _sizeVal, 
+                Unit _sizeUnit, String _supply, String _shelfLife) {
+            
+            Product product = createProduct(_barcode, _desc, _sizeVal, 
+                    _sizeUnit, _supply, _shelfLife);
+            
+            if(product == null){
+                return false;
+            }
+            
+            if(canAddProduct(product) == false) {
+                return false;
+            }
+            
+            return true;
+        }
+        
+        /**
+         * Tests whether or not a product can be created.
+         * 
+         * @param _barcode
+         * @param _desc
+         * @param _sizeVal
+         * @param _sizeUnit
+         * @param _supply
+         * @param _shelfLife
+         * 
+         * @return a product if the product can be created.  Otherwise it returns null.
+         */
+        public Product createProduct(String _barcode, String _desc, String _sizeVal, 
+                Unit _sizeUnit, String _supply, String _shelfLife) {
+            
+            String description = _desc;
+            BarCode barCode = new BarCode(_barcode);
+            float sizeVal;
+            int supply;
+            int shelfLife;
+            boolean canAddProduct = true;
+            
+            try {
+               sizeVal = Float.parseFloat(_sizeVal); 
+            }
+            catch(Exception e) {
+                sizeVal = 0;
+                canAddProduct = false;
+            }
+            
+            try {
+                shelfLife = Integer.parseInt(_shelfLife);
+            }
+            catch(Exception e) {
+                shelfLife = 0;
+                canAddProduct = false;
+            }
+            
+            try {
+                supply = Integer.parseInt(_supply);
+            }
+            catch(Exception e) {
+                supply = 0;
+                canAddProduct = false;
+            }
+            
+            Size size = new Size(_sizeUnit, sizeVal);
+            
+            if(canAddProduct == false){
+                return null;
+            }
+            
+            if(Product.canCreate(description, barCode, shelfLife, supply, size) == false){
+                return null;
+            }
+            
+            Product product = new Product(description, barCode, shelfLife, supply, size);
+            
+            return product;
         }
 }

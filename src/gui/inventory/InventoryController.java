@@ -340,7 +340,10 @@ public class InventoryController extends Controller implements IInventoryControl
 	 */
 	@Override
 	public boolean canDeleteProduct() {
-		return true;
+                Product p = (Product)getView().getSelectedProduct().getTag();
+                ProductContainer c = 
+                        (ProductContainer)getView().getSelectedProductContainer().getTag();
+                return pController.canRemoveProductFromContainer(p, c);
 	}
 
 	/**

@@ -237,6 +237,7 @@ public class AddItemBatchController extends Controller implements
                 count++;
                 addedProducts.get(index).setCount(Integer.toString(count));
             } else {
+                prodData.setCount("1");
                 addedProducts.add(prodData);
             }
         }

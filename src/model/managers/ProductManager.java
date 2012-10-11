@@ -183,6 +183,25 @@ public class ProductManager implements PersistentItem{
         }
     }
 
+    public void editProduct(BarCode productBarCode, Product newProduct) 
+            throws IllegalArgumentException{
+        assert(productBarCode != null);
+        assert(productBarCode.getBarCode().equals(""));
+        assert(newProduct != null);
+        
+        if(productBarCode == null || productBarCode.getBarCode().equals("") || 
+                productBarCode == null) {
+            throw new IllegalArgumentException();
+        }
+        
+        Product product = this.getProductByBarCode(productBarCode);
+        
+        product.setDescription(newProduct.getDescription());
+        product.setShelfLife(newProduct.getShelfLife());
+        product.setSize(newProduct.getSize());
+        product.setThreeMonthSupply(newProduct.getThreeMonthSupply());
+    }
+    
     /**
      * Determines if a product can be removed from the ProductManager
      *
