@@ -17,7 +17,7 @@ import model.Hint;
  *
  * @author davidpatty
  */
-public class ItemController extends ModelController{
+public class ItemController extends ModelController {
 
 	
 	/**
@@ -184,7 +184,8 @@ public class ItemController extends ModelController{
 	public void updateItemsEntryDate(Item i, Date newEntryDate) {
 		assert(i.canSetEntryDate(newEntryDate));
 		i.setEntryDate(newEntryDate);
-		System.out.println("Notifycall");
+		i.calculateExpirationDate();
+		this.setChanged();
 		this.notifyObservers(new Hint(i, Hint.Value.Edit));
 	}
 

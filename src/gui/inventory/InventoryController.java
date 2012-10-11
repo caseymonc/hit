@@ -312,7 +312,7 @@ public class InventoryController extends Controller implements IInventoryControl
 		Product product = (Product) selectedProduct.getTag();
 		ProductContainer container = (ProductContainer) selectedContainer.getTag();
 		if (selectedProduct != null) {
-			Set<Item> items = container.getItemsByProduct(product);
+			List<Item> items = sortItemsByEntryDate(container.getItemsByProduct(product));
 			for (Item item : items) {
 				ItemData data = new ItemData();
 				data.setBarcode(item.getBarCode().getBarCode());
@@ -332,9 +332,51 @@ public class InventoryController extends Controller implements IInventoryControl
 	 */
 	@Override
 	public void itemSelectionChanged() {
-		return;
-	}
+		List<ItemData> itemDataList = new ArrayList<ItemData>();
+		
+		String selectedItemBarCode = getView().getSelectedItem().getBarcode();
+		
+		ProductData selectedProduct = getView().getSelectedProduct();
+		Product product = (Product) selectedProduct.getTag();
 
+		ProductContainerData selectedContainer = getView().getSelectedProductContainer();
+		ProductContainer container = (ProductContainer) selectedContainer.getTag();
+		ItemData selectedItem = null;
+		
+		if (selectedProduct != null) {
+			List<Item> items = sortItemsByEntryDate(container.getItemsByProduct(product));
+			for (Item item : items) {
+				ItemData data = new ItemData();
+				String barCode = item.getBarCode().getBarCode();
+				data.setBarcode(barCode);
+				if(barCode.equalsIgnoreCase(selectedItemBarCode)) {
+					selectedItem = data;
+				}
+				data.setEntryDate(item.getEntryDate());
+				data.setExpirationDate(item.getExpirationDate());
+				data.setProductGroup(container.getName());
+				data.setStorageUnit(container.getStorageUnit().getName());
+				data.setTag(item);
+				itemDataList.add(data);
+			
+			}
+		}
+		getView().setItems(itemDataList.toArray(new ItemData[0]));
+		getView().selectItem(selectedItem);
+	}
+	/**
+	 * 
+	 * @return 
+	 */
+	private List<Item> sortItemsByEntryDate(Set<Item> items) {
+		List<Item> sortedItems = new ArrayList<Item>();
+		for(Item item : items) {
+			sortedItems.add(item);
+		}
+		Collections.sort(sortedItems, new Item.ItemComparator());
+		return sortedItems;
+	}
+	
 	/**
 	 * Returns true if and only if the "Delete Product" menu item should be enabled.
 	 */
@@ -531,7 +573,7 @@ public class InventoryController extends Controller implements IInventoryControl
 			if(hint.getHint() == Hint.Value.Add){
 				productContainerSelectionChanged();
 			}else if(hint.getHint() == Hint.Value.Edit){
-				productContainerSelectionChanged();
+				itemSelectionChanged();
 				System.out.println("Update");
 			}else if(hint.getHint() == Hint.Value.Delete){
 				productContainerSelectionChanged();

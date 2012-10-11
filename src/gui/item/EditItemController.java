@@ -39,6 +39,7 @@ public class EditItemController extends Controller implements IEditItemControlle
 		getView().enableDescription(false);
 		getView().enableBarcode(false);
 		construct();
+		getView().setEntryDate(target.getEntryDate());
 		COM = CoreObjectModel.getInstance();
 		IC = COM.getItemController();
 	}
@@ -110,7 +111,7 @@ public class EditItemController extends Controller implements IEditItemControlle
 	public void editItem() {
 		assert(this.canClickOk());
 		Item i = (Item) this._target.getTag();
-		IC.updateItemsEntryDate(i, this.getView().getEntryDate());		
+		IC.updateItemsEntryDate(i, this.getView().getEntryDate());
 	}
 	
 	private boolean canClickOk() {

@@ -1,6 +1,7 @@
 package model.entities;
 
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.Date;
 import model.persistence.PersistentItem;
 
@@ -209,6 +210,15 @@ public class Item implements PersistentItem{
 	public void setEntryDate(Date newDate){
 		entryDate = newDate;
 	}
+	
+	public void calculateExpirationDate() {
+		int shelfLifeInMonths = this.product.getShelfLife();
+		this.expirationDate = new Date();
+		long offset = this.entryDate.getTime();
+		long shelfLifeInMS = (long)shelfLifeInMonths*262980;
+		shelfLifeInMS = shelfLifeInMS * 10000;
+		this.expirationDate.setTime(offset + shelfLifeInMS);
+	}
 
 	/**
 	 * sets the items container to container
@@ -284,5 +294,33 @@ public class Item implements PersistentItem{
 		return barCode.hashCode();
 	}*/
 	
+	/**
+	 *
+	 * @author davidpatty
+	 */
+	public static class ItemComparator implements Comparator {
+
+		@Override
+		public int compare(Object o1, Object o2) {
+			if ( !(o1 instanceof Item && o2 instanceof Item)) {
+				throw new ClassCastException();
+			}
+			
+			Item e1 = (Item) o1;
+			Item e2 = (Item) o2;
+			Date d1 = e1.getEntryDate();
+			Date d2 = e2.getEntryDate();
+
+			int ret = -99;
+			if (d1.before(d2)) {
+				ret = -1;
+			} else if (d1.after(d2)) {
+				ret = 1;
+			} else {
+				ret = 0;
+			}
+			return ret;
+		}
+	}
 	
 }
