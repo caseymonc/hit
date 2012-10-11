@@ -211,12 +211,16 @@ public class Item implements PersistentItem{
 		entryDate = newDate;
 	}
 	
+	/**
+	 * calculates the expiration date from the shelf life and the entry date.  
+	 *	1 month = 365.25/12 days = 2629800 seconds
+	 */
 	public void calculateExpirationDate() {
 		int shelfLifeInMonths = this.product.getShelfLife();
 		this.expirationDate = new Date();
 		long offset = this.entryDate.getTime();
-		long shelfLifeInMS = (long)shelfLifeInMonths*262980;
-		shelfLifeInMS = shelfLifeInMS * 10000;
+		long shelfLifeInMS = (long) shelfLifeInMonths*2629742;
+		shelfLifeInMS = shelfLifeInMS * 1000;
 		this.expirationDate.setTime(offset + shelfLifeInMS);
 	}
 
