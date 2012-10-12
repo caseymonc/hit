@@ -276,13 +276,13 @@ public class AddItemBatchController extends Controller implements
 			
 			itemController.addItem(i, storageUnit);
                         
-                        addItemData(new ItemData(i), storageUnit);
-                        addProductData(prodData);
+			addItemData(new ItemData(i), storageUnit);
+			addProductData(prodData);
 		}
                 
 		getView().setProducts(getAddedProducts());
 		getView().selectProduct(prodData);
-                selectedProductChanged();
+		selectedProductChanged();
 		setFieldsToDefault();
 	}
         

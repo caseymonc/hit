@@ -267,33 +267,33 @@ public class InventoryController extends Controller implements IInventoryControl
 		if (selectedContainer != null) {
 			products = sortProductByDescription(selectedContainer.getAllProducts());
 		} else {
-                        products = sortProductByDescription(pController.getAllProducts());
-                }
+			products = sortProductByDescription(pController.getAllProducts());
+		}
         
-                for (Product product : products) {
-                    ProductData productData = new ProductData();			
-                    productData.setBarcode(product.getBarCode().toString());
-                    int itemCount;
-                    if(selectedContainer != null) {
-                            itemCount = selectedContainer.getItemsByProduct(product).size();  
-                    } else {
-                        try {
-                            itemCount = pController.getItemsByProduct(product).size();
-                        }
-                        catch(Exception e) {
-                            itemCount = 0;
-                            getView().displayErrorMessage(e.getMessage());
-                        }
-                    }
-                    productData.setCount(Integer.toString(itemCount));
-                    productData.setDescription(product.getDescription());
-                    productData.setShelfLife(product.getShelfLife() + " months");
-                    productData.setSize(SizeFormatter.format(product.getSize()));
-                    productData.setSupply("10 count");
-                    productData.setTag(product);
+		for (Product product : products) {
+		    ProductData productData = new ProductData();			
+		    productData.setBarcode(product.getBarCode().toString());
+		    int itemCount;
+		    if(selectedContainer != null) {
+				  itemCount = selectedContainer.getItemsByProduct(product).size();  
+		    } else {
+			   try {
+				  itemCount = pController.getItemsByProduct(product).size();
+			   }
+			   catch(Exception e) {
+				  itemCount = 0;
+				  getView().displayErrorMessage(e.getMessage());
+			   }
+		    }
+		    productData.setCount(Integer.toString(itemCount));
+		    productData.setDescription(product.getDescription());
+		    productData.setShelfLife(product.getShelfLife() + " months");
+		    productData.setSize(SizeFormatter.format(product.getSize()));
+		    productData.setSupply("10 count");
+		    productData.setTag(product);
 
-                    productDataList.add(productData);
-                }
+		    productDataList.add(productData);
+		}
                 
 		getView().setProducts(productDataList.toArray(new ProductData[0]));
 		
