@@ -2,12 +2,15 @@ package gui.batches;
 
 import gui.common.*;
 import gui.inventory.*;
+import gui.item.ItemData;
 import gui.product.*;
+import java.util.Collection;
 import model.CoreObjectModel;
 import model.controllers.ItemController;
+import model.controllers.ProductController;
+import model.entities.Item;
 import model.entities.Product;
 import model.entities.ProductContainer;
-
 
 
 /**
@@ -18,6 +21,9 @@ public class TransferItemBatchController extends Controller implements
 	
 	CoreObjectModel COM;
 	ItemController itemController;
+	ProductController productController;
+	ProductContainerData _target;
+	
 	/**
 	 * Constructor.
 	 * 
@@ -28,6 +34,8 @@ public class TransferItemBatchController extends Controller implements
 		super(view);
 		COM = CoreObjectModel.getInstance();
 		itemController = COM.getItemController();
+		productController = COM.getProductController();
+		_target = target;
 		construct();
 	}
 	
@@ -50,14 +58,21 @@ public class TransferItemBatchController extends Controller implements
 	protected void loadValues() {
 		String barcodeToChange = getView().getBarcode();
 		ProductData selectedProduct = getView().getSelectedProduct();
-		if(barcodeToChange.length() == 12)
-		if(itemController.hasItem(barcodeToChange)){
-			getView().enableItemAction(true);
-		}	
-		else{
-			getView().displayErrorMessage("The entered barcode does not exist.");
+		if(selectedProduct != null)
+		{
+			getView().setItems(getItemsForView());
 		}
-		
+		ProductContainer container = (ProductContainer)_target.getTag();
+		ProductData prodData[] = getProductsForView(container);
+		getView().setProducts(prodData);
+		if(barcodeToChange.length() == 12) {
+			if(itemController.hasItem(barcodeToChange)){
+				getView().enableItemAction(true);
+			}	
+			else{
+				getView().displayErrorMessage("The entered barcode does not exist.");
+			}
+		}
 	}
 
 	/**
@@ -102,6 +117,7 @@ public class TransferItemBatchController extends Controller implements
 	 */
 	@Override
 	public void selectedProductChanged() {
+		loadValues();		
 	}
 	
 	/**
@@ -111,12 +127,43 @@ public class TransferItemBatchController extends Controller implements
 	@Override
 	public void transferItem() {
 		String barcodeOfItemToTransfer = getView().getBarcode();
-		ProductData productContainerToPutItemIn = getView().getSelectedProduct();
-		//How do I change ProductData item to a product? Or do I just grab the name
-		//from the productData and change the move item to accept a name to find a 
-		//product?
-		ProductContainer container = (ProductContainer) productContainerToPutItemIn.getTag();
+		ProductContainer container = (ProductContainer)_target.getTag();
+		ProductData prodData[] = getProductsForView(container);
+		getView().setProducts(prodData);
+		//getView().setItems(items);
+		System.out.println("This is the name of the container transfering to:"+container.getName());
 		itemController.moveItem(barcodeOfItemToTransfer, container);
+		loadValues();
+	}
+
+	private ProductData[] getProductsForView(ProductContainer container)
+	{
+		Collection<Product> products = container.getAllProducts();
+		ProductData prodData[] = new ProductData[products.size()];
+		int i=0;
+		for(Product p: products)
+		{
+			ProductData pd = new ProductData(p);
+			prodData[i] = pd;
+			++i;
+		}
+		return prodData;
+	}
+	private ItemData[] getItemsForView()
+	{
+		ProductData selectedProduct = getView().getSelectedProduct();
+		ProductContainer pc = (ProductContainer)_target.getTag();
+		Collection<Item> items = pc.getAllItems();
+		ItemData itemDataObjs[] = new ItemData[items.size()];
+		int i=0;
+		for(Item it: items)
+		{
+			ItemData theItem = new ItemData(it);
+			itemDataObjs[i] = theItem;
+			++i;
+		}
+		getView().setItems(itemDataObjs);
+		return itemDataObjs;
 	}
 	
 	/**
