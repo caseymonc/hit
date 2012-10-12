@@ -332,14 +332,30 @@ public class InventoryController extends Controller implements IInventoryControl
 		Product product = (Product) selectedProduct.getTag();
 		ProductContainer container = (ProductContainer) selectedContainer.getTag();
 		if (selectedProduct != null) {
-			List<Item> items = sortItemsByEntryDate(container.getItemsByProduct(product));
+			List<Item> items;
+                        if(container != null) {
+                            items = sortItemsByEntryDate(container.getItemsByProduct(product));
+                        } else {
+                            items = sortItemsByEntryDate((Set<Item>)pController.getItemsByProduct(product));
+                        }
 			for (Item item : items) {
 				ItemData data = new ItemData();
 				data.setBarcode(item.getBarCode().getBarCode());
 				data.setEntryDate(item.getEntryDate());
 				data.setExpirationDate(item.getExpirationDate());
-				data.setProductGroup(container.getName());
-				data.setStorageUnit(container.getStorageUnit().getName());
+                                
+                                String groupName = "";
+                                String unitName = "";
+                                ProductContainer cont = item.getContainer();
+                                if(cont instanceof ProductGroup){
+                                    groupName = cont.getName();
+                                }
+                                else{
+                                    unitName = cont.getName();
+                                }
+                                
+                                data.setProductGroup(groupName);
+				data.setStorageUnit(unitName);
 				data.setTag(item);
 				itemDataList.add(data);
 			}
@@ -583,7 +599,6 @@ public class InventoryController extends Controller implements IInventoryControl
 				productContainerSelectionChanged();
 			}else if (hint.getHint() == Hint.Value.Edit) {
 				productContainerSelectionChanged();
-                                getView().selectProduct(selectedProduct);
 			}else if (hint.getHint() == Hint.Value.Delete) {
 				productContainerSelectionChanged();
 			}
