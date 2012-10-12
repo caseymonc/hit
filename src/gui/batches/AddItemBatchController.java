@@ -154,8 +154,7 @@ public class AddItemBatchController extends Controller implements
 		String count = getView().getCount();
 		String barCode = getView().getBarcode(); //this is the product barcode
 		Date entryDate = getView().getEntryDate();
-		getView().enableItemAction(itemController.enableAddItem(count, 
-                        entryDate, barCode));
+		getView().enableItemAction(itemController.enableAddItem(count, entryDate, barCode));
 	}
 	
 	/**
@@ -197,18 +196,22 @@ public class AddItemBatchController extends Controller implements
 	 * 
 	 */
 	private boolean checkForValidBarCode() {
+		
+		timer.stop();
 		boolean isValid = false;
+		
 		String newProductBarCode = getView().getBarcode();
 		if(!newProductBarCode.equals(this.previousBarCode)) {
 			this.previousBarCode = newProductBarCode;
 			isValid = (newProductBarCode.length() == 12);
 		}
-		timer.stop();
- 		if(!isValid) {
+		
+ 		if(!(isValid || newProductBarCode.equals(""))) {
 			getView().displayErrorMessage("The scanned Barcode was read incorrectly. Please Rescan");
 			getView().setBarcode("");
 			this.previousBarCode = "";
 		}
+		
 		return isValid;
 	}
 	/**
@@ -286,48 +289,48 @@ public class AddItemBatchController extends Controller implements
 		setFieldsToDefault();
 	}
         
-        private void addProductData(ProductData prodData){
-            if(addedProducts.contains(prodData)){
-                int index = addedProducts.indexOf(prodData);
-                int count;
-                
-                try {
-                    count = Integer.parseInt(addedProducts.get(index).getCount());
-                }
-                catch (Exception e) {
-                    count = 0;
-                }
-                
-                count++;
-                addedProducts.get(index).setCount(Integer.toString(count));
-            } else {
-                prodData.setCount("1");
-                addedProducts.add(prodData);
-            }
-        }
-        
-        private void addItemData(ItemData itemData, StorageUnit storageUnit) {
-            itemData.setStorageUnit(storageUnit.getName());
-            addedItems.add(itemData);
-        }
-        
-        private ProductData[] getAddedProducts() {
-            return addedProducts.toArray(new ProductData[addedProducts.size()]);
-        }
-        
-        private ItemData[] getAddedItemsByProduct(ProductData prodData) {
-            List<ItemData> itemDatas = new ArrayList<ItemData>();
-            
-            for(ItemData i : addedItems) {
-                Item item = (Item)i.getTag();
-                String barcode = item.getProduct().getBarCode().getBarCode();
-                if(barcode.equals(prodData.getBarcode())) {
-                    itemDatas.add(i);
-                }
-            }
-            
-            return itemDatas.toArray(new ItemData[itemDatas.size()]);
-        }
+	private void addProductData(ProductData prodData){
+	    if(addedProducts.contains(prodData)){
+		   int index = addedProducts.indexOf(prodData);
+		   int count;
+
+		   try {
+			  count = Integer.parseInt(addedProducts.get(index).getCount());
+		   }
+		   catch (Exception e) {
+			  count = 0;
+		   }
+
+		   count++;
+		   addedProducts.get(index).setCount(Integer.toString(count));
+	    } else {
+		   prodData.setCount("1");
+		   addedProducts.add(prodData);
+	    }
+	}
+
+	private void addItemData(ItemData itemData, StorageUnit storageUnit) {
+	    itemData.setStorageUnit(storageUnit.getName());
+	    addedItems.add(itemData);
+	}
+
+	private ProductData[] getAddedProducts() {
+	    return addedProducts.toArray(new ProductData[addedProducts.size()]);
+	}
+
+	private ItemData[] getAddedItemsByProduct(ProductData prodData) {
+	    List<ItemData> itemDatas = new ArrayList<ItemData>();
+
+	    for(ItemData i : addedItems) {
+		   Item item = (Item)i.getTag();
+		   String barcode = item.getProduct().getBarCode().getBarCode();
+		   if(barcode.equals(prodData.getBarcode())) {
+			  itemDatas.add(i);
+		   }
+	    }
+
+	    return itemDatas.toArray(new ItemData[itemDatas.size()]);
+	}
         
 	/**
 	 * This method is called when the user clicks the "Redo" button
