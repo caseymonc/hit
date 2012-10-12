@@ -22,6 +22,10 @@ import model.persistence.PersistentItem;
  */
 public class ProductGroupManager implements PersistentItem{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3631093947484619818L;
 	private Map<ProductContainer, Map<String,ProductGroup>> productGroupsByProductContainer;
 	private Map<StorageUnit,Set<ProductGroup>> productGroupsByStorageUnit;
 	private Set<ProductGroup> productGroups;

@@ -13,6 +13,10 @@ import model.persistence.PersistentItem;
 
 public class StorageUnit extends ProductContainer{
 	
+/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8718966701579021413L;
 private Map<Product, ProductContainer> productContainerByProduct;
 	
 	/** Constructor
@@ -74,7 +78,7 @@ private Map<Product, ProductContainer> productContainerByProduct;
 	 * @param product
 	 * @param productContainer
 	 */
-	public void setProductForContainer(Product product, ProductContainer productContainer) {
+	public void setContainerByProduct(Product product, ProductContainer productContainer) {
 		productContainerByProduct.put(product, productContainer);
 	}
 
@@ -83,7 +87,7 @@ private Map<Product, ProductContainer> productContainerByProduct;
 	 * @param product the index
 	 * @return the ProductContainer that is indexed by product
 	 */
-	public ProductContainer getProductGroupByProduct(Product product){
+	public ProductContainer getContainerByProduct(Product product){
 		assert(product != null);
 		
 		return productContainerByProduct.get(product);

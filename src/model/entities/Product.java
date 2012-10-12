@@ -23,6 +23,10 @@ import model.persistence.PersistentItem;
 public class Product implements PersistentItem {
 
 	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 976051463569069390L;
+	/**
 	 * Description of the Product. Must be non-empty.
 	 */
 	private String description;
@@ -293,6 +297,10 @@ public class Product implements PersistentItem {
 		}
 	}
 
+	public String toString(){
+		return this.getDescription();
+	}
+	
 	/*@Override
 	public int hashCode() {
 		return this.barCode.hashCode();

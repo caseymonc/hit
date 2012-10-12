@@ -142,7 +142,7 @@ public class ItemControllerTest {
 		ProductGroup destination1 = new ProductGroup("ContainsProduct",rootUnit, new Size(Unit.count, 2));
 		PGC.addProductGroup(destination1, rootUnit);
 		destination1.addProduct(p);
-		rootUnit.setProductForContainer(p, destination1);
+		rootUnit.setContainerByProduct(p, destination1);
 		
 		Item i = new Item(b, new Date(), null, p, null);
 		IC.addItem(i,rootUnit);
@@ -157,7 +157,7 @@ public class ItemControllerTest {
 		
 		Product p2 = new Product("NewProduct", new BarCode("222222222222"),0,5,new Size(Unit.quarts, 5));
 		Item i2 = new Item(new BarCode("111111111111"), new Date(), null, p2, rootUnit);
-		rootUnit.setProductForContainer(p2,rootUnit);
+		rootUnit.setContainerByProduct(p2,rootUnit);
 		IC.addItem(i2, rootUnit);
 		
 		//i2 should be in the destination storage unit
@@ -211,9 +211,9 @@ public class ItemControllerTest {
 		//add some items of that product to the product group
 		Product p2 = new Product("Second Product", new BarCode("222222222223"),0,2,new Size(Unit.count, 1));
 		moveToGroup.addProduct(p2);
-		containingUnit.setProductForContainer(p2,moveToGroup);
+		containingUnit.setContainerByProduct(p2,moveToGroup);
 		originalUnit.addProduct(p2);
-		originalUnit.setProductForContainer(p2,originalUnit);
+		originalUnit.setContainerByProduct(p2,originalUnit);
 
 		Item i2 = new Item(new BarCode("111111111112"), new Date(), null, p2, null);
 		IC.addItem(i2, originalUnit);

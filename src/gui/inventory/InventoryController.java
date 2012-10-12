@@ -300,6 +300,7 @@ public class InventoryController extends Controller implements IInventoryControl
                 }
                 
 
+
 		getView().setProducts(productDataList.toArray(new ProductData[0]));
 		
 		getView().setItems(new ItemData[0]);
@@ -358,6 +359,7 @@ public class InventoryController extends Controller implements IInventoryControl
 				data.setStorageUnit(unitName);
 				data.setTag(item);
 				itemDataList.add(data);
+
 			}
 		}
 		getView().setItems(itemDataList.toArray(new ItemData[0]));
@@ -551,8 +553,9 @@ public class InventoryController extends Controller implements IInventoryControl
 										ProductContainerData containerData) {	
 		ProductContainer targetContainer = (ProductContainer) containerData.getTag();
 		Product product = (Product) productData.getTag();
-		StorageUnit targetUnit = targetContainer.getStorageUnit();
-		pController.moveProductToContainer(product, targetContainer);
+		ProductContainer currentContainer = 
+			(ProductContainer) getView().getSelectedProductContainer().getTag();
+		pController.moveProductToContainer(product, targetContainer, currentContainer);
 		
 	}
 
@@ -579,9 +582,8 @@ public class InventoryController extends Controller implements IInventoryControl
          */
 	@Override
 	public void update(Observable oObj, Object hint) {
-		System.out.println("Notified Observers");
-		if ((oObj instanceof StorageUnitController 
-				|| oObj instanceof ProductGroupController)) {
+		if((oObj instanceof StorageUnitController 
+				|| oObj instanceof ProductGroupController)){
 			updateProductContainer(hint);
 		}else if (oObj instanceof ProductController) {
 			updateProduct(hint);
@@ -600,6 +602,8 @@ public class InventoryController extends Controller implements IInventoryControl
 			}else if (hint.getHint() == Hint.Value.Edit) {
 				productContainerSelectionChanged();
 			}else if (hint.getHint() == Hint.Value.Delete) {
+				productContainerSelectionChanged();
+			}else if(hint.getHint() == Hint.Value.Move){
 				productContainerSelectionChanged();
 			}
 		}

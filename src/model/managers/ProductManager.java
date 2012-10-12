@@ -22,6 +22,10 @@ import model.persistence.PersistentItem;
 public class ProductManager implements PersistentItem{
 
     /**
+	 * 
+	 */
+	private static final long serialVersionUID = -3617796467364037057L;
+	/**
      * Map of products indexed by their BarCodes
      */
     Map<BarCode, Product> productsByBarCode;
@@ -117,16 +121,18 @@ public class ProductManager implements PersistentItem{
         }
 
         // Check to see if p is already contained somewhere in c's storage unit
-        Set<ProductContainer> containers = p.getContainers();
-        
+        Set<ProductContainer> containerSet = p.getContainers();
+        ProductContainer[] containers = containerSet.toArray(new ProductContainer[0]);
+        System.out.println("Containers: " + containers);
         for(ProductContainer container : containers){
             if(container.getStorageUnit().equals(c.getStorageUnit())){
-                container.removeProduct(p);
+                container.moveProduct(p);
                 p.removeProductContainer(container);
             }
         }
         assert(!p.getContainers().contains(c));
         
+        c.getStorageUnit().setContainerByProduct(p, c);
         p.addProductContainer(c);
         c.addProduct(p);
     }

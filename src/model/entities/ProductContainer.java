@@ -113,13 +113,12 @@ public abstract class ProductContainer implements PersistentItem{
 	 */
 	private void putItem(Item item){
 		item.getProduct().addProductContainer(this);
-		getStorageUnit().setProductForContainer(item.getProduct(), this);
+		getStorageUnit().setContainerByProduct(item.getProduct(), this);
 		products.put(item.getProduct().getBarCode(), item.getProduct());
 		items.put(item.getBarCode(), item);
 		putItemByProduct(item);
 		item.setContainer(this);
 		
-		System.out.println(products.toString());
 	}
 	
 	/**
@@ -129,6 +128,7 @@ public abstract class ProductContainer implements PersistentItem{
 	private void putItemByProduct(Item item) {
 		Set<Item> items = itemsByProduct.get(item.getProduct());
 		if(items == null){
+			
 			items = new HashSet<Item>();
 		}
 		
@@ -155,7 +155,6 @@ public abstract class ProductContainer implements PersistentItem{
 	 * @return false of the item cannot be removed
 	 */
 	public boolean canRemoveItem(Item item) {
-		System.out.println("PC canRemoveItem");
 		if(items.containsKey(item.getBarCode())) {
 
 			return true;
@@ -168,7 +167,6 @@ public abstract class ProductContainer implements PersistentItem{
 	  * @param item the item to remove
 	  */
 	public void removeItem(Item item) {
-		System.out.println("PC removeItem");
 		assert(item != null);
 		
 		if(item == null){
@@ -181,7 +179,8 @@ public abstract class ProductContainer implements PersistentItem{
 			throw new IllegalArgumentException("The Item is not in this container" + this.name);
 		}
 		
-		itemsByProduct.get(item.getProduct()).remove(item);
+		if(itemsByProduct.get(item.getProduct()) != null)
+			itemsByProduct.get(item.getProduct()).remove(item);
 		items.remove(item.getBarCode());
 		
 	 }
@@ -225,19 +224,25 @@ public abstract class ProductContainer implements PersistentItem{
 		
 		ProductContainer targetContainer = this;
 		StorageUnit targetUnit = this.getStorageUnit();
-		ProductContainer oldContainer = targetUnit.getProductGroupByProduct(product);
+		ProductContainer oldContainer = targetUnit.getContainerByProduct(product);
 		if(oldContainer != null)
 			oldContainer.moveProduct(product, this);
 		products.put(product.getBarCode(), product);
+	}
+	
+	public void removeProductFromContainer(Product product, ProductContainer container){
+		this.itemsByProduct.remove(product);
+		this.products.remove(product.getBarCode());
 	}
 	
 	public void moveProduct(Product product, ProductContainer container){
 		Set<Item> items = this.getItemsByProduct(product);
 		this.itemsByProduct.remove(product);
 		this.products.remove(product.getBarCode());
-		for(Item item : items){
-			container.putItem(item);
-		}
+		if(items != null)
+			for(Item item : items){
+				container.putItem(item);
+			}
 	}
 	
 	/**
@@ -273,9 +278,14 @@ public abstract class ProductContainer implements PersistentItem{
 		
 		if(!canRemoveProduct(product)) {
 
-			throw new IllegalArgumentException("The Product is not in this container");
+			throw new IllegalArgumentException("The Product is not in this container " + getName());
 		}
 		
+		products.remove(product.getBarCode());
+		itemsByProduct.remove(product);
+	}
+	
+	public void moveProduct(Product product){
 		products.remove(product.getBarCode());
 		itemsByProduct.remove(product);
 	}
