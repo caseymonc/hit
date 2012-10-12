@@ -332,35 +332,34 @@ public class InventoryController extends Controller implements IInventoryControl
 	 */
 	@Override
 	public void itemSelectionChanged() {
-		List<ItemData> itemDataList = new ArrayList<ItemData>();
-		
-		String selectedItemBarCode = getView().getSelectedItem().getBarcode();
-		
-		ProductData selectedProduct = getView().getSelectedProduct();
-		Product product = (Product) selectedProduct.getTag();
 
-		ProductContainerData selectedContainer = getView().getSelectedProductContainer();
-		ProductContainer container = (ProductContainer) selectedContainer.getTag();
+		Product p = (Product)getView().getSelectedProduct().getTag();
+		ProductContainer pc = (ProductContainer)getView().getSelectedProductContainer().getTag();
+		
+		List<Item> items = sortItemsByEntryDate(pc.getItemsByProduct(p));
+		List<ItemData> itemDataList = new ArrayList<ItemData>();
+
+		String selectedItemBarCode = getView().getSelectedItem().getBarcode();
 		ItemData selectedItem = null;
 		
-		if (selectedProduct != null) {
-			List<Item> items = sortItemsByEntryDate(container.getItemsByProduct(product));
-			for (Item item : items) {
-				ItemData data = new ItemData();
-				String barCode = item.getBarCode().getBarCode();
-				data.setBarcode(barCode);
-				if (barCode.equalsIgnoreCase(selectedItemBarCode)) {
-					selectedItem = data;
-				}
-				data.setEntryDate(item.getEntryDate());
-				data.setExpirationDate(item.getExpirationDate());
-				data.setProductGroup(container.getName());
-				data.setStorageUnit(container.getStorageUnit().getName());
-				data.setTag(item);
-				itemDataList.add(data);
+		for (Item item : items) {
 			
+			ItemData data = new ItemData();
+			String barCode = item.getBarCode().getBarCode();
+			
+			data.setBarcode(barCode);
+			if (barCode.equalsIgnoreCase(selectedItemBarCode)) {
+				selectedItem = data;
 			}
+			
+			data.setEntryDate(item.getEntryDate());
+			data.setExpirationDate(item.getExpirationDate());
+			data.setProductGroup(pc.getName());
+			data.setStorageUnit(pc.getStorageUnit().getName());
+			data.setTag(item);
+			itemDataList.add(data);
 		}
+		
 		getView().setItems(itemDataList.toArray(new ItemData[0]));
 		getView().selectItem(selectedItem);
 	}
@@ -571,21 +570,21 @@ public class InventoryController extends Controller implements IInventoryControl
 	private void updateItem(Object observerHint) {
 		ProductContainerData selectedData = getView().getSelectedProductContainer();
 		if (observerHint instanceof Hint) {
-			
+			System.out.println("Updating item");
 			Hint hint = (Hint)observerHint;
 			Item item = (Item)hint.getExtra();
 			
 			if (hint.getHint() == Hint.Value.Add) {
 				
-				itemSelectionChanged();
+				productContainerSelectionChanged();
 				
 			} else if (hint.getHint() == Hint.Value.Edit) {
 				
 				itemSelectionChanged();
 			
 			} else if (hint.getHint() == Hint.Value.Delete) {
-				
 				productSelectionChanged();
+				productContainerSelectionChanged();
 			
 			} else if (hint.getHint() == Hint.Value.Move) {
 				

@@ -78,11 +78,15 @@ public class AddItemBatchController extends Controller implements
 		productController = COM.getProductController();
 		itemController = COM.getItemController();
 
-                addedItems = new ArrayList<ItemData>();
-                addedProducts = new ArrayList<ProductData>();
+          addedItems = new ArrayList<ItemData>();
+          addedProducts = new ArrayList<ProductData>();
                 
 		construct();
 		getView().enableItemAction(false);
+		getView().setUseScanner(true);
+		getView().setCount("1");
+		getView().enableUndo(false);
+		getView().enableRedo(false);
 	}
 
 	/**
@@ -224,9 +228,10 @@ public class AddItemBatchController extends Controller implements
                         addProductData(prodData);
 		}
                 
-                getView().setProducts(getAddedProducts());
-                getView().selectProduct(prodData);
-                selectedProductChanged();
+		getView().setProducts(getAddedProducts());
+		getView().selectProduct(prodData);
+		selectedProductChanged();
+		
 	}
         
         private void addProductData(ProductData prodData){
