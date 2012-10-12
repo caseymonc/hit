@@ -392,6 +392,11 @@ public class InventoryController extends Controller implements IInventoryControl
 	 */
 	@Override
 	public void deleteProduct() {
+                Product p = (Product)getView().getSelectedProduct().getTag();
+                ProductContainer c = 
+                        (ProductContainer)getView().getSelectedProductContainer().getTag();
+                pController.removeProductFromContainer(p, c);
+                productContainerSelectionChanged();
 	}
 
 	/**
