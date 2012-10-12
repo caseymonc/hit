@@ -281,8 +281,8 @@ public class AddItemBatchController extends Controller implements
 		}
                 
 		getView().setProducts(getAddedProducts());
-		selectedProductChanged();
 		getView().selectProduct(prodData);
+                selectedProductChanged();
 		setFieldsToDefault();
 	}
         
