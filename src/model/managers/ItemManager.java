@@ -5,12 +5,8 @@
 package model.managers;
 
 import java.util.HashMap;
-
-import model.entities.Item;
 import model.entities.BarCode;
-import model.entities.ProductGroup;
-import model.entities.ProductContainer;
-import model.entities.StorageUnit;
+import model.entities.Item;
 import model.persistence.PersistentItem;
 
 
@@ -41,7 +37,7 @@ public class ItemManager implements PersistentItem
 	
 	public Item getItemByBarCode(BarCode barcode)
 	{
-		return null;
+		return itemsByBarCode.get(barcode);
 	}
 	
 	/** adds the item

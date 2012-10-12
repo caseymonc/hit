@@ -13,11 +13,8 @@ public class TransferItemBatchView extends ItemBatchView implements ITransferIte
 	
 	public TransferItemBatchView(GUI parent, DialogBox dialog, ProductContainerData target) {
 		super(parent, dialog);
-	
 		_target = target;
-		
 		construct();
-
 		_controller = new TransferItemBatchController(this, target);
 	}
 

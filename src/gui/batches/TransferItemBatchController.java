@@ -3,6 +3,11 @@ package gui.batches;
 import gui.common.*;
 import gui.inventory.*;
 import gui.product.*;
+import model.CoreObjectModel;
+import model.controllers.ItemController;
+import model.entities.Product;
+
+
 
 /**
  * Controller class for the transfer item batch view.
@@ -10,6 +15,8 @@ import gui.product.*;
 public class TransferItemBatchController extends Controller implements
 		ITransferItemBatchController {
 	
+	CoreObjectModel COM;
+	ItemController itemController;
 	/**
 	 * Constructor.
 	 * 
@@ -18,7 +25,8 @@ public class TransferItemBatchController extends Controller implements
 	 */
 	public TransferItemBatchController(IView view, ProductContainerData target) {
 		super(view);
-
+		COM = CoreObjectModel.getInstance();
+		itemController = COM.getItemController();
 		construct();
 	}
 	
@@ -39,6 +47,15 @@ public class TransferItemBatchController extends Controller implements
 	 */
 	@Override
 	protected void loadValues() {
+		String barcodeToChange = getView().getBarcode();
+		ProductData selectedProduct = getView().getSelectedProduct();
+		if(itemController.hasItem(barcodeToChange)){
+			getView().enableItemAction(true);
+		}	
+		else{
+			getView().displayErrorMessage("The entered barcode does not exist.");
+		}
+		
 	}
 
 	/**
@@ -53,6 +70,11 @@ public class TransferItemBatchController extends Controller implements
 	 */
 	@Override
 	protected void enableComponents() {
+		String barCode = getView().getBarcode();
+		if(barCode.length() == 12)
+			loadValues();
+		else
+			getView().enableItemAction(false);
 	}
 
 	/**
@@ -61,6 +83,7 @@ public class TransferItemBatchController extends Controller implements
 	 */
 	@Override
 	public void barcodeChanged() {
+		enableComponents();
 	}
 	
 	/**
@@ -85,6 +108,12 @@ public class TransferItemBatchController extends Controller implements
 	 */
 	@Override
 	public void transferItem() {
+		String barcodeOfItemToTransfer = getView().getBarcode();
+		ProductData productContainerToPutItemIn = getView().getSelectedProduct();
+		//How do I change ProductData item to a product? Or do I just grab the name
+		//from the productData and change the move item to accept a name to find a 
+		//product?
+		itemController.moveItem(barcodeOfItemToTransfer, null);
 	}
 	
 	/**

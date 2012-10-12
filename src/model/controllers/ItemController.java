@@ -104,7 +104,9 @@ public class ItemController extends ModelController {
 	 * @param pc
 	 * @throws CannotMoveItemException 
 	 */
-	public void moveItem(Item i, ProductContainer target) {
+	public void moveItem(String barcode, ProductContainer target) {
+		BarCode bc = new BarCode(barcode);
+		Item i = IM.getItemByBarCode(bc);
 		SC.moveItem(i,target.getStorageUnit());
 		this.setChanged();
 		this.notifyObservers(new Hint(i, Hint.Value.Move));
@@ -116,7 +118,8 @@ public class ItemController extends ModelController {
 	 * @param pc 
 	 */
 	public void transferItem(Item i, ProductContainer target) {
-		moveItem(i, target);
+		String bc = i.getBarCode().getBarCode();
+		moveItem(bc, target);
 	}
 	
 	/**
@@ -189,6 +192,14 @@ public class ItemController extends ModelController {
 		i.calculateExpirationDate();
 		this.setChanged();
 		this.notifyObservers(new Hint(i, Hint.Value.Edit));
+	}
+	
+	public boolean hasItem(String barcode)
+	{
+		BarCode b = new BarCode(barcode);
+		if (!b.isValid())
+			return false;
+		return IM.getItemByBarCode(b) != null;
 	}
 
 }
