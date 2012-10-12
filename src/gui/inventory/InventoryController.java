@@ -266,6 +266,7 @@ public class InventoryController extends Controller implements IInventoryControl
                 Collection<Product> products;
 		if (selectedContainer != null) {
 			products = sortProductByDescription(selectedContainer.getAllProducts());
+
 		} else {
 			products = sortProductByDescription(pController.getAllProducts());
 		}
@@ -369,8 +370,11 @@ public class InventoryController extends Controller implements IInventoryControl
 
 		Product p = (Product)getView().getSelectedProduct().getTag();
 		ProductContainer pc = (ProductContainer)getView().getSelectedProductContainer().getTag();
-		
-		List<Item> items = sortItemsByEntryDate(pc.getItemsByProduct(p));
+		List<Item> items;
+		if(pc != null)
+			items = sortItemsByEntryDate(pc.getItemsByProduct(p));
+		else
+			items = sortItemsByEntryDate((Set<Item>)pController.getItemsByProduct(p));
 		List<ItemData> itemDataList = new ArrayList<ItemData>();
 
 		String selectedItemBarCode = getView().getSelectedItem().getBarcode();
@@ -388,8 +392,8 @@ public class InventoryController extends Controller implements IInventoryControl
 			
 			data.setEntryDate(item.getEntryDate());
 			data.setExpirationDate(item.getExpirationDate());
-			data.setProductGroup(pc.getName());
-			data.setStorageUnit(pc.getStorageUnit().getName());
+			data.setProductGroup(item.getContainer().getName());
+			data.setStorageUnit(item.getContainer().getStorageUnit().getName());
 			data.setTag(item);
 			itemDataList.add(data);
 		}
@@ -627,7 +631,6 @@ public class InventoryController extends Controller implements IInventoryControl
 		ProductContainerData selectedData = getView().getSelectedProductContainer();
                 ProductData selectedProduct = getView().getSelectedProduct();
 		if (observerHint instanceof Hint) {
-			System.out.println("Updating item");
 			Hint hint = (Hint)observerHint;
 			Item item = (Item)hint.getExtra();
 			
