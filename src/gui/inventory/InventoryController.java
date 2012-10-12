@@ -314,10 +314,9 @@ public class InventoryController extends Controller implements IInventoryControl
 				Size tmSupply = ((ProductGroup) selectedContainer).getThreeMonthSupply();
 				getView().setContextSupply(SizeFormatter.format(tmSupply));
 			}
+		} else {
+			   getView().setContextUnit("All");
 		}
-                else {
-                        getView().setContextUnit("All");
-                }
 	}
 
 	/**
@@ -625,13 +624,13 @@ public class InventoryController extends Controller implements IInventoryControl
 			
 			} else if (hint.getHint() == Hint.Value.Delete) {
 				productContainerSelectionChanged();
-                                getView().selectProduct(selectedProduct);
-                                productSelectionChanged();
-			
+				getView().selectProduct(selectedProduct);
+				productSelectionChanged();
+
 			} else if (hint.getHint() == Hint.Value.Move) {
 				productContainerSelectionChanged();
-                                getView().selectProduct(selectedProduct);
-                                productSelectionChanged();
+				getView().selectProduct(selectedProduct);
+				productSelectionChanged();
 			}
 		}
 	}

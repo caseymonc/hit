@@ -82,13 +82,19 @@ public class AddItemBatchController extends Controller implements
           addedProducts = new ArrayList<ProductData>();
                 
 		construct();
+		setFieldsToDefault();
+	}
+	/**
+	 * 
+	 */
+	private void setFieldsToDefault() {
 		getView().enableItemAction(false);
 		getView().setUseScanner(true);
 		getView().setCount("1");
 		getView().enableUndo(false);
 		getView().enableRedo(false);
+		getView().setBarcode("");
 	}
-
 	/**
 	 * Returns a reference to the view for this controller.
 	 */
@@ -229,9 +235,9 @@ public class AddItemBatchController extends Controller implements
 		}
                 
 		getView().setProducts(getAddedProducts());
-		getView().selectProduct(prodData);
 		selectedProductChanged();
-		
+		getView().selectProduct(prodData);
+		setFieldsToDefault();
 	}
         
         private void addProductData(ProductData prodData){
