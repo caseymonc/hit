@@ -452,7 +452,7 @@ public abstract class ItemBatchView extends DialogView {
 			for (int i = 0; i < productTableModel.getRowCount(); ++i) {
 				ProductFormatter formatter = (ProductFormatter)productTableModel.getValueAt(i, 0);
 				ProductData pd = (ProductData)formatter.getTag();
-				if (pd == product) {
+				if (pd.equals(product)) {
 					TableOperations.selectTableRow(productTable, i);
 					return;
 				}
