@@ -412,6 +412,18 @@ public class InventoryController extends Controller implements IInventoryControl
 		return sortedItems;
 	}
 	
+        /**
+         * 
+         */
+        private List<Product> sortProductByDescription(Set<Product> products) {
+                List<Product> sortedProducts = new ArrayList<Product>();
+                for(Product product : products) {
+                        sortedProducts.add(product);
+                }
+                Collections.sort(sortedProducts, new Product.ProductComparator());
+                return sortedProducts;
+        }
+        
 	/**
 	 * Returns true if and only if the "Delete Product" menu item should be enabled.
 	 */

@@ -1,6 +1,7 @@
 package model.entities;
 
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashSet;
@@ -293,9 +294,19 @@ public class Product implements PersistentItem {
 		}
 	}
 
-	/*@Override
-	public int hashCode() {
-		return this.barCode.hashCode();
-	}*/
+	public static class ProductComparator implements Comparator {
+
+		@Override
+		public int compare(Object o1, Object o2) {
+			if ( !(o1 instanceof Product && o2 instanceof Product)) {
+				throw new ClassCastException();
+			}
+			
+			Product p1 = (Product)o1;
+			Product p2 = (Product)o2;
+                        
+                        return p1.getDescription().compareTo(p2.getDescription());
+		}
+	}
 
 }
