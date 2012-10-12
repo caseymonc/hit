@@ -18,6 +18,11 @@ public class ItemManager implements PersistentItem
 {
 	
 	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8816747283776538422L;
+
+	/**
 	 *  Maps each barcode to its item. all unremoved items belong here
 	 */
 	private HashMap<BarCode, Item> itemsByBarCode;

@@ -8,6 +8,11 @@ import java.io.Serializable;
  */
 public class Size implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1163709499282771933L;
+
 	/** The unit of measurement.
 	 * Can be any of the following: count, pounds, ounces, grams, kilograms, 
 	 * gallons, quarts, pints, fluid, ounces, liters.

@@ -1,6 +1,7 @@
 
 package model.controllers;
 
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -93,20 +94,70 @@ public class ProductController extends ModelController{
         */
         public void addProductToContainer(Product p, ProductContainer c)
                throws IllegalArgumentException {
-            productManager.addProductToContainer(p, c);
+        	try{
+        		productManager.addProductToContainer(p, c);
+        	}catch(Exception e){
+        		e.printStackTrace();
+        	}
         }
         
-        public void moveProductToContainer(Product product, ProductContainer targetContainer){
+        public void moveProductToContainer(Product product, ProductContainer targetContainer
+        												, ProductContainer currentContainer){
+        	if(targetContainer == currentContainer)
+        		return;
+        	        	
         	StorageUnit targetUnit = targetContainer.getStorageUnit();
-        	ProductContainer currentContainer = targetUnit.getProductGroupByProduct(product);
-        	if(currentContainer == null){
+        	ProductContainer currentContainerInTargetUnit = 
+        					targetUnit.getContainerByProduct(product);
+        	
+        	boolean needsToBeRemovedFromStorageUnit = 
+        				targetUnit != currentContainer.getStorageUnit();
+        	//Just add
+        	if(currentContainerInTargetUnit == null){
         		addProductToContainer(product, targetContainer);
-        	}else{
-        		//Move the Product and all associated Items from 
-        		//their old Product Container to the Target
-        		//Product Container
-        		targetUnit.moveProduct(product, targetContainer);
+        	}else if(currentContainerInTargetUnit != targetContainer){
+        		//Move all items in sibling container
+        		Set<Item> itemSet = currentContainerInTargetUnit.getItemsByProduct(product);
+        		addProductToContainer(product, targetContainer);
+        		if(itemSet != null){
+	        		Item[] items = new Item[itemSet.size()];
+	        		int i = 0;
+	        		for(Item item : itemSet){
+	        			items[i] = item;
+	        			i++;
+	        		}
+	        			        		
+	        		for(Item item : items){
+	        			model.getStorageUnitController().moveItem(item, targetUnit);
+	        		}
+        		}
         	}
+        	
+        	Set<Item> itemSet = currentContainer.getItemsByProduct(product);
+
+        	if(itemSet != null){
+	        	Item[] items = new Item[itemSet.size()];
+	        	int i = 0;
+	    		for(Item item : itemSet){
+	    			items[i] = item;
+	    			i++;
+	    		}
+	        	for(Item item : items){
+	        		model.getStorageUnitController().moveItem(item, targetUnit);
+	    		}
+        	}
+        	
+        	product.removeProductContainer(currentContainer);
+        	
+        	if(currentContainer.canRemoveProduct(product))
+        		currentContainer.removeProduct(product);
+        	
+        	if(needsToBeRemovedFromStorageUnit){
+	        	currentContainer.getStorageUnit().setContainerByProduct(product, null);
+        	}
+        	
+        	this.setChanged();
+        	this.notifyObservers(new Hint(product, Hint.Value.Move));
         }
         
         /**

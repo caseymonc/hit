@@ -172,7 +172,7 @@ public class StorageUnitControllerTest {
 		unit.addItem(item2);
 		
 		group2.addProduct(product2);
-		unit.setProductForContainer(product2, group2);
+		unit.setContainerByProduct(product2, group2);
 		
 		unit.addItem(item3);
 		unit.addItem(item4);

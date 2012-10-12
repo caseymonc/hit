@@ -27,6 +27,7 @@ public class EditItemView extends ItemView implements IEditItemView {
 
 	@Override
 	protected void cancel() {
+		
 		return;
 	}
 

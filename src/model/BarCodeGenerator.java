@@ -10,6 +10,10 @@ import model.persistence.PersistentItem;
  */
 public class BarCodeGenerator implements PersistentItem {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2476371904716914286L;
 	/** Singleton instance of BarCodeGenerator*/
 	private static BarCodeGenerator _instance;
 	//private int lastBarCode;

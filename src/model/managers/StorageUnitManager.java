@@ -20,10 +20,11 @@ import model.persistence.PersistentItem;
  */
 public class StorageUnitManager implements PersistentItem{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7094239995948263377L;
 	private Map<String,StorageUnit> storageUnits;
-	private Map<Item,StorageUnit> storageUnitByItem;
-	private Map<Product,Set<StorageUnit>> storageUnitsByProduct;
-	private Map<Product, ProductGroup> productByProductGroup;
 	
 	/** Constructor */
 	public StorageUnitManager(){
