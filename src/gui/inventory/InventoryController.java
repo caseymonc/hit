@@ -357,6 +357,7 @@ public class InventoryController extends Controller implements IInventoryControl
 				data.setTag(item);
 				itemDataList.add(data);
 
+
 			}
 		}
 		getView().setItems(itemDataList.toArray(new ItemData[0]));
@@ -579,7 +580,6 @@ public class InventoryController extends Controller implements IInventoryControl
          */
 	@Override
 	public void update(Observable oObj, Object hint) {
-
 		if((oObj instanceof StorageUnitController 
 				|| oObj instanceof ProductGroupController)){
 			updateProductContainer(hint);
@@ -600,6 +600,8 @@ public class InventoryController extends Controller implements IInventoryControl
 			}else if (hint.getHint() == Hint.Value.Edit) {
 				productContainerSelectionChanged();
 			}else if (hint.getHint() == Hint.Value.Delete) {
+				productContainerSelectionChanged();
+			}else if(hint.getHint() == Hint.Value.Move){
 				productContainerSelectionChanged();
 			}else if(hint.getHint() == Hint.Value.Move){
 				productContainerSelectionChanged();
