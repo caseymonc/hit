@@ -4,10 +4,13 @@ import gui.common.*;
 import gui.inventory.*;
 import gui.item.ItemData;
 import gui.product.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import javax.swing.Timer;
 import model.BarCodeGenerator;
 import model.CoreObjectModel;
 import model.controllers.*;
@@ -51,18 +54,28 @@ public class AddItemBatchController extends Controller implements
 	 */
 	ItemController itemController;
         
-        /**
-         * list of ItemDatas used by the GUI to show what items were added during 
-         * the batch.
-         */
-        List<ItemData> addedItems;
-        
-        /**
-         * list of ProductDatas used by the GUI to show what products were added
-         * during the batch.
-         */
-        List<ProductData> addedProducts;
-        
+	/**
+	 * list of ItemDatas used by the GUI to show what items were added during 
+	 * the batch.
+	 */
+	List<ItemData> addedItems;
+
+	/**
+	 * list of ProductDatas used by the GUI to show what products were added
+	 * during the batch.
+	 */
+	List<ProductData> addedProducts;
+     
+	/**
+	 * the timer needed to track barcode scanner induced add item 
+	 */
+	Timer timer;
+	
+	/**
+	 * Barcode for use to check if the barcode actually changed
+	 */
+	String previousBarCode;
+
 	/**
 	 * Constructor.
 	 * 
@@ -82,6 +95,16 @@ public class AddItemBatchController extends Controller implements
           addedProducts = new ArrayList<ProductData>();
                 
 		construct();
+
+		timer = new Timer(100, new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent evt) {
+				if(checkForValidBarCode()) {
+					addItem();
+				}
+			}
+		});
+		timer.setInitialDelay(1000);
 		setFieldsToDefault();
 	}
 	/**
@@ -94,6 +117,7 @@ public class AddItemBatchController extends Controller implements
 		getView().enableUndo(false);
 		getView().enableRedo(false);
 		getView().setBarcode("");
+		previousBarCode = "";
 	}
 	/**
 	 * Returns a reference to the view for this controller.
@@ -158,16 +182,42 @@ public class AddItemBatchController extends Controller implements
 	 */
 	@Override
 	public void barcodeChanged() {
+		if(getView().getUseScanner()) {
+			//start
+			if(timer.isRunning()) {
+				timer.restart();
+			} else {
+				timer.start();
+			}
+		}
 		enableComponents();
 	}
-
+	
+	/**
+	 * 
+	 */
+	private boolean checkForValidBarCode() {
+		boolean isValid = false;
+		String newProductBarCode = getView().getBarcode();
+		if(!newProductBarCode.equals(this.previousBarCode)) {
+			this.previousBarCode = newProductBarCode;
+			isValid = (newProductBarCode.length() == 12);
+		}
+		timer.stop();
+ 		if(!isValid) {
+			getView().displayErrorMessage("The scanned Barcode was read incorrectly. Please Rescan");
+			getView().setBarcode("");
+			this.previousBarCode = "";
+		}
+		return isValid;
+	}
 	/**
 	 * This method is called when the "Use Barcode Scanner" setting in the
 	 * add item batch view is changed by the user.
 	 */
 	@Override
 	public void useScannerChanged() {
-		//
+		
 	}
 
 	/**
