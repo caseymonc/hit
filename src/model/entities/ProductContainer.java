@@ -140,6 +140,7 @@ public abstract class ProductContainer implements PersistentItem{
 		assert(product != null);	
 		if(product == null)
 			throw new IllegalArgumentException("Product cannot be null");
+
 		if(itemsByProduct.containsKey(product)) {
 			return itemsByProduct.get(product);
 		} else {

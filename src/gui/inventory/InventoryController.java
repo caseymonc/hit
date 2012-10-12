@@ -262,42 +262,39 @@ public class InventoryController extends Controller implements IInventoryControl
 	public void productContainerSelectionChanged() {
 		ProductContainer selectedContainer = 
 						(ProductContainer)getView().getSelectedProductContainer().getTag();
-		System.out.println("Drawing Products");
 		List<ProductData> productDataList = new ArrayList<ProductData>();
                 Collection<Product> products;
 		if (selectedContainer != null) {
-			System.out.println("Got Selected Container: " + selectedContainer.getName());
 			products = selectedContainer.getAllProducts();
 			System.out.println(products.toString());
 		} else {
-                        System.out.println("Root Unit");
-                        products = pController.getAllProducts();
+                products = pController.getAllProducts();
+        }
+        
+        for (Product product : products) {
+            ProductData productData = new ProductData();			
+            productData.setBarcode(product.getBarCode().toString());
+            int itemCount;
+            if(selectedContainer != null) {
+                    itemCount = selectedContainer.getItemsByProduct(product).size();  
+            } else {
+                try {
+                    itemCount = pController.getItemsByProduct(product).size();
                 }
-                
-                for (Product product : products) {
-                        ProductData productData = new ProductData();			
-                        productData.setBarcode(product.getBarCode().toString());
-                        int itemCount;
-                        if(selectedContainer != null) {
-                                itemCount = selectedContainer.getItemsByProduct(product).size();  
-                        } else {
-                                try {
-                                    itemCount = pController.getItemsByProduct(product).size();
-                                }
-                                catch(Exception e) {
-                                    itemCount = 0;
-                                    getView().displayErrorMessage(e.getMessage());
-                                }
-                        }
-                        productData.setCount(Integer.toString(itemCount));
-                        productData.setDescription(product.getDescription());
-                        productData.setShelfLife(product.getShelfLife() + " months");
-                        productData.setSize(SizeFormatter.format(product.getSize()));
-                        productData.setSupply("10 count");
-                        productData.setTag(product);
+                catch(Exception e) {
+                    itemCount = 0;
+                    getView().displayErrorMessage(e.getMessage());
+                }
+            }
+            productData.setCount(Integer.toString(itemCount));
+            productData.setDescription(product.getDescription());
+            productData.setShelfLife(product.getShelfLife() + " months");
+            productData.setSize(SizeFormatter.format(product.getSize()));
+            productData.setSupply("10 count");
+            productData.setTag(product);
 
-                        productDataList.add(productData);
-                }
+            productDataList.add(productData);
+        }
                 
 
 
@@ -334,28 +331,28 @@ public class InventoryController extends Controller implements IInventoryControl
 		ProductContainer container = (ProductContainer) selectedContainer.getTag();
 		if (selectedProduct != null) {
 			List<Item> items;
-                        if(container != null) {
-                            items = sortItemsByEntryDate(container.getItemsByProduct(product));
-                        } else {
-                            items = sortItemsByEntryDate((Set<Item>)pController.getItemsByProduct(product));
-                        }
+	        if(container != null) {
+	            items = sortItemsByEntryDate(container.getItemsByProduct(product));
+	        } else {
+	            items = sortItemsByEntryDate((Set<Item>)pController.getItemsByProduct(product));
+	        }
 			for (Item item : items) {
 				ItemData data = new ItemData();
 				data.setBarcode(item.getBarCode().getBarCode());
 				data.setEntryDate(item.getEntryDate());
 				data.setExpirationDate(item.getExpirationDate());
                                 
-                                String groupName = "";
-                                String unitName = "";
-                                ProductContainer cont = item.getContainer();
-                                if(cont instanceof ProductGroup){
-                                    groupName = cont.getName();
-                                }
-                                else{
-                                    unitName = cont.getName();
-                                }
-                                
-                                data.setProductGroup(groupName);
+                String groupName = "";
+                String unitName = "";
+                ProductContainer cont = item.getContainer();
+                if(cont instanceof ProductGroup){
+                    groupName = cont.getName();
+                }
+                else{
+                    unitName = cont.getName();
+                }
+                
+                data.setProductGroup(groupName);
 				data.setStorageUnit(unitName);
 				data.setTag(item);
 				itemDataList.add(data);
@@ -582,6 +579,7 @@ public class InventoryController extends Controller implements IInventoryControl
          */
 	@Override
 	public void update(Observable oObj, Object hint) {
+
 		if((oObj instanceof StorageUnitController 
 				|| oObj instanceof ProductGroupController)){
 			updateProductContainer(hint);
