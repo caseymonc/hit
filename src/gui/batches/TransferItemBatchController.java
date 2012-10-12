@@ -6,6 +6,7 @@ import gui.product.*;
 import model.CoreObjectModel;
 import model.controllers.ItemController;
 import model.entities.Product;
+import model.entities.ProductContainer;
 
 
 
@@ -49,6 +50,7 @@ public class TransferItemBatchController extends Controller implements
 	protected void loadValues() {
 		String barcodeToChange = getView().getBarcode();
 		ProductData selectedProduct = getView().getSelectedProduct();
+		if(barcodeToChange.length() == 12)
 		if(itemController.hasItem(barcodeToChange)){
 			getView().enableItemAction(true);
 		}	
@@ -113,7 +115,8 @@ public class TransferItemBatchController extends Controller implements
 		//How do I change ProductData item to a product? Or do I just grab the name
 		//from the productData and change the move item to accept a name to find a 
 		//product?
-		itemController.moveItem(barcodeOfItemToTransfer, null);
+		ProductContainer container = (ProductContainer) productContainerToPutItemIn.getTag();
+		itemController.moveItem(barcodeOfItemToTransfer, container);
 	}
 	
 	/**
