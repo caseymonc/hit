@@ -8,6 +8,7 @@ import model.CoreObjectModel;
 import model.Hint;
 import model.entities.*;
 import model.BarCodeGenerator;
+import model.managers.ProductManager;
 
 /** 
  * @author davidmathis
@@ -20,7 +21,10 @@ public class ProductController extends ModelController{
 	 */
 	
 	private static ProductController instance;
+
 	private CoreObjectModel model;
+        
+        private ProductManager productManager;
 	
 	/** Constructor
 	 * 
@@ -28,6 +32,7 @@ public class ProductController extends ModelController{
 	 */
 	private ProductController(){
 		model = CoreObjectModel.getInstance();
+                productManager = model.getProductManager();
 	}
 	
 	public static ProductController getInstance(){
@@ -46,7 +51,7 @@ public class ProductController extends ModelController{
         * product doesn't exist.
         */
         public Product getProductByBarCode(BarCode barcode){
-            return model.getProductManager().getProductByBarCode(barcode);
+            return productManager.getProductByBarCode(barcode);
         }
         
         /** Determines if a product can be added to the Product Manager
@@ -56,7 +61,7 @@ public class ProductController extends ModelController{
         * @return true if p can be added. Otherwise, return false.
         */
        public boolean canAddProduct(Product p) {        
-           return model.getProductManager().canAddProduct(p);
+           return productManager.canAddProduct(p);
        }
 
        /** Adds a product to the Product Manager
@@ -73,7 +78,7 @@ public class ProductController extends ModelController{
                throw new IllegalArgumentException("Not a valid Product");
            }
 
-           model.getProductManager().addProduct(p);
+           productManager.addProduct(p);
            this.setChanged();
            this.notifyObservers(new Hint(p, Hint.Value.Add));
        }
@@ -88,7 +93,7 @@ public class ProductController extends ModelController{
         */
         public void addProductToContainer(Product p, ProductContainer c)
                throws IllegalArgumentException {
-            model.getProductManager().addProductToContainer(p, c);
+            productManager.addProductToContainer(p, c);
         }
         
         public void moveProductToContainer(Product product, ProductContainer targetContainer){
@@ -112,7 +117,7 @@ public class ProductController extends ModelController{
         * @return return true if p can be removed, else return true
         */
         public boolean canRemoveProductFromContainer(Product p, ProductContainer c){
-            return model.getProductManager().canRemoveProductFromContainer(p, c);
+            return productManager.canRemoveProductFromContainer(p, c);
         }
         
         /**
@@ -126,14 +131,14 @@ public class ProductController extends ModelController{
         */
         public void removeProductFromContainer(Product p, ProductContainer c)
                 throws IllegalArgumentException {
-            model.getProductManager().removeProductFromContainer(p, c);
+            productManager.removeProductFromContainer(p, c);
         }
         
         public void EditProduct(BarCode productBarCode, Product newProduct) 
                 throws IllegalArgumentException {
-            model.getProductManager().editProduct(productBarCode, newProduct);
+            productManager.editProduct(productBarCode, newProduct);
             
-            Product p = model.getProductManager().getProductByBarCode(productBarCode);
+            Product p = productManager.getProductByBarCode(productBarCode);
             System.out.println("Notifying observers...");
             this.setChanged();
             this.notifyObservers(new Hint(p, Hint.Value.Edit));
@@ -146,7 +151,7 @@ public class ProductController extends ModelController{
         * @return the Products that belong to c
         */
         public Collection<Product> getProductsByContainer(ProductContainer c) {
-            return model.getProductManager().getProductsByContainer(c);
+            return productManager.getProductsByContainer(c);
         }
 
         /**
@@ -156,7 +161,7 @@ public class ProductController extends ModelController{
          * @return the ProductContainers that contain p
          */
         public Set<ProductContainer> getContainersByProduct(Product p) {
-            return model.getProductManager().getContainersByProduct(p);
+            return productManager.getContainersByProduct(p);
         }
         
         /**
@@ -272,5 +277,21 @@ public class ProductController extends ModelController{
             Product product = new Product(description, barCode, shelfLife, supply, size);
             
             return product;
+        }
+        
+        public Collection<Product> getAllProducts() {
+            return productManager.getAllProducts();
+        }
+        
+        public Collection<Item> getItemsByProduct(Product p) throws IllegalArgumentException {
+            return productManager.getItemsByProduct(p);
+        }
+        
+        public void addItemToProduct(Product p, Item i){
+            productManager.addItemToProduct(p, i);
+        }
+        
+        public void removeItemFromProduct(Product p, Item i) {
+            productManager.removeItemFromProduct(p, i);
         }
 }

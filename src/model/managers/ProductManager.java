@@ -5,6 +5,7 @@
 package model.managers;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -276,6 +277,47 @@ public class ProductManager implements PersistentItem{
     }
 
     /**
+     * Removes an Item-Product relationship from itemsByProduct
+     *
+     * @param p
+     * @param i
+     *
+     * @throws IllegalArgumentException
+     */
+    public void removeItemFromProduct(Product p, Item i) throws IllegalArgumentException {
+        assert(p != null);
+        assert(i != null);
+        assert(itemsByProduct.containsKey(p));
+        
+        if (p == null || i == null) {
+            throw new IllegalArgumentException();
+        }
+        
+        if(itemsByProduct.containsKey(p)){
+            itemsByProduct.get(p).remove(i);
+            
+            // A product's creation date is equal to the earliest entry
+            // date of any its items.
+            //
+            // This code may not be necessary
+            if(p.getCreationDate().compareTo(i.getEntryDate()) > 0){
+                    Collection<Item> items = itemsByProduct.get(p);
+                    
+                    Date min = new Date();
+                    for(Item item : items) {
+                        if(min.compareTo(item.getEntryDate()) > 0) {
+                            min = item.getEntryDate();
+                        }
+                    }
+                    
+                    p.setCreationDate(min);
+            }
+        } else{
+            throw new IllegalArgumentException("The product doesn't exist");
+        }
+    }
+    
+    /**
      * Determines if a product exists
      *
      * @param barcode - the BarCode of the product being searched for.
@@ -327,7 +369,28 @@ public class ProductManager implements PersistentItem{
         return p.getContainers();
     }
     
-    public boolean hasProduct(Product p){
+    public boolean hasProduct(Product p) throws IllegalArgumentException{
+        assert(p != null);
+        
+        if(p == null){
+            throw new IllegalArgumentException("Product is not defined");
+        }
+        
         return productsByBarCode.containsKey(p.getBarCode());
+    }
+    
+    public Collection<Product> getAllProducts() {
+        return productsByBarCode.values();
+    }
+    
+    public Collection<Item> getItemsByProduct(Product p) throws IllegalArgumentException {
+        assert(p != null);
+        assert(hasProduct(p));
+        
+        if(p == null || !hasProduct(p)){
+            throw new IllegalArgumentException("Product does not exist");
+        }
+        
+        return itemsByProduct.get(p);
     }
 }

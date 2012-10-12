@@ -906,7 +906,7 @@ public class InventoryView extends View implements IInventoryView {
 			for (int i = 0; i < _productTableModel.getRowCount(); ++i) {
 				ProductFormatter formatter = (ProductFormatter)_productTableModel.getValueAt(i, 0);
 				ProductData id = (ProductData)formatter.getTag();
-				if (id == product) {
+				if (id.equals(product)) {
 					TableOperations.selectTableRow(_productTable, i);
 					return;
 				}

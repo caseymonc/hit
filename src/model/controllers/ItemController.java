@@ -34,6 +34,12 @@ public class ItemController extends ModelController {
 	 * Controls everything to do with Storage Units
 	 */
 	private StorageUnitController SC;
+        
+        /**
+         * Controls everything to do with Products
+         */
+        private ProductController PC;
+        
 	private static ItemController instance;
 	private List<String> newItemBarCodes;
 
@@ -44,6 +50,7 @@ public class ItemController extends ModelController {
 		COM = CoreObjectModel.getInstance();
 		IM = COM.getItemManager();
 		SC = COM.getStorageUnitController();
+                PC = COM.getProductController();
 		newItemBarCodes = new ArrayList<String>();
 	}
 
@@ -72,6 +79,7 @@ public class ItemController extends ModelController {
 			throw new IllegalArgumentException("Item still does not have a specified container");
 		}
 		IM.addItem(i);
+                PC.addItemToProduct(i.getProduct(), i);
 		newItemBarCodes.add(i.getBarCode().getBarCode());
         
 		System.out.println("Notifying Item Observers");
@@ -93,6 +101,7 @@ public class ItemController extends ModelController {
 		} else {
 			i.getContainer().removeItem(i);
 			IM.removeItem(i);
+                        PC.removeItemFromProduct(i.getProduct(), i);
 		}
 		this.setChanged();
 		this.notifyObservers(new Hint(i, Hint.Value.Delete));
