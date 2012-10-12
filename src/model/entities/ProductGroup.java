@@ -1,7 +1,5 @@
 package model.entities;
 
-import model.persistence.PersistentItem;
-
 /** ProductGroup
  * A user-defined group of Products.Product Groups are used by users to 
  * aggregate related Products so they can be managed as a collection.
@@ -11,6 +9,10 @@ import model.persistence.PersistentItem;
  */
 
 public class ProductGroup extends ProductContainer{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2396336823994810333L;
 	private Size threeMonthSupply;
 
 	/**

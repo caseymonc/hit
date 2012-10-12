@@ -104,7 +104,7 @@ public class ProductContainerTest {
 		assertTrue(unit.getItemsByProduct(item2.getProduct()).contains(item2));
 		
 		group2.addProduct(product2);
-		unit.setProductForContainer(product2, group2);
+		unit.setContainerByProduct(product2, group2);
 		
 		unit.addItem(item3);
 		
@@ -130,22 +130,22 @@ public class ProductContainerTest {
 		group2.addProduct(product);
 
 		
-		assertTrue(unit.getProductGroupByProduct(product) == group2);
+		assertTrue(unit.getContainerByProduct(product) == group2);
 		assertTrue(group2.getAllItems().contains(item));
 		assertTrue(group2.getAllItems().contains(item2));
 		
 		unit.addProduct(product);
 		unit.addProduct(product2);
 		
-		assertTrue(unit.getProductGroupByProduct(product) == unit);
-		assertTrue(unit.getProductGroupByProduct(product2) == unit);
+		assertTrue(unit.getContainerByProduct(product) == unit);
+		assertTrue(unit.getContainerByProduct(product2) == unit);
 		assertTrue(unit.getAllItems().contains(item));
 		assertTrue(unit.getAllItems().contains(item2));
 		assertTrue(unit.getAllItems().contains(item3));
 		assertTrue(unit.getAllItems().contains(item4));
 		
 		group1.addProduct(product);
-		assertTrue(unit.getProductGroupByProduct(product) == group1);
+		assertTrue(unit.getContainerByProduct(product) == group1);
 		assertTrue(group1.getAllItems().contains(item));
 		assertTrue(group1.getAllItems().contains(item2));
 		
@@ -225,8 +225,8 @@ public class ProductContainerTest {
 		assertTrue(unit.getItemsByProduct(product).contains(item));
 		assertTrue(unit.getItemsByProduct(product).contains(item2));
 		assertTrue(!unit.getItemsByProduct(product).contains(item3));
-		assertTrue(unit.getProductGroupByProduct(product) == unit);
-		assertTrue(unit.getProductGroupByProduct(product2) == group2);
+		assertTrue(unit.getContainerByProduct(product) == unit);
+		assertTrue(unit.getContainerByProduct(product2) == group2);
 		assertTrue(group1.getContainer() == unit);
 	}
 	
@@ -245,7 +245,7 @@ public class ProductContainerTest {
 		unit.addItem(item2);
 		
 		group2.addProduct(product2);
-		unit.setProductForContainer(product2, group2);
+		unit.setContainerByProduct(product2, group2);
 		
 		unit.addItem(item3);
 		unit.addItem(item4);

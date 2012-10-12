@@ -29,38 +29,39 @@ public class BarCodePrinter {
 	 * @param newItemBarCodes
 	 */
 	public BarCodePrinter(List<String> newItemBarCodes) {
-		
-		try {
-			
-			//Print the newItem barcodes to a pdf			
-			BarcodeEAN codeEAN = new BarcodeEAN();
-			codeEAN.setCodeType(Barcode.UPCA);
-			Document document = new Document(new Rectangle(340, 842));
-			PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream("ItemsAddedBarcodes.pdf"));
-			document.open();
-			PdfContentByte cb = writer.getDirectContent();
+		if(newItemBarCodes.size() > 0) {
+			try {
 
-			
-			//For all of the barcodes that need to be printed
-			for(int i=0; i < newItemBarCodes.size(); ++i)
-			{
-				codeEAN.setCode(newItemBarCodes.get(i)); 
-				document.add(codeEAN.createImageWithBarcode(cb, null, null));
+				//Print the newItem barcodes to a pdf			
+				BarcodeEAN codeEAN = new BarcodeEAN();
+				codeEAN.setCodeType(Barcode.UPCA);
+				Document document = new Document(new Rectangle(340, 842));
+				PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream("ItemsAddedBarcodes.pdf"));
+				document.open();
+				PdfContentByte cb = writer.getDirectContent();
+
+
+				//For all of the barcodes that need to be printed
+				for(int i=0; i < newItemBarCodes.size(); ++i)
+				{
+					codeEAN.setCode(newItemBarCodes.get(i)); 
+					document.add(codeEAN.createImageWithBarcode(cb, null, null));
+				}
+
+				document.close();
+				//This will allow you to open a pdf and display it on the screen
+				java.awt.Desktop.getDesktop().open(new File("ItemsAddedBarcodes.pdf"));
+
+
+			} catch(DocumentException e) {
+
+				System.out.println("Error: unable to create pdf: " + e.getMessage());
+
+			} catch(IOException e) {
+
+				System.out.println("Error: unable to write to pdf: " + e.getMessage());			
+
 			}
-			
-			document.close();
-			//This will allow you to open a pdf and display it on the screen
-			java.awt.Desktop.getDesktop().open(new File("ItemsAddedBarcodes.pdf"));
-			
-			
-		} catch(DocumentException e) {
-			
-			System.out.println("Error: unable to create pdf: " + e.getMessage());
-		
-		} catch(IOException e) {
-			
-			System.out.println("Error: unable to write to pdf: " + e.getMessage());			
-		
 		}
 	}
 	

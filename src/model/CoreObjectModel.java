@@ -22,6 +22,10 @@ import model.persistence.PersistentStore;
  */
 public class CoreObjectModel implements PersistentItem{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7518635251729938948L;
 	private static CoreObjectModel _instance;
 	private int lastBarCode;
 	//private ItemController itemController;

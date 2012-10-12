@@ -43,7 +43,7 @@ public class StorageUnitController extends ModelController{
 	 */
 	public void moveItem(Item item, StorageUnit targetContainer) {
 		if(item.getContainer().canRemoveItem(item)){
-			item.getContainer().getStorageUnit().removeItem(item);
+			item.getContainer().removeItem(item);
 			item.move(targetContainer);
 		}
 		targetContainer.addItem(item);

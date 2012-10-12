@@ -262,43 +262,42 @@ public class InventoryController extends Controller implements IInventoryControl
 	public void productContainerSelectionChanged() {
 		ProductContainer selectedContainer = 
 						(ProductContainer)getView().getSelectedProductContainer().getTag();
-		System.out.println("Drawing Products");
 		List<ProductData> productDataList = new ArrayList<ProductData>();
                 Collection<Product> products;
 		if (selectedContainer != null) {
-			System.out.println("Got Selected Container: " + selectedContainer.getName());
 			products = selectedContainer.getAllProducts();
 			System.out.println(products.toString());
 		} else {
-                        System.out.println("Root Unit");
-                        products = pController.getAllProducts();
+                products = pController.getAllProducts();
+        }
+        
+        for (Product product : products) {
+            ProductData productData = new ProductData();			
+            productData.setBarcode(product.getBarCode().toString());
+            int itemCount;
+            if(selectedContainer != null) {
+                    itemCount = selectedContainer.getItemsByProduct(product).size();  
+            } else {
+                try {
+                    itemCount = pController.getItemsByProduct(product).size();
                 }
-                
-                for (Product product : products) {
-                        ProductData productData = new ProductData();			
-                        productData.setBarcode(product.getBarCode().toString());
-                        int itemCount;
-                        if(selectedContainer != null) {
-                                itemCount = selectedContainer.getItemsByProduct(product).size();  
-                        } else {
-                                try {
-                                    itemCount = pController.getItemsByProduct(product).size();
-                                }
-                                catch(Exception e) {
-                                    itemCount = 0;
-                                    getView().displayErrorMessage(e.getMessage());
-                                }
-                        }
-                        productData.setCount(Integer.toString(itemCount));
-                        productData.setDescription(product.getDescription());
-                        productData.setShelfLife(product.getShelfLife() + " months");
-                        productData.setSize(SizeFormatter.format(product.getSize()));
-                        productData.setSupply("10 count");
-                        productData.setTag(product);
+                catch(Exception e) {
+                    itemCount = 0;
+                    getView().displayErrorMessage(e.getMessage());
+                }
+            }
+            productData.setCount(Integer.toString(itemCount));
+            productData.setDescription(product.getDescription());
+            productData.setShelfLife(product.getShelfLife() + " months");
+            productData.setSize(SizeFormatter.format(product.getSize()));
+            productData.setSupply("10 count");
+            productData.setTag(product);
 
-                        productDataList.add(productData);
-                }
+            productDataList.add(productData);
+        }
                 
+
+
 		getView().setProducts(productDataList.toArray(new ProductData[0]));
 		
 		getView().setItems(new ItemData[0]);
@@ -314,10 +313,9 @@ public class InventoryController extends Controller implements IInventoryControl
 				Size tmSupply = ((ProductGroup) selectedContainer).getThreeMonthSupply();
 				getView().setContextSupply(SizeFormatter.format(tmSupply));
 			}
+		} else {
+			   getView().setContextUnit("All");
 		}
-                else {
-                        getView().setContextUnit("All");
-                }
 	}
 
 	/**
@@ -333,31 +331,33 @@ public class InventoryController extends Controller implements IInventoryControl
 		ProductContainer container = (ProductContainer) selectedContainer.getTag();
 		if (selectedProduct != null) {
 			List<Item> items;
-                        if(container != null) {
-                            items = sortItemsByEntryDate(container.getItemsByProduct(product));
-                        } else {
-                            items = sortItemsByEntryDate((Set<Item>)pController.getItemsByProduct(product));
-                        }
+	        if(container != null) {
+	            items = sortItemsByEntryDate(container.getItemsByProduct(product));
+	        } else {
+	            items = sortItemsByEntryDate((Set<Item>)pController.getItemsByProduct(product));
+	        }
 			for (Item item : items) {
 				ItemData data = new ItemData();
 				data.setBarcode(item.getBarCode().getBarCode());
 				data.setEntryDate(item.getEntryDate());
 				data.setExpirationDate(item.getExpirationDate());
                                 
-                                String groupName = "";
-                                String unitName = "";
-                                ProductContainer cont = item.getContainer();
-                                if(cont instanceof ProductGroup){
-                                    groupName = cont.getName();
-                                }
-                                else{
-                                    unitName = cont.getName();
-                                }
-                                
-                                data.setProductGroup(groupName);
+                String groupName = "";
+                String unitName = "";
+                ProductContainer cont = item.getContainer();
+                if(cont instanceof ProductGroup){
+                    groupName = cont.getName();
+                }
+                else{
+                    unitName = cont.getName();
+                }
+                
+                data.setProductGroup(groupName);
 				data.setStorageUnit(unitName);
 				data.setTag(item);
 				itemDataList.add(data);
+
+
 			}
 		}
 		getView().setItems(itemDataList.toArray(new ItemData[0]));
@@ -412,6 +412,18 @@ public class InventoryController extends Controller implements IInventoryControl
 		return sortedItems;
 	}
 	
+        /**
+         * 
+         */
+        private List<Product> sortProductByDescription(Set<Product> products) {
+                List<Product> sortedProducts = new ArrayList<Product>();
+                for(Product product : products) {
+                        sortedProducts.add(product);
+                }
+                Collections.sort(sortedProducts, new Product.ProductComparator());
+                return sortedProducts;
+        }
+        
 	/**
 	 * Returns true if and only if the "Delete Product" menu item should be enabled.
 	 */
@@ -551,8 +563,9 @@ public class InventoryController extends Controller implements IInventoryControl
 										ProductContainerData containerData) {	
 		ProductContainer targetContainer = (ProductContainer) containerData.getTag();
 		Product product = (Product) productData.getTag();
-		StorageUnit targetUnit = targetContainer.getStorageUnit();
-		pController.moveProductToContainer(product, targetContainer);
+		ProductContainer currentContainer = 
+			(ProductContainer) getView().getSelectedProductContainer().getTag();
+		pController.moveProductToContainer(product, targetContainer, currentContainer);
 		
 	}
 
@@ -579,9 +592,8 @@ public class InventoryController extends Controller implements IInventoryControl
          */
 	@Override
 	public void update(Observable oObj, Object hint) {
-		System.out.println("Notified Observers");
-		if ((oObj instanceof StorageUnitController 
-				|| oObj instanceof ProductGroupController)) {
+		if((oObj instanceof StorageUnitController 
+				|| oObj instanceof ProductGroupController)){
 			updateProductContainer(hint);
 		}else if (oObj instanceof ProductController) {
 			updateProduct(hint);
@@ -600,6 +612,10 @@ public class InventoryController extends Controller implements IInventoryControl
 			}else if (hint.getHint() == Hint.Value.Edit) {
 				productContainerSelectionChanged();
 			}else if (hint.getHint() == Hint.Value.Delete) {
+				productContainerSelectionChanged();
+			}else if(hint.getHint() == Hint.Value.Move){
+				productContainerSelectionChanged();
+			}else if(hint.getHint() == Hint.Value.Move){
 				productContainerSelectionChanged();
 			}
 		}
@@ -625,13 +641,13 @@ public class InventoryController extends Controller implements IInventoryControl
 			
 			} else if (hint.getHint() == Hint.Value.Delete) {
 				productContainerSelectionChanged();
-                                getView().selectProduct(selectedProduct);
-                                productSelectionChanged();
-			
+				getView().selectProduct(selectedProduct);
+				productSelectionChanged();
+
 			} else if (hint.getHint() == Hint.Value.Move) {
 				productContainerSelectionChanged();
-                                getView().selectProduct(selectedProduct);
-                                productSelectionChanged();
+				getView().selectProduct(selectedProduct);
+				productSelectionChanged();
 			}
 		}
 	}

@@ -11,6 +11,10 @@ import java.io.Serializable;
  */
 public class BarCode implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4706105919749843346L;
 	/** The value of the BarCode.
 	 * This value must be a valid UPC-A barcode and must
 	 * be unique for all products and items in the system.
