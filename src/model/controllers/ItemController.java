@@ -4,14 +4,14 @@
  */
 package model.controllers;
 
-import model.CoreObjectModel;
-import model.entities.*;
-import model.managers.ItemManager;
-import java.util.List;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import model.BarCodePrinter;
+import model.CoreObjectModel;
 import model.Hint;
+import model.entities.*;
+import model.managers.ItemManager;
 
 /** Oversees, controls or delegates everything to do with Items
  *

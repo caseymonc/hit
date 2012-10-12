@@ -5,16 +5,9 @@
 package model;
 
 
-import com.itextpdf.text.Document;
-import com.itextpdf.text.Rectangle;
-import com.itextpdf.text.pdf.Barcode;
-import com.itextpdf.text.pdf.BarcodeEAN;
-import com.itextpdf.text.pdf.PdfContentByte;
-import com.itextpdf.text.pdf.PdfWriter;
-import java.io.FileOutputStream;
+import model.controllers.*;
 import model.entities.*;
 import model.managers.*;
-import model.controllers.*;
 import model.persistence.PersistentItem;
 import model.persistence.PersistentStore;
 
