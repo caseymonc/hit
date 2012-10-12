@@ -532,7 +532,7 @@ public class InventoryController extends Controller implements IInventoryControl
 									ProductContainerData containerData) {
 		ProductContainer container = (ProductContainer) containerData.getTag();
 		Item item = (Item) itemData.getTag();
-		iController.moveItem(item, container.getStorageUnit());
+		iController.transferItem(item, container.getStorageUnit());
 	}
 
         /** Updates the InventoryController.  Called from the observers when there

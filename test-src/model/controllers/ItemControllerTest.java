@@ -193,7 +193,7 @@ public class ItemControllerTest {
 		assertTrue(moveToGroup.getContainer()!= null);
 		assertTrue(moveToGroup.getStorageUnit() == containingUnit);
 		
-		IC.moveItem(i, moveToGroup);
+		IC.transferItem(i, moveToGroup);
 		
 		//Target Product Container = the Product Container the user dropped the Item on
 		
@@ -222,7 +222,7 @@ public class ItemControllerTest {
 		assertTrue(originalUnit.getAllProducts().contains(p2));
 
 
-		IC.moveItem(i2, moveToGroup);
+		IC.transferItem(i2, moveToGroup);
 
 		//this time the product will end up in moveToGroup
 		assertTrue(i2.getContainer() == moveToGroup);
