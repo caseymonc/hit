@@ -183,6 +183,10 @@ public class Product implements PersistentItem {
 	public int getThreeMonthSupply() {
 		return threeMonthSupply;
 	}
+	
+	public Size getThreeMonthSize(){
+		return new Size(this.size.getUnits(), this.size.getSize() * threeMonthSupply);
+	}
 
 	/**
 	 * Get the size of the product

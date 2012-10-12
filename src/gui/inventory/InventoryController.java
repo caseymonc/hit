@@ -290,7 +290,7 @@ public class InventoryController extends Controller implements IInventoryControl
             productData.setDescription(product.getDescription());
             productData.setShelfLife(product.getShelfLife() + " months");
             productData.setSize(SizeFormatter.format(product.getSize()));
-            productData.setSupply("10 count");
+            productData.setSupply(SizeFormatter.format(product.getThreeMonthSize()));
             productData.setTag(product);
 
             productDataList.add(productData);
