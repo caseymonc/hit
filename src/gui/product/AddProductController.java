@@ -25,7 +25,12 @@ public class AddProductController extends Controller implements
 	 * The facade in charge of Storage Units and moving items
 	 */
         ProductController productController;
-    
+        
+        /** 
+         * flag to determine the previous unit of the size.
+         */
+        private boolean unitIsCount;
+        
 	/**
 	 * Constructor.
 	 * 
@@ -37,9 +42,9 @@ public class AddProductController extends Controller implements
 		this.barcode = barcode;
                 COM = CoreObjectModel.getInstance();
                 productController = COM.getProductController();
+                unitIsCount = false;
                 
 		construct();
-                loadValues();
 	}
 
 	//
@@ -70,6 +75,28 @@ public class AddProductController extends Controller implements
 	 */
 	@Override
 	protected void enableComponents() {
+            String description = getView().getDescription();
+            String sizeVal = getView().getSizeValue();
+            Unit sizeUnit = getView().getSizeUnit().toUnit();
+            String supply = getView().getSupply();
+            String shelfLife = getView().getShelfLife();
+            
+            getView().enableBarcode(false);
+            
+            if(getView().getSizeUnit() == SizeUnits.Count){
+                getView().enableSizeValue(false);
+            } else {
+                getView().enableSizeValue(true);
+            }
+            
+            if(productController.canAddProduct(barcode, description, sizeVal, 
+                    sizeUnit, supply, shelfLife)){
+                getView().enableOK(true);
+            } else {
+                getView().enableOK(false);
+            }
+            
+            
 	}
 
 	/**
@@ -81,12 +108,8 @@ public class AddProductController extends Controller implements
 	 */
 	@Override
 	protected void loadValues() {
-            getView().enableOK(false);
-            getView().setBarcode(barcode);
-            if(getView().getSizeUnit() == SizeUnits.Count){
-                getView().setSizeValue("1");
-                getView().enableSizeValue(false);
-            }
+            getView().setBarcode(barcode);           
+            valuesChanged();
 	}
 
 	//
@@ -99,56 +122,15 @@ public class AddProductController extends Controller implements
 	 */
 	@Override
 	public void valuesChanged() {
-            BarCode barCode = new BarCode(barcode);
-            String description = getView().getDescription();
-            float sizeVal;
-            int supply;
-            int shelfLife;
-            boolean canAddProduct = true;
-            
-            try {
-               sizeVal = Float.parseFloat(getView().getSizeValue()); 
-            }
-            catch(Exception e) {
-                sizeVal = 0;
-                canAddProduct = false;
-            }
-            
-            try {
-                shelfLife = Integer.parseInt(getView().getShelfLife());
-            }
-            catch(Exception e) {
-                shelfLife = 0;
-                canAddProduct = false;
-            }
-            
-            try {
-                supply = Integer.parseInt(getView().getSupply());
-            }
-            catch(Exception e) {
-                supply = 0;
-                canAddProduct = false;
-            }
-            
-            Size size = new Size(getView().getSizeUnit().toUnit(), sizeVal);
-            
-            if(size.getUnits() == Unit.count){
+            if(getView().getSizeUnit() == SizeUnits.Count){
+                unitIsCount = true;
                 getView().setSizeValue("1");
-                getView().enableSizeValue(false);
-            } else {
-                getView().enableSizeValue(true);
+            } else if(unitIsCount == true) {
+                unitIsCount = false;
+                getView().setSizeValue("0");
             }
             
-            if(canAddProduct == false){
-                getView().enableOK(false);
-                return;
-            }
-            
-            if(Product.canCreate(description, barCode, shelfLife, supply, size)){
-                getView().enableOK(true);
-            } else {
-                getView().enableOK(false);
-            }
+            enableComponents();
 	}
 	
 	/**
@@ -166,8 +148,13 @@ public class AddProductController extends Controller implements
             Size size = new Size(getView().getSizeUnit().toUnit(), sizeVal);
             
             Product product = new Product(description, barCode, shelfLife, supply, size);
-
-            productController.addProduct(product);
+            
+            try{
+                productController.addProduct(product);
+            }
+            catch(Exception e){
+                getView().displayErrorMessage("The product could not be added.");
+            }
 	}
         
 }

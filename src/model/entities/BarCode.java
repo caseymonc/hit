@@ -51,6 +51,11 @@ public class BarCode implements Serializable {
 		return this.barCode.hashCode();
 	}
 	
+        
+        @Override
+        public String toString() {
+                return barCode;
+        }
 	/**
 	 * Method test to make sure that the barcode is a valid UPC Barcode
 	 * Which it only wouldn't be if someone was using or source code it a way that 

@@ -71,7 +71,7 @@ public class InventoryController extends Controller implements IInventoryControl
 	 *  {@post The controller has loaded data into its view}
 	 */
 	@Override
-	public void loadValues(){
+	public void loadValues() {
 		dataForContainer = new HashMap<ProductContainer, ProductContainerData>();
 		
 		ProductContainerData root = new ProductContainerData();
@@ -82,17 +82,17 @@ public class InventoryController extends Controller implements IInventoryControl
 		
 		StorageUnit[] unitsArray = new StorageUnit[units.size()];
 		
-		for(int i = 0; i < unitsArray.length; i++){
+		for(int i = 0; i < unitsArray.length; i++) {
 			unitsArray[i] = units.get(i);
 		}
 		
-		Arrays.sort(unitsArray, new Comparator<StorageUnit>(){
+		Arrays.sort(unitsArray, new Comparator<StorageUnit>() {
 			public int compare(StorageUnit arg0, StorageUnit arg1) {
 				return arg0.getName().compareTo(arg1.getName());
 			}
 		});
 		
-		for(StorageUnit unit : unitsArray){
+		for(StorageUnit unit : unitsArray) {
 			addProductContainer(unit, root);
 		}
 		
@@ -105,7 +105,7 @@ public class InventoryController extends Controller implements IInventoryControl
 	 * @param container
 	 * @param parent
 	 */
-	private void addProductContainer(ProductContainer container, ProductContainerData parent){
+	private void addProductContainer(ProductContainer container, ProductContainerData parent) {
 		ProductContainerData unitData = new ProductContainerData(container.getName());
 		unitData.setTag(container);
 		
@@ -116,18 +116,18 @@ public class InventoryController extends Controller implements IInventoryControl
 		ProductGroup[] groupsArray = new ProductGroup[groups.size()];
 		
 		int i = 0;
-		for(ProductGroup group : groups){
+		for(ProductGroup group : groups) {
 			groupsArray[i] = group;
 			i++;
 		}
 		
-		Arrays.sort(groupsArray, new Comparator<ProductGroup>(){
+		Arrays.sort(groupsArray, new Comparator<ProductGroup>() {
 			public int compare(ProductGroup arg0, ProductGroup arg1) {
 				return arg0.getName().compareTo(arg1.getName());
 			}
 		});
 		
-		for(ProductGroup group : groupsArray){
+		for(ProductGroup group : groupsArray) {
 			addProductContainer(group, unitData);
 		}
 		parent.addChild(unitData);
@@ -289,10 +289,10 @@ public class InventoryController extends Controller implements IInventoryControl
 		getView().setContextGroup("");
 		getView().setContextUnit("");
 		
-		if(selectedContainer != null){
+		if (selectedContainer != null) {
 			StorageUnit unit = selectedContainer.getStorageUnit();
 			getView().setContextUnit(unit.getName());
-			if(selectedContainer instanceof ProductGroup){
+			if (selectedContainer instanceof ProductGroup) {
 				getView().setContextGroup(selectedContainer.getName());
 				Size tmSupply = ((ProductGroup) selectedContainer).getThreeMonthSupply();
 				getView().setContextSupply(SizeFormatter.format(tmSupply));
@@ -312,7 +312,7 @@ public class InventoryController extends Controller implements IInventoryControl
 		Product product = (Product) selectedProduct.getTag();
 		ProductContainer container = (ProductContainer) selectedContainer.getTag();
 		if (selectedProduct != null) {
-			Set<Item> items = container.getItemsByProduct(product);
+			List<Item> items = sortItemsByEntryDate(container.getItemsByProduct(product));
 			for (Item item : items) {
 				ItemData data = new ItemData();
 				data.setBarcode(item.getBarCode().getBarCode());
@@ -332,15 +332,59 @@ public class InventoryController extends Controller implements IInventoryControl
 	 */
 	@Override
 	public void itemSelectionChanged() {
-		return;
-	}
 
+		Product p = (Product)getView().getSelectedProduct().getTag();
+		ProductContainer pc = (ProductContainer)getView().getSelectedProductContainer().getTag();
+		
+		List<Item> items = sortItemsByEntryDate(pc.getItemsByProduct(p));
+		List<ItemData> itemDataList = new ArrayList<ItemData>();
+
+		String selectedItemBarCode = getView().getSelectedItem().getBarcode();
+		ItemData selectedItem = null;
+		
+		for (Item item : items) {
+			
+			ItemData data = new ItemData();
+			String barCode = item.getBarCode().getBarCode();
+			
+			data.setBarcode(barCode);
+			if (barCode.equalsIgnoreCase(selectedItemBarCode)) {
+				selectedItem = data;
+			}
+			
+			data.setEntryDate(item.getEntryDate());
+			data.setExpirationDate(item.getExpirationDate());
+			data.setProductGroup(pc.getName());
+			data.setStorageUnit(pc.getStorageUnit().getName());
+			data.setTag(item);
+			itemDataList.add(data);
+		}
+		
+		getView().setItems(itemDataList.toArray(new ItemData[0]));
+		getView().selectItem(selectedItem);
+	}
+	/**
+	 * 
+	 * @return 
+	 */
+	private List<Item> sortItemsByEntryDate(Set<Item> items) {
+		List<Item> sortedItems = new ArrayList<Item>();
+		for(Item item : items) {
+			sortedItems.add(item);
+		}
+		Collections.sort(sortedItems, new Item.ItemComparator());
+		return sortedItems;
+	}
+	
 	/**
 	 * Returns true if and only if the "Delete Product" menu item should be enabled.
 	 */
 	@Override
 	public boolean canDeleteProduct() {
-		return true;
+                Product p = (Product)getView().getSelectedProduct().getTag();
+                ProductContainer c = 
+                        (ProductContainer)getView().getSelectedProductContainer().getTag();
+                return pController.canRemoveProductFromContainer(p, c);
 	}
 
 	/**
@@ -355,7 +399,7 @@ public class InventoryController extends Controller implements IInventoryControl
 	 */
 	@Override
 	public boolean canEditItem() {
-		return true;
+		return (getView().getSelectedItem() != null);
 	}
 
 	/**
@@ -371,7 +415,7 @@ public class InventoryController extends Controller implements IInventoryControl
 	 */
 	@Override
 	public boolean canRemoveItem() {
-		return true;
+		return (getView().getSelectedItem() != null);
 	}
 
 	/**
@@ -379,6 +423,7 @@ public class InventoryController extends Controller implements IInventoryControl
 	 */
 	@Override
 	public void removeItem() {
+		iController.removeItem((Item) getView().getSelectedItem().getTag());
 	}
 
 	/**
@@ -494,58 +539,71 @@ public class InventoryController extends Controller implements IInventoryControl
 	@Override
 	public void update(Observable oObj, Object hint) {
 		System.out.println("Notified Observers");
-		if((oObj instanceof StorageUnitController 
-				|| oObj instanceof ProductGroupController)){
+		if ((oObj instanceof StorageUnitController 
+				|| oObj instanceof ProductGroupController)) {
 			updateProductContainer(hint);
-		}else if(oObj instanceof ProductController){
-			upadateProduct(hint);
-		}else if(oObj instanceof ItemController){
-			upadateItem(hint);
+		}else if (oObj instanceof ProductController) {
+			updateProduct(hint);
+		}else if (oObj instanceof ItemController) {
+			updateItem(hint);
 		}
 	}
 	
-	private void upadateProduct(Object observerHint){
+	private void updateProduct(Object observerHint) {
 		ProductContainerData selectedData = getView().getSelectedProductContainer();
-		if(observerHint instanceof Hint){
+		if (observerHint instanceof Hint) {
 			Hint hint = (Hint)observerHint;
 			Product product = (Product)hint.getExtra();
-			if(hint.getHint() == Hint.Value.Add){
+			if (hint.getHint() == Hint.Value.Add) {
 				productContainerSelectionChanged();
-			}else if(hint.getHint() == Hint.Value.Edit){
+			}else if (hint.getHint() == Hint.Value.Edit) {
 				productContainerSelectionChanged();
-			}else if(hint.getHint() == Hint.Value.Delete){
+			}else if (hint.getHint() == Hint.Value.Delete) {
 				productContainerSelectionChanged();
 			}
 		}
 	}
-	
-	private void upadateItem(Object observerHint){
+	/**
+	 *	
+	 * @param observerHint has the hint and the Item that was changed
+	 */
+	private void updateItem(Object observerHint) {
 		ProductContainerData selectedData = getView().getSelectedProductContainer();
-		if(observerHint instanceof Hint){
+		if (observerHint instanceof Hint) {
+			System.out.println("Updating item");
 			Hint hint = (Hint)observerHint;
-			Item product = (Item)hint.getExtra();
-			if(hint.getHint() == Hint.Value.Add){
+			Item item = (Item)hint.getExtra();
+			
+			if (hint.getHint() == Hint.Value.Add) {
+				
 				productContainerSelectionChanged();
-			}else if(hint.getHint() == Hint.Value.Edit){
+				
+			} else if (hint.getHint() == Hint.Value.Edit) {
+				
+				itemSelectionChanged();
+			
+			} else if (hint.getHint() == Hint.Value.Delete) {
+				productSelectionChanged();
 				productContainerSelectionChanged();
-			}else if(hint.getHint() == Hint.Value.Delete){
-				productContainerSelectionChanged();
-			}else if(hint.getHint() == Hint.Value.Move){
-				productContainerSelectionChanged();
+			
+			} else if (hint.getHint() == Hint.Value.Move) {
+				
+				itemSelectionChanged();
+			
 			}
 		}
 	}
 	
 	private void updateProductContainer(Object observerHint) {
 		ProductContainerData selectedData = getView().getSelectedProductContainer();
-		if(observerHint instanceof Hint){
+		if (observerHint instanceof Hint) {
 			Hint hint = (Hint)observerHint;
 			ProductContainer container = (ProductContainer)hint.getExtra();
-			if(hint.getHint() == Hint.Value.Add || hint.getHint() == Hint.Value.Edit){
+			if (hint.getHint() == Hint.Value.Add || hint.getHint() == Hint.Value.Edit) {
 				loadValues();
 				ProductContainerData selectedContainer = dataForContainer.get(container);
 				getView().selectProductContainer(selectedContainer);
-			}else if(hint.getHint() == Hint.Value.Delete){
+			}else if (hint.getHint() == Hint.Value.Delete) {
 				getView().deleteProductContainer(selectedData);
 				selectedData = null;
 			}

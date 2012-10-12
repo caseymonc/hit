@@ -17,7 +17,7 @@ import model.managers.ItemManager;
  *
  * @author davidpatty
  */
-public class ItemController extends ModelController{
+public class ItemController extends ModelController {
 
 	
 	/**
@@ -76,7 +76,7 @@ public class ItemController extends ModelController{
         
 		System.out.println("Notifying Item Observers");
 		this.setChanged();
-        this.notifyObservers(new Hint(i, Hint.Value.Add));
+		this.notifyObservers(new Hint(i, Hint.Value.Add));
 	}
 
 	/** Moves the item to removed items 
@@ -94,6 +94,8 @@ public class ItemController extends ModelController{
 			i.getContainer().removeItem(i);
 			IM.removeItem(i);
 		}
+		this.setChanged();
+		this.notifyObservers(new Hint(i, Hint.Value.Delete));
 	}
 	
 	/** The Storage Unit Controller will take care of the movement
@@ -176,6 +178,17 @@ public class ItemController extends ModelController{
 		return Item.canCreate(null, entryDate, null, dummyProduct, null);	
 	}
 
-	
+	/**
+	 * Updates the specified item with a new entry date
+	 * @param i The item to be modified
+	 * @param newEntryDate 
+	 */
+	public void updateItemsEntryDate(Item i, Date newEntryDate) {
+		assert(i.canSetEntryDate(newEntryDate));
+		i.setEntryDate(newEntryDate);
+		i.calculateExpirationDate();
+		this.setChanged();
+		this.notifyObservers(new Hint(i, Hint.Value.Edit));
+	}
 
 }
