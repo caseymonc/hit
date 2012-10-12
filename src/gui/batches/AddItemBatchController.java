@@ -214,12 +214,8 @@ public class AddItemBatchController extends Controller implements
 		for(; count > 0; --count)
 		{
 			Date entryDate = getView().getEntryDate();
-
 			BarCode itemBarcode = BarCodeGenerator.getInstance().generateBarCode();
-			
-			int shelfLife = product.getShelfLife();
-			double power = java.lang.Math.pow( 10, 9);
-			
+			int shelfLife = product.getShelfLife();			
 			Calendar calen = Calendar.getInstance();
 			calen.add(Calendar.MONTH, shelfLife);
 			Date expirationDate = calen.getTime();
