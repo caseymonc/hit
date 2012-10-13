@@ -435,7 +435,11 @@ public class InventoryController extends Controller implements IInventoryControl
                 Product p = (Product)getView().getSelectedProduct().getTag();
                 ProductContainer c = 
                         (ProductContainer)getView().getSelectedProductContainer().getTag();
-                return pController.canRemoveProductFromContainer(p, c);
+                
+                if(c != null)
+                	return pController.canRemoveProductFromContainer(p, c);
+                else
+                	return pController.canRemoveProduct(p);
 	}
 
 	/**
@@ -446,7 +450,10 @@ public class InventoryController extends Controller implements IInventoryControl
                 Product p = (Product)getView().getSelectedProduct().getTag();
                 ProductContainer c = 
                         (ProductContainer)getView().getSelectedProductContainer().getTag();
-                pController.removeProductFromContainer(p, c);
+                if(c != null)
+                	pController.removeProductFromContainer(p, c);
+                else
+                	pController.removeProduct(p);
                 productContainerSelectionChanged();
 	}
 

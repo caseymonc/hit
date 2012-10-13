@@ -171,6 +171,8 @@ public class ProductController extends ModelController{
             return productManager.canRemoveProductFromContainer(p, c);
         }
         
+        
+        
         /**
         * Removes a product from a container.
         *
@@ -183,6 +185,23 @@ public class ProductController extends ModelController{
         public void removeProductFromContainer(Product p, ProductContainer c)
                 throws IllegalArgumentException {
             productManager.removeProductFromContainer(p, c);
+        }
+        
+        public boolean canRemoveProduct(Product p){
+        	return productManager.canRemoveProduct(p);
+        }
+        
+        public void removeProduct(Product p){
+        	Set<ProductContainer> containers = p.getContainers();
+        	if(containers != null){
+        		for(ProductContainer container : containers){
+        			if(this.canRemoveProductFromContainer(p, container)){
+        				this.removeProductFromContainer(p, container);
+        			}
+        		}
+        	}
+        	
+        	productManager.removeProduct(p);
         }
         
         public void EditProduct(BarCode productBarCode, Product newProduct) 
