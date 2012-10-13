@@ -117,23 +117,21 @@ public class ProductController extends ModelController{
         		addProductToContainer(product, targetContainer);
         	}else if(currentContainerInTargetUnit != targetContainer){
         		//Move all items in sibling container
-        		Set<Item> itemSet = currentContainerInTargetUnit.getItemsByProduct(product);
-        		addProductToContainer(product, targetContainer);
-        		if(itemSet != null){
-	        		Item[] items = new Item[itemSet.size()];
-	        		int i = 0;
-	        		for(Item item : itemSet){
-	        			items[i] = item;
-	        			i++;
-	        		}
-	        			        		
-	        		for(Item item : items){
-	        			model.getStorageUnitController().moveItem(item, targetUnit);
-	        		}
-        		}
+        		moveProductToTargetContainer(product, targetContainer,
+						targetUnit, currentContainerInTargetUnit);
         	}
         	
-        	Set<Item> itemSet = currentContainer.getItemsByProduct(product);
+        	moveCurrentProductToTargetContainer(product, currentContainer,
+					targetUnit, needsToBeRemovedFromStorageUnit);
+        	
+        	this.setChanged();
+        	this.notifyObservers(new Hint(product, Hint.Value.Move));
+        }
+
+		private void moveCurrentProductToTargetContainer(Product product,
+				ProductContainer currentContainer, StorageUnit targetUnit,
+				boolean needsToBeRemovedFromStorageUnit) {
+			Set<Item> itemSet = currentContainer.getItemsByProduct(product);
 
         	if(itemSet != null){
 	        	Item[] items = new Item[itemSet.size()];
@@ -155,10 +153,26 @@ public class ProductController extends ModelController{
         	if(needsToBeRemovedFromStorageUnit){
 	        	currentContainer.getStorageUnit().setContainerByProduct(product, null);
         	}
-        	
-        	this.setChanged();
-        	this.notifyObservers(new Hint(product, Hint.Value.Move));
-        }
+		}
+
+		private void moveProductToTargetContainer(Product product,
+				ProductContainer targetContainer, StorageUnit targetUnit,
+				ProductContainer currentContainerInTargetUnit) {
+			Set<Item> itemSet = currentContainerInTargetUnit.getItemsByProduct(product);
+			addProductToContainer(product, targetContainer);
+			if(itemSet != null){
+				Item[] items = new Item[itemSet.size()];
+				int i = 0;
+				for(Item item : itemSet){
+					items[i] = item;
+					i++;
+				}
+					        		
+				for(Item item : items){
+					model.getStorageUnitController().moveItem(item, targetUnit);
+				}
+			}
+		}
         
         /**
         * Checks to see if a product can be removed.
