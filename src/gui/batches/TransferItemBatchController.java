@@ -45,7 +45,7 @@ public class TransferItemBatchController extends Controller implements
 		productController = COM.getProductController();
 		PGC = COM.getProductGroupController();
 		SU = COM.getStorageUnitController();
-		productMap = new HashMap<>();
+		productMap = new HashMap<Product, ProductData>();
 		_target = target;
 		construct();
 		itemController.addObserver(this);

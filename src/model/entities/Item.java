@@ -223,13 +223,15 @@ public class Item implements PersistentItem{
 	 *
 	 */
 	public void calculateExpirationDate() {
-		GregorianCalendar calendar = new GregorianCalendar();
-
-		calendar.setTime(this.entryDate);
-
-		calendar.add(GregorianCalendar.MONTH, product.getShelfLife());
-
-		this.expirationDate = DateUtils.removeTimeFromDate(calendar.getTime());
+		if(this.hasProductShelfLife()){
+			GregorianCalendar calendar = new GregorianCalendar();
+	
+			calendar.setTime(this.entryDate);
+	
+			calendar.add(GregorianCalendar.MONTH, product.getShelfLife());
+	
+			this.expirationDate = DateUtils.removeTimeFromDate(calendar.getTime());
+		}
 	}
 
 	/**
@@ -246,6 +248,7 @@ public class Item implements PersistentItem{
 	 * @return the expiration date of the item
 	 */
 	public Date getExpirationDate() {
+		calculateExpirationDate();
 		return expirationDate;
 	}
 	

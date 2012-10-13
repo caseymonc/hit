@@ -52,6 +52,13 @@ public class ItemManager implements PersistentItem
 		if(i == null) {
 			throw new IllegalArgumentException();
 		}
+		
+		assert(canAddItem(i));
+		
+		if(!canAddItem(i)){
+			throw new IllegalArgumentException("Cannot add Item: " + i);
+		}
+		
 		if(canAddItem(i)) {
 			itemsByBarCode.put(i.getBarCode(), i);		
 		}

@@ -292,7 +292,7 @@ public class InventoryController extends Controller implements IInventoryControl
 		    productData.setDescription(product.getDescription());
 		    productData.setShelfLife(product.getShelfLife() + " months");
 		    productData.setSize(SizeFormatter.format(product.getSize()));
-		    productData.setSupply("10 count");
+		    productData.setSupply(SizeFormatter.format(product.getThreeMonthSize()));
 		    productData.setTag(product);
 
 		    productDataList.add(productData);
@@ -326,11 +326,10 @@ public class InventoryController extends Controller implements IInventoryControl
 		List<ItemData> itemDataList = new ArrayList<ItemData>();		
 		ProductData selectedProduct = getView().getSelectedProduct();
 		ProductContainerData selectedContainer = getView().getSelectedProductContainer();
-		if (selectedProduct == null)
-			return;
-		Product product = (Product) selectedProduct.getTag();
-		ProductContainer container = (ProductContainer) selectedContainer.getTag();
+
 		if (selectedProduct != null) {
+			Product product = (Product) selectedProduct.getTag();
+			ProductContainer container = (ProductContainer) selectedContainer.getTag();
 			List<Item> items;
 	        if(container != null) {
 	            items = sortItemsByEntryDate(container.getItemsByProduct(product));
@@ -435,14 +434,17 @@ public class InventoryController extends Controller implements IInventoryControl
 	 */
 	@Override
 	public boolean canDeleteProduct() {
-                Product p = (Product)getView().getSelectedProduct().getTag();
-                ProductContainer c = 
-                        (ProductContainer)getView().getSelectedProductContainer().getTag();
-                
-                if(c != null)
-                	return pController.canRemoveProductFromContainer(p, c);
-                else
-                	return pController.canRemoveProduct(p);
+		if(getView().getSelectedProduct() == null)
+			return false;
+		
+        Product p = (Product)getView().getSelectedProduct().getTag();
+        ProductContainer c = 
+                (ProductContainer)getView().getSelectedProductContainer().getTag();
+        
+        if(c != null)
+        	return pController.canRemoveProductFromContainer(p, c);
+        else
+        	return pController.canRemoveProduct(p);
 	}
 
 	/**
