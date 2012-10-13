@@ -30,11 +30,11 @@ public enum Unit{
             _string = s;
 	}
         
-        /** 
-         * returns the string of the enum value
-         */
-        @Override
-        public String toString() {
-            return _string;
-        }
+	/** 
+	 * returns the string of the enum value
+	 */
+	@Override
+	public String toString() {
+	    return _string;
+	}
 }
