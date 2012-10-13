@@ -36,7 +36,8 @@ public class BarCodePrinter {
 				BarcodeEAN codeEAN = new BarcodeEAN();
 				codeEAN.setCodeType(Barcode.UPCA);
 				Document document = new Document(new Rectangle(340, 842));
-				PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream("ItemsAddedBarcodes.pdf"));
+				PdfWriter writer = PdfWriter.getInstance(document, 
+					   new FileOutputStream("ItemsAddedBarcodes.pdf"));
 				document.open();
 				PdfContentByte cb = writer.getDirectContent();
 

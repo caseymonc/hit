@@ -75,7 +75,8 @@ public class AddItemBatchController extends Controller implements
 	 * Barcode for use to check if the barcode actually changed
 	 */
 	String previousBarCode;
-
+	
+	final String INVALID_SCAN = "The scanned Barcode was read incorrectly. Please Rescan";
 	/**
 	 * Constructor.
 	 * 
@@ -207,7 +208,8 @@ public class AddItemBatchController extends Controller implements
 		}
 		
  		if(!(isValid || newProductBarCode.equals(""))) {
-			getView().displayErrorMessage("The scanned Barcode was read incorrectly. Please Rescan");
+			
+			getView().displayErrorMessage(INVALID_SCAN);
 			getView().setBarcode("");
 			this.previousBarCode = "";
 		}
