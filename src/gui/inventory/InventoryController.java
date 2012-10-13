@@ -266,7 +266,7 @@ public class InventoryController extends Controller implements IInventoryControl
                 Collection<Product> products;
 		if (selectedContainer != null) {
 			products = selectedContainer.getAllProducts();
-			System.out.println(products.toString());
+			//System.out.println(products.toString());
 		} else {
                 products = pController.getAllProducts();
         }
@@ -326,7 +326,8 @@ public class InventoryController extends Controller implements IInventoryControl
 		List<ItemData> itemDataList = new ArrayList<ItemData>();		
 		ProductData selectedProduct = getView().getSelectedProduct();
 		ProductContainerData selectedContainer = getView().getSelectedProductContainer();
-		
+		if (selectedProduct == null)
+			return;
 		Product product = (Product) selectedProduct.getTag();
 		ProductContainer container = (ProductContainer) selectedContainer.getTag();
 		if (selectedProduct != null) {

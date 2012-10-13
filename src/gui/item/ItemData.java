@@ -63,9 +63,11 @@ public class ItemData extends Tagable {
 
         if (item.getContainer() instanceof ProductGroup){
             _productGroup = item.getContainer().getName();
+		  _storageUnit = item.getContainer().getStorageUnit().getName();
         }
         else{
             _productGroup = "";
+		  _storageUnit = item.getContainer().getName();
         }
         
         this.setTag(item);

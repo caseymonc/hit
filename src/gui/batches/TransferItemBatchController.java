@@ -5,9 +5,14 @@ import gui.inventory.*;
 import gui.item.ItemData;
 import gui.product.*;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Observable;
+import java.util.Observer;
 import model.CoreObjectModel;
 import model.controllers.ItemController;
 import model.controllers.ProductController;
+import model.controllers.ProductGroupController;
+import model.controllers.StorageUnitController;
 import model.entities.Item;
 import model.entities.Product;
 import model.entities.ProductContainer;
@@ -17,12 +22,15 @@ import model.entities.ProductContainer;
  * Controller class for the transfer item batch view.
  */
 public class TransferItemBatchController extends Controller implements
-		ITransferItemBatchController {
+		ITransferItemBatchController, Observer {
 	
 	CoreObjectModel COM;
 	ItemController itemController;
 	ProductController productController;
+	StorageUnitController SU;
+	ProductGroupController PGC;
 	ProductContainerData _target;
+	HashMap<Product, ProductData> productMap;
 	
 	/**
 	 * Constructor.
@@ -35,8 +43,12 @@ public class TransferItemBatchController extends Controller implements
 		COM = CoreObjectModel.getInstance();
 		itemController = COM.getItemController();
 		productController = COM.getProductController();
+		PGC = COM.getProductGroupController();
+		SU = COM.getStorageUnitController();
+		productMap = new HashMap<>();
 		_target = target;
 		construct();
+		itemController.addObserver(this);
 	}
 	
 	/**
@@ -62,6 +74,7 @@ public class TransferItemBatchController extends Controller implements
 		{
 			getView().setItems(getItemsForView());
 		}
+		updateTarget();
 		ProductContainer container = (ProductContainer)_target.getTag();
 		ProductData prodData[] = getProductsForView(container);
 		getView().setProducts(prodData);
@@ -70,9 +83,21 @@ public class TransferItemBatchController extends Controller implements
 				getView().enableItemAction(true);
 			}	
 			else{
-				getView().displayErrorMessage("The entered barcode does not exist.");
+				getView().displayErrorMessage("The entered barcode is invalid. \""
+				+ barcodeToChange +"\" does not exist.");
+				getView().setBarcode("");
 			}
 		}
+		if(selectedProduct != null)
+		{
+			Product p = (Product)selectedProduct.getTag();
+			getView().selectProduct(productMap.get(p));
+		}
+	}
+	
+	private void updateTarget()
+	{
+		_target.setTag(SU.getStorageUnitByName(_target.getName()));
 	}
 
 	/**
@@ -128,12 +153,18 @@ public class TransferItemBatchController extends Controller implements
 	public void transferItem() {
 		String barcodeOfItemToTransfer = getView().getBarcode();
 		ProductContainer container = (ProductContainer)_target.getTag();
-		ProductData prodData[] = getProductsForView(container);
-		getView().setProducts(prodData);
-		//getView().setItems(items);
-		System.out.println("This is the name of the container transfering to:"+container.getName());
 		itemController.moveItem(barcodeOfItemToTransfer, container);
-		loadValues();
+		getView().setBarcode("");
+//		ProductData selectedProduct = getView().getSelectedProduct();
+//		if(selectedProduct!=null)
+//		{
+//			int count = Integer.parseInt(selectedProduct.getCount());
+//			count++; //hack for being able to ignore updating my productdata obj
+//			String newCount = Integer.toString(count);
+//			selectedProduct.setCount(newCount);
+//		}
+		//loadValues();
+		
 	}
 
 	private ProductData[] getProductsForView(ProductContainer container)
@@ -144,7 +175,11 @@ public class TransferItemBatchController extends Controller implements
 		for(Product p: products)
 		{
 			ProductData pd = new ProductData(p);
+			ProductContainer product = (ProductContainer)_target.getTag();
+			String count = Integer.toString(product.getItemsByProduct(p).size());
+			pd.setCount(count);
 			prodData[i] = pd;
+			productMap.put(p, pd);
 			++i;
 		}
 		return prodData;
@@ -189,6 +224,24 @@ public class TransferItemBatchController extends Controller implements
 	@Override
 	public void done() {
 		getView().close();
+	}
+
+	@Override
+	public void update(Observable o, Object observerHint) {
+		//make sure observerHint is instanceof then cast
+		//get selected product
+//		ProductData selectedProduct = getView().getSelectedProduct();
+//		//use product controller and the selected products name to renew the product
+//		if(selectedProduct!=null)
+//		{
+//			Product oldProduct = (Product)selectedProduct.getTag(); 
+//			Product updatedProduct =  productController.getProductByBarCode(oldProduct.getBarCode());
+//			ProductData updatedProductData = new ProductData(updatedProduct);
+//			getView().selectProduct(updatedProductData);
+//		}
+		
+		loadValues();
+		//throw new UnsupportedOperationException("Not supported yet.");
 	}
 
 }
