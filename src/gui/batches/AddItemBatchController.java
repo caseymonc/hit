@@ -4,10 +4,13 @@ import gui.common.*;
 import gui.inventory.*;
 import gui.item.ItemData;
 import gui.product.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import javax.swing.Timer;
 import model.BarCodeGenerator;
 import model.CoreObjectModel;
 import model.controllers.*;
@@ -51,18 +54,29 @@ public class AddItemBatchController extends Controller implements
 	 */
 	ItemController itemController;
         
-        /**
-         * list of ItemDatas used by the GUI to show what items were added during 
-         * the batch.
-         */
-        List<ItemData> addedItems;
-        
-        /**
-         * list of ProductDatas used by the GUI to show what products were added
-         * during the batch.
-         */
-        List<ProductData> addedProducts;
-        
+	/**
+	 * list of ItemDatas used by the GUI to show what items were added during 
+	 * the batch.
+	 */
+	List<ItemData> addedItems;
+
+	/**
+	 * list of ProductDatas used by the GUI to show what products were added
+	 * during the batch.
+	 */
+	List<ProductData> addedProducts;
+     
+	/**
+	 * the timer needed to track barcode scanner induced add item 
+	 */
+	Timer timer;
+	
+	/**
+	 * Barcode for use to check if the barcode actually changed
+	 */
+	String previousBarCode;
+	
+	final String INVALID_SCAN = "The scanned Barcode was read incorrectly. Please Rescan";
 	/**
 	 * Constructor.
 	 * 
@@ -82,6 +96,16 @@ public class AddItemBatchController extends Controller implements
           addedProducts = new ArrayList<ProductData>();
                 
 		construct();
+
+		timer = new Timer(100, new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent evt) {
+				if(checkForValidBarCode()) {
+					addItem();
+				}
+			}
+		});
+		timer.setInitialDelay(1000);
 		setFieldsToDefault();
 	}
 	/**
@@ -94,6 +118,7 @@ public class AddItemBatchController extends Controller implements
 		getView().enableUndo(false);
 		getView().enableRedo(false);
 		getView().setBarcode("");
+		previousBarCode = "";
 	}
 	/**
 	 * Returns a reference to the view for this controller.
@@ -130,8 +155,7 @@ public class AddItemBatchController extends Controller implements
 		String count = getView().getCount();
 		String barCode = getView().getBarcode(); //this is the product barcode
 		Date entryDate = getView().getEntryDate();
-		getView().enableItemAction(itemController.enableAddItem(count, 
-                        entryDate, barCode));
+		getView().enableItemAction(itemController.enableAddItem(count, entryDate, barCode));
 	}
 	
 	/**
@@ -158,16 +182,47 @@ public class AddItemBatchController extends Controller implements
 	 */
 	@Override
 	public void barcodeChanged() {
+		if(getView().getUseScanner()) {
+			//start
+			if(timer.isRunning()) {
+				timer.restart();
+			} else {
+				timer.start();
+			}
+		}
 		enableComponents();
 	}
-
+	
+	/**
+	 * 
+	 */
+	private boolean checkForValidBarCode() {
+		
+		timer.stop();
+		boolean isValid = false;
+		
+		String newProductBarCode = getView().getBarcode();
+		if(!newProductBarCode.equals(this.previousBarCode)) {
+			this.previousBarCode = newProductBarCode;
+			isValid = (newProductBarCode.length() == 12);
+		}
+		
+ 		if(!(isValid || newProductBarCode.equals(""))) {
+			
+			getView().displayErrorMessage(INVALID_SCAN);
+			getView().setBarcode("");
+			this.previousBarCode = "";
+		}
+		
+		return isValid;
+	}
 	/**
 	 * This method is called when the "Use Barcode Scanner" setting in the
 	 * add item batch view is changed by the user.
 	 */
 	@Override
 	public void useScannerChanged() {
-		//
+		
 	}
 
 	/**
@@ -226,58 +281,58 @@ public class AddItemBatchController extends Controller implements
 			
 			itemController.addItem(i, storageUnit);
                         
-                        addItemData(new ItemData(i), storageUnit);
-                        addProductData(prodData);
+			addItemData(new ItemData(i), storageUnit);
+			addProductData(prodData);
 		}
                 
 		getView().setProducts(getAddedProducts());
-		selectedProductChanged();
 		getView().selectProduct(prodData);
+		selectedProductChanged();
 		setFieldsToDefault();
 	}
         
-        private void addProductData(ProductData prodData){
-            if(addedProducts.contains(prodData)){
-                int index = addedProducts.indexOf(prodData);
-                int count;
-                
-                try {
-                    count = Integer.parseInt(addedProducts.get(index).getCount());
-                }
-                catch (Exception e) {
-                    count = 0;
-                }
-                
-                count++;
-                addedProducts.get(index).setCount(Integer.toString(count));
-            } else {
-                prodData.setCount("1");
-                addedProducts.add(prodData);
-            }
-        }
-        
-        private void addItemData(ItemData itemData, StorageUnit storageUnit) {
-            itemData.setStorageUnit(storageUnit.getName());
-            addedItems.add(itemData);
-        }
-        
-        private ProductData[] getAddedProducts() {
-            return addedProducts.toArray(new ProductData[addedProducts.size()]);
-        }
-        
-        private ItemData[] getAddedItemsByProduct(ProductData prodData) {
-            List<ItemData> itemDatas = new ArrayList<ItemData>();
-            
-            for(ItemData i : addedItems) {
-                Item item = (Item)i.getTag();
-                String barcode = item.getProduct().getBarCode().getBarCode();
-                if(barcode.equals(prodData.getBarcode())) {
-                    itemDatas.add(i);
-                }
-            }
-            
-            return itemDatas.toArray(new ItemData[itemDatas.size()]);
-        }
+	private void addProductData(ProductData prodData){
+	    if(addedProducts.contains(prodData)){
+		   int index = addedProducts.indexOf(prodData);
+		   int count;
+
+		   try {
+			  count = Integer.parseInt(addedProducts.get(index).getCount());
+		   }
+		   catch (Exception e) {
+			  count = 0;
+		   }
+
+		   count++;
+		   addedProducts.get(index).setCount(Integer.toString(count));
+	    } else {
+		   prodData.setCount("1");
+		   addedProducts.add(prodData);
+	    }
+	}
+
+	private void addItemData(ItemData itemData, StorageUnit storageUnit) {
+	    itemData.setStorageUnit(storageUnit.getName());
+	    addedItems.add(itemData);
+	}
+
+	private ProductData[] getAddedProducts() {
+	    return addedProducts.toArray(new ProductData[addedProducts.size()]);
+	}
+
+	private ItemData[] getAddedItemsByProduct(ProductData prodData) {
+	    List<ItemData> itemDatas = new ArrayList<ItemData>();
+
+	    for(ItemData i : addedItems) {
+		   Item item = (Item)i.getTag();
+		   String barcode = item.getProduct().getBarCode().getBarCode();
+		   if(barcode.equals(prodData.getBarcode())) {
+			  itemDatas.add(i);
+		   }
+	    }
+
+	    return itemDatas.toArray(new ItemData[itemDatas.size()]);
+	}
         
 	/**
 	 * This method is called when the user clicks the "Redo" button
@@ -301,7 +356,7 @@ public class AddItemBatchController extends Controller implements
 	 */
 	@Override
 	public void done() {
-		itemController.printItemLabelsOnAddBatchClose();
+		itemController.printItemLabelsOnAddBatchClose(addedItems);
 		getView().close();
 	}
 	

@@ -4,6 +4,7 @@
  */
 package model.controllers;
 
+import gui.item.ItemData;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -41,7 +42,6 @@ public class ItemController extends ModelController {
         private ProductController PC;
         
 	private static ItemController instance;
-	private List<String> newItemBarCodes;
 
 	/**
 	 * Constructor
@@ -51,7 +51,6 @@ public class ItemController extends ModelController {
 		IM = COM.getItemManager();
 		SC = COM.getStorageUnitController();
                 PC = COM.getProductController();
-		newItemBarCodes = new ArrayList<String>();
 	}
 
 	public static ItemController getInstance() {
@@ -80,7 +79,6 @@ public class ItemController extends ModelController {
 		}
 		IM.addItem(i);
                 PC.addItemToProduct(i.getProduct(), i);
-		newItemBarCodes.add(i.getBarCode().getBarCode());
         
 		System.out.println("Notifying Item Observers");
 		this.setChanged();
@@ -166,9 +164,8 @@ public class ItemController extends ModelController {
 	 * This method will print 
 	 * After the pdf is displayed the list of items is cleared.
 	 */
-	public void printItemLabelsOnAddBatchClose() {
-		BarCodePrinter bcp = new BarCodePrinter(newItemBarCodes);
-		newItemBarCodes.clear();
+	public void printItemLabelsOnAddBatchClose(List<ItemData> items) {
+		BarCodePrinter bcp = new BarCodePrinter(items);
 	}
 	
 	public boolean enableAddItem(String count, Date entryDate, String productBarCode) {

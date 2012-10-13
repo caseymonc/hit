@@ -48,57 +48,11 @@ public enum SizeUnits {
 	}
 	
 	public Unit toUnit(){
-		switch(this){
-		case Pounds:
-			return Unit.pounds;
-		case Ounces:
-			return Unit.ounces;
-		case Grams:
-			return Unit.grams;
-		case Kilograms:
-			return Unit.kilograms;
-		case Gallons:
-			return Unit.gallons;
-		case Quarts:
-			return Unit.quarts;
-		case Pints:
-			return Unit.pints;
-		case FluidOunces:
-			return Unit.fluidOunces;
-		case Liters:
-			return Unit.liters;
-		case Count:
-			return Unit.count;
-		default:
-			return null;
-		}
+		return Unit.valueOf(this.toString());
 	}
 
 	public static SizeUnits fromUnit(Unit units) {
-		switch(units){
-		case pounds:
-			return Pounds;
-		case ounces:
-			return Ounces;
-		case grams:
-			return Grams;
-		case kilograms:
-			return Kilograms;
-		case gallons:
-			return Gallons;
-		case quarts:
-			return Quarts;
-		case pints:
-			return Pints;
-		case fluidOunces:
-			return FluidOunces;
-		case liters:
-			return Liters;
-		case count:
-			return Count;
-		default:
-			return null;
-		}
+		return SizeUnits.valueOf(units.toString());
 	}
 	
 }

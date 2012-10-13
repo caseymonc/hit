@@ -117,23 +117,21 @@ public class ProductController extends ModelController{
         		addProductToContainer(product, targetContainer);
         	}else if(currentContainerInTargetUnit != targetContainer){
         		//Move all items in sibling container
-        		Set<Item> itemSet = currentContainerInTargetUnit.getItemsByProduct(product);
-        		addProductToContainer(product, targetContainer);
-        		if(itemSet != null){
-	        		Item[] items = new Item[itemSet.size()];
-	        		int i = 0;
-	        		for(Item item : itemSet){
-	        			items[i] = item;
-	        			i++;
-	        		}
-	        			        		
-	        		for(Item item : items){
-	        			model.getStorageUnitController().moveItem(item, targetUnit);
-	        		}
-        		}
+        		moveProductToTargetContainer(product, targetContainer,
+						targetUnit, currentContainerInTargetUnit);
         	}
         	
-        	Set<Item> itemSet = currentContainer.getItemsByProduct(product);
+        	moveCurrentProductToTargetContainer(product, currentContainer,
+					targetUnit, needsToBeRemovedFromStorageUnit);
+        	
+        	this.setChanged();
+        	this.notifyObservers(new Hint(product, Hint.Value.Move));
+        }
+
+		private void moveCurrentProductToTargetContainer(Product product,
+				ProductContainer currentContainer, StorageUnit targetUnit,
+				boolean needsToBeRemovedFromStorageUnit) {
+			Set<Item> itemSet = currentContainer.getItemsByProduct(product);
 
         	if(itemSet != null){
 	        	Item[] items = new Item[itemSet.size()];
@@ -155,10 +153,26 @@ public class ProductController extends ModelController{
         	if(needsToBeRemovedFromStorageUnit){
 	        	currentContainer.getStorageUnit().setContainerByProduct(product, null);
         	}
-        	
-        	this.setChanged();
-        	this.notifyObservers(new Hint(product, Hint.Value.Move));
-        }
+		}
+
+		private void moveProductToTargetContainer(Product product,
+				ProductContainer targetContainer, StorageUnit targetUnit,
+				ProductContainer currentContainerInTargetUnit) {
+			Set<Item> itemSet = currentContainerInTargetUnit.getItemsByProduct(product);
+			addProductToContainer(product, targetContainer);
+			if(itemSet != null){
+				Item[] items = new Item[itemSet.size()];
+				int i = 0;
+				for(Item item : itemSet){
+					items[i] = item;
+					i++;
+				}
+					        		
+				for(Item item : items){
+					model.getStorageUnitController().moveItem(item, targetUnit);
+				}
+			}
+		}
         
         /**
         * Checks to see if a product can be removed.
@@ -170,6 +184,8 @@ public class ProductController extends ModelController{
         public boolean canRemoveProductFromContainer(Product p, ProductContainer c){
             return productManager.canRemoveProductFromContainer(p, c);
         }
+        
+        
         
         /**
         * Removes a product from a container.
@@ -183,6 +199,23 @@ public class ProductController extends ModelController{
         public void removeProductFromContainer(Product p, ProductContainer c)
                 throws IllegalArgumentException {
             productManager.removeProductFromContainer(p, c);
+        }
+        
+        public boolean canRemoveProduct(Product p){
+        	return productManager.canRemoveProduct(p);
+        }
+        
+        public void removeProduct(Product p){
+        	Set<ProductContainer> containers = p.getContainers();
+        	if(containers != null){
+        		for(ProductContainer container : containers){
+        			if(this.canRemoveProductFromContainer(p, container)){
+        				this.removeProductFromContainer(p, container);
+        			}
+        		}
+        	}
+        	
+        	productManager.removeProduct(p);
         }
         
         public void EditProduct(BarCode productBarCode, Product newProduct) 
