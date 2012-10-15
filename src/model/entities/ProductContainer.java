@@ -495,15 +495,17 @@ public abstract class ProductContainer implements PersistentItem{
 	  * @return
 	  */
 	 public boolean isEmpty() {
-		 boolean isEmpty = items.size() == 0;
-		 if(!isEmpty)
+		 
+		 if(!items.isEmpty()) {
 			 return false;
-		 for(ProductGroup group : productGroups.values()){
-			 isEmpty |= group.isEmpty();
-			 if(!isEmpty)
-				 return false;
 		 }
-		 return items.size() == 0;
+
+		 for(ProductGroup group : productGroups.values()) {
+			 if(!group.isEmpty()) {
+				 return false;
+			 }
+		 }
+		 return true;
 	}
 
 	/**

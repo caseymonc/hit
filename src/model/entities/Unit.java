@@ -5,16 +5,16 @@ package model.entities;
  *
  */
 public enum Unit{
-	count("count"),
-	pounds("pounds"),
-	ounces("ounces"),
-	grams("grams"),
-	kilograms("kilograms"),
-	gallons("gallons"),
-	quarts("quarts"),
-	pints("pints"),
-	liters("liters"),
-	fluidOunces("fluid ounces");
+	count("Count"),
+	pounds("Pounds"),
+	ounces("Ounces"),
+	grams("Grams"),
+	kilograms("Kilograms"),
+	gallons("Gallons"),
+	quarts("Quarts"),
+	pints("Pints"),
+	liters("Liters"),
+	fluidOunces("Fluid ounces");
         
         /**
 	 * String value to be returned by toString.

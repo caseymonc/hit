@@ -326,33 +326,29 @@ public class ProductController extends ModelController{
             
             try {
                sizeVal = Float.parseFloat(_sizeVal); 
+               if(Float.isInfinite(sizeVal) || Float.isNaN(sizeVal) || sizeVal < 1){
+                   return null;
+               }
             }
             catch(Exception e) {
-                sizeVal = 0;
-                canAddProduct = false;
+                return null;
             }
             
             try {
                 shelfLife = Integer.parseInt(_shelfLife);
             }
             catch(Exception e) {
-                shelfLife = 0;
-                canAddProduct = false;
+                return null;
             }
             
             try {
                 supply = Integer.parseInt(_supply);
             }
             catch(Exception e) {
-                supply = 0;
-                canAddProduct = false;
+                return null;
             }
             
             Size size = new Size(_sizeUnit, sizeVal);
-            
-            if(canAddProduct == false){
-                return null;
-            }
             
             if(Product.canCreate(description, barCode, shelfLife, supply, size) == false){
                 return null;
