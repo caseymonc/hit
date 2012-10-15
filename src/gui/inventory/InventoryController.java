@@ -387,12 +387,10 @@ public class InventoryController extends Controller implements IInventoryControl
 			ItemData data = new ItemData(item);
 			String barCode = item.getBarCode().getBarCode();
 			
-			data.setBarcode(barCode);
 			if (barCode.equalsIgnoreCase(selectedItemBarCode)) {
 				selectedItem = data;
 			}
 			
-			data.setTag(item);
 			itemDataList.add(data);
 		}
 		
