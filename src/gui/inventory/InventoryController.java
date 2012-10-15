@@ -675,6 +675,7 @@ public class InventoryController extends Controller implements IInventoryControl
 				loadValues();
 				ProductContainerData selectedContainer = dataForContainer.get(container);
 				getView().selectProductContainer(selectedContainer);
+                                productContainerSelectionChanged();
 			}else if (hint.getHint() == Hint.Value.Delete) {
 				getView().deleteProductContainer(selectedData);
 				selectedData = null;
