@@ -118,6 +118,7 @@ public class AddItemBatchController extends Controller implements
 		getView().enableUndo(false);
 		getView().enableRedo(false);
 		getView().setBarcode("");
+		getView().setEntryDate(new Date());
 		previousBarCode = "";
 	}
 	/**
