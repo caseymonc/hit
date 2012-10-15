@@ -384,19 +384,13 @@ public class InventoryController extends Controller implements IInventoryControl
 		
 		for (Item item : items) {
 			
-			ItemData data = new ItemData();
+			ItemData data = new ItemData(item);
 			String barCode = item.getBarCode().getBarCode();
 			
-			data.setBarcode(barCode);
 			if (barCode.equalsIgnoreCase(selectedItemBarCode)) {
 				selectedItem = data;
 			}
 			
-			data.setEntryDate(item.getEntryDate());
-			data.setExpirationDate(item.getExpirationDate());
-			data.setProductGroup(item.getContainer().getName());
-			data.setStorageUnit(item.getContainer().getStorageUnit().getName());
-			data.setTag(item);
 			itemDataList.add(data);
 		}
 		
