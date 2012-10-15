@@ -326,6 +326,9 @@ public class ProductController extends ModelController{
             
             try {
                sizeVal = Float.parseFloat(_sizeVal); 
+               if(Float.isInfinite(sizeVal) || Float.isNaN(sizeVal)){
+                   canAddProduct = false;
+               }
             }
             catch(Exception e) {
                 sizeVal = 0;
