@@ -232,8 +232,8 @@ public class InventoryController extends Controller implements IInventoryControl
 	 */
 	@Override
 	public boolean canEditProductGroup() {
-		return true;
-	}
+            return (getView().getSelectedProductContainer() != null);
+        }
 	
 	/**
 	 * This method is called when the user selects the "Delete Product Group" menu item.
@@ -499,7 +499,7 @@ public class InventoryController extends Controller implements IInventoryControl
 	 */
 	@Override
 	public boolean canEditProduct() {
-		return true;
+            return (getView().getSelectedProduct() != null);
 	}
 
 	/**
