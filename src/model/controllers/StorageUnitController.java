@@ -41,7 +41,7 @@ public class StorageUnitController extends ModelController{
 	/** Oversees moving an item from one container to another
 	 * 
 	 */
-	public void moveItem(Item item, StorageUnit targetContainer) {
+	public void moveItem(Item item, ProductContainer targetContainer) {
 		if(item.getContainer().canRemoveItem(item)){
 			item.getContainer().removeItem(item);
 			item.move(targetContainer);

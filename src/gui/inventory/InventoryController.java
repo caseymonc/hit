@@ -587,8 +587,7 @@ public class InventoryController extends Controller implements IInventoryControl
 	 * @param containerData Target product container
 	 */
 	@Override
-	public void moveItemToContainer(ItemData itemData,
-									ProductContainerData containerData) {
+	public void moveItemToContainer(ItemData itemData, ProductContainerData containerData) {
 		ProductContainer container = (ProductContainer) containerData.getTag();
 		Item item = (Item) itemData.getTag();
 		iController.transferItem(item, container.getStorageUnit());

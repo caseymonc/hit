@@ -114,7 +114,7 @@ public class ItemController extends ModelController {
 	public void moveItem(String barcode, ProductContainer target) {
 		BarCode bc = new BarCode(barcode);
 		Item i = IM.getItemByBarCode(bc);
-		SC.moveItem(i,target.getStorageUnit());
+		SC.moveItem(i,target);
 		this.setChanged();
 		this.notifyObservers(new Hint(i, Hint.Value.Move));
 	}
