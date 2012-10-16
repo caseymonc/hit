@@ -183,7 +183,7 @@ public class ProductManager implements PersistentItem{
 
         c.removeProduct(p);
         p.removeProductContainer(c);
-
+        
         if (p.getContainers().isEmpty()) {
             assert(canRemoveProduct(p));
             removeProduct(p);

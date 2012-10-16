@@ -92,6 +92,20 @@ private Map<Product, ProductContainer> productContainerByProduct;
 		
 		return productContainerByProduct.get(product);
 	}
-	
-	
+        
+        public void removeProductFromContainerByProduct(Product product){
+            this.productContainerByProduct.remove(product);
+        }
+        
+        @Override
+        public void removeProductFromContainer(Product product, ProductContainer container){
+                super.removeProductFromContainer(product, container);
+                removeProductFromContainerByProduct(product);
+        }
+        
+        @Override
+        public void removeProduct(Product product){
+                super.removeProduct(product);
+                removeProductFromContainerByProduct(product);
+        }
 }
