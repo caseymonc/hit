@@ -69,6 +69,20 @@ public class ProductData extends Tagable {
                 this.setTag(product);
         }
 
+        public void incrementCount() {
+            int count;
+            try{
+                count = Integer.valueOf(_count);
+            }
+            catch(Exception e){
+                count = 0;
+            }
+            
+            count++;
+            
+            _count = Integer.toString(count);
+        }
+        
 	/**
 	 * Returns the value of the Barcode attribute.
 	 */

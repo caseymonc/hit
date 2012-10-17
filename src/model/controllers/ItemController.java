@@ -207,5 +207,15 @@ public class ItemController extends ModelController {
 			return false;
 		return IM.getItemByBarCode(b) != null;
 	}
+        
+        public Item getItemByBarCode(String barcode){
+            assert(barcode.equals("") == false);
+            
+            if(barcode.equals("")){
+                throw new IllegalArgumentException();
+            }
+
+            return IM.getItemByBarCode(new BarCode(barcode));
+        }
 
 }
