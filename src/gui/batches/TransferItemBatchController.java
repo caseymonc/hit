@@ -33,6 +33,7 @@ public class TransferItemBatchController extends Controller implements
 	ProductGroupController PGC;
 	ProductContainerData target;
 	ArrayList<ProductData> addedProducts;
+        ArrayList<ItemData> addedItems;
         
         /**
 	 * the timer needed to track barcode scanner induced add item 
@@ -50,6 +51,8 @@ public class TransferItemBatchController extends Controller implements
             COM = CoreObjectModel.getInstance();
             itemController = COM.getItemController();
             addedProducts = new ArrayList<ProductData>();
+            addedItems = new ArrayList<ItemData>();
+            
             this.target = target;
 
             timer = new Timer(100, new ActionListener() {
@@ -158,6 +161,13 @@ public class TransferItemBatchController extends Controller implements
             itemController.moveItem(barcodeOfItemToTransfer, container);
             
             Item item = itemController.getItemByBarCode(barcodeOfItemToTransfer);
+            
+            ItemData itemData = new ItemData(item);
+            
+            if(addedItems.contains(itemData) == false){
+                addedItems.add(itemData);
+            }
+            
             ProductData productData = new ProductData(item.getProduct());
             
             if(addedProducts.contains(productData)){
@@ -181,18 +191,7 @@ public class TransferItemBatchController extends Controller implements
         
 	private ItemData[] getItemsForView()
 	{
-            ProductContainer pc = (ProductContainer)target.getTag();
-            Product selectedProduct = (Product)getView().getSelectedProduct().getTag();
-            Collection<Item> items = pc.getItemsByProduct(selectedProduct);
-            ItemData itemDataObjs[] = new ItemData[items.size()];
-            int i=0;
-            for(Item it: items)
-            {
-                ItemData theItem = new ItemData(it);
-                itemDataObjs[i] = theItem;
-                ++i;
-            }
-            return itemDataObjs;
+            return addedItems.toArray(new ItemData[addedItems.size()]);
 	}
 	
 	/**
