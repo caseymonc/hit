@@ -121,8 +121,8 @@ public class ProductController extends ModelController{
 						targetUnit, currentContainerInTargetUnit);
         	}
         	
-        	moveCurrentProductToTargetContainer(product, currentContainer,
-					targetUnit, needsToBeRemovedFromStorageUnit);
+        	//moveCurrentProductToTargetContainer(product, currentContainer,
+				//	targetUnit, needsToBeRemovedFromStorageUnit);
         	
         	this.setChanged();
         	this.notifyObservers(new Hint(product, Hint.Value.Move));

@@ -200,12 +200,12 @@ public class AddItemBatchController extends Controller implements
 	private boolean checkForValidBarCode() {
 		
 		timer.stop();
-		boolean isValid = false;
+		boolean isValid = true;
 		
 		String newProductBarCode = getView().getBarcode();
 		if(!newProductBarCode.equals(this.previousBarCode)) {
 			this.previousBarCode = newProductBarCode;
-			isValid = (newProductBarCode.length() == 12);
+			//isValid = (newProductBarCode.length() == 12);
 		}
 		
  		if(!(isValid || newProductBarCode.equals(""))) {
@@ -257,6 +257,10 @@ public class AddItemBatchController extends Controller implements
 			//open the other dialogue box to prompt for a new product.
 			getView().displayAddProductView();
 			product = productController.getProductByBarCode(productBarcode);
+			if(product == null) {
+				setFieldsToDefault();
+				return;
+			}
 			assert(product != null);
 			assert(product.getBarCode().isValid());
 		}

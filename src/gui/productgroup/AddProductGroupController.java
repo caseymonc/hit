@@ -100,12 +100,12 @@ public class AddProductGroupController extends Controller implements
 		
 		float count;
 		if(countString == null || countString.equals("")){
-			count = 0;
+			return null;
 		}else{
 			try{
 				count = Float.parseFloat(getView().getSupplyValue());
 			}catch(NumberFormatException e){
-				count = 0;
+				return null;
 			}
 		}
 		ProductContainer parent = (ProductContainer)container.getTag();
