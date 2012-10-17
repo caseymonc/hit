@@ -16,20 +16,28 @@ import model.entities.ProductGroup;
 import gui.common.*;
 import gui.item.ItemData;
 import gui.product.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.Timer;
 
 /**
  * Controller class for the remove item batch view.
  */
 public class RemoveItemBatchController extends Controller implements
 		IRemoveItemBatchController {
-	
-	
+    
 	private ItemController iController;
 	private CoreObjectModel model;
 	private List<Product> removedProducts;
 	private HashMap<Product, Set<Item>> removedItems;
 	private HashMap<Product, ProductData> productDataForProduct;
 	private HashMap<Item, ItemData> itemDataForItem;
+        
+        /**
+	 * the timer needed to track barcode scanner induced add item 
+	 */
+	Timer timer;
+        
 	/**
 	 * Constructor.
 	 * 
@@ -43,8 +51,21 @@ public class RemoveItemBatchController extends Controller implements
 		removedItems = new HashMap<Product, Set<Item>>();
 		productDataForProduct = new HashMap<Product, ProductData>();
 		itemDataForItem = new HashMap<Item, ItemData>();
+                
+                timer = new Timer(100, new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent evt) {
+                        timer.stop();
+                        if(getView().getBarcode().equals("") == false) {
+                            removeItem();
+                        }
+                    }
+                });
+                timer.setInitialDelay(1000);
+                
 		construct();
-		
+                
+                getView().setUseScanner(true);
 	}
 	
 	/**
@@ -65,6 +86,7 @@ public class RemoveItemBatchController extends Controller implements
 	@Override
 	protected void loadValues() {
 		enableComponents();
+                getView().setUseScanner(true);
 		Product selectedProduct = getSelectedProduct();
 		System.out.println("Selected Product: " + selectedProduct);
 		List<ProductData> productDataList = new ArrayList<ProductData>();
@@ -132,12 +154,12 @@ public class RemoveItemBatchController extends Controller implements
 	protected void enableComponents() {
 		getView().enableRedo(false);
 		getView().enableUndo(false);
-		Item item = getItemFromBarCode();
-		if(item != null){
-			getView().enableItemAction(true);
-		}else{
-			getView().enableItemAction(false);
-		}
+		String barcode = getView().getBarcode();
+                if(barcode.equals("")){
+                    getView().enableItemAction(false);
+                } else {
+                    getView().enableItemAction(true);
+                }
 	}
 
 	private Item getItemFromBarCode() {
@@ -152,6 +174,14 @@ public class RemoveItemBatchController extends Controller implements
 	 */
 	@Override
 	public void barcodeChanged() {
+                if(getView().getUseScanner()) {
+                    //start
+                    if(timer.isRunning()) {
+                            timer.restart();
+                    } else {
+                            timer.start();
+                    }
+                }
 		enableComponents();
 	}
 	
@@ -179,11 +209,15 @@ public class RemoveItemBatchController extends Controller implements
 	@Override
 	public void removeItem() {
 		Item item = getItemFromBarCode();
-		if(item != null){
-			iController.removeItem(item);
-			addRemovedItem(item);
-			loadValues();
-		}
+		if(item == null){
+                    getView().displayWarningMessage("The specified item does not exist");	
+		} else {
+                    iController.removeItem(item);
+                    addRemovedItem(item);
+                    loadValues();
+                }
+                getView().setBarcode("");
+                enableComponents();
 	}
 	
 	private void addRemovedItem(Item item) {

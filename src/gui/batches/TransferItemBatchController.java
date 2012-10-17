@@ -7,8 +7,6 @@ import gui.product.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
 import javax.swing.Timer;
 import model.CoreObjectModel;
 import model.controllers.ItemController;
@@ -16,7 +14,6 @@ import model.controllers.ProductController;
 import model.controllers.ProductGroupController;
 import model.controllers.StorageUnitController;
 import model.entities.Item;
-import model.entities.Product;
 import model.entities.ProductContainer;
 
 
@@ -153,6 +150,8 @@ public class TransferItemBatchController extends Controller implements
             ProductData selectedProduct = getView().getSelectedProduct();
             if(itemController.hasItem(getView().getBarcode()) == false){
                 getView().displayErrorMessage("The specified item does not exist.");
+                getView().setBarcode("");
+                enableComponents();
                 return;
             }
 
@@ -180,6 +179,7 @@ public class TransferItemBatchController extends Controller implements
             ProductData prodData[] = getProductsForView(container);
             getView().setProducts(prodData);
             getView().setBarcode("");
+            enableComponents();
             getView().selectProduct(selectedProduct);
             selectedProductChanged();
 	}
