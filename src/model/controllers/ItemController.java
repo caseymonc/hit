@@ -170,10 +170,10 @@ public class ItemController extends ModelController {
 	
 	public boolean enableAddItem(String count, Date entryDate, String productBarCode) {
 		
-		if(productBarCode.length() !=12) {
+		/*if(productBarCode.length() !=12) {
 			//invalid barcodes are allowed in HIT demo, but we might not want them...
 			return false;
-		}
+		}*/
 
 		try{
 			int i = Integer.parseInt(count);
@@ -185,9 +185,13 @@ public class ItemController extends ModelController {
 		}
 		
 		BarCode productB = new BarCode(productBarCode);
-		Product dummyProduct = new Product("dummy",productB, 1, 1, new Size(Unit.count, 1));
-
-		return Item.canCreate(null, entryDate, null, dummyProduct, null);	
+		try{
+			Product dummyProduct = new Product("dummy",productB, 1, 1, new Size(Unit.count, 1));
+			return Item.canCreate(null, entryDate, null, dummyProduct, null);	
+		}catch(IllegalArgumentException e){
+			return false;
+		}
+		
 	}
 
 	/**
