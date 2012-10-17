@@ -4,6 +4,7 @@
  */
 package model.entities;
 
+import java.util.Calendar;
 import model.managers.*;
 import java.util.Date;
 import org.junit.After;
@@ -36,9 +37,11 @@ public class ProductTest {
     public void testCreationDate() {
         Product product1 = new Product("Test Product", new BarCode("123412341234"), 3, 3, new Size(Unit.count, 1));
         Date date1 = new Date();
-        Date date2 = new Date();
-
-        date2.setDate(20);
+        
+        Calendar calendar = Calendar.getInstance();
+        
+        calendar.add(Calendar.DAY_OF_YEAR, -1);
+        Date date2 = calendar.getTime();
         
         assertTrue(product1.getCreationDate() != null);
         

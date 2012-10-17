@@ -40,12 +40,14 @@ public class ItemControllerTest {
 	private StorageUnitController SC;
 	private ProductGroupController PGC;
 	private ItemController IC;
+        private ProductController PC;
 	
 	public ItemControllerTest() {
 		COM = CoreObjectModel.getInstance();
 		SC = COM.getStorageUnitController();
 		PGC = COM.getProductGroupController();
 		IC = COM.getItemController();
+                PC = COM.getProductController();
 	}
 	
 	@BeforeClass
@@ -142,6 +144,7 @@ public class ItemControllerTest {
 		ProductGroup destination1 = new ProductGroup("ContainsProduct",rootUnit, new Size(Unit.count, 2));
 		PGC.addProductGroup(destination1, rootUnit);
 		destination1.addProduct(p);
+                PC.addProductToContainer(p, destination1);
 		rootUnit.setContainerByProduct(p, destination1);
 		
 		Item i = new Item(b, new Date(), null, p, null);
@@ -156,8 +159,9 @@ public class ItemControllerTest {
 		assertTrue(destination1.getAllProducts().contains(p));
 		
 		Product p2 = new Product("NewProduct", new BarCode("222222222222"),0,5,new Size(Unit.quarts, 5));
-		Item i2 = new Item(new BarCode("111111111111"), new Date(), null, p2, rootUnit);
+		Item i2 = new Item(new BarCode("000000000013"), new Date(), null, p2, rootUnit);
 		rootUnit.setContainerByProduct(p2,rootUnit);
+                PC.addProduct(p2);
 		IC.addItem(i2, rootUnit);
 		
 		//i2 should be in the destination storage unit
