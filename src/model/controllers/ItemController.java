@@ -176,13 +176,16 @@ public class ItemController extends ModelController {
 		}
 
 		try{
-			Integer.parseInt(count);
+			int i = Integer.parseInt(count);
+			if(i <= 0) {
+				return false;
+			}
 		} catch(Exception e) {
 			return false;
 		}
 		
 		BarCode productB = new BarCode(productBarCode);
-		Product dummyProduct = new Product("dummy",productB, 1,1, new Size(Unit.count, 1));
+		Product dummyProduct = new Product("dummy",productB, 1, 1, new Size(Unit.count, 1));
 
 		return Item.canCreate(null, entryDate, null, dummyProduct, null);	
 	}
