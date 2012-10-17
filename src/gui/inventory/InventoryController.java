@@ -588,9 +588,13 @@ public class InventoryController extends Controller implements IInventoryControl
 	 */
 	@Override
 	public void moveItemToContainer(ItemData itemData, ProductContainerData containerData) {
-		ProductContainer container = (ProductContainer) containerData.getTag();
 		Item item = (Item) itemData.getTag();
-		iController.transferItem(item, container.getStorageUnit());
+		ProductContainer targetContainer = (ProductContainer) containerData.getTag();
+		Product product = item.getProduct();
+		ProductContainer currentContainer = item.getContainer();
+		pController.moveProductToContainer(product, targetContainer, currentContainer);
+		
+		iController.transferItem(item, targetContainer.getStorageUnit());
 	}
 
         /** Updates the InventoryController.  Called from the observers when there
