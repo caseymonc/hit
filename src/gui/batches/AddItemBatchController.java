@@ -4,6 +4,7 @@ import gui.common.*;
 import gui.inventory.*;
 import gui.item.ItemData;
 import gui.product.*;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -12,6 +13,8 @@ import java.util.Date;
 import java.util.List;
 import javax.swing.Timer;
 import model.BarCodeGenerator;
+import model.Command;
+import model.CommandManager;
 import model.CoreObjectModel;
 import model.controllers.*;
 import model.entities.BarCode;
@@ -33,6 +36,7 @@ public class AddItemBatchController extends Controller implements
 	 *  The target for which product container was selected
 	 */
 	private ProductContainerData _target;
+	private CommandManager commandManager;
 	
 	/**
 	 * The facade interface to Model.  SIngleton class
@@ -91,7 +95,7 @@ public class AddItemBatchController extends Controller implements
 		storageUnitController = COM.getStorageUnitController();
 		productController = COM.getProductController();
 		itemController = COM.getItemController();
-
+		commandManager = new CommandManager();
           addedItems = new ArrayList<ItemData>();
           addedProducts = new ArrayList<ProductData>();
                 
@@ -157,6 +161,10 @@ public class AddItemBatchController extends Controller implements
 		String barCode = getView().getBarcode(); //this is the product barcode
 		Date entryDate = getView().getEntryDate();
 		getView().enableItemAction(itemController.enableAddItem(count, entryDate, barCode));
+		
+		getView().enableUndo(commandManager.canUndo());
+		getView().enableRedo(commandManager.canRedo());
+		
 	}
 	
 	/**
@@ -234,9 +242,11 @@ public class AddItemBatchController extends Controller implements
 	public void selectedProductChanged() {
 		ProductData selectedProduct = getView().getSelectedProduct();
                 
-                if(selectedProduct != null){
-                    getView().setItems(getAddedItemsByProduct(selectedProduct));
-                }
+        if(selectedProduct != null){
+            getView().setItems(getAddedItemsByProduct(selectedProduct));
+        }else{
+        	getView().setItems(new ItemData[0]);
+        }
 	}
 
 	/**
@@ -247,55 +257,152 @@ public class AddItemBatchController extends Controller implements
 	 */
 	@Override
 	public void addItem() {
-                
-		BarCode productBarcode = new BarCode(getView().getBarcode());
-		
-		//assert(productBarcode.isValid());
-		
-		Product product = productController.getProductByBarCode(productBarcode);
-		if(product == null) {		
-			//open the other dialogue box to prompt for a new product.
-			getView().displayAddProductView();
-			product = productController.getProductByBarCode(productBarcode);
-			if(product == null) {
+        Command command = new Command(){
+        	private List<Item> addedItems;
+        	private Product addedProduct;
+        	private ProductContainer addedContainer;
+        	private List<ItemData> itemData;
+			private ProductData prodData;
+			@Override
+			public void doAction() {
+				Product product;
+				if(addedProduct == null){
+					BarCode productBarcode = new BarCode(getView().getBarcode());
+					product = productController.getProductByBarCode(productBarcode);
+					if(product == null) {		
+						//open the other dialogue box to prompt for a new product.
+						getView().displayAddProductView();
+						product = productController.getProductByBarCode(productBarcode);
+						assert(product != null);
+						assert(product.getBarCode().isValid());
+					}
+					addedProduct = product;
+				}else{
+					product = addedProduct;
+				}
+				
+				
+				
+				//we have a good product now
+				ProductData prodData = new ProductData(product);
+		        
+				ProductContainer container = (ProductContainer) _target.getTag();
+				addedContainer = container;
+				StorageUnit storageUnit = container.getStorageUnit();
+				
+				if(addedItems == null){
+					addedItems = new ArrayList<Item>();
+					itemData = new ArrayList<ItemData>();
+					int count = Integer.parseInt(getView().getCount());
+					for(; count > 0; --count)
+					{
+						Date entryDate = getView().getEntryDate();
+						BarCode itemBarcode = BarCodeGenerator.getInstance().generateBarCode();
+						int shelfLife = product.getShelfLife();			
+						Calendar calen = Calendar.getInstance();
+						calen.add(Calendar.MONTH, shelfLife);
+						Date expirationDate = calen.getTime();
+						assert(Item.canCreate(itemBarcode, entryDate, expirationDate, 
+			                                product, storageUnit));
+						
+						Item i = new Item(itemBarcode, entryDate, expirationDate, product, storageUnit);
+						addedItems.add(i);
+						itemController.addItem(i, storageUnit);
+			            
+						ItemData iData = new ItemData(i);
+						this.itemData.add(iData);
+						this.prodData = prodData;
+						addItemData(iData, storageUnit);
+						addProductData(prodData);
+					}
+				}else{
+					Item[] addedItems = this.addedItems.toArray(new Item[0]);
+					List<Item> items = new ArrayList<Item>();
+					for(int j = 0; j < addedItems.length; j++){
+						Item i = addedItems[j];
+						Item item = new Item(i.getBarCode(), 
+								i.getEntryDate(), 
+								i.getExpirationDate(), 
+								product, 
+								storageUnit);
+						items.add(item);
+						itemController.addItem(item, storageUnit);
+					}
+					
+					this.addedItems = items;
+					
+					for(ItemData iData : itemData){
+						addItemData(iData, storageUnit);
+						addProductData(prodData);
+					}
+					
+				}
+				
+				
+		                
+				getView().setProducts(getAddedProducts());
+				getView().selectProduct(prodData);
+				selectedProductChanged();
 				setFieldsToDefault();
-				return;
 			}
-			assert(product != null);
-			assert(product.getBarCode().isValid());
-		}
-		//we have a good product now
-		ProductData prodData = new ProductData(product);
-        
-		ProductContainer container = (ProductContainer) _target.getTag();
-		StorageUnit storageUnit = container.getStorageUnit();
 
-		int count = Integer.parseInt(getView().getCount());
-		for(; count > 0; --count)
-		{
-			Date entryDate = getView().getEntryDate();
-			BarCode itemBarcode = BarCodeGenerator.getInstance().generateBarCode();
-			int shelfLife = product.getShelfLife();			
-			Calendar calen = Calendar.getInstance();
-			calen.add(Calendar.MONTH, shelfLife);
-			Date expirationDate = calen.getTime();
-			assert(Item.canCreate(itemBarcode, entryDate, expirationDate, 
-                                product, storageUnit));
-			
-			Item i = new Item(itemBarcode, entryDate, expirationDate, product, storageUnit);
-			
-			itemController.addItem(i, storageUnit);
-                        
-			addItemData(new ItemData(i), storageUnit);
-			addProductData(prodData);
-		}
-                
-		getView().setProducts(getAddedProducts());
-		getView().selectProduct(prodData);
-		selectedProductChanged();
-		setFieldsToDefault();
+			@Override
+			public void undoAction() {
+				for(Item item : addedItems){
+					deleteItem(item);
+				}
+				
+				for(ItemData iData : itemData){
+					removeItemData(iData, prodData);
+				}
+				
+				getView().setProducts(getAddedProducts());
+				if(getAddedProducts().length != 0)
+					getView().selectProduct(prodData);
+				selectedProductChanged();
+				setFieldsToDefault();
+			}
+
+			private void deleteItem(Item item) {
+				itemController.deleteItem(item);
+			}
+
+			private void removeProduct() {
+				if(productController.canRemoveProduct(addedProduct)){
+					productController.removeProduct(addedProduct);
+				}else if(productController
+						.canRemoveProductFromContainer(addedProduct, addedContainer)){
+					productController.removeProductFromContainer(addedProduct, addedContainer);
+				}
+			}
+        	
+        };
+		commandManager.doAction(command);
+		this.enableComponents();
 	}
         
+	protected void removeItemData(ItemData iData, ProductData prodData) {
+		if(addedProducts.contains(prodData)){
+			int index = addedProducts.indexOf(prodData);
+			int count;
+
+			try {
+				count = Integer.parseInt(addedProducts.get(index).getCount());
+			}catch (Exception e) {
+				count = 0;
+			}
+			
+			count--;
+			addedProducts.get(index).setCount(Integer.toString(count));
+			
+			if(count == 0){
+				addedProducts.remove(index);
+			}
+		}
+		
+		addedItems.remove(iData);
+	}
+	
 	private void addProductData(ProductData prodData){
 	    if(addedProducts.contains(prodData)){
 		   int index = addedProducts.indexOf(prodData);
@@ -345,6 +452,10 @@ public class AddItemBatchController extends Controller implements
 	 */
 	@Override
 	public void redo() {
+		if(commandManager.canRedo()){
+			commandManager.redo();
+		}
+		enableComponents();
 	}
 
 	/**
@@ -353,6 +464,10 @@ public class AddItemBatchController extends Controller implements
 	 */
 	@Override
 	public void undo() {
+		if(commandManager.canUndo()){
+			commandManager.undo();
+		}
+		enableComponents();
 	}
 
 	/**

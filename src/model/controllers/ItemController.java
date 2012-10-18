@@ -99,12 +99,45 @@ public class ItemController extends ModelController {
 		} else {
 			i.getContainer().removeItem(i);
 			IM.removeItem(i);
-                        PC.removeItemFromProduct(i.getProduct(), i);
+            PC.removeItemFromProduct(i.getProduct(), i);
 		}
 		this.setChanged();
 		this.notifyObservers(new Hint(i, Hint.Value.Delete));
 	}
 	
+	public void unRemoveItem(Item item, ProductContainer container){
+		container.unRemoveItem(item);
+		IM.unRemoveItem(item, container);
+		PC.unRemoveItemFromProduct(item.getProduct(), item);
+		
+		this.setChanged();
+		this.notifyObservers(new Hint(item, Hint.Value.Add));
+	}
+	
+	/**
+	 * Delete an item from the system completely
+	 * @param item
+	 */
+	public void deleteItem(Item item) {
+		if(item == null) {
+			throw new IllegalArgumentException("Null item");
+		}
+		
+		if(!this.canDeleteItem(item)){
+			throw new IllegalArgumentException("!Can Delete Item");
+		}
+		
+		item.getContainer().removeItem(item);
+		IM.deleteItem(item);
+		
+		this.setChanged();
+		this.notifyObservers(new Hint(item, Hint.Value.Delete));
+	}
+	
+	private boolean canDeleteItem(Item item) {
+		return item.getContainer().canRemoveItem(item);
+	}
+
 	/** The Storage Unit Controller will take care of the movement
 	 * 
 	 * @param i
@@ -215,14 +248,14 @@ public class ItemController extends ModelController {
 		return IM.getItemByBarCode(b) != null;
 	}
         
-        public Item getItemByBarCode(String barcode){
-            assert(barcode.equals("") == false);
-            
-            if(barcode.equals("")){
-                throw new IllegalArgumentException();
-            }
-
-            return IM.getItemByBarCode(new BarCode(barcode));
+    public Item getItemByBarCode(String barcode){
+        assert(barcode.equals("") == false);
+        
+        if(barcode.equals("")){
+            throw new IllegalArgumentException();
         }
+
+        return IM.getItemByBarCode(new BarCode(barcode));
+    }
 
 }

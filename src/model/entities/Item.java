@@ -127,6 +127,12 @@ public class Item implements PersistentItem{
 		this.container = null;
 		this.removed = true;
 	}
+	
+	public void unRemove(ProductContainer container){
+		exitDate = null;
+		this.container = container;
+		removed = false;
+	}
 	/** does this item have a product shelf life?
 	 * 
 	 * @return true if the shelf life is set > 0

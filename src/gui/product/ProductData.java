@@ -59,39 +59,45 @@ public class ProductData extends Tagable {
 		_barcode = "";
 	}
 
-	public ProductData(Product product) {
-		if(product == null){
-			_description = "";
-			_size = "";
-			_count = "";
-			_shelfLife = "";
-			_supply = "";
-			_barcode = "";	
-		} else {
-			_barcode = product.getBarCode().getBarCode();
-			_count = "1";
-			_description = product.getDescription();
-			_shelfLife = Integer.toString(product.getShelfLife());
-			_supply = Integer.toString(product.getThreeMonthSupply());
-			_size = product.getSize().toString();
-			this.setTag(product);
-		}
-	}
 
-	public void incrementCount() {
-	    int count;
-	    try{
-		   count = Integer.valueOf(_count);
-	    }
-	    catch(Exception e){
-		   count = 0;
-	    }
+        public ProductData(Product product) {
+                _barcode = product.getBarCode().getBarCode();
+                _count = "1";
+                _description = product.getDescription();
+                _shelfLife = Integer.toString(product.getShelfLife());
+                _supply = Integer.toString(product.getThreeMonthSupply());
+                _size = product.getSize().toString();
+                this.setTag(product);
+        }
 
-	    count++;
-
-	    _count = Integer.toString(count);
-	}
-
+        public void incrementCount() {
+            int count;
+            try{
+                count = Integer.valueOf(_count);
+            }
+            catch(Exception e){
+                count = 0;
+            }
+            
+            count++;
+            
+            _count = Integer.toString(count);
+        }
+        
+        public void decramentCount() {
+            int count;
+            try{
+                count = Integer.valueOf(_count);
+            }
+            catch(Exception e){
+                count = 0;
+            }
+            
+            count--;
+            
+            _count = Integer.toString(count);
+        }
+        
 	/**
 	 * Returns the value of the Barcode attribute.
 	 */

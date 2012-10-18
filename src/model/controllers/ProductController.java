@@ -374,4 +374,8 @@ public class ProductController extends ModelController{
         public void removeItemFromProduct(Product p, Item i) {
             productManager.removeItemFromProduct(p, i);
         }
+        
+        public void unRemoveItemFromProduct(Product product, Item item){
+        	addItemToProduct(product, item);
+        }
 }
