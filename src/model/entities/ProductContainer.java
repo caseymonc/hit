@@ -184,6 +184,11 @@ public abstract class ProductContainer implements PersistentItem{
 		items.remove(item.getBarCode());
 		
 	 }
+	
+	public void unRemoveItem(Item item){
+		this.putItemByProduct(item);
+		this.putItem(item);
+	}
 
 	 
 	/**

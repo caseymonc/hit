@@ -6,6 +6,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import model.Command;
+import model.CommandManager;
 import model.CoreObjectModel;
 import model.controllers.ItemController;
 import model.entities.BarCode;
@@ -32,6 +34,7 @@ public class RemoveItemBatchController extends Controller implements
 	private HashMap<Product, Set<Item>> removedItems;
 	private HashMap<Product, ProductData> productDataForProduct;
 	private HashMap<Item, ItemData> itemDataForItem;
+	private CommandManager commandManager;
         
         /**
 	 * the timer needed to track barcode scanner induced add item 
@@ -50,6 +53,7 @@ public class RemoveItemBatchController extends Controller implements
 		removedProducts = new ArrayList<Product>();
 		removedItems = new HashMap<Product, Set<Item>>();
 		productDataForProduct = new HashMap<Product, ProductData>();
+		commandManager = new CommandManager();
 		itemDataForItem = new HashMap<Item, ItemData>();
                 
                 timer = new Timer(100, new ActionListener() {
@@ -155,11 +159,14 @@ public class RemoveItemBatchController extends Controller implements
 		getView().enableRedo(false);
 		getView().enableUndo(false);
 		String barcode = getView().getBarcode();
-                if(barcode.equals("")){
-                    getView().enableItemAction(false);
-                } else {
-                    getView().enableItemAction(true);
-                }
+        if(barcode.equals("")){
+            getView().enableItemAction(false);
+        } else {
+            getView().enableItemAction(true);
+        }
+        
+        getView().enableUndo(commandManager.canUndo());
+		getView().enableRedo(commandManager.canRedo());
 	}
 
 	private Item getItemFromBarCode() {
@@ -174,14 +181,14 @@ public class RemoveItemBatchController extends Controller implements
 	 */
 	@Override
 	public void barcodeChanged() {
-                if(getView().getUseScanner()) {
-                    //start
-                    if(timer.isRunning()) {
-                            timer.restart();
-                    } else {
-                            timer.start();
-                    }
-                }
+	    if(getView().getUseScanner()) {
+	        //start
+	        if(timer.isRunning()) {
+	                timer.restart();
+	        } else {
+	                timer.start();
+	        }
+	    }
 		enableComponents();
 	}
 	
@@ -208,16 +215,36 @@ public class RemoveItemBatchController extends Controller implements
 	 */
 	@Override
 	public void removeItem() {
-		Item item = getItemFromBarCode();
+		final Item item = getItemFromBarCode();
 		if(item == null){
-                    getView().displayWarningMessage("The specified item does not exist");	
-		} else {
-                    iController.removeItem(item);
-                    addRemovedItem(item);
-                    loadValues();
-                }
-                getView().setBarcode("");
-                enableComponents();
+			getView().displayWarningMessage("The specified item does not exist");	
+		}
+		Command command = new Command(){
+			private Item removedItem;
+			private ProductContainer removedFromContainer;
+			
+			@Override
+			public void doAction() {
+				removedItem = item;
+				removedFromContainer = item.getContainer();
+	            iController.removeItem(item);
+	            addRemovedItem(item);
+	            loadValues();
+			}
+
+			@Override
+			public void undoAction() {
+				iController.unRemoveItem(removedItem, removedFromContainer);
+				removeRemovedItem(removedItem);
+				loadValues();
+			}
+			
+		};
+		
+		
+        getView().setBarcode("");
+        commandManager.doAction(command);
+		this.enableComponents();
 	}
 	
 	private void addRemovedItem(Item item) {
@@ -231,6 +258,19 @@ public class RemoveItemBatchController extends Controller implements
 		items.add(item);
 		removedItems.put(item.getProduct(), items);
 	}
+	
+	private void removeRemovedItem(Item item) {
+		Set<Item> items = removedItems.get(item.getProduct());
+		if(items == null)
+			return;
+		
+		items.remove(item);
+		
+		if(items.size() == 0){
+			removedProducts.remove(item.getProduct());
+			removedItems.remove(item.getProduct());
+		}
+	}
 
 	/**
 	 * This method is called when the user clicks the "Redo" button
@@ -238,6 +278,10 @@ public class RemoveItemBatchController extends Controller implements
 	 */
 	@Override
 	public void redo() {
+		if(commandManager.canRedo()){
+			commandManager.redo();
+		}
+		enableComponents();
 	}
 
 	/**
@@ -246,6 +290,10 @@ public class RemoveItemBatchController extends Controller implements
 	 */
 	@Override
 	public void undo() {
+		if(commandManager.canUndo()){
+			commandManager.undo();
+		}
+		enableComponents();
 	}
 
 	/**

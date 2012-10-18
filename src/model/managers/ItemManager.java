@@ -7,6 +7,7 @@ package model.managers;
 import java.util.HashMap;
 import model.entities.BarCode;
 import model.entities.Item;
+import model.entities.ProductContainer;
 import model.persistence.PersistentItem;
 
 
@@ -79,6 +80,18 @@ public class ItemManager implements PersistentItem
 		//add item to removed items history stuff.
 		removedItemsByBarCode.put(i.getBarCode(), i);
 	}
+	
+	public void unRemoveItem(Item item, ProductContainer container){
+		item.unRemove(container);
+		itemsByBarCode.put(item.getBarCode(), item);
+		removedItemsByBarCode.remove(item.getBarCode());
+	}
+	
+	public void deleteItem(Item i){
+		i.remove();
+		itemsByBarCode.remove(i.getBarCode());
+	}
+	
 	/**  can you add this item?
 	 * 
 	 * @param i
