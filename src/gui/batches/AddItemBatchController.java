@@ -75,11 +75,6 @@ public class AddItemBatchController extends Controller implements
 	 */
 	Timer timer;
 	
-	/**
-	 * Barcode for use to check if the barcode actually changed
-	 */
-	String previousBarCode;
-	
 	final String INVALID_SCAN = "The scanned Barcode was read incorrectly. Please Rescan";
 	/**
 	 * Constructor.
@@ -88,29 +83,30 @@ public class AddItemBatchController extends Controller implements
 	 * @param target Reference to the storage unit to which items are being added.
 	 */
 	public AddItemBatchController(IView view, ProductContainerData target) {
-		super(view);
-		
-		_target = target;
-		COM = CoreObjectModel.getInstance();
-		storageUnitController = COM.getStorageUnitController();
-		productController = COM.getProductController();
-		itemController = COM.getItemController();
-		commandManager = new CommandManager();
-          addedItems = new ArrayList<ItemData>();
-          addedProducts = new ArrayList<ProductData>();
-                
-		construct();
+            super(view);
 
-		timer = new Timer(100, new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent evt) {
-				if(checkForValidBarCode()) {
-					addItem();
-				}
-			}
-		});
-		timer.setInitialDelay(1000);
-		setFieldsToDefault();
+            _target = target;
+            COM = CoreObjectModel.getInstance();
+            storageUnitController = COM.getStorageUnitController();
+            productController = COM.getProductController();
+            itemController = COM.getItemController();
+            commandManager = new CommandManager();
+            addedItems = new ArrayList<ItemData>();
+            addedProducts = new ArrayList<ProductData>();
+                
+            construct();
+
+            timer = new Timer(100, new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent evt) {
+                    timer.stop();
+                    if(isValidEntry()) {
+                        addItem();
+                    }
+                }
+            });
+            timer.setInitialDelay(1000);
+            setFieldsToDefault();
 	}
 	/**
 	 * 
@@ -123,7 +119,6 @@ public class AddItemBatchController extends Controller implements
 		getView().enableRedo(false);
 		getView().setBarcode("");
 		getView().setEntryDate(new Date());
-		previousBarCode = "";
 	}
 	/**
 	 * Returns a reference to the view for this controller.
@@ -205,25 +200,25 @@ public class AddItemBatchController extends Controller implements
 	/**
 	 * 
 	 */
-	private boolean checkForValidBarCode() {
-		
-		timer.stop();
-		boolean isValid = true;
-		
-		String newProductBarCode = getView().getBarcode();
-		if(!newProductBarCode.equals(this.previousBarCode)) {
-			this.previousBarCode = newProductBarCode;
-			//isValid = (newProductBarCode.length() == 12);
-		}
-		
- 		if(!(isValid || newProductBarCode.equals(""))) {
-			
-			getView().displayErrorMessage(INVALID_SCAN);
-			getView().setBarcode("");
-			this.previousBarCode = "";
-		}
-		
-		return isValid;
+	private boolean isValidEntry() {
+            int count;
+ 		
+            if(getView().getBarcode().equals("")) {
+                return false;
+            }
+
+            try{
+                count = Integer.parseInt(getView().getCount());
+            }
+            catch(Exception e){
+                count = 0;
+            }
+
+            if(count < 1){
+                return false;
+            }
+
+            return true;
 	}
 	/**
 	 * This method is called when the "Use Barcode Scanner" setting in the
