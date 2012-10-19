@@ -28,10 +28,6 @@ public class CoreObjectModel implements PersistentItem{
 	private static final long serialVersionUID = -7518635251729938948L;
 	private static CoreObjectModel _instance;
 	private int lastBarCode;
-	//private ItemController itemController;
-	//private ProductController productController;
-	//private StorageUnitController storageUnitController;
-	//private ProductGroupController productGroupController;
 
 	private ProductManager productManager;
 	private ProductGroupManager productGroupManager;
@@ -43,12 +39,12 @@ public class CoreObjectModel implements PersistentItem{
 	   if(_instance == null)
 	   {
 		   if(PersistentStore.getSelectedStore() != null){
-			   System.out.println("Get CoreObjectModel From Persistent Serializer");
+			   //System.out.println("Get CoreObjectModel From Persistent Serializer");
 			   _instance = PersistentStore.getSelectedStore().getCoreObjectModel();
 		   }
 		   
 		   if(_instance == null){
-			   System.out.println("Get new CoreObjectModel");
+			   //System.out.println("Get new CoreObjectModel");
 			   _instance = new CoreObjectModel();
 		   }
 	   }
