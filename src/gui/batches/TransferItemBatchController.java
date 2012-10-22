@@ -181,8 +181,7 @@ public class TransferItemBatchController extends Controller implements
             	
             };
             commandManager.doAction(command);
-    		this.enableComponents();
-            
+    		this.enableComponents(); 
 	}
 	
 	private void removeItemFromView(Item item){

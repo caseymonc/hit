@@ -88,7 +88,6 @@ public class Item implements PersistentItem{
 			this.expirationDate = expirationDate;
 		}
 		this.barCode = barCode;
-		
 		this.product = product;
 		this.container = container;
 		this.removed = false;
