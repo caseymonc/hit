@@ -340,7 +340,7 @@ public class AddItemBatchController extends Controller implements
 		this.enableComponents();
 	}
         
-	protected void removeItemData(ItemData iData, ProductData prodData) {
+	private void removeItemData(ItemData iData, ProductData prodData) {
 		if(addedProducts.contains(prodData)){
 			int index = addedProducts.indexOf(prodData);
 			int count;

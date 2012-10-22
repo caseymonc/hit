@@ -91,26 +91,6 @@ public class CoreObjectModel implements PersistentItem{
 		return ItemController.getInstance();
 	}
 	
-		
-	/** finds and returns the product associated with the unique barcode
-	 * 
-	 * @param barcode unique for each product
-	 * @return Product
-	 */
-	public Product findProductByBarCode(BarCode barcode) 
-	{
-			return productManager.getProductByBarCode(barcode);
-	}
-
-	/** finds and returns the Item associated with the unique barcode
-	 * 
-	 * @param barcode unique for each item
-	 * @return Item
-	 */
-	public Item findItemByBarCode(BarCode barcode) {
-			return itemManager.getItemByBarCode(barcode);
-	}
-	
 	public int getLastBarCode() {
 		return lastBarCode;
 	}

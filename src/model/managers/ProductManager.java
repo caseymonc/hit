@@ -34,11 +34,11 @@ public class ProductManager implements PersistentItem{
 	/**
      * Map of products indexed by their BarCodes
      */
-    Map<BarCode, Product> productsByBarCode;
+    private Map<BarCode, Product> productsByBarCode;
     /**
      * Map of Item Collections indexed by their product
      */
-    Map<Product, Set<Item>> itemsByProduct;
+    private Map<Product, Set<Item>> itemsByProduct;
 
     /**
      * Constructor
