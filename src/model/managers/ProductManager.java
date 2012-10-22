@@ -4,13 +4,19 @@
  */
 package model.managers;
 
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.HashMap;
+
+import reports.visitors.ItemVisitor;
+import reports.visitors.NoticesProductVisitor;
+import reports.visitors.ProductVisitor;
 
 import model.entities.*;
 import model.persistence.PersistentItem;
@@ -399,4 +405,34 @@ public class ProductManager implements PersistentItem{
         
         return itemsByProduct.get(p);
     }
+    
+    public void accept(ProductVisitor visitor){
+    	for(Product product : productsByBarCode.values()){
+			visitor.visitProduct(product);
+		}
+    }
+    
+    public void accept(ItemVisitor visitor, Product product){
+    	Collection<Item> items = this.getItemsByProduct(product);
+    	if(items != null){
+	    	for(Item item : items){
+				visitor.visitItem(item);
+			}
+    	}
+    }
+
+	public void accept(ProductVisitor productVisitor, ProductGroup group) {
+		Product[] products = this.getProductsByContainer(group).toArray(new Product[0]);
+		Arrays.sort(products, new Comparator<Product>(){
+			public int compare(Product o1, Product o2) {
+				return o1.getDescription().compareTo(o2.getDescription());
+			}
+		});
+		
+		if(products != null){
+			for(Product product : products){
+				productVisitor.visitProduct(product);
+			}
+		}
+	}
 }

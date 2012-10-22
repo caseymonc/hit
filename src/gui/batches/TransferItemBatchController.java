@@ -27,16 +27,14 @@ public class TransferItemBatchController extends Controller implements
         ITransferItemBatchController{
 	
 	private CommandManager commandManager;
-	CoreObjectModel COM;
-	ItemController itemController;
-	ProductController productController;
-	StorageUnitController SU;
-	ProductGroupController PGC;
-	ProductContainerData target;
-	ArrayList<ProductData> addedProducts;
-        ArrayList<ItemData> addedItems;
+	private CoreObjectModel COM;
+	private ItemController itemController;
+	private StorageUnitController SU;
+	private ProductContainerData target;
+	private ArrayList<ProductData> addedProducts;
+	private ArrayList<ItemData> addedItems;
         
-        /**
+    /**
 	 * the timer needed to track barcode scanner induced add item 
 	 */
 	Timer timer;

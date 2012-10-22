@@ -5,6 +5,8 @@
 package model.managers;
 
 import java.util.HashMap;
+
+import reports.visitors.ItemVisitor;
 import model.entities.BarCode;
 import model.entities.Item;
 import model.entities.ProductContainer;
@@ -88,7 +90,7 @@ public class ItemManager implements PersistentItem
 	}
 	
 	public void deleteItem(Item i){
-		i.remove();
+		i.delete();
 		itemsByBarCode.remove(i.getBarCode());
 	}
 	
@@ -133,5 +135,11 @@ public class ItemManager implements PersistentItem
 		
 		return (removedItemsByBarCode.containsKey(i.getBarCode())
 			   && removedItemsByBarCode.containsValue(i));
+	}
+	
+	public void accept(ItemVisitor visitor){
+		for(Item item : itemsByBarCode.values()){
+			visitor.visitItem(item);
+		}
 	}
 }
