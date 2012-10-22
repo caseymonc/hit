@@ -5,7 +5,6 @@
 package model.controllers;
 
 import gui.item.ItemData;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import model.BarCodePrinter;
@@ -50,7 +49,7 @@ public class ItemController extends ModelController {
 		COM = CoreObjectModel.getInstance();
 		IM = COM.getItemManager();
 		SC = COM.getStorageUnitController();
-                PC = COM.getProductController();
+          PC = COM.getProductController();
 	}
 
 	public static ItemController getInstance() {
@@ -124,7 +123,7 @@ public class ItemController extends ModelController {
 		}
 		
 		if(!this.canDeleteItem(item)){
-			throw new IllegalArgumentException("!Can Delete Item");
+			throw new IllegalArgumentException("Can Delete Item!");
 		}
 		
 		item.getContainer().removeItem(item);
@@ -140,8 +139,8 @@ public class ItemController extends ModelController {
 
 	/** The Storage Unit Controller will take care of the movement
 	 * 
-	 * @param i
-	 * @param pc
+	 * @param barcode of the item that will be moved
+	 * @param target
 	 * @throws CannotMoveItemException 
 	 */
 	public void moveItem(String barcode, ProductContainer target) {
@@ -154,28 +153,12 @@ public class ItemController extends ModelController {
 	
 	/**
 	 * 
-	 * @param i
+	 * @param itemToTransfer
 	 * @param pc 
 	 */
-	public void transferItem(Item i, ProductContainer target) {
-		String bc = i.getBarCode().getBarCode();
+	public void transferItem(Item itemToTransfer, ProductContainer target) {
+		String bc = itemToTransfer.getBarCode().getBarCode();
 		moveItem(bc, target);
-	}
-	
-	/**
-	 * @throws CannotModifyItemException
-	 */
-	public void modifyItem(Item i) {// throws CannotModifyItemException {
-		
-		Item oldItem = IM.getItemByBarCode(i.getBarCode());
-		
-		if(canModifyItem(i, oldItem) == false) {
-			//throw new CannotModifyItemException();
-			//does this subsequently disable the ok button?
-		} else {
-			
-			//code to remove...
-		}
 	}
 		
 	/**
