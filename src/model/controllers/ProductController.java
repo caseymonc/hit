@@ -224,26 +224,6 @@ public class ProductController extends ModelController {
 	}
 
 	/**
-	 * Get the products in a ProductContainer
-	 *
-	 * @param c - The ProductContainer whose products will be returned
-	 * @return the Products that belong to c
-	 */
-	public Collection<Product> getProductsByContainer(ProductContainer c) {
-		return productManager.getProductsByContainer(c);
-	}
-
-	/**
-	 * Get the Containers that contain a Product
-	 *
-	 * @param p - The Product whose containers will be returned
-	 * @return the ProductContainers that contain p
-	 */
-	public Set<ProductContainer> getContainersByProduct(Product p) {
-		return productManager.getContainersByProduct(p);
-	}
-
-	/**
 	 * Tests whether or not a product can be edited.
 	 *
 	 * @param barcode - the new barcode string for the product
@@ -309,7 +289,7 @@ public class ProductController extends ModelController {
 	 *
 	 * @return a product if the product can be created. Otherwise it returns null.
 	 */
-	public Product createProduct(String barcode, String description, String sizeVal,
+	private Product createProduct(String barcode, String description, String sizeVal,
 			Unit sizeUnit, String supply, String shelfLife) {
 
 		String _description = description;

@@ -143,6 +143,8 @@ public class ProductGroupManager implements PersistentItem{
 	 * Get all of the product groups in unit
 	 * @param unit The unit to get the groups from
 	 * @return All of the ProductGroups in unit
+	 * We are keeping this because it gets all posterity.  Not just direct
+	 * children
 	 */
 	public Set<ProductGroup> getProductGroups(StorageUnit unit){
 		return productGroupsByStorageUnit.get(unit);
