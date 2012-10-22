@@ -232,8 +232,8 @@ public class InventoryController extends Controller implements IInventoryControl
 	 */
 	@Override
 	public boolean canEditProductGroup() {
-            return (getView().getSelectedProductContainer() != null);
-        }
+			return (getView().getSelectedProductContainer() != null);
+		}
 	
 	/**
 	 * This method is called when the user selects the "Delete Product Group" menu item.
@@ -263,7 +263,7 @@ public class InventoryController extends Controller implements IInventoryControl
 		ProductContainer selectedContainer = 
 						(ProductContainer)getView().getSelectedProductContainer().getTag();
 		List<ProductData> productDataList = new ArrayList<ProductData>();
-                Collection<Product> products;
+				Collection<Product> products;
 		if (selectedContainer != null) {
 			products = selectedContainer.getAllProducts();
 			//System.out.println(products.toString());
@@ -272,30 +272,30 @@ public class InventoryController extends Controller implements IInventoryControl
 		} else {
 			products = sortProductByDescription(pController.getAllProducts());
 		}
-        
+		
 		for (Product product : products) {
-		    ProductData productData = new ProductData();			
-		    productData.setBarcode(product.getBarCode().toString());
-		    int itemCount;
-		    if(selectedContainer != null) {
+			ProductData productData = new ProductData();			
+			productData.setBarcode(product.getBarCode().toString());
+			int itemCount;
+			if (selectedContainer != null) {
 				  itemCount = selectedContainer.getItemsByProduct(product).size();  
-		    } else {
-			   try {
+			} else {
+				try {
 				  itemCount = pController.getItemsByProduct(product).size();
-			   }
-			   catch(Exception e) {
+				}
+				catch(Exception e) {
 				  itemCount = 0;
 				  getView().displayErrorMessage(e.getMessage());
-			   }
-		    }
-		    productData.setCount(Integer.toString(itemCount));
-		    productData.setDescription(product.getDescription());
-		    productData.setShelfLife(product.getShelfLife() + " months");
-		    productData.setSize(SizeFormatter.format(product.getSize()));
-		    productData.setSupply(SizeFormatter.format(product.getThreeMonthSize()));
-		    productData.setTag(product);
+				}
+			}
+			productData.setCount(Integer.toString(itemCount));
+			productData.setDescription(product.getDescription());
+			productData.setShelfLife(product.getShelfLife() + " months");
+			productData.setSize(SizeFormatter.format(product.getSize()));
+			productData.setSupply(SizeFormatter.format(product.getThreeMonthSize()));
+			productData.setTag(product);
 
-		    productDataList.add(productData);
+			productDataList.add(productData);
 		}
 
 		getView().setProducts(productDataList.toArray(new ProductData[0]));
@@ -314,7 +314,7 @@ public class InventoryController extends Controller implements IInventoryControl
 				getView().setContextSupply(SizeFormatter.format(tmSupply));
 			}
 		} else {
-                        getView().setContextUnit("All");
+						getView().setContextUnit("All");
 		}
 	}
 
@@ -331,29 +331,29 @@ public class InventoryController extends Controller implements IInventoryControl
 			Product product = (Product) selectedProduct.getTag();
 			ProductContainer container = (ProductContainer) selectedContainer.getTag();
 			List<Item> items;
-	        if(container != null) {
-	            items = sortItemsByEntryDate(container.getItemsByProduct(product));
-	        } else {
-	            items = sortItemsByEntryDate((Set<Item>)pController.getItemsByProduct(product));
-	        }
+			if (container != null) {
+				items = sortItemsByEntryDate(container.getItemsByProduct(product));
+			} else {
+				items = sortItemsByEntryDate((Set<Item>)pController.getItemsByProduct(product));
+			}
 			for (Item item : items) {
 				ItemData data = new ItemData();
 				data.setBarcode(item.getBarCode().getBarCode());
 				data.setEntryDate(item.getEntryDate());
 				data.setExpirationDate(item.getExpirationDate());
-                                
-                String groupName = "";
-                String unitName = "";
-                ProductContainer cont = item.getContainer();
-                if(cont instanceof ProductGroup){
-                    groupName = cont.getName();
-                    unitName = cont.getStorageUnit().getName();
-                }
-                else{
-                    unitName = cont.getName();
-                }
-                
-                data.setProductGroup(groupName);
+								
+				String groupName = "";
+				String unitName = "";
+				ProductContainer cont = item.getContainer();
+				if (cont instanceof ProductGroup){
+					groupName = cont.getName();
+					unitName = cont.getStorageUnit().getName();
+				}
+				else{
+					unitName = cont.getName();
+				}
+				
+				data.setProductGroup(groupName);
 				data.setStorageUnit(unitName);
 				data.setTag(item);
 				itemDataList.add(data);
@@ -373,10 +373,11 @@ public class InventoryController extends Controller implements IInventoryControl
 		Product p = (Product)getView().getSelectedProduct().getTag();
 		ProductContainer pc = (ProductContainer)getView().getSelectedProductContainer().getTag();
 		List<Item> items;
-		if(pc != null)
+		if (pc != null) {
 			items = sortItemsByEntryDate(pc.getItemsByProduct(p));
-		else
+		} else {
 			items = sortItemsByEntryDate((Set<Item>)pController.getItemsByProduct(p));
+		}
 		List<ItemData> itemDataList = new ArrayList<ItemData>();
 
 		String selectedItemBarCode = getView().getSelectedItem().getBarcode();
@@ -410,35 +411,36 @@ public class InventoryController extends Controller implements IInventoryControl
 		return sortedItems;
 	}
 	
-        /**
-         * Sorts products by their description
-         * @return a sorted list of Products.
-         */
-        private List<Product> sortProductByDescription(Collection<Product> products) {
-                List<Product> sortedProducts = new ArrayList<Product>();
-                for(Product product : products) {
-                        sortedProducts.add(product);
-                }
-                Collections.sort(sortedProducts, new Product.ProductComparator());
-                return sortedProducts;
-        }
-        
+	/**
+	 * Sorts products by their description
+	 * @return a sorted list of Products.
+	 */
+	private List<Product> sortProductByDescription(Collection<Product> products) {
+			List<Product> sortedProducts = new ArrayList<Product>();
+			for(Product product : products) {
+					sortedProducts.add(product);
+			}
+			Collections.sort(sortedProducts, new Product.ProductComparator());
+			return sortedProducts;
+	}
+		
 	/**
 	 * Returns true if and only if the "Delete Product" menu item should be enabled.
 	 */
 	@Override
 	public boolean canDeleteProduct() {
-		if(getView().getSelectedProduct() == null)
+		if (getView().getSelectedProduct() == null)
 			return false;
 		
-        Product p = (Product)getView().getSelectedProduct().getTag();
-        ProductContainer c = 
-                (ProductContainer)getView().getSelectedProductContainer().getTag();
-        
-        if(c != null)
-        	return pController.canRemoveProductFromContainer(p, c);
-        else
-        	return pController.canRemoveProduct(p);
+		Product p = (Product)getView().getSelectedProduct().getTag();
+		ProductContainer c = 
+				(ProductContainer)getView().getSelectedProductContainer().getTag();
+		
+		if (c != null) {
+			return pController.canRemoveProductFromContainer(p, c);
+		} else {
+			return pController.canRemoveProduct(p);
+		}
 	}
 
 	/**
@@ -446,15 +448,15 @@ public class InventoryController extends Controller implements IInventoryControl
 	 */
 	@Override
 	public void deleteProduct() {
-                Product p = (Product)getView().getSelectedProduct().getTag();
-                ProductContainer c = 
-                        (ProductContainer)getView().getSelectedProductContainer().getTag();
-                if(c != null){
-                	pController.removeProductFromContainer(p, c);
-                } else {
-                	pController.removeProduct(p);
-                }
-                productContainerSelectionChanged();
+				Product p = (Product)getView().getSelectedProduct().getTag();
+				ProductContainer c = 
+						(ProductContainer)getView().getSelectedProductContainer().getTag();
+				if (c != null){
+					pController.removeProductFromContainer(p, c);
+				} else {
+					pController.removeProduct(p);
+				}
+				productContainerSelectionChanged();
 	}
 
 	/**
@@ -494,7 +496,7 @@ public class InventoryController extends Controller implements IInventoryControl
 	 */
 	@Override
 	public boolean canEditProduct() {
-            return (getView().getSelectedProduct() != null);
+			return (getView().getSelectedProduct() != null);
 	}
 
 	/**
@@ -597,38 +599,38 @@ public class InventoryController extends Controller implements IInventoryControl
 		iController.transferItem(item, targetContainer.getStorageUnit());
 	}
 
-        /** Updates the InventoryController.  Called from the observers when there
-         * is a change.
-         * 
-         * @param oObj - the observable object that is notifying the observer
-         * @param hint - the hint about what what updated
-         */
+		/** Updates the InventoryController.  Called from the observers when there
+		 * is a change.
+		 * 
+		 * @param oObj - the observable object that is notifying the observer
+		 * @param hint - the hint about what what updated
+		 */
 	@Override
 	public void update(Observable oObj, Object hint) {
-		if((oObj instanceof StorageUnitController 
+		if ((oObj instanceof StorageUnitController 
 				|| oObj instanceof ProductGroupController)){
 			updateProductContainer(hint);
-		}else if (oObj instanceof ProductController) {
+		} else if (oObj instanceof ProductController) {
 			updateProduct(hint);
-		}else if (oObj instanceof ItemController) {
+		} else if (oObj instanceof ItemController) {
 			updateItem(hint);
 		}
 	}
 	
 	private void updateProduct(Object observerHint) {
-                ProductData selectedProduct = getView().getSelectedProduct();
+				ProductData selectedProduct = getView().getSelectedProduct();
 		if (observerHint instanceof Hint) {
 			Hint hint = (Hint)observerHint;
 			Product product = (Product)hint.getExtra();
 			if (hint.getHint() == Hint.Value.Add) {
 				productContainerSelectionChanged();
-			}else if (hint.getHint() == Hint.Value.Edit) {
+			} else if (hint.getHint() == Hint.Value.Edit) {
 				productContainerSelectionChanged();
-			}else if (hint.getHint() == Hint.Value.Delete) {
+			} else if (hint.getHint() == Hint.Value.Delete) {
 				productContainerSelectionChanged();
-			}else if(hint.getHint() == Hint.Value.Move){
+			} else if (hint.getHint() == Hint.Value.Move){
 				productContainerSelectionChanged();
-			}else if(hint.getHint() == Hint.Value.Move){
+			} else if (hint.getHint() == Hint.Value.Move){
 				productContainerSelectionChanged();
 			}
 		}
@@ -639,7 +641,7 @@ public class InventoryController extends Controller implements IInventoryControl
 	 */
 	private void updateItem(Object observerHint) {
 		ProductContainerData selectedData = getView().getSelectedProductContainer();
-                ProductData selectedProduct = getView().getSelectedProduct();
+				ProductData selectedProduct = getView().getSelectedProduct();
 		if (observerHint instanceof Hint) {
 			Hint hint = (Hint)observerHint;
 			Item item = (Item)hint.getExtra();
@@ -673,8 +675,8 @@ public class InventoryController extends Controller implements IInventoryControl
 				loadValues();
 				ProductContainerData selectedContainer = dataForContainer.get(container);
 				getView().selectProductContainer(selectedContainer);
-                                productContainerSelectionChanged();
-			}else if (hint.getHint() == Hint.Value.Delete) {
+								productContainerSelectionChanged();
+			} else if (hint.getHint() == Hint.Value.Delete) {
 				getView().deleteProductContainer(selectedData);
 				selectedData = null;
 			}
