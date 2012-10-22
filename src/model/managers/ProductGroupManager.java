@@ -132,7 +132,7 @@ public class ProductGroupManager implements PersistentItem{
 	 * @return true if group is in the system
 	 * @return false if group in not in the system
 	 */
-	public boolean contains(ProductGroup group) {
+	private boolean contains(ProductGroup group) {
 		if(productGroups.contains(group)) {
 			return true;
 		}

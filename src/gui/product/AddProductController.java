@@ -14,22 +14,22 @@ import model.entities.Unit;
 public class AddProductController extends Controller implements
 		IAddProductController {
 	    
-        String barcode;
+    private String barcode;
     
-        /**
+    /**
 	 * The facade interface to Model.  SIngleton class
 	 */
-	CoreObjectModel COM;
+	private CoreObjectModel COM;
     
-        /**
+    /**
 	 * The facade in charge of Storage Units and moving items
 	 */
-        ProductController productController;
+    private ProductController productController;
         
-        /** 
-         * flag to determine the previous unit of the size.
-         */
-        private boolean unitIsCount;
+    /** 
+     * flag to determine the previous unit of the size.
+     */
+    private boolean unitIsCount;
         
 	/**
 	 * Constructor.

@@ -39,7 +39,7 @@ public class RemoveItemBatchController extends Controller implements
         /**
 	 * the timer needed to track barcode scanner induced add item 
 	 */
-	Timer timer;
+	private Timer timer;
         
 	/**
 	 * Constructor.

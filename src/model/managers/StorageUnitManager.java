@@ -116,7 +116,7 @@ public class StorageUnitManager implements PersistentItem{
 	 * @return true if the StorageUnit is in the manager
 	 * @return false if the StorageUnit is not in the manager
 	 */
-	public boolean contains(StorageUnit unit) {
+	private boolean contains(StorageUnit unit) {
 		if(storageUnits.keySet().contains(unit.getName())) {
 			return true;
 		}

@@ -15,17 +15,17 @@ public class EditItemController extends Controller implements IEditItemControlle
 	/**
 	 * The item that was selected when Edit was clicked
 	 */
-	ItemData _target;
+	private ItemData _target;
 	
 	/**
 	 * the facade to the Model
 	 */
-	CoreObjectModel COM;
+	private CoreObjectModel COM;
 	
 	/**
 	 * The model's controller
 	 */
-	ItemController IC;
+	private ItemController IC;
 	
 	/**
 	 * Constructor.
