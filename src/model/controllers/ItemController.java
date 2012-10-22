@@ -177,15 +177,7 @@ public class ItemController extends ModelController {
 			//code to remove...
 		}
 	}
-	
-
-	/** can we modify this item from oldItem to item
-	 * @return true if valid state change
-	 */
-	public boolean canModifyItem(Item item, Item oldItem) {
-		return true;
-	}
-	
+		
 	/**
 	 * gets the Item Manager
 	 * @return IM the item manager
@@ -229,32 +221,24 @@ public class ItemController extends ModelController {
 
 	/**
 	 * Updates the specified item with a new entry date
-	 * @param i The item to be modified
+	 * @param modifableItem The item to be modified
 	 * @param newEntryDate 
 	 */
-	public void updateItemsEntryDate(Item i, Date newEntryDate) {
-		assert(i.canSetEntryDate(newEntryDate));
-		i.setEntryDate(newEntryDate);
-		i.calculateExpirationDate();
+	public void updateItemsEntryDate(Item modifableItem, Date newEntryDate) {
+		assert(modifableItem.canSetEntryDate(newEntryDate));
+		modifableItem.setEntryDate(newEntryDate);
+		modifableItem.calculateExpirationDate();
 		this.setChanged();
-		this.notifyObservers(new Hint(i, Hint.Value.Edit));
+		this.notifyObservers(new Hint(modifableItem, Hint.Value.Edit));
 	}
 	
 	public boolean hasItem(String barcode)
 	{
 		BarCode b = new BarCode(barcode);
-		if (!b.isValid())
-			return false;
 		return IM.getItemByBarCode(b) != null;
 	}
         
     public Item getItemByBarCode(String barcode){
-        assert(barcode.equals("") == false);
-        
-        if(barcode.equals("")){
-            throw new IllegalArgumentException();
-        }
-
         return IM.getItemByBarCode(new BarCode(barcode));
     }
 

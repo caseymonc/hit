@@ -331,10 +331,7 @@ public class AddItemBatchController extends Controller implements
 						addProductData(prodData);
 					}
 					
-				}
-				
-				
-		                
+				}		                
 				getView().setProducts(getAddedProducts());
 				getView().selectProduct(prodData);
 				selectedProductChanged();
