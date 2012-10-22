@@ -1,13 +1,10 @@
 package model.controllers;
 
-import java.util.Calendar;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Set;
 import model.CoreObjectModel;
 import model.Hint;
 import model.entities.*;
-import model.BarCodeGenerator;
 import model.managers.ProductManager;
 
 /**
