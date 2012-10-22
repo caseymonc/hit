@@ -263,12 +263,9 @@ public class InventoryController extends Controller implements IInventoryControl
 		ProductContainer selectedContainer = 
 						(ProductContainer)getView().getSelectedProductContainer().getTag();
 		List<ProductData> productDataList = new ArrayList<ProductData>();
-				Collection<Product> products;
+		Collection<Product> products;
 		if (selectedContainer != null) {
-			products = selectedContainer.getAllProducts();
-			//System.out.println(products.toString());
 			products = sortProductByDescription(selectedContainer.getAllProducts());
-
 		} else {
 			products = sortProductByDescription(pController.getAllProducts());
 		}
