@@ -232,9 +232,9 @@ public class InventoryController extends Controller implements IInventoryControl
 	 */
 	@Override
 	public boolean canEditProductGroup() {
-			return (getView().getSelectedProductContainer() != null);
-		}
-	
+		return (getView().getSelectedProductContainer() != null);
+	}
+
 	/**
 	 * This method is called when the user selects the "Delete Product Group" menu item.
 	 */
@@ -243,42 +243,28 @@ public class InventoryController extends Controller implements IInventoryControl
 		ProductGroup group = (ProductGroup) getView().getSelectedProductContainer().getTag();
 		pgController.deleteProductGroup(group);
 	}
-
-	private Random rand = new Random();
 	
-	private String getRandomBarcode() {
-		Random rand = new Random();
-		StringBuilder barcode = new StringBuilder();
-		for (int i = 0; i < 12; ++i) {
-			barcode.append(((Integer)rand.nextInt(10)).toString());
-		}
-		return barcode.toString();
-	}
-
 	/**
 	 * This method is called when the selected item container changes.
 	 */
 	@Override
 	public void productContainerSelectionChanged() {
-		ProductContainer selectedContainer = 
+		ProductContainer selectedContainer =
 						(ProductContainer)getView().getSelectedProductContainer().getTag();
 		List<ProductData> productDataList = new ArrayList<ProductData>();
-				Collection<Product> products;
+		Collection<Product> products;
 		if (selectedContainer != null) {
-			products = selectedContainer.getAllProducts();
-			//System.out.println(products.toString());
 			products = sortProductByDescription(selectedContainer.getAllProducts());
-
 		} else {
 			products = sortProductByDescription(pController.getAllProducts());
 		}
 		
 		for (Product product : products) {
-			ProductData productData = new ProductData();			
+			ProductData productData = new ProductData();
 			productData.setBarcode(product.getBarCode().toString());
 			int itemCount;
 			if (selectedContainer != null) {
-				  itemCount = selectedContainer.getItemsByProduct(product).size();  
+				  itemCount = selectedContainer.getItemsByProduct(product).size();
 			} else {
 				try {
 				  itemCount = pController.getItemsByProduct(product).size();
