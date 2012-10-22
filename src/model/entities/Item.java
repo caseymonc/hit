@@ -127,6 +127,10 @@ public class Item implements PersistentItem{
 		this.removed = true;
 	}
 	
+	public void delete(){
+		//this.container = null;
+	}
+	
 	public void unRemove(ProductContainer container){
 		exitDate = null;
 		this.container = container;
