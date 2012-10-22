@@ -5,7 +5,6 @@
 package model.controllers;
 
 import gui.item.ItemData;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import model.BarCodePrinter;
@@ -50,7 +49,7 @@ public class ItemController extends ModelController {
 		COM = CoreObjectModel.getInstance();
 		IM = COM.getItemManager();
 		SC = COM.getStorageUnitController();
-                PC = COM.getProductController();
+          PC = COM.getProductController();
 	}
 
 	public static ItemController getInstance() {
@@ -124,7 +123,7 @@ public class ItemController extends ModelController {
 		}
 		
 		if(!this.canDeleteItem(item)){
-			throw new IllegalArgumentException("!Can Delete Item");
+			throw new IllegalArgumentException("Can Delete Item!");
 		}
 		
 		item.getContainer().removeItem(item);
@@ -140,8 +139,8 @@ public class ItemController extends ModelController {
 
 	/** The Storage Unit Controller will take care of the movement
 	 * 
-	 * @param i
-	 * @param pc
+	 * @param barcode of the item that will be moved
+	 * @param target
 	 * @throws CannotMoveItemException 
 	 */
 	public void moveItem(String barcode, ProductContainer target) {
@@ -154,38 +153,14 @@ public class ItemController extends ModelController {
 	
 	/**
 	 * 
-	 * @param i
+	 * @param itemToTransfer
 	 * @param pc 
 	 */
-	public void transferItem(Item i, ProductContainer target) {
-		String bc = i.getBarCode().getBarCode();
+	public void transferItem(Item itemToTransfer, ProductContainer target) {
+		String bc = itemToTransfer.getBarCode().getBarCode();
 		moveItem(bc, target);
 	}
-	
-	/**
-	 * @throws CannotModifyItemException
-	 */
-	public void modifyItem(Item i) {// throws CannotModifyItemException {
 		
-		Item oldItem = IM.getItemByBarCode(i.getBarCode());
-		
-		if(canModifyItem(i, oldItem) == false) {
-			//throw new CannotModifyItemException();
-			//does this subsequently disable the ok button?
-		} else {
-			
-			//code to remove...
-		}
-	}
-	
-
-	/** can we modify this item from oldItem to item
-	 * @return true if valid state change
-	 */
-	public boolean canModifyItem(Item item, Item oldItem) {
-		return true;
-	}
-	
 	/**
 	 * gets the Item Manager
 	 * @return IM the item manager
@@ -229,32 +204,24 @@ public class ItemController extends ModelController {
 
 	/**
 	 * Updates the specified item with a new entry date
-	 * @param i The item to be modified
+	 * @param modifableItem The item to be modified
 	 * @param newEntryDate 
 	 */
-	public void updateItemsEntryDate(Item i, Date newEntryDate) {
-		assert(i.canSetEntryDate(newEntryDate));
-		i.setEntryDate(newEntryDate);
-		i.calculateExpirationDate();
+	public void updateItemsEntryDate(Item modifableItem, Date newEntryDate) {
+		assert(modifableItem.canSetEntryDate(newEntryDate));
+		modifableItem.setEntryDate(newEntryDate);
+		modifableItem.calculateExpirationDate();
 		this.setChanged();
-		this.notifyObservers(new Hint(i, Hint.Value.Edit));
+		this.notifyObservers(new Hint(modifableItem, Hint.Value.Edit));
 	}
 	
 	public boolean hasItem(String barcode)
 	{
 		BarCode b = new BarCode(barcode);
-		if (!b.isValid())
-			return false;
 		return IM.getItemByBarCode(b) != null;
 	}
         
     public Item getItemByBarCode(String barcode){
-        assert(barcode.equals("") == false);
-        
-        if(barcode.equals("")){
-            throw new IllegalArgumentException();
-        }
-
         return IM.getItemByBarCode(new BarCode(barcode));
     }
 

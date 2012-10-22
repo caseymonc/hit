@@ -1,8 +1,12 @@
 package model.entities;
 
 
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
+
+import reports.visitors.ProductGroupVisitor;
 import model.persistence.PersistentItem;
 
 /** StorageUnit
@@ -93,19 +97,26 @@ private Map<Product, ProductContainer> productContainerByProduct;
 		return productContainerByProduct.get(product);
 	}
         
-        public void removeProductFromContainerByProduct(Product product){
-            this.productContainerByProduct.remove(product);
-        }
-        
-        @Override
-        public void removeProductFromContainer(Product product, ProductContainer container){
-                super.removeProductFromContainer(product, container);
-                removeProductFromContainerByProduct(product);
-        }
-        
-        @Override
-        public void removeProduct(Product product){
-                super.removeProduct(product);
-                removeProductFromContainerByProduct(product);
-        }
+    public void removeProductFromContainerByProduct(Product product){
+        this.productContainerByProduct.remove(product);
+    }
+    
+    @Override
+    public void removeProductFromContainer(Product product, ProductContainer container){
+            super.removeProductFromContainer(product, container);
+            removeProductFromContainerByProduct(product);
+    }
+    
+    @Override
+    public void removeProduct(Product product){
+            super.removeProduct(product);
+            removeProductFromContainerByProduct(product);
+    }
+
+	@Override
+	public void accept(ProductGroupVisitor visitor) {
+		for(ProductGroup group : this.getAllProductGroup()){
+			group.accept(visitor);
+		}
+	}
 }

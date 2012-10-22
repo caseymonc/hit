@@ -1,5 +1,7 @@
 package model.entities;
 
+import reports.visitors.ProductGroupVisitor;
+
 /** ProductGroup
  * A user-defined group of Products.Product Groups are used by users to 
  * aggregate related Products so they can be managed as a collection.
@@ -78,9 +80,17 @@ public class ProductGroup extends ProductContainer{
                 this.getStorageUnit().removeProductFromContainerByProduct(product);
 	}
         
-        @Override
-        public void removeProduct(Product product){
-                super.removeProduct(product);
-                this.getStorageUnit().removeProductFromContainerByProduct(product);
-        }
+    @Override
+    public void removeProduct(Product product){
+            super.removeProduct(product);
+            this.getStorageUnit().removeProductFromContainerByProduct(product);
+    }
+
+	@Override
+	public void accept(ProductGroupVisitor visitor) {
+		visitor.visitGroup(this);
+		for(ProductGroup group : this.getAllProductGroup()){
+			group.accept(visitor);
+		}
+	}
 }

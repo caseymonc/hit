@@ -88,7 +88,6 @@ public class Item implements PersistentItem{
 			this.expirationDate = expirationDate;
 		}
 		this.barCode = barCode;
-		
 		this.product = product;
 		this.container = container;
 		this.removed = false;
@@ -126,6 +125,10 @@ public class Item implements PersistentItem{
 		assert(this.container != null);// Non-empty if the item has not been removed from storage
 		this.container = null;
 		this.removed = true;
+	}
+	
+	public void delete(){
+		//this.container = null;
 	}
 	
 	public void unRemove(ProductContainer container){

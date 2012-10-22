@@ -12,6 +12,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.List;
 
+import reports.visitors.ProductGroupVisitor;
+
 
 
 /** ProductContainer
@@ -564,4 +566,6 @@ public abstract class ProductContainer implements PersistentItem{
 		productGroups.remove(oldName);
 		productGroups.put(newName, group);
 	}
+	
+	public abstract void accept(ProductGroupVisitor visitor);
 }
