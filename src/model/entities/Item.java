@@ -284,6 +284,14 @@ public class Item implements PersistentItem{
 	public BarCode getBarCode() {
 		return barCode;
 	}
+	
+	/** Get the barCode of the item's product
+	 * 
+	 * @return the BarCode of the item's product
+	 */
+	public BarCode getProductBarCode() {
+		return product.getBarCode();
+	}
 
 	/** Get the item's product
 	 * 

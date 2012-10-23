@@ -28,14 +28,6 @@ public class BarCode implements Serializable {
 	public BarCode(String barCode){
 		this.barCode = barCode;
 	}
-	
-	/** gets the value of the BarCode
-	 * 
-	 * @return barCode - the value of the BarCode
-	 */
-	public String getBarCode(){
-		return barCode;
-	}
 	 
 	@Override
 	public boolean equals(Object obj) 
@@ -55,11 +47,15 @@ public class BarCode implements Serializable {
 		return this.barCode.hashCode();
 	}
 	
-		
-		@Override
-		public String toString() {
-				return barCode;
-		}
+	/** 
+	 * Converts a BarCode to a string
+	 * 
+	 * @return the BarCode as a string
+	 */
+	@Override
+	public String toString() {
+		return barCode;
+	}
 	/**
 	 * Method test to make sure that the barcode is a valid UPC Barcode
 	 * Which it only wouldn't be if someone was using or source code it a way that 

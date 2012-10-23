@@ -324,7 +324,7 @@ public class InventoryController extends Controller implements IInventoryControl
 			}
 			for (Item item : items) {
 				ItemData data = new ItemData();
-				data.setBarcode(item.getBarCode().getBarCode());
+				data.setBarcode(item.getBarCode().toString());
 				data.setEntryDate(item.getEntryDate());
 				data.setExpirationDate(item.getExpirationDate());
 								
@@ -372,7 +372,7 @@ public class InventoryController extends Controller implements IInventoryControl
 		for (Item item : items) {
 			
 			ItemData data = new ItemData(item);
-			String barCode = item.getBarCode().getBarCode();
+			String barCode = item.getBarCode().toString();
 			
 			if (barCode.equalsIgnoreCase(selectedItemBarCode)) {
 				selectedItem = data;

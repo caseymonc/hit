@@ -204,10 +204,10 @@ public class ProductManager implements PersistentItem {
 	public void editProduct(BarCode productBarCode, Product newProduct)
 			throws IllegalArgumentException {
 		assert (productBarCode != null);
-		assert (productBarCode.getBarCode().equals(""));
+		assert (productBarCode.toString().equals(""));
 		assert (newProduct != null);
 
-		if (productBarCode == null || productBarCode.getBarCode().equals("")
+		if (productBarCode == null || productBarCode.toString().equals("")
 				|| productBarCode == null) {
 			throw new IllegalArgumentException();
 		}

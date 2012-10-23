@@ -79,7 +79,6 @@ public class ItemController extends ModelController {
 		IM.addItem(i);
 				PC.addItemToProduct(i.getProduct(), i);
 		
-		System.out.println("Notifying Item Observers");
 		this.setChanged();
 		this.notifyObservers(new Hint(i, Hint.Value.Add));
 	}
@@ -157,7 +156,7 @@ public class ItemController extends ModelController {
 	 * @param pc 
 	 */
 	public void transferItem(Item itemToTransfer, ProductContainer target) {
-		String bc = itemToTransfer.getBarCode().getBarCode();
+		String bc = itemToTransfer.getBarCode().toString();
 		moveItem(bc, target);
 	}
 		

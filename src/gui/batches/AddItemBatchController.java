@@ -415,7 +415,7 @@ public class AddItemBatchController extends Controller implements
 
 		for(ItemData i : addedItems) {
 			Item item = (Item)i.getTag();
-			String barcode = item.getProduct().getBarCode().getBarCode();
+			String barcode = item.getProductBarCode().toString();
 			if(barcode.equals(prodData.getBarcode())) {
 				itemDatas.add(i);
 			}

@@ -218,7 +218,6 @@ public class ProductController extends ModelController {
 		productManager.editProduct(productBarCode, newProduct);
 
 		Product p = productManager.getProductByBarCode(productBarCode);
-		System.out.println("Notifying observers...");
 		this.setChanged();
 		this.notifyObservers(new Hint(p, Hint.Value.Edit));
 	}

@@ -167,13 +167,13 @@ public class TransferItemBatchController extends Controller implements
 					oldContainer = item.getContainer();
 					
 					ProductContainer container = (ProductContainer)target.getTag();
-					itemController.moveItem(item.getBarCode().getBarCode(), container);
+					itemController.moveItem(item.getBarCode().toString(), container);
 					addItemToView(item);
 				}
 
 				@Override
 				public void undoAction() {
-					itemController.moveItem(item.getBarCode().getBarCode(), oldContainer);					
+					itemController.moveItem(item.getBarCode().toString(), oldContainer);					
 					removeItemFromView(item);
 				}
 				

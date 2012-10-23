@@ -58,7 +58,7 @@ public class ItemData extends Tagable {
 	public ItemData(Item item) {
 		_entryDate = item.getEntryDate();
 		_expirationDate = item.getExpirationDate();
-		_barcode = item.getBarCode().getBarCode();
+		_barcode = item.getBarCode().toString();
 		_storageUnit = "";
 
 		if (item.getContainer() instanceof ProductGroup){

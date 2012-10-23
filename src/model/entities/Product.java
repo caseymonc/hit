@@ -82,7 +82,7 @@ public class Product implements PersistentItem {
 			throw new IllegalArgumentException("Description cannot be empty");
 		}
 
-		if (barCode == null || barCode.getBarCode().equals("")) {
+		if (barCode == null || barCode.toString().equals("")) {
 			throw new IllegalArgumentException("Barcode is not valid");
 		}
 
@@ -302,8 +302,21 @@ public class Product implements PersistentItem {
 		}
 	}
 
+	/**
+	 * Class used to compare Products.  Products are compared by their description.
+	 */
 	public static class ProductComparator implements Comparator {
 
+		/**
+		 * Compares two products by their description. If one product's description
+		 * is alphabetically greater than the product's description, it is greater 
+		 * than the other product.
+		 * 
+		 * @param o1 - a Product
+		 * @param o2 - another Product
+		 * @return 0 if o1 and o2 are equal, a negative value if o1 is less than o2, or a
+		 * positive value if o1 is greater than o2. 
+		 */
 		@Override
 		public int compare(Object o1, Object o2) {
 			if ( !(o1 instanceof Product && o2 instanceof Product)) {
@@ -317,13 +330,12 @@ public class Product implements PersistentItem {
 		}
 	}
 
+	/**
+	 * Converts a product to a string by returning it's description.  
+	 * 
+	 * @return the description of a product.
+	 */
 	public String toString(){
 		return this.getDescription();
 	}
-	
-	/*@Override
-	public int hashCode() {
-		return this.barCode.hashCode();
-	}*/
-
 }

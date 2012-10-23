@@ -92,7 +92,6 @@ public class RemoveItemBatchController extends Controller implements
 		enableComponents();
 		getView().setUseScanner(true);
 		Product selectedProduct = getSelectedProduct();
-		System.out.println("Selected Product: " + selectedProduct);
 		List<ProductData> productDataList = new ArrayList<ProductData>();
 		for(Product product : removedProducts){
 			ProductData productData = new ProductData();			
@@ -117,10 +116,9 @@ public class RemoveItemBatchController extends Controller implements
 			
 			List<ItemData> itemDataList = new ArrayList<ItemData>();
 			Set<Item> selectedItems = removedItems.get(selectedProduct);
-			System.out.println("Selected Items: " + selectedItems);
 			for(Item item : selectedItems){
 				ItemData itemData = new ItemData();
-				itemData.setBarcode(item.getBarCode().getBarCode());
+				itemData.setBarcode(item.getBarCode().toString());
 				itemData.setEntryDate(item.getEntryDate());
 				itemData.setExpirationDate(item.getExpirationDate());
 								

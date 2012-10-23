@@ -76,7 +76,7 @@ public class BarCodePrinter {
 										exp = "";
 									}
 
-									codeEAN.setCode(item.getBarCode().getBarCode());
+									codeEAN.setCode(item.getBarCode().toString());
 									cell.addElement(new Paragraph(title, font));
 									cell.addElement(new Paragraph(entry + exp, font));
 									
