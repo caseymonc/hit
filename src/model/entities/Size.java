@@ -111,12 +111,12 @@ public class Size implements Serializable {
 	public float getSize() {
 		return size;
 	}
-        
-        /** 
-         * returns a string representation of the size
-         */
-        @Override
-        public String toString() {
-            return Float.toString(size) + " " + units.toString();
-        }
+		
+		/** 
+		 * returns a string representation of the size
+		 */
+		@Override
+		public String toString() {
+			return Float.toString(size) + " " + units.toString();
+		}
 }

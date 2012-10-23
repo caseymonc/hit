@@ -34,12 +34,12 @@ public class ItemController extends ModelController {
 	 * Controls everything to do with Storage Units
 	 */
 	private StorageUnitController SC;
-        
-        /**
-         * Controls everything to do with Products
-         */
-        private ProductController PC;
-        
+		
+		/**
+		 * Controls everything to do with Products
+		 */
+		private ProductController PC;
+		
 	private static ItemController instance;
 
 	/**
@@ -49,7 +49,7 @@ public class ItemController extends ModelController {
 		COM = CoreObjectModel.getInstance();
 		IM = COM.getItemManager();
 		SC = COM.getStorageUnitController();
-          PC = COM.getProductController();
+		  PC = COM.getProductController();
 	}
 
 	public static ItemController getInstance() {
@@ -61,9 +61,9 @@ public class ItemController extends ModelController {
 	
 	/** 
 	 * New Items are added to the Product Container within the target Storage 
-         * Unit that contains the Item’s Product. If the Item’s Product is not already
-         * in the Storage Unit, it is automatically added to the Storage Unit at the 
-         * top level before the Items are added.
+		 * Unit that contains the Item’s Product. If the Item’s Product is not already
+		 * in the Storage Unit, it is automatically added to the Storage Unit at the 
+		 * top level before the Items are added.
 	 * 
 	 * @throws IllegalArgumentException
 	 */
@@ -77,8 +77,8 @@ public class ItemController extends ModelController {
 			throw new IllegalArgumentException("Item still does not have a specified container");
 		}
 		IM.addItem(i);
-                PC.addItemToProduct(i.getProduct(), i);
-        
+				PC.addItemToProduct(i.getProduct(), i);
+		
 		System.out.println("Notifying Item Observers");
 		this.setChanged();
 		this.notifyObservers(new Hint(i, Hint.Value.Add));
@@ -98,7 +98,7 @@ public class ItemController extends ModelController {
 		} else {
 			i.getContainer().removeItem(i);
 			IM.removeItem(i);
-            PC.removeItemFromProduct(i.getProduct(), i);
+			PC.removeItemFromProduct(i.getProduct(), i);
 		}
 		this.setChanged();
 		this.notifyObservers(new Hint(i, Hint.Value.Delete));
@@ -220,9 +220,9 @@ public class ItemController extends ModelController {
 		BarCode b = new BarCode(barcode);
 		return IM.getItemByBarCode(b) != null;
 	}
-        
-    public Item getItemByBarCode(String barcode){
-        return IM.getItemByBarCode(new BarCode(barcode));
-    }
+		
+	public Item getItemByBarCode(String barcode){
+		return IM.getItemByBarCode(new BarCode(barcode));
+	}
 
 }

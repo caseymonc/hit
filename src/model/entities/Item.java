@@ -300,17 +300,17 @@ public class Item implements PersistentItem{
 	public ProductContainer getContainer() {
 		return container;
 	}
-     
+	 
 	@Override
 	public boolean equals(Object obj) 
 	{
-	    if(obj instanceof Item){
+		if(obj instanceof Item){
 		   Item objItem = (Item)obj;
 		   return this.barCode == objItem.barCode;
-	    }
-	    else{
+		}
+		else{
 		   return false;
-	    }    
+		}	
 	}
 
 	public String toString(){

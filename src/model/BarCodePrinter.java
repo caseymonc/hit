@@ -39,63 +39,63 @@ public class BarCodePrinter {
 	 * @param newItemBarCodes
 	 */
 	public BarCodePrinter(List<ItemData> items) {
-            Random random = new Random();
-            
+			Random random = new Random();
+			
 		if(items.size() > 0) {
 			try {
 				//Print the newItem barcodes to a pdf			
 				BarcodeEAN codeEAN = new BarcodeEAN();
 				codeEAN.setCodeType(Barcode.UPCA);
 				Document document = new Document(new Rectangle(340, 842));
-                                String file_name = "labels-" + 
-                                        Integer.toString(random.nextInt()) + ".pdf";
+								String file_name = "labels-" + 
+										Integer.toString(random.nextInt()) + ".pdf";
 				PdfWriter writer = PdfWriter.getInstance(document, 
-                                        new FileOutputStream(file_name));
+										new FileOutputStream(file_name));
 				document.open();
 				PdfContentByte cb = writer.getDirectContent();
 
-                                int numCols = 6;
-                                int colWidth = 200;
-                                PdfPTable table = new PdfPTable(numCols);
-                                table.setTotalWidth(numCols*colWidth);
-                                
-                                Font font = new Font(FontFamily.HELVETICA, 4);
+								int numCols = 6;
+								int colWidth = 200;
+								PdfPTable table = new PdfPTable(numCols);
+								table.setTotalWidth(numCols*colWidth);
+								
+								Font font = new Font(FontFamily.HELVETICA, 4);
 
 				for(int i=0; i < items.size(); ++i)
 				{
-                                    Item item = (Item)items.get(i).getTag();
-                                    String title = item.getProduct().getDescription();
-                                    String entry = DateUtils.formatDate(item.getEntryDate()); 
-                                    String exp;
-                                    
-                                    PdfPCell cell = new PdfPCell();
-                                    cell.setBorder(Rectangle.NO_BORDER);
-                                    if(item.getExpirationDate() != null){
-                                        exp = " exp " + DateUtils.formatDate(item.getExpirationDate());
-                                    } else {
-                                        exp = "";
-                                    }
+									Item item = (Item)items.get(i).getTag();
+									String title = item.getProduct().getDescription();
+									String entry = DateUtils.formatDate(item.getEntryDate()); 
+									String exp;
+									
+									PdfPCell cell = new PdfPCell();
+									cell.setBorder(Rectangle.NO_BORDER);
+									if(item.getExpirationDate() != null){
+										exp = " exp " + DateUtils.formatDate(item.getExpirationDate());
+									} else {
+										exp = "";
+									}
 
-                                    codeEAN.setCode(item.getBarCode().getBarCode());
-                                    cell.addElement(new Paragraph(title, font));
-                                    cell.addElement(new Paragraph(entry + exp, font));
-                                    
-                                    Image image = codeEAN.createImageWithBarcode(cb, null, null);
-                                    image.setSpacingBefore(3);
-                                    cell.addElement(image);
-                                    
-                                    table.addCell(cell);
+									codeEAN.setCode(item.getBarCode().getBarCode());
+									cell.addElement(new Paragraph(title, font));
+									cell.addElement(new Paragraph(entry + exp, font));
+									
+									Image image = codeEAN.createImageWithBarcode(cb, null, null);
+									image.setSpacingBefore(3);
+									cell.addElement(image);
+									
+									table.addCell(cell);
 				}
-                                
-                                int remainingCells = numCols - (items.size() % numCols);
-                                
-                                for(int i = 0; i < remainingCells; i++) {
-                                    PdfPCell cell = new PdfPCell();
-                                    cell.setBorder(Rectangle.NO_BORDER);
-                                    table.addCell(cell);
-                                }
-                                
-                                document.add(table);
+								
+								int remainingCells = numCols - (items.size() % numCols);
+								
+								for(int i = 0; i < remainingCells; i++) {
+									PdfPCell cell = new PdfPCell();
+									cell.setBorder(Rectangle.NO_BORDER);
+									table.addCell(cell);
+								}
+								
+								document.add(table);
 				document.close();
 				//This will allow you to open a pdf and display it on the screen
 				java.awt.Desktop.getDesktop().open(new File(file_name));

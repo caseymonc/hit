@@ -15,8 +15,8 @@ public enum Unit{
 	pints("Pints"),
 	liters("Liters"),
 	fluidOunces("Fluid ounces");
-        
-        /**
+		
+		/**
 	 * String value to be returned by toString.
 	 */
 	private String _string;
@@ -27,14 +27,14 @@ public enum Unit{
 	 * @param s String value to be returned by toString.
 	 */
 	private Unit(String s) {
-            _string = s;
+			_string = s;
 	}
-        
+		
 	/** 
 	 * returns the string of the enum value
 	 */
 	@Override
 	public String toString() {
-	    return _string;
+		return _string;
 	}
 }

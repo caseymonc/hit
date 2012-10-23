@@ -73,18 +73,18 @@ public class ProductGroup extends ProductContainer{
 	public Size getThreeMonthSupply() {
 		return threeMonthSupply;
 	}
-        
-        @Override
-        public void removeProductFromContainer(Product product, ProductContainer container){
+		
+		@Override
+		public void removeProductFromContainer(Product product, ProductContainer container){
 		super.removeProductFromContainer(product, container);
-                this.getStorageUnit().removeProductFromContainerByProduct(product);
+				this.getStorageUnit().removeProductFromContainerByProduct(product);
 	}
-        
-    @Override
-    public void removeProduct(Product product){
-            super.removeProduct(product);
-            this.getStorageUnit().removeProductFromContainerByProduct(product);
-    }
+		
+	@Override
+	public void removeProduct(Product product){
+			super.removeProduct(product);
+			this.getStorageUnit().removeProductFromContainerByProduct(product);
+	}
 
 	@Override
 	public void accept(ProductGroupVisitor visitor) {

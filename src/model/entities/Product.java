@@ -312,8 +312,8 @@ public class Product implements PersistentItem {
 			
 			Product p1 = (Product)o1;
 			Product p2 = (Product)o2;
-                        
-                        return p1.getDescription().compareTo(p2.getDescription());
+						
+						return p1.getDescription().compareTo(p2.getDescription());
 		}
 	}
 

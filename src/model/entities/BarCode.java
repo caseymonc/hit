@@ -36,18 +36,18 @@ public class BarCode implements Serializable {
 	public String getBarCode(){
 		return barCode;
 	}
-     
+	 
 	@Override
 	public boolean equals(Object obj) 
 	{
-	    if(obj instanceof BarCode)
-	    {
+		if(obj instanceof BarCode)
+		{
 		   BarCode objBCode = (BarCode)obj;
 		   return this.barCode.equals(objBCode.barCode);
-	    }
-	    else{
+		}
+		else{
 		   return false;
-	    }
+		}
 	}
 
 	@Override
@@ -55,11 +55,11 @@ public class BarCode implements Serializable {
 		return this.barCode.hashCode();
 	}
 	
-        
-        @Override
-        public String toString() {
-                return barCode;
-        }
+		
+		@Override
+		public String toString() {
+				return barCode;
+		}
 	/**
 	 * Method test to make sure that the barcode is a valid UPC Barcode
 	 * Which it only wouldn't be if someone was using or source code it a way that 
