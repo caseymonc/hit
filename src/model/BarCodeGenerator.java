@@ -24,11 +24,11 @@ public class BarCodeGenerator implements PersistentItem {
 	 */
 	public static BarCodeGenerator getInstance()
 	{
-	   if(_instance == null)
-	   {
-		   _instance = new BarCodeGenerator();
-	   }
-	   return _instance;
+		if(_instance == null)
+		{
+			_instance = new BarCodeGenerator();
+		}
+		return _instance;
 	}
 	
 	/**

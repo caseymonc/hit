@@ -364,41 +364,41 @@ public class AddItemBatchController extends Controller implements
 	
 	private void addProductData(ProductData prodData){
 		if(addedProducts.contains(prodData)){
-		   int index = addedProducts.indexOf(prodData);
-		   int count;
+			int index = addedProducts.indexOf(prodData);
+			int count;
 
-		   try {
+			try {
 			  count = Integer.parseInt(addedProducts.get(index).getCount());
-		   }
-		   catch (Exception e) {
+			}
+			catch (Exception e) {
 			  count = 0;
-		   }
+			}
 
-		   count++;
-		   addedProducts.get(index).setCount(Integer.toString(count));
+			count++;
+			addedProducts.get(index).setCount(Integer.toString(count));
 		} else {
-		   prodData.setCount("1");
-		   addedProducts.add(prodData);
+			prodData.setCount("1");
+			addedProducts.add(prodData);
 		}
 	}
 	
 	private void removeProductData(ProductData prodData){
-	   int index = addedProducts.indexOf(prodData);
-	   int count;
+		int index = addedProducts.indexOf(prodData);
+		int count;
 
-	   try {
+		try {
 		  count = Integer.parseInt(addedProducts.get(index).getCount());
-	   }
-	   catch (Exception e) {
+		}
+		catch (Exception e) {
 		  count = 0;
-	   }
+		}
 
-	   count--;
-	   addedProducts.get(index).setCount(Integer.toString(count));
-	   
-	   if(count == 0){
-		   addedProducts.remove(index);
-	   }
+		count--;
+		addedProducts.get(index).setCount(Integer.toString(count));
+		
+		if(count == 0){
+			addedProducts.remove(index);
+		}
 	}
 
 	private void addItemData(ItemData itemData, StorageUnit storageUnit) {
@@ -414,11 +414,11 @@ public class AddItemBatchController extends Controller implements
 		List<ItemData> itemDatas = new ArrayList<ItemData>();
 
 		for(ItemData i : addedItems) {
-		   Item item = (Item)i.getTag();
-		   String barcode = item.getProduct().getBarCode().getBarCode();
-		   if(barcode.equals(prodData.getBarcode())) {
+			Item item = (Item)i.getTag();
+			String barcode = item.getProduct().getBarCode().getBarCode();
+			if(barcode.equals(prodData.getBarcode())) {
 			  itemDatas.add(i);
-		   }
+			}
 		}
 
 		return itemDatas.toArray(new ItemData[itemDatas.size()]);

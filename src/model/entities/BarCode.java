@@ -42,11 +42,11 @@ public class BarCode implements Serializable {
 	{
 		if(obj instanceof BarCode)
 		{
-		   BarCode objBCode = (BarCode)obj;
-		   return this.barCode.equals(objBCode.barCode);
+			BarCode objBCode = (BarCode)obj;
+			return this.barCode.equals(objBCode.barCode);
 		}
 		else{
-		   return false;
+			return false;
 		}
 	}
 

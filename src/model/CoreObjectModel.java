@@ -36,19 +36,19 @@ public class CoreObjectModel implements PersistentItem{
 	  
 	public static CoreObjectModel getInstance()
 	{
-	   if(_instance == null)
-	   {
-		   if(PersistentStore.getSelectedStore() != null){
-			   //System.out.println("Get CoreObjectModel From Persistent Serializer");
-			   _instance = PersistentStore.getSelectedStore().getCoreObjectModel();
-		   }
-		   
-		   if(_instance == null){
-			   //System.out.println("Get new CoreObjectModel");
-			   _instance = new CoreObjectModel();
-		   }
-	   }
-	   return _instance;
+		if(_instance == null)
+		{
+			if(PersistentStore.getSelectedStore() != null){
+				//System.out.println("Get CoreObjectModel From Persistent Serializer");
+				_instance = PersistentStore.getSelectedStore().getCoreObjectModel();
+			}
+			
+			if(_instance == null){
+				//System.out.println("Get new CoreObjectModel");
+				_instance = new CoreObjectModel();
+			}
+		}
+		return _instance;
 	}
 	private CoreObjectModel()
 	{

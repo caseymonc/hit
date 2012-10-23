@@ -177,11 +177,11 @@ public class ItemData extends Tagable {
 	public boolean equals(Object obj) 
 	{
 		if(obj instanceof ItemData){
-		   ItemData objItem = (ItemData)obj;
-		   return _barcode.equals(objItem.getBarcode());
+			ItemData objItem = (ItemData)obj;
+			return _barcode.equals(objItem.getBarcode());
 		}
 		else{
-		   return false;
+			return false;
 		}	
 	}
 

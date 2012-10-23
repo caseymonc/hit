@@ -134,7 +134,7 @@ public class ItemManager implements PersistentItem
 		}
 		
 		return (removedItemsByBarCode.containsKey(i.getBarCode())
-			   && removedItemsByBarCode.containsValue(i));
+				&& removedItemsByBarCode.containsValue(i));
 	}
 	
 	public void accept(ItemVisitor visitor){
