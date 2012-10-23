@@ -181,10 +181,10 @@ public abstract class ProductContainer implements PersistentItem{
 			throw new IllegalArgumentException("The Item is not in this container" + this.name);
 		}
 		
-		if(itemsByProduct.get(item.getProduct()) != null)
+		if(itemsByProduct.get(item.getProduct()) != null){
 			itemsByProduct.get(item.getProduct()).remove(item);
+		}
 		items.remove(item.getBarCode());
-		
 	 }
 	
 	public void unRemoveItem(Item item){

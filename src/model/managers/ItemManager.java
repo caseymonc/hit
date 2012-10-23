@@ -5,7 +5,6 @@
 package model.managers;
 
 import java.util.HashMap;
-
 import reports.visitors.ItemVisitor;
 import model.entities.BarCode;
 import model.entities.Item;
@@ -70,17 +69,17 @@ public class ItemManager implements PersistentItem
 
 	/** Removes the Item from items by barcode, and puts it in the removed items index
 	 * 
-	 * @param i 
+	 * @param itemToRemove 
 	 */
-	public void removeItem(Item i) {
+	public void removeItem(Item itemToRemove) {
 		
-		assert(itemsByBarCode.containsKey(i.getBarCode()));
+		assert(itemsByBarCode.containsKey(itemToRemove.getBarCode()));
 		//tell the item to change its state
-		i.remove();
+		itemToRemove.remove();
 		//pull out item from itemsByBarCode
-		itemsByBarCode.remove(i.getBarCode());
+		itemsByBarCode.remove(itemToRemove.getBarCode());
 		//add item to removed items history stuff.
-		removedItemsByBarCode.put(i.getBarCode(), i);
+		removedItemsByBarCode.put(itemToRemove.getBarCode(), itemToRemove);
 	}
 	
 	public void unRemoveItem(Item item, ProductContainer container){
@@ -89,52 +88,42 @@ public class ItemManager implements PersistentItem
 		removedItemsByBarCode.remove(item.getBarCode());
 	}
 	
-	public void deleteItem(Item i){
-		i.delete();
-		itemsByBarCode.remove(i.getBarCode());
+	public void deleteItem(Item itemToDelete){
+		itemToDelete.delete();
+		itemsByBarCode.remove(itemToDelete.getBarCode());
 	}
 	
 	/**  can you add this item?
 	 * 
-	 * @param i
+	 * @param newItem
 	 * @return true if the conditions are met and false otherwise
 	 */
-	public boolean canAddItem(Item i) {
-
-		if(i == null) {
+	public boolean canAddItem(Item newItem) {
+		//is a valid item
+		if(newItem == null) {
 			return false;
-		} else if(i.getProduct() == null) {
-			//Product	Must be non-empty.
+		} else if(newItem.getProduct() == null) { //Product Must be non-empty.
 			return false;
-		} else if(!i.getBarCode().isValid()) {
+		} else if(!newItem.getBarCode().isValid()) { // Have a valid barcode
 			return false;
-		} else if(!i.hasValidEntryDate()) {
+		} else if(!newItem.hasValidEntryDate()) { // Have a valid entry date
 			return false;
-		} else if(i.getExitDate() != null) {
+		} else if(newItem.getExitDate() != null) { // Can't be a removed item
 			return false;
-		} else if(!i.hasProductShelfLife() && i.getExpirationDate() != null) {
+		} else if(!newItem.hasProductShelfLife() && newItem.getExpirationDate() != null) {
 			return false;
-
 		}
-		//Barcode	Unique among all Items.
-		assert(!itemsByBarCode.containsKey(i.getBarCode()));
-		assert(!removedItemsByBarCode.containsKey(i.getBarCode()));
-		
-		return true;
+		//Barcode	Unique among all Items.		
+		return (!itemsByBarCode.containsKey(newItem.getBarCode()) 
+			   && !removedItemsByBarCode.containsKey(newItem.getBarCode()));
 	}
 	
 	/** has the item already been removed?
-	 * @param i Item
+	 * @param item Item
 	 * @return true if it has been removed. 
 	 */
-	public boolean itemIsInRemovedItems(Item i) {
-		if(itemsByBarCode.containsKey(i.getBarCode())) {
-			assert(!removedItemsByBarCode.containsKey(i.getBarCode()));
-			return false;
-		}
-		
-		return (removedItemsByBarCode.containsKey(i.getBarCode())
-			   && removedItemsByBarCode.containsValue(i));
+	public boolean itemIsInRemovedItems(Item item) {
+		return removedItemsByBarCode.containsKey(item.getBarCode());
 	}
 	
 	public void accept(ItemVisitor visitor){
