@@ -90,22 +90,22 @@ public class AddItemBatchController extends Controller implements
 		productController = COM.getProductController();
 		itemController = COM.getItemController();
 		commandManager = new CommandManager();
-		  addedItems = new ArrayList<ItemData>();
-		  addedProducts = new ArrayList<ProductData>();
+		addedItems = new ArrayList<ItemData>();
+		addedProducts = new ArrayList<ProductData>();
 				
-			construct();
+		construct();
 
-			timer = new Timer(100, new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent evt) {
-					timer.stop();
-					if(isValidEntry()) {
-						addItem();
-					}
+		timer = new Timer(100, new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent evt) {
+				timer.stop();
+				if(isValidEntry()) {
+					addItem();
 				}
-			});
-			timer.setInitialDelay(1000);
-			setFieldsToDefault();
+			}
+		});
+		timer.setInitialDelay(1000);
+		setFieldsToDefault();
 	}
 	/**
 	 * 
@@ -368,10 +368,10 @@ public class AddItemBatchController extends Controller implements
 			int count;
 
 			try {
-			  count = Integer.parseInt(addedProducts.get(index).getCount());
+				count = Integer.parseInt(addedProducts.get(index).getCount());
 			}
 			catch (Exception e) {
-			  count = 0;
+				count = 0;
 			}
 
 			count++;
@@ -387,10 +387,10 @@ public class AddItemBatchController extends Controller implements
 		int count;
 
 		try {
-		  count = Integer.parseInt(addedProducts.get(index).getCount());
+			count = Integer.parseInt(addedProducts.get(index).getCount());
 		}
 		catch (Exception e) {
-		  count = 0;
+			count = 0;
 		}
 
 		count--;
@@ -417,7 +417,7 @@ public class AddItemBatchController extends Controller implements
 			Item item = (Item)i.getTag();
 			String barcode = item.getProduct().getBarCode().getBarCode();
 			if(barcode.equals(prodData.getBarcode())) {
-			  itemDatas.add(i);
+				itemDatas.add(i);
 			}
 		}
 

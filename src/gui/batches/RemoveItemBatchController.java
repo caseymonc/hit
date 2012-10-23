@@ -90,7 +90,7 @@ public class RemoveItemBatchController extends Controller implements
 	@Override
 	protected void loadValues() {
 		enableComponents();
-				getView().setUseScanner(true);
+		getView().setUseScanner(true);
 		Product selectedProduct = getSelectedProduct();
 		System.out.println("Selected Product: " + selectedProduct);
 		List<ProductData> productDataList = new ArrayList<ProductData>();

@@ -49,7 +49,7 @@ public class ItemController extends ModelController {
 		COM = CoreObjectModel.getInstance();
 		IM = COM.getItemManager();
 		SC = COM.getStorageUnitController();
-		  PC = COM.getProductController();
+		PC = COM.getProductController();
 	}
 
 	public static ItemController getInstance() {
