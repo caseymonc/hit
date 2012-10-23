@@ -181,11 +181,6 @@ public class ProductManager implements PersistentItem {
 		assert (p != null);
 		assert (c != null);
 		assert (canRemoveProductFromContainer(p, c));
-
-		if (p == null || c == null) {
-			throw new IllegalArgumentException();
-		}
-
 		c.removeProduct(p);
 		p.removeProductContainer(c);
 
@@ -195,6 +190,10 @@ public class ProductManager implements PersistentItem {
 		}
 	}
 
+	/**
+	
+
+		
 	/**
 	 * Edits a product using the data stored in newProduct.
 	 * 

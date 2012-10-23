@@ -30,21 +30,6 @@ private Map<Product, ProductContainer> productContainerByProduct;
 		super(name, null);
 		productContainerByProduct = new HashMap<Product, ProductContainer>();
 	}
-
-	/**
-	 * Asks whether a StorageUnit can be created with these values
-	 * @param name The name of the StorageUnit
-	 * @return true if a StorageUnit can be created with these values
-	 * @return false if a StorageUnit cannot be created with these values
-	 */
-	public static boolean canCreate(String name){
-		try{
-			new StorageUnit(name);
-			return true;
-		}catch(IllegalArgumentException e){
-			return false;
-		}
-	}
 	
 	/**
 	 * @return this
@@ -96,22 +81,22 @@ private Map<Product, ProductContainer> productContainerByProduct;
 		
 		return productContainerByProduct.get(product);
 	}
-        
-    public void removeProductFromContainerByProduct(Product product){
-        this.productContainerByProduct.remove(product);
-    }
-    
-    @Override
-    public void removeProductFromContainer(Product product, ProductContainer container){
-            super.removeProductFromContainer(product, container);
-            removeProductFromContainerByProduct(product);
-    }
-    
-    @Override
-    public void removeProduct(Product product){
-            super.removeProduct(product);
-            removeProductFromContainerByProduct(product);
-    }
+		
+	public void removeProductFromContainerByProduct(Product product){
+		this.productContainerByProduct.remove(product);
+	}
+	
+	@Override
+	public void removeProductFromContainer(Product product, ProductContainer container){
+			super.removeProductFromContainer(product, container);
+			removeProductFromContainerByProduct(product);
+	}
+	
+	@Override
+	public void removeProduct(Product product){
+			super.removeProduct(product);
+			removeProductFromContainerByProduct(product);
+	}
 
 	@Override
 	public void accept(ProductGroupVisitor visitor) {

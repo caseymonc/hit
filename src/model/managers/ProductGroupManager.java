@@ -84,10 +84,10 @@ public class ProductGroupManager implements PersistentItem{
 		productGroupsByStorageUnit.get(group.getStorageUnit()).add(group);
 		
 		Map<String, ProductGroup> groups = 
-			   productGroupsByProductContainer.get(group.getContainer());
+				productGroupsByProductContainer.get(group.getContainer());
 		if(groups == null) {
 			productGroupsByProductContainer.put(group.getContainer(), 
-				   new HashMap<String, ProductGroup>());
+					new HashMap<String, ProductGroup>());
 			groups = productGroupsByProductContainer.get(group.getContainer());
 		}
 		groups.put(group.getName(), group);
@@ -143,6 +143,8 @@ public class ProductGroupManager implements PersistentItem{
 	 * Get all of the product groups in unit
 	 * @param unit The unit to get the groups from
 	 * @return All of the ProductGroups in unit
+	 * We are keeping this because it gets all posterity.  Not just direct
+	 * children
 	 */
 	public Set<ProductGroup> getProductGroups(StorageUnit unit){
 		return productGroupsByStorageUnit.get(unit);

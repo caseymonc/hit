@@ -83,7 +83,7 @@ public class Item implements PersistentItem{
 			throw new IllegalArgumentException();
 		}
 		
-		//test constraint: Expiration Date only defined if the Product's Shelf life is defined	   
+		//test constraint: Expiration Date only defined if the Product's Shelf life is defined		
 		if(product.getShelfLife() != 0) { 
 			this.expirationDate = expirationDate;
 		}
@@ -300,17 +300,17 @@ public class Item implements PersistentItem{
 	public ProductContainer getContainer() {
 		return container;
 	}
-     
+	 
 	@Override
 	public boolean equals(Object obj) 
 	{
-	    if(obj instanceof Item){
-		   Item objItem = (Item)obj;
-		   return this.barCode == objItem.barCode;
-	    }
-	    else{
-		   return false;
-	    }    
+		if(obj instanceof Item){
+			Item objItem = (Item)obj;
+			return this.barCode == objItem.barCode;
+		}
+		else{
+			return false;
+		}	
 	}
 
 	public String toString(){

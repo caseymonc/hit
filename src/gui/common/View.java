@@ -30,7 +30,7 @@ import gui.main.GUI;
  * <UL>
  * <LI>{@link #createComponents() createComponents}
  * <LI>{@link #layoutComponents() layoutComponents}
-  * </UL>
+ * </UL>
  * <P>
  * Subclasses should also call {@link #construct() construct} from their
  * constructors.

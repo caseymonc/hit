@@ -69,17 +69,17 @@ public final class GUI extends JFrame implements IMainView {
 	}
 
 	private void display() {
-        pack();
-        setVisible(true);
+		pack();
+		setVisible(true);
 	}
 	
 	public IMainController getController() {
 		return _controller;
 	}
 
-    //
-    // IView overrides
-    //
+	//
+	// IView overrides
+	//
 
 	@Override
 	public void displayInformationMessage(String message) {
@@ -112,9 +112,9 @@ public final class GUI extends JFrame implements IMainView {
 		});
 	}
 
-    //
-    // IMainView overrides
-    //
+	//
+	// IMainView overrides
+	//
 
 	@Override
 	public void displayExpiredReportView() {
@@ -151,22 +151,22 @@ public final class GUI extends JFrame implements IMainView {
 	// Main
 	//
 	
-    public static void main(final String[] args) {
-     	try {
-    		UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-    	}
-    	catch (Exception e) {
-    		e.printStackTrace();
-    	}
+	public static void main(final String[] args) {
+	 	try {
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
 
  		SwingUtilities.invokeLater(
 			new Runnable() {
-            	public void run() {
-                	new GUI(args);
-            	}
-        	}
+				public void run() {
+					new GUI(args);
+				}
+			}
 		);
-    }
+	}
 
 }
 

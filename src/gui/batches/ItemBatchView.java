@@ -222,28 +222,28 @@ public abstract class ItemBatchView extends DialogView {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				handleMouseEvent(e);
-    		}
+			}
 			
 			@Override
-    		public void mouseReleased(MouseEvent e) {
+			public void mouseReleased(MouseEvent e) {
 				handleMouseEvent(e);
-    		}
-    	    
+			}
+			
 			private void handleMouseEvent(MouseEvent e) {
-    	 		if (eventsAreDisabled()) {
-    				return;
-    			}
-    	 		if (e.getSource() == productTableHeader) {
-//    	    		if (e.getButton() == MouseEvent.BUTTON1 &&
-//    						e.getID() == MouseEvent.MOUSE_PRESSED) {
-//    					int clickedColumnIndex = 
-//    						commentsColumnModel.getColumnIndexAtX(e.getX());
-//    					if (clickedColumnIndex >= 0) {
-//    						updateCommentSortOrder(clickedColumnIndex);
-//    					}
-//    	    		}
-    			}
-    	    }
+		 		if (eventsAreDisabled()) {
+					return;
+				}
+		 		if (e.getSource() == productTableHeader) {
+//					if (e.getButton() == MouseEvent.BUTTON1 &&
+//							e.getID() == MouseEvent.MOUSE_PRESSED) {
+//						int clickedColumnIndex = 
+//							commentsColumnModel.getColumnIndexAtX(e.getX());
+//						if (clickedColumnIndex >= 0) {
+//							updateCommentSortOrder(clickedColumnIndex);
+//						}
+//					}
+				}
+			}
 		};
 
 		productTableColumnModel = new DefaultTableColumnModel();
@@ -302,28 +302,28 @@ public abstract class ItemBatchView extends DialogView {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				handleMouseEvent(e);
-    		}
+			}
 			
 			@Override
-    		public void mouseReleased(MouseEvent e) {
+			public void mouseReleased(MouseEvent e) {
 				handleMouseEvent(e);
-    		}
-    	    
+			}
+			
 			private void handleMouseEvent(MouseEvent e) {
-    	 		if (eventsAreDisabled()) {
-    				return;
-    			}
-    	 		if (e.getSource() == itemTableHeader) {
-//    	        	if (e.getButton() == MouseEvent.BUTTON1 &&
-//    						e.getID() == MouseEvent.MOUSE_PRESSED) {
-//    					int clickedColumnIndex = 
-//    						commentsColumnModel.getColumnIndexAtX(e.getX());
-//    					if (clickedColumnIndex >= 0) {
-//    						updateCommentSortOrder(clickedColumnIndex);
-//    					}
-//    	    		}
-    			}
-    	    }
+		 		if (eventsAreDisabled()) {
+					return;
+				}
+		 		if (e.getSource() == itemTableHeader) {
+//					if (e.getButton() == MouseEvent.BUTTON1 &&
+//							e.getID() == MouseEvent.MOUSE_PRESSED) {
+//						int clickedColumnIndex = 
+//							commentsColumnModel.getColumnIndexAtX(e.getX());
+//						if (clickedColumnIndex >= 0) {
+//							updateCommentSortOrder(clickedColumnIndex);
+//						}
+//					}
+				}
+			}
 		};
 		
 		itemTableColumnModel = new DefaultTableColumnModel();

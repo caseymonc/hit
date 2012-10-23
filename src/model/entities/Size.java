@@ -111,31 +111,12 @@ public class Size implements Serializable {
 	public float getSize() {
 		return size;
 	}
-	
-	public static boolean isValidSize(Size size){
-		if(size == null){
-                    return false;
-                }
-
-                if(!(size.getUnits() instanceof Unit)){
-                    return false;
-                }
-
-                if(size.getSize() < 1){
-                    return false;
-                }
-
-                if(size.getUnits() == Unit.count && size.getSize() != 1){
-                    return false;
-                }
-                return true;
-	}
-        
-        /** 
-         * returns a string representation of the size
-         */
-        @Override
-        public String toString() {
-            return Float.toString(size) + " " + units.toString();
-        }
+		
+		/** 
+		 * returns a string representation of the size
+		 */
+		@Override
+		public String toString() {
+			return Float.toString(size) + " " + units.toString();
+		}
 }

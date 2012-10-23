@@ -27,7 +27,7 @@ import javax.swing.Timer;
  */
 public class RemoveItemBatchController extends Controller implements
 		IRemoveItemBatchController {
-    
+	
 	private ItemController iController;
 	private CoreObjectModel model;
 	private List<Product> removedProducts;
@@ -35,12 +35,12 @@ public class RemoveItemBatchController extends Controller implements
 	private HashMap<Product, ProductData> productDataForProduct;
 	private HashMap<Item, ItemData> itemDataForItem;
 	private CommandManager commandManager;
-        
-        /**
+		
+		/**
 	 * the timer needed to track barcode scanner induced add item 
 	 */
 	private Timer timer;
-        
+		
 	/**
 	 * Constructor.
 	 * 
@@ -55,21 +55,21 @@ public class RemoveItemBatchController extends Controller implements
 		productDataForProduct = new HashMap<Product, ProductData>();
 		commandManager = new CommandManager();
 		itemDataForItem = new HashMap<Item, ItemData>();
-                
-                timer = new Timer(100, new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent evt) {
-                        timer.stop();
-                        if(getView().getBarcode().equals("") == false) {
-                            removeItem();
-                        }
-                    }
-                });
-                timer.setInitialDelay(1000);
-                
+				
+				timer = new Timer(100, new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent evt) {
+						timer.stop();
+						if(getView().getBarcode().equals("") == false) {
+							removeItem();
+						}
+					}
+				});
+				timer.setInitialDelay(1000);
+				
 		construct();
-                
-                getView().setUseScanner(true);
+				
+				getView().setUseScanner(true);
 	}
 	
 	/**
@@ -90,22 +90,22 @@ public class RemoveItemBatchController extends Controller implements
 	@Override
 	protected void loadValues() {
 		enableComponents();
-                getView().setUseScanner(true);
+		getView().setUseScanner(true);
 		Product selectedProduct = getSelectedProduct();
 		System.out.println("Selected Product: " + selectedProduct);
 		List<ProductData> productDataList = new ArrayList<ProductData>();
 		for(Product product : removedProducts){
 			ProductData productData = new ProductData();			
-		    productData.setBarcode(product.getBarCode().toString());
-		    int itemCount = removedItems.get(product).size();
-		    productData.setCount(Integer.toString(itemCount));
-		    productData.setDescription(product.getDescription());
-		    productData.setShelfLife(product.getShelfLife() + " months");
-		    productData.setSize(SizeFormatter.format(product.getSize()));
-		    productData.setSupply(SizeFormatter.format(product.getThreeMonthSize()));
-		    productData.setTag(product);
-		    productDataForProduct.put(product, productData);
-		    productDataList.add(productData);
+			productData.setBarcode(product.getBarCode().toString());
+			int itemCount = removedItems.get(product).size();
+			productData.setCount(Integer.toString(itemCount));
+			productData.setDescription(product.getDescription());
+			productData.setShelfLife(product.getShelfLife() + " months");
+			productData.setSize(SizeFormatter.format(product.getSize()));
+			productData.setSupply(SizeFormatter.format(product.getThreeMonthSize()));
+			productData.setTag(product);
+			productDataForProduct.put(product, productData);
+			productDataList.add(productData);
 		}
 		
 		getView().setProducts(productDataList.toArray(new ProductData[0]));
@@ -123,13 +123,13 @@ public class RemoveItemBatchController extends Controller implements
 				itemData.setBarcode(item.getBarCode().getBarCode());
 				itemData.setEntryDate(item.getEntryDate());
 				itemData.setExpirationDate(item.getExpirationDate());
-                                
-                String groupName = "";
-                String unitName = "";
-                
-                itemData.setProductGroup(groupName);
-                itemData.setStorageUnit(unitName);
-                itemData.setTag(item);
+								
+				String groupName = "";
+				String unitName = "";
+				
+				itemData.setProductGroup(groupName);
+				itemData.setStorageUnit(unitName);
+				itemData.setTag(item);
 				itemDataList.add(itemData);
 			}
 			
@@ -159,13 +159,13 @@ public class RemoveItemBatchController extends Controller implements
 		getView().enableRedo(false);
 		getView().enableUndo(false);
 		String barcode = getView().getBarcode();
-        if(barcode.equals("")){
-            getView().enableItemAction(false);
-        } else {
-            getView().enableItemAction(true);
-        }
-        
-        getView().enableUndo(commandManager.canUndo());
+		if(barcode.equals("")){
+			getView().enableItemAction(false);
+		} else {
+			getView().enableItemAction(true);
+		}
+		
+		getView().enableUndo(commandManager.canUndo());
 		getView().enableRedo(commandManager.canRedo());
 	}
 
@@ -181,14 +181,14 @@ public class RemoveItemBatchController extends Controller implements
 	 */
 	@Override
 	public void barcodeChanged() {
-	    if(getView().getUseScanner()) {
-	        //start
-	        if(timer.isRunning()) {
-	                timer.restart();
-	        } else {
-	                timer.start();
-	        }
-	    }
+		if(getView().getUseScanner()) {
+			//start
+			if(timer.isRunning()) {
+					timer.restart();
+			} else {
+					timer.start();
+			}
+		}
 		enableComponents();
 	}
 	
@@ -227,9 +227,9 @@ public class RemoveItemBatchController extends Controller implements
 			public void doAction() {
 				removedItem = item;
 				removedFromContainer = item.getContainer();
-	            iController.removeItem(item);
-	            addRemovedItem(item);
-	            loadValues();
+				iController.removeItem(item);
+				addRemovedItem(item);
+				loadValues();
 			}
 
 			@Override
@@ -242,8 +242,8 @@ public class RemoveItemBatchController extends Controller implements
 		};
 		
 		
-        getView().setBarcode("");
-        commandManager.doAction(command);
+		getView().setBarcode("");
+		commandManager.doAction(command);
 		this.enableComponents();
 	}
 	

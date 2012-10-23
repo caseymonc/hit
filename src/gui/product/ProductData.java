@@ -60,44 +60,44 @@ public class ProductData extends Tagable {
 	}
 
 
-        public ProductData(Product product) {
-                _barcode = product.getBarCode().getBarCode();
-                _count = "1";
-                _description = product.getDescription();
-                _shelfLife = Integer.toString(product.getShelfLife());
-                _supply = Integer.toString(product.getThreeMonthSupply());
-                _size = product.getSize().toString();
-                this.setTag(product);
-        }
+		public ProductData(Product product) {
+				_barcode = product.getBarCode().getBarCode();
+				_count = "1";
+				_description = product.getDescription();
+				_shelfLife = Integer.toString(product.getShelfLife());
+				_supply = Integer.toString(product.getThreeMonthSupply());
+				_size = product.getSize().toString();
+				this.setTag(product);
+		}
 
-        public void incrementCount() {
-            int count;
-            try{
-                count = Integer.valueOf(_count);
-            }
-            catch(Exception e){
-                count = 0;
-            }
-            
-            count++;
-            
-            _count = Integer.toString(count);
-        }
-        
-        public void decramentCount() {
-            int count;
-            try{
-                count = Integer.valueOf(_count);
-            }
-            catch(Exception e){
-                count = 0;
-            }
-            
-            count--;
-            
-            _count = Integer.toString(count);
-        }
-        
+		public void incrementCount() {
+			int count;
+			try{
+				count = Integer.valueOf(_count);
+			}
+			catch(Exception e){
+				count = 0;
+			}
+			
+			count++;
+			
+			_count = Integer.toString(count);
+		}
+		
+		public void decramentCount() {
+			int count;
+			try{
+				count = Integer.valueOf(_count);
+			}
+			catch(Exception e){
+				count = 0;
+			}
+			
+			count--;
+			
+			_count = Integer.toString(count);
+		}
+		
 	/**
 	 * Returns the value of the Barcode attribute.
 	 */
@@ -217,8 +217,8 @@ public class ProductData extends Tagable {
 	public void setSupply(String supply) {
 		this._supply = supply;
 	}
-        
-        /**
+		
+		/**
 	 * determines if an Object is equal to this Product
 	 *
 	 * @param obj - the Object being compared with this Product

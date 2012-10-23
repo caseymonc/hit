@@ -55,23 +55,23 @@ public class ItemData extends Tagable {
 		_productGroup = "";
 	}
 
-    public ItemData(Item item) {
-        _entryDate = item.getEntryDate();
-        _expirationDate = item.getExpirationDate();
-        _barcode = item.getBarCode().getBarCode();
-        _storageUnit = "";
+	public ItemData(Item item) {
+		_entryDate = item.getEntryDate();
+		_expirationDate = item.getExpirationDate();
+		_barcode = item.getBarCode().getBarCode();
+		_storageUnit = "";
 
-        if (item.getContainer() instanceof ProductGroup){
-            _productGroup = item.getContainer().getName();
-		  _storageUnit = item.getContainer().getStorageUnit().getName();
-        }
-        else{
-            _productGroup = "";
-		  _storageUnit = item.getContainer().getName();
-        }
-        
-        this.setTag(item);
-    }
+		if (item.getContainer() instanceof ProductGroup){
+			_productGroup = item.getContainer().getName();
+			_storageUnit = item.getContainer().getStorageUnit().getName();
+		}
+		else{
+			_productGroup = "";
+			_storageUnit = item.getContainer().getName();
+		}
+		
+		this.setTag(item);
+	}
 	
 	/**
 	 * Returns the value of the Barcode attribute.
@@ -172,17 +172,17 @@ public class ItemData extends Tagable {
 	public void setProductGroup(String productGroup) {
 		this._productGroup = productGroup;
 	}
-        
-        @Override
+		
+		@Override
 	public boolean equals(Object obj) 
 	{
-	    if(obj instanceof ItemData){
-		   ItemData objItem = (ItemData)obj;
-		   return _barcode.equals(objItem.getBarcode());
-	    }
-	    else{
-		   return false;
-	    }    
+		if(obj instanceof ItemData){
+			ItemData objItem = (ItemData)obj;
+			return _barcode.equals(objItem.getBarcode());
+		}
+		else{
+			return false;
+		}	
 	}
 
 	@Override

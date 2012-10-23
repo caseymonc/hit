@@ -223,12 +223,12 @@ public class InventoryView extends View implements IInventoryView {
 	
 	private TreeSelectionListener createProductContainerTreeSelectionListener() {
 		return new TreeSelectionListener() {
-		    public void valueChanged(TreeSelectionEvent e) {
+			public void valueChanged(TreeSelectionEvent e) {
 				if (eventsAreDisabled()) {
 					return;
 				}
 				getController().productContainerSelectionChanged();
-		    }			
+			}			
 		};
 	}
 	
@@ -238,42 +238,42 @@ public class InventoryView extends View implements IInventoryView {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				handleMouseEvent(e);
-    		}
+			}
 
 			@Override
-    		public void mouseReleased(MouseEvent e) {
-    			handleMouseEvent(e);
-    		}
-    	    private void handleMouseEvent(MouseEvent e) {
-    			if (eventsAreDisabled()) {
-    				return;
-    			}
+			public void mouseReleased(MouseEvent e) {
+				handleMouseEvent(e);
+			}
+			private void handleMouseEvent(MouseEvent e) {
+				if (eventsAreDisabled()) {
+					return;
+				}
 				ProductContainerTreeNode node = 
 					(ProductContainerTreeNode)TreeOperations.getSelectedTreeNode(_productContainerTree);
 				if (node != null) {
 					if (node.isAllStorageUnits()) {
 						if (e.isPopupTrigger()) {
-			    			_productContainerTree.requestFocus();
-			    			enableAllStorageUnitsMenuItems();
-			    			_allStorageUnitsMenu.show(e.getComponent(), e.getX(), e.getY());
+							_productContainerTree.requestFocus();
+							enableAllStorageUnitsMenuItems();
+							_allStorageUnitsMenu.show(e.getComponent(), e.getX(), e.getY());
 						}
 					}
 					else if (node.isStorageUnit()) {
 						if (e.isPopupTrigger()) {
-			    			_productContainerTree.requestFocus();
-			    			enableStorageUnitMenuItems();
-			    			_storageUnitMenu.show(e.getComponent(), e.getX(), e.getY());
+							_productContainerTree.requestFocus();
+							enableStorageUnitMenuItems();
+							_storageUnitMenu.show(e.getComponent(), e.getX(), e.getY());
 						}
 					}
 					else if (node.isProductGroup()) {
 						if (e.isPopupTrigger()) {
-			    			_productContainerTree.requestFocus();
-			    			enableProductGroupMenuItems();
-			    			_productGroupMenu.show(e.getComponent(), e.getX(), e.getY());
+							_productContainerTree.requestFocus();
+							enableProductGroupMenuItems();
+							_productGroupMenu.show(e.getComponent(), e.getX(), e.getY());
 						}
 					}
 				}
-    	    }
+			}
 		};
 	}
 	
@@ -354,38 +354,38 @@ public class InventoryView extends View implements IInventoryView {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				handleMouseEvent(e);
-    		}
+			}
 			
 			@Override
-    		public void mouseReleased(MouseEvent e) {
+			public void mouseReleased(MouseEvent e) {
 				handleMouseEvent(e);
-    		}
-    	    
+			}
+			
 			private void handleMouseEvent(MouseEvent e) {
-    	 		if (eventsAreDisabled()) {
-    				return;
-    			}
-    			if (e.getSource() == _productTable) {
-    	        	if (e.isPopupTrigger()) {
-    	    			enableProductMenuItems();
-    	    			_productMenu.show(e.getComponent(), e.getX(), e.getY());
-    				}
-    			}
-    			else if (e.getSource() == _productTableHeader) {
-    	        	if (e.isPopupTrigger()) {
-    	        		enableProductMenuItems();
-    	    			_productMenu.show(e.getComponent(), e.getX(), e.getY());
-    				}
-//    	    		else if (e.getButton() == MouseEvent.BUTTON1 &&
-//    						e.getID() == MouseEvent.MOUSE_PRESSED) {
-//    					int clickedColumnIndex = 
-//    						commentsColumnModel.getColumnIndexAtX(e.getX());
-//    					if (clickedColumnIndex >= 0) {
-//    						updateCommentSortOrder(clickedColumnIndex);
-//    					}
-//    	    		}
-    			}
-    	    }
+		 		if (eventsAreDisabled()) {
+					return;
+				}
+				if (e.getSource() == _productTable) {
+					if (e.isPopupTrigger()) {
+						enableProductMenuItems();
+						_productMenu.show(e.getComponent(), e.getX(), e.getY());
+					}
+				}
+				else if (e.getSource() == _productTableHeader) {
+					if (e.isPopupTrigger()) {
+						enableProductMenuItems();
+						_productMenu.show(e.getComponent(), e.getX(), e.getY());
+					}
+//					else if (e.getButton() == MouseEvent.BUTTON1 &&
+//							e.getID() == MouseEvent.MOUSE_PRESSED) {
+//						int clickedColumnIndex = 
+//							commentsColumnModel.getColumnIndexAtX(e.getX());
+//						if (clickedColumnIndex >= 0) {
+//							updateCommentSortOrder(clickedColumnIndex);
+//						}
+//					}
+				}
+			}
 		};
 
 		_productTableColumnModel = new DefaultTableColumnModel();
@@ -466,38 +466,38 @@ public class InventoryView extends View implements IInventoryView {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				handleMouseEvent(e);
-    		}
+			}
 			
 			@Override
-    		public void mouseReleased(MouseEvent e) {
+			public void mouseReleased(MouseEvent e) {
 				handleMouseEvent(e);
-    		}
-    	    
+			}
+			
 			private void handleMouseEvent(MouseEvent e) {
-    	 		if (eventsAreDisabled()) {
-    				return;
-    			}
-    			if (e.getSource() == _itemTable) {
-    	        	if (e.isPopupTrigger()) {
-    	    			enableItemMenuItems();
-    	    			_itemMenu.show(e.getComponent(), e.getX(), e.getY());
-    				}
-    			}
-    			else if (e.getSource() == _itemTableHeader) {
-    	        	if (e.isPopupTrigger()) {
-    	        		enableItemMenuItems();
-    	        		_itemMenu.show(e.getComponent(), e.getX(), e.getY());
-    				}
-//    	    		else if (e.getButton() == MouseEvent.BUTTON1 &&
-//    						e.getID() == MouseEvent.MOUSE_PRESSED) {
-//    					int clickedColumnIndex = 
-//    						commentsColumnModel.getColumnIndexAtX(e.getX());
-//    					if (clickedColumnIndex >= 0) {
-//    						updateCommentSortOrder(clickedColumnIndex);
-//    					}
-//    	    		}
-    			}
-    	    }
+		 		if (eventsAreDisabled()) {
+					return;
+				}
+				if (e.getSource() == _itemTable) {
+					if (e.isPopupTrigger()) {
+						enableItemMenuItems();
+						_itemMenu.show(e.getComponent(), e.getX(), e.getY());
+					}
+				}
+				else if (e.getSource() == _itemTableHeader) {
+					if (e.isPopupTrigger()) {
+						enableItemMenuItems();
+						_itemMenu.show(e.getComponent(), e.getX(), e.getY());
+					}
+//					else if (e.getButton() == MouseEvent.BUTTON1 &&
+//							e.getID() == MouseEvent.MOUSE_PRESSED) {
+//						int clickedColumnIndex = 
+//							commentsColumnModel.getColumnIndexAtX(e.getX());
+//						if (clickedColumnIndex >= 0) {
+//							updateCommentSortOrder(clickedColumnIndex);
+//						}
+//					}
+				}
+			}
 		};
 		
 		_itemTableColumnModel = new DefaultTableColumnModel();
@@ -1340,36 +1340,36 @@ class ProductContainerTreeCellRenderer extends DefaultTreeCellRenderer {
 
 	private Icon _storageUnitIcon;
 	
-    public ProductContainerTreeCellRenderer() {
-        _storageUnitIcon = new ImageIcon("images" + java.io.File.separator + "door-icon.png");
-    }
+	public ProductContainerTreeCellRenderer() {
+		_storageUnitIcon = new ImageIcon("images" + java.io.File.separator + "door-icon.png");
+	}
 
-    public Component getTreeCellRendererComponent(
-                        JTree tree,
-                        Object value,
-                        boolean sel,
-                        boolean expanded,
-                        boolean leaf,
-                        int row,
-                        boolean hasFocus) {
+	public Component getTreeCellRendererComponent(
+						JTree tree,
+						Object value,
+						boolean sel,
+						boolean expanded,
+						boolean leaf,
+						int row,
+						boolean hasFocus) {
 
-        super.getTreeCellRendererComponent(
-                        tree, value, sel,
-                        expanded, leaf, row,
-                        hasFocus);
-        
-        if (value instanceof ProductContainerTreeNode) {
-	        ProductContainerTreeNode node = (ProductContainerTreeNode)value;
-	        if (node.isAllStorageUnits() || node.isStorageUnit()) {
-	        	setIcon(_storageUnitIcon);
-	        }
-	        else {
-	        	setIcon(closedIcon);
-	        }
-        }
+		super.getTreeCellRendererComponent(
+						tree, value, sel,
+						expanded, leaf, row,
+						hasFocus);
+		
+		if (value instanceof ProductContainerTreeNode) {
+			ProductContainerTreeNode node = (ProductContainerTreeNode)value;
+			if (node.isAllStorageUnits() || node.isStorageUnit()) {
+				setIcon(_storageUnitIcon);
+			}
+			else {
+				setIcon(closedIcon);
+			}
+		}
 
-        return this;
-    }
+		return this;
+	}
 	
 }
 

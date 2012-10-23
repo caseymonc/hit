@@ -13,24 +13,24 @@ import model.entities.Unit;
  */
 public class AddProductController extends Controller implements
 		IAddProductController {
-	    
-    private String barcode;
-    
-    /**
+		
+	private String barcode;
+	
+	/**
 	 * The facade interface to Model.  SIngleton class
 	 */
 	private CoreObjectModel COM;
-    
-    /**
+	
+	/**
 	 * The facade in charge of Storage Units and moving items
 	 */
-    private ProductController productController;
-        
-    /** 
-     * flag to determine the previous unit of the size.
-     */
-    private boolean unitIsCount;
-        
+	private ProductController productController;
+		
+	/** 
+	 * flag to determine the previous unit of the size.
+	 */
+	private boolean unitIsCount;
+		
 	/**
 	 * Constructor.
 	 * 
@@ -40,17 +40,17 @@ public class AddProductController extends Controller implements
 	public AddProductController(IView view, String barcode) {
 		super(view);
 		this.barcode = barcode;
-                COM = CoreObjectModel.getInstance();
-                productController = COM.getProductController();
-                unitIsCount = false;
-                
+				COM = CoreObjectModel.getInstance();
+				productController = COM.getProductController();
+				unitIsCount = false;
+				
 		construct();
 	}
 
 	//
 	// Controller overrides
 	//
-        
+		
 	/**
 	 * Returns a reference to the view for this controller.
 	 * 
@@ -75,28 +75,28 @@ public class AddProductController extends Controller implements
 	 */
 	@Override
 	protected void enableComponents() {
-            String description = getView().getDescription();
-            String sizeVal = getView().getSizeValue();
-            Unit sizeUnit = getView().getSizeUnit().toUnit();
-            String supply = getView().getSupply();
-            String shelfLife = getView().getShelfLife();
-            
-            getView().enableBarcode(false);
-            
-            if(getView().getSizeUnit() == SizeUnits.Count){
-                getView().enableSizeValue(false);
-            } else {
-                getView().enableSizeValue(true);
-            }
-            
-            if(productController.canAddProduct(barcode, description, sizeVal, 
-                    sizeUnit, supply, shelfLife)){
-                getView().enableOK(true);
-            } else {
-                getView().enableOK(false);
-            }
-            
-            
+			String description = getView().getDescription();
+			String sizeVal = getView().getSizeValue();
+			Unit sizeUnit = getView().getSizeUnit().toUnit();
+			String supply = getView().getSupply();
+			String shelfLife = getView().getShelfLife();
+			
+			getView().enableBarcode(false);
+			
+			if(getView().getSizeUnit() == SizeUnits.Count){
+				getView().enableSizeValue(false);
+			} else {
+				getView().enableSizeValue(true);
+			}
+			
+			if(productController.canAddProduct(barcode, description, sizeVal, 
+					sizeUnit, supply, shelfLife)){
+				getView().enableOK(true);
+			} else {
+				getView().enableOK(false);
+			}
+			
+			
 	}
 
 	/**
@@ -108,10 +108,10 @@ public class AddProductController extends Controller implements
 	 */
 	@Override
 	protected void loadValues() {
-            getView().setBarcode(barcode);
-            getView().setShelfLife("0");
-            getView().setSupply("0");
-            valuesChanged();
+			getView().setBarcode(barcode);
+			getView().setShelfLife("0");
+			getView().setSupply("0");
+			valuesChanged();
 	}
 
 	//
@@ -124,15 +124,15 @@ public class AddProductController extends Controller implements
 	 */
 	@Override
 	public void valuesChanged() {
-            if(getView().getSizeUnit() == SizeUnits.Count){
-                unitIsCount = true;
-                getView().setSizeValue("1");
-            } else if(unitIsCount == true) {
-                unitIsCount = false;
-                getView().setSizeValue("0");
-            }
-            
-            enableComponents();
+			if(getView().getSizeUnit() == SizeUnits.Count){
+				unitIsCount = true;
+				getView().setSizeValue("1");
+			} else if(unitIsCount == true) {
+				unitIsCount = false;
+				getView().setSizeValue("0");
+			}
+			
+			enableComponents();
 	}
 	
 	/**
@@ -141,23 +141,23 @@ public class AddProductController extends Controller implements
 	 */
 	@Override
 	public void addProduct() {
-            BarCode barCode = new BarCode(barcode);
-            String description = getView().getDescription();
-            float sizeVal = Float.parseFloat(getView().getSizeValue());
-            int supply = Integer.parseInt(getView().getSupply());
-            int shelfLife = Integer.parseInt(getView().getShelfLife());
-            
-            Size size = new Size(getView().getSizeUnit().toUnit(), sizeVal);
-            
-            Product product = new Product(description, barCode, shelfLife, supply, size);
-            
-            try{
-                productController.addProduct(product);
-            }
-            catch(Exception e){
-                getView().displayErrorMessage("The product could not be added.");
-            }
+			BarCode barCode = new BarCode(barcode);
+			String description = getView().getDescription();
+			float sizeVal = Float.parseFloat(getView().getSizeValue());
+			int supply = Integer.parseInt(getView().getSupply());
+			int shelfLife = Integer.parseInt(getView().getShelfLife());
+			
+			Size size = new Size(getView().getSizeUnit().toUnit(), sizeVal);
+			
+			Product product = new Product(description, barCode, shelfLife, supply, size);
+			
+			try{
+				productController.addProduct(product);
+			}
+			catch(Exception e){
+				getView().displayErrorMessage("The product could not be added.");
+			}
 	}
-        
+		
 }
 

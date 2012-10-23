@@ -439,7 +439,7 @@ public abstract class ProductContainer implements PersistentItem{
 	 
 	 
 	 /** Used to get the name of the storage container
-	  *   in the case of root, this is "StorageUnit"
+	  *	in the case of root, this is "StorageUnit"
 	  * @return string name of the product Container.
 	  */
 	 public String getName() {

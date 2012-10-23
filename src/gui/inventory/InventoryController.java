@@ -264,14 +264,14 @@ public class InventoryController extends Controller implements IInventoryControl
 			productData.setBarcode(product.getBarCode().toString());
 			int itemCount;
 			if (selectedContainer != null) {
-				  itemCount = selectedContainer.getItemsByProduct(product).size();
+				itemCount = selectedContainer.getItemsByProduct(product).size();
 			} else {
 				try {
-				  itemCount = pController.getItemsByProduct(product).size();
+					itemCount = pController.getItemsByProduct(product).size();
 				}
 				catch(Exception e) {
-				  itemCount = 0;
-				  getView().displayErrorMessage(e.getMessage());
+					itemCount = 0;
+					getView().displayErrorMessage(e.getMessage());
 				}
 			}
 			productData.setCount(Integer.toString(itemCount));

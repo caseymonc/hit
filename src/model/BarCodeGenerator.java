@@ -24,11 +24,11 @@ public class BarCodeGenerator implements PersistentItem {
 	 */
 	public static BarCodeGenerator getInstance()
 	{
-	   if(_instance == null)
-	   {
-		   _instance = new BarCodeGenerator();
-	   }
-	   return _instance;
+		if(_instance == null)
+		{
+			_instance = new BarCodeGenerator();
+		}
+		return _instance;
 	}
 	
 	/**
@@ -71,23 +71,23 @@ public class BarCodeGenerator implements PersistentItem {
 
 	/**
 	 * This method generates the check digit of a UPC-A Barcode by following 
-         * these standards:
-         * 
+		 * these standards:
+		 * 
 	 * In the UPC-A system, the check digit is calculated as follows:
 	 * Add the digits in the odd-numbered positions (first, third, fifth,
-         * etc.) together and multiply by three.
-         * 
+		 * etc.) together and multiply by three.
+		 * 
 	 * Add the digits in the even-numbered positions (second, fourth, sixth,
-         * etc.) to the result.
-         * 
+		 * etc.) to the result.
+		 * 
 	 * Find the result modulo 10 (i.e. the remainder when divided by 10.. 
-         * 10 goes into 58 5 times with 8 leftover).
-         * 
+		 * 10 goes into 58 5 times with 8 leftover).
+		 * 
 	 * If the result is not zero, subtract the result from ten.
-         * 
+		 * 
 	 * @param barcodeBuilder The barcodeBuilder is the first 11 digits of 
-         * the barcode in string form
-         * 
+		 * the barcode in string form
+		 * 
 	 * @return The check digit of the barCode
 	 */
 	private String getCheckDigit(String barcodeBuilder)

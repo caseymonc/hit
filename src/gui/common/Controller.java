@@ -16,7 +16,7 @@ package gui.common;
  * <UL>
  * <LI>{@link #enableComponents() enableComponents}
  * <LI>{@link #loadValues() loadValues}
-  * </UL>
+ * </UL>
  * <P>
  * Subclasses should also call {@link #construct() construct} from their
  * constructors.

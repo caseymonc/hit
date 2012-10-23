@@ -116,7 +116,7 @@ public class ProductGroupController extends ModelController{
 	 * there is an invalid new name for a product group)
 	 */
 	public void editProductGroup(ProductGroup editedUnit, ProductGroup oldUnit) 
-		   throws IllegalArgumentException {
+			throws IllegalArgumentException {
 
 		assert(canEditProductGroup(editedUnit, oldUnit));
 		
