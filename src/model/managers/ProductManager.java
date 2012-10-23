@@ -181,48 +181,6 @@ public class ProductManager implements PersistentItem {
 		assert (p != null);
 		assert (c != null);
 		assert (canRemoveProductFromContainer(p, c));
-
-    /**
-     * Removes an Item-Product relationship from itemsByProduct
-     *
-     * @param p
-     * @param i
-     *
-     * @throws IllegalArgumentException
-     */
-    public void removeItemFromProduct(Product p, Item i) throws IllegalArgumentException {
-        assert(p != null);
-        assert(i != null);
-        assert(itemsByProduct.containsKey(p));
-        
-        if (p == null || i == null) {
-            throw new IllegalArgumentException();
-        }
-        
-        if(itemsByProduct.containsKey(p)){
-            itemsByProduct.get(p).remove(i);
-            
-            // A product's creation date is equal to the earliest entry
-            // date of any its items.
-            //
-            // This code may not be necessary
-            if(p.getCreationDate().compareTo(i.getEntryDate()) > 0){
-                    Collection<Item> items = itemsByProduct.get(p);
-                    
-                    Date min = new Date();
-                    for(Item item : items) {
-                        if(min.compareTo(item.getEntryDate()) > 0) {
-                            min = item.getEntryDate();
-                        }
-                    }
-                    
-                    p.setCreationDate(min);
-            }
-        } else{
-            throw new IllegalArgumentException("The product doesn't exist");
-        }
-    }
-
 		c.removeProduct(p);
 		p.removeProductContainer(c);
 
@@ -232,6 +190,10 @@ public class ProductManager implements PersistentItem {
 		}
 	}
 
+    /**
+   
+
+		
 	/**
 	 * Edits a product using the data stored in newProduct.
 	 * 
