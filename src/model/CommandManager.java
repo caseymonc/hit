@@ -3,8 +3,22 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * CommandManager manages a list of Commands.  Whenever a command is performed in a Batch
+ * View, a record of that command is stored in a Command object.  The CommandManager keeps
+ * track of all of these Commands.  It also provides undo and redo functionality.
+ */
 public class CommandManager {
+	/**
+	 * A list of Commands that are created as a user performs actions in a Batch View.
+	 */
 	private List<Command> commands;
+	
+	/**
+	 * An index that keeps track of the current position in commands.  As Commands are 
+	 * added to commands, position is set to the last index in commands.  When Undo is
+	 * called, position is decremented.  When redo is called, position is incremented.
+	 */
 	private int position;
 	
 	/**
