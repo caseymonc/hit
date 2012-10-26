@@ -1,7 +1,6 @@
-package gui.reports.notices;
+package reports.directors;
 
 import gui.reports.Builder;
-import gui.reports.Director;
 
 public class NoticesDirector extends Director {
 

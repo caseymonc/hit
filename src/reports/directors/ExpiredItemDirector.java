@@ -1,4 +1,4 @@
-package gui.reports.expired;
+package reports.directors;
 
 import java.util.Set;
 
@@ -7,7 +7,6 @@ import model.entities.Item;
 import model.managers.ItemManager;
 import reports.visitors.ExpiredItemsVisitor;
 import gui.reports.Builder;
-import gui.reports.Director;
 
 public class ExpiredItemDirector extends Director {
 

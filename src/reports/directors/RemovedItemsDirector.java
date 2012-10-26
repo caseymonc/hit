@@ -1,7 +1,6 @@
-package gui.reports.removed;
+package reports.directors;
 
 import gui.reports.Builder;
-import gui.reports.Director;
 
 public class RemovedItemsDirector extends Director {
 

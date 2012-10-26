@@ -1,4 +1,6 @@
-package gui.reports;
+package reports.directors;
+
+import gui.reports.Builder;
 
 /**
  * 

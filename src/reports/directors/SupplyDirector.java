@@ -1,7 +1,6 @@
-package gui.reports.supply;
+package reports.directors;
 
 import gui.reports.Builder;
-import gui.reports.Director;
 
 public class SupplyDirector extends Director {
 

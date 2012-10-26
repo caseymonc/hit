@@ -1,6 +1,7 @@
 package gui.reports.expired;
 
 
+import reports.directors.ExpiredItemDirector;
 import gui.common.*;
 import gui.reports.Builder;
 import gui.reports.HtmlBuilder;

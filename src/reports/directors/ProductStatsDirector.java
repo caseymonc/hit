@@ -1,7 +1,6 @@
-package gui.reports.productstats;
+package reports.directors;
 
 import gui.reports.Builder;
-import gui.reports.Director;
 
 public class ProductStatsDirector extends Director {
 
