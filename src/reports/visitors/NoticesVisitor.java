@@ -12,7 +12,10 @@ import model.entities.ProductGroup;
 
 public class NoticesVisitor implements ProductGroupVisitor {
 
+	/** A list of all groups with inconsistent */
 	private List<ProductGroup> groups;
+	
+	/** A map of all inconsistent products in each group*/
 	private Map<ProductGroup, Set<Product>> incorrectProducts;
 	
 	public NoticesVisitor(){
@@ -32,10 +35,29 @@ public class NoticesVisitor implements ProductGroupVisitor {
 		}
 	}
 	
+	/**
+	 * Asks whether the visitor found inconsistencies
+	 * @return
+	 */
+	public boolean hasInconsistencies(){
+		return groups.size() != 0;
+	}
+	
+	/**
+	 * Get all of the groups with inconsistencies
+	 * @return a List of all of the groups with inconsistencies
+	 */
 	public List<ProductGroup> getProductGroups(){
 		return groups;
 	}
 	
+	/**
+	 * Get a Set of all of the inconsistent products in a particular
+	 * ProductGroup
+	 * @param group the ProductGroup to get the set from
+	 * @return a Set of all of the inconsistent products in a particular
+	 * ProductGroup
+	 */
 	public Set<Product> getInconsistentProducts(ProductGroup group){
 		return incorrectProducts.get(group);
 	}

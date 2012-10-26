@@ -12,7 +12,10 @@ import model.entities.Size;
 
 public class NMonthVisitor implements ProductVisitor, ProductGroupVisitor {
 
+	/** All of the visited products*/
 	private List<Product> products;
+	
+	/** All of the visited ProductGroups*/
 	private List<ProductGroup> productGroups;
 	private int months;
 	public NMonthVisitor(int months){

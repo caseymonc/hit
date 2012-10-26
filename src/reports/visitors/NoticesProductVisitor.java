@@ -8,7 +8,10 @@ import model.entities.ProductGroup;
 
 public class NoticesProductVisitor implements ProductVisitor {
 
+	/** The group that we were visiting*/
 	private ProductGroup group;
+	
+	/** The inconsistend products in group*/
 	private Set<Product> inconsistentProducts;
 	
 	public NoticesProductVisitor(ProductGroup group){
@@ -24,10 +27,19 @@ public class NoticesProductVisitor implements ProductVisitor {
 		}
 	}
 	
+	/**
+	 * Ask whether there were inconsistent products in group
+	 * @return true if there were inconsistent products
+	 * @return false if there were no inconsistent products
+	 */
 	public boolean hasInconsistencies(){
 		return inconsistentProducts.size() != 0;
 	}
 	
+	/**
+	 * Get a set of all inconsistent products in group
+	 * @return Set of all inconsistent products in group
+	 */
 	public Set<Product> getInconsistentProducts(){
 		return inconsistentProducts;
 	}

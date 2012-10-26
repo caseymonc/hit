@@ -8,6 +8,7 @@ import model.entities.Item;
 
 public class ExpiredItemsVisitor implements ItemVisitor{
 
+	/** A set of all expired items*/
 	private Set<Item> expiredItems = new HashSet<Item>();
 	
 	
@@ -21,6 +22,11 @@ public class ExpiredItemsVisitor implements ItemVisitor{
 		}
 	}
 	
+	/**
+	 * Get all of the expired items after
+	 * running the algorithm
+	 * @return A set of all expired items
+	 */
 	public Set<Item> getExpiredItems(){
 		return expiredItems;
 	}
