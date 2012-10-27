@@ -1,6 +1,10 @@
 package gui.reports.productstats;
 
 import gui.common.*;
+import gui.reports.Builder;
+import gui.reports.HtmlBuilder;
+import gui.reports.PdfBuilder;
+import reports.directors.ProductStatsDirector;
 
 /**
  * Controller class for the product statistics report view.
@@ -47,6 +51,18 @@ public class ProductStatsReportController extends Controller implements
 	 */
 	@Override
 	protected void enableComponents() {
+		try{
+			int months = Integer.parseInt(getView().getMonths());
+			if(months < 1){
+				getView().enableOK(false);
+			} else {
+				getView().enableOK(true);
+			}
+		}
+		catch(Exception e){
+			getView().enableOK(false);
+			getView().setMonths("3");
+		}
 	}
 
 	/**
@@ -58,6 +74,8 @@ public class ProductStatsReportController extends Controller implements
 	 */
 	@Override
 	protected void loadValues() {
+		getView().setMonths("3");
+		enableComponents();
 	}
 
 	//
@@ -70,6 +88,7 @@ public class ProductStatsReportController extends Controller implements
 	 */
 	@Override
 	public void valuesChanged() {
+		enableComponents();
 	}
 	
 	/**
@@ -78,6 +97,18 @@ public class ProductStatsReportController extends Controller implements
 	 */
 	@Override
 	public void display() {
+		FileFormat format = getView().getFormat();
+		
+		Builder builder;
+		if(format == FileFormat.HTML) {
+			builder = new HtmlBuilder();
+		} else {
+			builder = new PdfBuilder();
+		}
+		
+		ProductStatsDirector director = new ProductStatsDirector(builder);
+		
+		director.createReport();
 	}
 
 }
