@@ -53,6 +53,9 @@ public class AddItemBatchController extends Controller implements
 	 */
 	private ItemController itemController;
 		
+	private StorageUnitController suController;
+	private ProductGroupController pgController;
+	
 	/**
 	 * list of ItemDatas used by the GUI to show what items were added during 
 	 * the batch.
@@ -89,6 +92,8 @@ public class AddItemBatchController extends Controller implements
 		COM = CoreObjectModel.getInstance();
 		productController = COM.getProductController();
 		itemController = COM.getItemController();
+		suController = COM.getStorageUnitController();
+		pgController = COM.getProductGroupController();
 		commandManager = new CommandManager();
 		addedItems = new ArrayList<ItemData>();
 		addedProducts = new ArrayList<ProductData>();
@@ -252,9 +257,11 @@ public class AddItemBatchController extends Controller implements
 	@Override
 	public void addItem() {
 		//Get the Product
-		BarCode productBarcode = new BarCode(getView().getBarcode());
+		boolean temp = true;
+		final BarCode productBarcode = new BarCode(getView().getBarcode());
 		Product addedProduct = productController.getProductByBarCode(productBarcode);
-		if(addedProduct == null) {		
+		if(addedProduct == null) {
+			temp = false;
 			//open the other dialogue box to prompt for a new product.
 			getView().displayAddProductView();
 			addedProduct = productController.getProductByBarCode(productBarcode);
@@ -262,15 +269,20 @@ public class AddItemBatchController extends Controller implements
 			assert(addedProduct.getBarCode().isValid());
 		}
 		final Product product = addedProduct;
+		final ProductData prodData = new ProductData(product);
+		final boolean productWasInSystem = temp;
+		
+		//Get Container
+		ProductContainer container = (ProductContainer) _target.getTag();
+		final ProductContainer addedContainer = container;
+		final StorageUnit storageUnit = container.getStorageUnit();
+		final boolean wasInStorageUnit = storageUnit.getContainerByProduct(product) != null;
 		
 		//Get Items
 		final List<ItemData> addedItemData = new ArrayList<ItemData>();
 		final List<Item> addedItems = new ArrayList<Item>();
 		int itemCount = Integer.parseInt(getView().getCount());
 		final int countF = itemCount;
-		ProductContainer container = (ProductContainer) _target.getTag();
-		final ProductContainer addedContainer = container;
-		final StorageUnit storageUnit = container.getStorageUnit();
 		for(; itemCount > 0; --itemCount)
 		{
 			Date entryDate = getView().getEntryDate();
@@ -286,10 +298,12 @@ public class AddItemBatchController extends Controller implements
 			addedItems.add(i);
 			addedItemData.add(new ItemData(i));
 		}
-		final ProductData prodData = new ProductData(product);
+		
 		Command command = new Command(){
 			@Override
 			public void doAction() {
+				if(productController.canAddProduct(product))
+					productController.addProduct(product);
 				//we have a good product now
 				for(int i = 0; i < addedItems.size(); i++)
 				{
@@ -313,6 +327,17 @@ public class AddItemBatchController extends Controller implements
 					ItemData iData = addedItemData.get(i);
 					deleteItem(item);
 					removeItemData(iData, prodData);
+					
+					
+				}
+				
+				if(!wasInStorageUnit){
+					ProductContainer container = storageUnit.getContainerByProduct(product);
+					productController.removeProductFromContainer(product, container);
+				}
+				
+				if(!productWasInSystem){
+					productController.removeProduct(product);
 				}
 				
 				getView().setProducts(getAddedProducts());

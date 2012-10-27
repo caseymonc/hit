@@ -116,21 +116,22 @@ public class RemoveItemBatchController extends Controller implements
 			
 			List<ItemData> itemDataList = new ArrayList<ItemData>();
 			Set<Item> selectedItems = removedItems.get(selectedProduct);
-			for(Item item : selectedItems){
-				ItemData itemData = new ItemData();
-				itemData.setBarcode(item.getBarCode().toString());
-				itemData.setEntryDate(item.getEntryDate());
-				itemData.setExpirationDate(item.getExpirationDate());
-								
-				String groupName = "";
-				String unitName = "";
-				
-				itemData.setProductGroup(groupName);
-				itemData.setStorageUnit(unitName);
-				itemData.setTag(item);
-				itemDataList.add(itemData);
+			if(selectedItems != null){
+				for(Item item : selectedItems){
+					ItemData itemData = new ItemData();
+					itemData.setBarcode(item.getBarCode().toString());
+					itemData.setEntryDate(item.getEntryDate());
+					itemData.setExpirationDate(item.getExpirationDate());
+									
+					String groupName = "";
+					String unitName = "";
+					
+					itemData.setProductGroup(groupName);
+					itemData.setStorageUnit(unitName);
+					itemData.setTag(item);
+					itemDataList.add(itemData);
+				}
 			}
-			
 			getView().setItems(itemDataList.toArray(new ItemData[0]));
 		}
 	}
@@ -215,8 +216,15 @@ public class RemoveItemBatchController extends Controller implements
 	public void removeItem() {
 		final Item item = getItemFromBarCode();
 		if(item == null){
-			getView().displayWarningMessage("The specified item does not exist");	
+			getView().displayWarningMessage("The specified item does not exist");
+			return;
 		}
+		
+		if(item.getContainer() == null){
+			getView().displayWarningMessage("The specified item has already been removed.");
+			return;
+		}
+		
 		Command command = new Command(){
 			private Item removedItem;
 			private ProductContainer removedFromContainer;
@@ -228,6 +236,8 @@ public class RemoveItemBatchController extends Controller implements
 				iController.removeItem(item);
 				addRemovedItem(item);
 				loadValues();
+				getView().selectProduct(productDataForProduct.get(item.getProduct()));
+				selectedProductChanged();
 			}
 
 			@Override
@@ -235,6 +245,9 @@ public class RemoveItemBatchController extends Controller implements
 				iController.unRemoveItem(removedItem, removedFromContainer);
 				removeRemovedItem(removedItem);
 				loadValues();
+				getView().selectProduct(productDataForProduct.get(item.getProduct()));
+				selectedProductChanged();
+				
 			}
 			
 		};

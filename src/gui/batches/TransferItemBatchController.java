@@ -7,6 +7,10 @@ import gui.product.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.swing.Timer;
 
 import model.Command;
@@ -17,6 +21,7 @@ import model.controllers.ProductController;
 import model.controllers.ProductGroupController;
 import model.controllers.StorageUnitController;
 import model.entities.Item;
+import model.entities.Product;
 import model.entities.ProductContainer;
 
 
@@ -26,6 +31,7 @@ import model.entities.ProductContainer;
 public class TransferItemBatchController extends Controller implements 
 		ITransferItemBatchController{
 	
+	private ProductController pController;
 	private CommandManager commandManager;
 	private CoreObjectModel COM;
 	private ItemController itemController;
@@ -38,6 +44,7 @@ public class TransferItemBatchController extends Controller implements
 	 * the timer needed to track barcode scanner induced add item 
 	 */
 	private Timer timer;
+	private Map<Item, ItemData> itemDataForItem;
 		
 	/**
 	 * Constructor.
@@ -47,8 +54,10 @@ public class TransferItemBatchController extends Controller implements
 	 */
 	public TransferItemBatchController(IView view, ProductContainerData target) {
 			super(view);
+			itemDataForItem = new HashMap<Item,ItemData>();
 			COM = CoreObjectModel.getInstance();
 			itemController = COM.getItemController();
+			pController = COM.getProductController();
 			addedProducts = new ArrayList<ProductData>();
 			addedItems = new ArrayList<ItemData>();
 			commandManager = new CommandManager();
@@ -143,6 +152,8 @@ public class TransferItemBatchController extends Controller implements
 	public void selectedProductChanged() {
 			if(getView().getSelectedProduct() != null){
 				getView().setItems(getItemsForView());
+			}else{
+				getView().setItems(new ItemData[0]);
 			}
 	}
 	
@@ -159,9 +170,18 @@ public class TransferItemBatchController extends Controller implements
 				return;
 			}
 			String barcodeOfItemToTransfer = getView().getBarcode();
-			final Item item = itemController.getItemByBarCode(barcodeOfItemToTransfer);;
+			final Item item = itemController.getItemByBarCode(barcodeOfItemToTransfer);
+			ProductContainer container = (ProductContainer)target.getTag();
+			Collection<Product> products = 	container.getAllProducts();
+			boolean temp;
+			if(products == null)
+				temp = false;
+			else
+				temp = products.contains(item.getProduct());
+			final boolean hadProductBefore = temp;
 			Command command = new Command(){
 				private ProductContainer oldContainer;
+				private boolean hadProductBefore;
 				@Override
 				public void doAction() {
 					oldContainer = item.getContainer();
@@ -173,7 +193,11 @@ public class TransferItemBatchController extends Controller implements
 
 				@Override
 				public void undoAction() {
-					itemController.moveItem(item.getBarCode().toString(), oldContainer);					
+					itemController.moveItem(item.getBarCode().toString(), oldContainer);
+					if(!hadProductBefore){
+						ProductContainer container = (ProductContainer)target.getTag();
+						pController.removeProductFromContainer(item.getProduct(), container);
+					}
 					removeItemFromView(item);
 				}
 				
@@ -185,7 +209,7 @@ public class TransferItemBatchController extends Controller implements
 	private void removeItemFromView(Item item){
 		ProductData selectedProduct = getView().getSelectedProduct();
 		ProductContainer container = (ProductContainer)target.getTag();
-		addedItems.remove(item);
+		addedItems.remove(itemDataForItem.get(item));
 		
 		ProductData productData = new ProductData(item.getProduct());
 		int index = addedProducts.indexOf(productData);
@@ -211,6 +235,8 @@ public class TransferItemBatchController extends Controller implements
 		if(addedItems.contains(itemData) == false){
 			addedItems.add(itemData);
 		}
+		
+		itemDataForItem.put(item, itemData);
 		
 		ProductData productData = new ProductData(item.getProduct());
 		

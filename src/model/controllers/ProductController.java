@@ -175,6 +175,8 @@ public class ProductController extends ModelController {
 	public void removeProductFromContainer(Product p, ProductContainer c)
 			throws IllegalArgumentException {
 		productManager.removeProductFromContainer(p, c);
+		this.setChanged();
+		this.notifyObservers(new Hint(p, Hint.Value.Delete));
 	}
 
 	/**
