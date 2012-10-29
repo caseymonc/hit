@@ -1,7 +1,9 @@
 package reports.visitors;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import model.entities.Item;
@@ -9,7 +11,7 @@ import model.entities.Item;
 public class ExpiredItemsVisitor implements ItemVisitor{
 
 	/** A set of all expired items*/
-	private Set<Item> expiredItems = new HashSet<Item>();
+	private List<Item> expiredItems = new ArrayList<Item>();
 	
 	
 	@Override
@@ -27,7 +29,7 @@ public class ExpiredItemsVisitor implements ItemVisitor{
 	 * running the algorithm
 	 * @return A set of all expired items
 	 */
-	public Set<Item> getExpiredItems(){
+	public List<Item> getExpiredItems(){
 		return expiredItems;
 	}
 

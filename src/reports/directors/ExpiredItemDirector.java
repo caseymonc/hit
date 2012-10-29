@@ -1,5 +1,6 @@
 package reports.directors;
 
+import java.util.List;
 import java.util.Set;
 
 import common.util.DateUtils;
@@ -26,11 +27,13 @@ public class ExpiredItemDirector extends Director {
 	public void createReport() {
 		ExpiredItemsVisitor visitor = new ExpiredItemsVisitor();
 		
+		//Get the data by traversing the tree Pre-Order, Items sorted by 
+		//Description and entry date, ProductContainers sorted by name
 		StorageUnitManager manager = CoreObjectModel.getInstance().getStorageUnitManager();
 		manager.acceptPreOrder(visitor);
+		List<Item> expiredItems = visitor.getExpiredItems();
 		
-		Set<Item> expiredItems = visitor.getExpiredItems();
-		
+		//Start Drawing the report
 		getBuilder().drawTitle("Expired Items");
 		
 		Table table = new Table();
