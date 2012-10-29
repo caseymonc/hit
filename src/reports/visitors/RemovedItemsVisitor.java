@@ -13,7 +13,7 @@ import model.entities.Product;
 public class RemovedItemsVisitor implements ItemVisitor {
 
 	/** A list of all items removed after since*/
-	private Map<Product, Set<Item>> removedItems = new HashMap<Product, Set<Item>>());
+	private Map<Product, Set<Item>> removedItems = new HashMap<Product, Set<Item>>();
 	
 	/** The date from which to get all removed items*/
 	private Date since;
