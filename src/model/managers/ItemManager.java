@@ -131,4 +131,10 @@ public class ItemManager implements PersistentItem
 			visitor.visitItem(item);
 		}
 	}
+	
+	public void acceptRemoved(ItemVisitor visitor){
+		for(Item item : removedItemsByBarCode.values()){
+			visitor.visitItem(item);
+		}
+	}
 }

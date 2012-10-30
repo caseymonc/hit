@@ -4,10 +4,14 @@
  */
 package model.managers;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import reports.visitors.ItemVisitor;
 import model.entities.Item;
 import model.entities.Product;
 import model.entities.ProductGroup;
@@ -127,5 +131,18 @@ public class StorageUnitManager implements PersistentItem{
 		StorageUnit unit = storageUnits.get(oldName);
 		storageUnits.remove(oldName);
 		storageUnits.put(newName, unit);
+	}
+
+	public void acceptPreOrder(ItemVisitor visitor){
+		List<StorageUnit> units = this.getAllStorageUnits();
+		Collections.sort(units, new Comparator<StorageUnit>(){
+			public int compare(StorageUnit unit1, StorageUnit unit2) {
+				return unit1.getName().compareTo(unit2.getName());
+			}
+		});
+		
+		for(StorageUnit unit : units){
+			unit.acceptPreOrder(visitor);
+		}
 	}
 }
