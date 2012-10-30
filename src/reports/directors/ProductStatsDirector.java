@@ -46,8 +46,7 @@ public class ProductStatsDirector extends Director {
 		for(Product product : productVisitor.getProducts()) {
 			Row row = new Row();
 			row.addCell(new Cell(product.getDescription()));
-			row.addCell(new Cell(product.getBarCode()));
-			row.addCell(new Cell(product.getBarCode()));
+			row.addCell(new Cell(product.getBarCode().toString()));
 			row.addCell(new Cell(product.getSize().toString()));
 			row.addCell(new Cell(product.getThreeMonthSupply()));
 			row.addCell(new Cell(productVisitor.getCurrentSupply(product), productVisitor.getAverageSupply(product)));

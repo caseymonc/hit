@@ -53,7 +53,7 @@ public class ItemStatsVisitor implements ItemVisitor {
 		updateItemAges(item);
 		
 		if(item.getEntryDate().after(startDate)) {
-			numAddedItems = 0;
+			numAddedItems++;
 		}
 	}
 	
@@ -133,46 +133,50 @@ public class ItemStatsVisitor implements ItemVisitor {
 	 * Get the average used age
 	 * @return
 	 */
-	public float getAverageUsedAge(){
-		int totalAge = 0;
-		int numAges = 0;
-		
-		for(Integer i : usedItemAges) {
-			totalAge += i;
-			numAges++;
-		}
-		return (numAges == 0) ? 0 : (totalAge / numAges);
+	public String getAverageUsedAge(){
+		return getAverageAge(usedItemAges);
 	}
 	
 	/**
 	 * Get the max used age
 	 * @return
 	 */
-	public int getMaxUsedAge(){		
-		return maxUsedAge;
+	public String getMaxUsedAge(){		
+		return Integer.toString(maxUsedAge) + " days";
 	}
 	
 	/**
 	 * Get the average current age
 	 * @return
 	 */
-	public float getAverageCurrentAge(){
+	public String getAverageCurrentAge(){
+		return getAverageAge(currentItemAges);
+	}
+	
+	private String getAverageAge(List<Integer> ages) {
 		int totalAge = 0;
 		int numAges = 0;
 		
-		for(Integer i : currentItemAges) {
+		for(Integer i : ages) {
 			totalAge += i;
 			numAges++;
 		}
-		return (numAges == 0) ? 0 : (totalAge / numAges);
+		
+		String result = "";
+		if(numAges == 0){
+			result += "0 days";
+		} else {
+			result += Float.toString(totalAge / numAges) + " days";
+		}
+		return result;
 	}
 	
 	/**
 	 * Get max current age
 	 * @return
 	 */
-	public int getMaxCurrentAge(){
-		return maxCurrentAge;
+	public String getMaxCurrentAge(){
+		return Integer.toString(maxCurrentAge) + " days";
 	}
 
 	private void updateSupplyOnDate(Item item) {

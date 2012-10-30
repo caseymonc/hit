@@ -81,19 +81,19 @@ public class ProductStatsVisitor implements ProductVisitor {
 		return itemStats.get(product).getUsedSupply();
 	}
 	
-	public int getMaxCurrentAge(Product product) {
+	public String getMaxCurrentAge(Product product) {
 		return itemStats.get(product).getMaxCurrentAge();
 	}
 	
-	public int getMaxUsedAge(Product product) {
+	public String getMaxUsedAge(Product product) {
 		return itemStats.get(product).getMaxUsedAge();
 	}
 	
-	public float getAverageCurrentAge(Product product) {
+	public String getAverageCurrentAge(Product product) {
 		return itemStats.get(product).getAverageCurrentAge();
 	}
 	
-	public float getAverageUsedAge(Product product) {
+	public String getAverageUsedAge(Product product) {
 		return itemStats.get(product).getAverageUsedAge();
 	}
 }
