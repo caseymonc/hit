@@ -14,4 +14,10 @@ public class NoticesDirector extends Director {
 		
 	}
 
+	@Override
+	public void createReport(int months) {
+
+	}
+
+	
 }

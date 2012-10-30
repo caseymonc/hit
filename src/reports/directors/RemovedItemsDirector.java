@@ -15,4 +15,9 @@ public class RemovedItemsDirector extends Director {
 		
 	}
 
+	@Override
+	public void createReport(int months) {
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
+
 }

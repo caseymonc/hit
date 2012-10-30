@@ -11,7 +11,7 @@ import gui.reports.Builder;
  */
 public abstract class Director {
 	
-	private Builder builder;
+	protected Builder builder;
 
 	/**
 	 * Constructor
@@ -25,6 +25,8 @@ public abstract class Director {
 	 * Run the algorithm to build the report
 	 */
 	public abstract void createReport();
+	
+	public abstract void createReport(int months);
 	
 	/**
 	 * Get the builder

@@ -108,7 +108,7 @@ public class ProductStatsReportController extends Controller implements
 		
 		ProductStatsDirector director = new ProductStatsDirector(builder);
 		
-		director.createReport();
+		director.createReport(Integer.parseInt(getView().getMonths()));
 	}
 
 }

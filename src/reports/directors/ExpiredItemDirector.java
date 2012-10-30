@@ -28,4 +28,9 @@ public class ExpiredItemDirector extends Director {
 		
 	}
 
+	@Override
+	public void createReport(int months) {
+		
+	}
+
 }

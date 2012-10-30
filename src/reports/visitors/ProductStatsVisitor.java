@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import model.CoreObjectModel;
 import model.entities.Product;
 
@@ -46,4 +45,43 @@ public class ProductStatsVisitor implements ProductVisitor {
 		return products;
 	}
 
+	public int getCurrentSupply(Product product) {
+		return itemStats.get(product).getCurrentSupply();
+	}
+	
+	public float getAverageSupply(Product product) {
+		return itemStats.get(product).getAverageSupply();
+	}
+	
+	public int getMaxSupply(Product product) {
+		return itemStats.get(product).getMaxSupply();
+	}
+	
+	public int getMinSupply(Product product) {
+		return itemStats.get(product).getMinSupply();
+	}
+	
+	public int getAddedSupply(Product product) {
+		return itemStats.get(product).getAddedSupply();
+	}
+	
+	public int getUsedSupply(Product product) {
+		return itemStats.get(product).getUsedSupply();
+	}
+	
+	public int getMaxCurrentAge(Product product) {
+		return itemStats.get(product).getMaxCurrentAge();
+	}
+	
+	public int getMaxUsedAge(Product product) {
+		return itemStats.get(product).getMaxUsedAge();
+	}
+	
+	public float getAverageCurrentAge(Product product) {
+		return itemStats.get(product).getAverageCurrentAge();
+	}
+	
+	public float getAverageUsedAge(Product product) {
+		return itemStats.get(product).getAverageUsedAge();
+	}
 }
