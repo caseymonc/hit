@@ -20,4 +20,16 @@ public class TestBuilder extends Builder {
 		
 	}
 
+	@Override
+	public void printTableHeader(Cell cell) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void printTable(Row row) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
