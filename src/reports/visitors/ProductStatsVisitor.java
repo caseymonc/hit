@@ -1,6 +1,8 @@
 package reports.visitors;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,6 +44,16 @@ public class ProductStatsVisitor implements ProductVisitor {
 	 * @return
 	 */
 	public List<Product> getProducts(){
+		
+		Collections.sort(products, new Comparator(){
+			@Override
+			public int compare(Object p1, Object p2) {
+				Product product1 = (Product)p1;
+				Product product2 = (Product)p2;
+				return product1.getDescription().compareTo(product2.getDescription());
+			}
+		});
+		
 		return products;
 	}
 

@@ -1,6 +1,9 @@
 package reports.directors;
 
 import gui.reports.Builder;
+import gui.reports.Cell;
+import gui.reports.Row;
+import gui.reports.Table;
 import model.CoreObjectModel;
 import model.entities.Product;
 import reports.visitors.ProductStatsVisitor;
@@ -19,23 +22,44 @@ public class ProductStatsDirector extends Director {
 	@Override
 	public void createReport(int months) {
 		ProductStatsVisitor productVisitor = new ProductStatsVisitor(months);
-		
 		CoreObjectModel model = CoreObjectModel.getInstance();
 		model.getProductManager().accept(productVisitor);
-
+		
+		builder.drawTitle("Product Report (" + months + " Months)");
+		
+		Table table = new Table();
+		
+		Row header = new Row();
+		header.addCell(new Cell("Description"));
+		header.addCell(new Cell("BarCode"));
+		header.addCell(new Cell("Size"));
+		header.addCell(new Cell("3-Month Supply"));
+		header.addCell(new Cell("Supply: Cur/Avg"));
+		header.addCell(new Cell("Supply: Min/Max"));
+		header.addCell(new Cell("Supply: Used/Added"));
+		header.addCell(new Cell("Shelf Life"));
+		header.addCell(new Cell("Used Age: Avg/Max"));
+		header.addCell(new Cell("Current Age: Avg/Max"));
+		
+		table.addRow(header);
+		
 		for(Product product : productVisitor.getProducts()) {
-			System.out.println("Current supply for " + product.toString() + ": " + productVisitor.getCurrentSupply(product));
-			System.out.println("Average supply for " + product.toString() + ": " + productVisitor.getAverageSupply(product));
-			System.out.println("Minimum supply for " + product.toString() + ": " + productVisitor.getMinSupply(product));
-			System.out.println("Maximum supply for " + product.toString() + ": " + productVisitor.getMaxSupply(product));
-			System.out.println("Used supply for " + product.toString() + ": " + productVisitor.getUsedSupply(product));
-			System.out.println("Added supply for " + product.toString() + ": " + productVisitor.getAddedSupply(product));
-			System.out.println("Average used age for " + product.toString() + ": " + productVisitor.getAverageUsedAge(product));
-			System.out.println("Max used age for " + product.toString() + ": " + productVisitor.getMaxUsedAge(product));
-			System.out.println("Average current age for " + product.toString() + ": " + productVisitor.getAverageCurrentAge(product));
-			System.out.println("Max current age for " + product.toString() + ": " + productVisitor.getMaxCurrentAge(product));
-			System.out.println("");
+			Row row = new Row();
+			row.addCell(new Cell(product.getDescription()));
+			row.addCell(new Cell(product.getBarCode()));
+			row.addCell(new Cell(product.getBarCode()));
+			row.addCell(new Cell(product.getSize().toString()));
+			row.addCell(new Cell(product.getThreeMonthSupply()));
+			row.addCell(new Cell(productVisitor.getCurrentSupply(product), productVisitor.getAverageSupply(product)));
+			row.addCell(new Cell(productVisitor.getMinSupply(product), productVisitor.getMaxSupply(product)));
+			row.addCell(new Cell(productVisitor.getUsedSupply(product), productVisitor.getAddedSupply(product)));
+			row.addCell(new Cell(product.getShelfLife()));
+			row.addCell(new Cell(productVisitor.getAverageUsedAge(product), productVisitor.getMaxUsedAge(product)));
+			row.addCell(new Cell(productVisitor.getAverageCurrentAge(product), productVisitor.getMaxCurrentAge(product)));
+			table.addRow(row);
 		}
+
+		builder.drawTable(table);
 	}
 
 }
