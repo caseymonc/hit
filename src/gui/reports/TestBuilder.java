@@ -1,27 +1,35 @@
 package gui.reports;
 
-public class TestBuilder extends Builder {
+import java.util.ArrayList;
 
+public class TestBuilder extends Builder {
+	
+	private ArrayList<Object> list;
 	@Override
 	public void drawTitle(String title) {
 		// TODO Auto-generated method stub
+		list.add(title);
 
 	}
 
 	@Override
 	public void drawTable(Table table) {
+		list.add(table);
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void drawText(String text, int fontSize) {
+		list.add(text);
+		
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void printTableHeader(Cell cell) {
+		list.add(cell);
 		// TODO Auto-generated method stub
 		
 	}
@@ -29,7 +37,15 @@ public class TestBuilder extends Builder {
 	@Override
 	public void printTable(Row row) {
 		// TODO Auto-generated method stub
-		
+		list.add(row);
+	}
+	public boolean hasMoreObjects()
+	{
+		return list.size()>0;
+	}
+	public Object getNextObject()
+	{
+		return list.remove(list.size()-1);
 	}
 
 }

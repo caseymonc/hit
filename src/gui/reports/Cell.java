@@ -43,13 +43,13 @@ public class Cell {
 	@Override
 	public String toString(){
 		String result = "";
-		if(value instanceof Float) {
-			result = Float.toString((float)value);
-		} else if(value instanceof Integer) {
-			result = Integer.toString((int)value);
-		} else if(value instanceof String) {
-			result = (String)value;
-		}
+//		if(value instanceof Float) {
+//			result = Float.toString((float)value);
+//		} else if(value instanceof Integer) {
+//			result = Integer.toString((int)value);
+//		} else if(value instanceof String) {
+//			result = (String)value;
+//		}
 		
 		if(partnerCell != null){
 			result += "/" + partnerCell.toString();
