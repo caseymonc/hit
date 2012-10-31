@@ -83,7 +83,7 @@ public class ExpiredReportController extends Controller implements
 	 */
 	@Override
 	public void display() {
-		Builder builder = new HtmlBuilder();
+		Builder builder = new HtmlBuilder("Expired Items Report");
 		ExpiredItemDirector director = new ExpiredItemDirector(builder);
 		director.createReport();
 	}

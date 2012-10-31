@@ -2,11 +2,11 @@ package gui.reports;
 
 public abstract class Builder {	
 	
-	private Table tableToDraw;
 	/**
 	 * Draw the title of the report
 	 * @param title The title of the Report
 	 */
+
 	public abstract void drawTitle(String title);
 	
 	/**
@@ -28,15 +28,23 @@ public abstract class Builder {
 		Row firstRow = table.getRow(0);
 		// This assumes that the first line of the table is ALWAYS
 		// the header information for the table
+		startTable();
 		for(int i = 1; i < numColumns; ++i){
 			printTableHeader(firstRow.getCell(i));
 		}
+		endHeader();
 		for(int i = 1; i < tableSize; ++i){
 			printTable(table.getRow(i));
 		}
+		endTable();
 	
 	}
 	
+	public abstract void endHeader();
+
+	public abstract void endTable();
+	public abstract void startTable();
+
 	public abstract void printTableHeader(Cell cell);
 
 	public abstract void printTable(Row row);

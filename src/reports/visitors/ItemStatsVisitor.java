@@ -33,15 +33,15 @@ public class ItemStatsVisitor implements ItemVisitor {
 		calendar.add(Calendar.MONTH, -months);
 		startDate = formatDate(calendar.getTime());
 		
-		supplyOnDate = new TreeMap();
+		supplyOnDate = new TreeMap<Date, Integer>();
 		
 		while(formatDate(calendar.getTime()).compareTo(endDate) <= 0) {
 			supplyOnDate.put(formatDate(calendar.getTime()), new Integer(0));
 			calendar.add(Calendar.DATE, 1);
 		}
 		
-		usedItemAges = new ArrayList();
-		currentItemAges = new ArrayList();
+		usedItemAges = new ArrayList<Integer>();
+		currentItemAges = new ArrayList<Integer>();
 		maxUsedAge = 0;
 		maxCurrentAge = 0;
 		numAddedItems = 0;

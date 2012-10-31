@@ -48,4 +48,20 @@ public class TestBuilder extends Builder {
 		return list.remove(list.size()-1);
 	}
 
+	@Override
+	public void endHeader() {
+		return;
+	}
+
+	@Override
+	public void endTable() {
+		return;
+		
+	}
+
+	@Override
+	public void startTable() {
+		return;
+	}
+
 }

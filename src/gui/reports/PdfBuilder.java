@@ -2,6 +2,10 @@ package gui.reports;
 
 public class PdfBuilder extends Builder {
 
+	public PdfBuilder(String reportName) {
+		
+	}
+
 	@Override
 	public void drawTitle(String title) {
 		// TODO Auto-generated method stub
@@ -28,6 +32,24 @@ public class PdfBuilder extends Builder {
 
 	@Override
 	public void printTable(Row row) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void endTable() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void endHeader() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void startTable() {
 		// TODO Auto-generated method stub
 		
 	}

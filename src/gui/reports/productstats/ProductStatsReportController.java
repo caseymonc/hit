@@ -101,9 +101,9 @@ public class ProductStatsReportController extends Controller implements
 		
 		Builder builder;
 		if(format == FileFormat.HTML) {
-			builder = new HtmlBuilder();
+			builder = new HtmlBuilder("Product Stats Report");
 		} else {
-			builder = new PdfBuilder();
+			builder = new PdfBuilder("Product Stats Report");
 		}
 		
 		ProductStatsDirector director = new ProductStatsDirector(builder);
