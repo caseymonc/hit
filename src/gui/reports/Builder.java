@@ -29,7 +29,7 @@ public abstract class Builder {
 		// This assumes that the first line of the table is ALWAYS
 		// the header information for the table
 		startTable();
-		for(int i = 1; i < numColumns; ++i){
+		for(int i = 0; i < numColumns; ++i){
 			printTableHeader(firstRow.getCell(i));
 		}
 		endHeader();
@@ -39,6 +39,8 @@ public abstract class Builder {
 		endTable();
 	
 	}
+	
+	public abstract void finish();
 	
 	public abstract void endHeader();
 

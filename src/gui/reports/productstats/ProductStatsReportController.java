@@ -61,7 +61,6 @@ public class ProductStatsReportController extends Controller implements
 		}
 		catch(Exception e){
 			getView().enableOK(false);
-			getView().setMonths("3");
 		}
 	}
 

@@ -48,17 +48,19 @@ public class ProductStatsDirector extends Director {
 			row.addCell(new Cell(product.getDescription()));
 			row.addCell(new Cell(product.getBarCode().toString()));
 			row.addCell(new Cell(product.getSize().toString()));
-			row.addCell(new Cell(product.getThreeMonthSupply()));
-			row.addCell(new Cell(productVisitor.getCurrentSupply(product), productVisitor.getAverageSupply(product)));
-			row.addCell(new Cell(productVisitor.getMinSupply(product), productVisitor.getMaxSupply(product)));
-			row.addCell(new Cell(productVisitor.getUsedSupply(product), productVisitor.getAddedSupply(product)));
-			row.addCell(new Cell(product.getShelfLife()));
-			row.addCell(new Cell(productVisitor.getAverageUsedAge(product), productVisitor.getMaxUsedAge(product)));
-			row.addCell(new Cell(productVisitor.getAverageCurrentAge(product), productVisitor.getMaxCurrentAge(product)));
+			row.addCell(new Cell(Integer.toString(product.getThreeMonthSupply())));
+			row.addCell(new Cell(productVisitor.getCurAvgSupply(product)));
+			row.addCell(new Cell(productVisitor.getMinMaxSupply(product)));
+			row.addCell(new Cell(productVisitor.getUsedAddedSupply(product)));
+			row.addCell(new Cell(Integer.toString(product.getShelfLife())));
+			row.addCell(new Cell(productVisitor.getAvgMaxUsedAge(product)));
+			row.addCell(new Cell(productVisitor.getAvgMaxCurrentAge(product)));
 			table.addRow(row);
 		}
 
 		builder.drawTable(table);
+		
+		builder.finish();
 	}
 
 }

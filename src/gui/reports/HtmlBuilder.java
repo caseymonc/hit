@@ -38,7 +38,7 @@ public class HtmlBuilder extends Builder {
 		for (int i = 0; i<numCells; ++i){
 			out.println("<td>"+row.getCell(i).toString()+"</td>");
 		}
-		out.println("</tr>");		
+		out.println("</tr>");
 	}
 
 	@Override
@@ -61,6 +61,9 @@ public class HtmlBuilder extends Builder {
 		out.println("</thead></tr>");	
 	}
 
-	
+	@Override
+	public void finish() {
+		out.close();
+	}
 
 }

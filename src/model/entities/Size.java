@@ -1,6 +1,7 @@
 package model.entities;
 
 import java.io.Serializable;
+import java.text.DecimalFormat;
 /**
  * Represents the size of an Item, Product, or three month supply
  * 
@@ -117,6 +118,6 @@ public class Size implements Serializable {
 		 */
 		@Override
 		public String toString() {
-			return Float.toString(size) + " " + units.toString();
+			return (new DecimalFormat("#.##").format(size)) + " " + units.toString();
 		}
 }

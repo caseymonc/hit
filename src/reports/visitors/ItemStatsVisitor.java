@@ -1,9 +1,10 @@
 package reports.visitors;
 
+import common.util.DateUtils;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import common.util.DateUtils;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -61,15 +62,15 @@ public class ItemStatsVisitor implements ItemVisitor {
 	 * Get the current number of items in the system
 	 * @return
 	 */
-	public int getCurrentSupply(){
-		return supplyOnDate.get(formatDate(new Date()));
+	public String getCurrentSupply(){
+		return Integer.toString(supplyOnDate.get(formatDate(new Date())));
 	}
 	
 	/**
 	 * Get the average number of items in the system
 	 * @return
 	 */
-	public float getAverageSupply(){
+	public String getAverageSupply(){
 		int totalDays = 0;
 		int sumSupply = 0;
 		
@@ -78,14 +79,14 @@ public class ItemStatsVisitor implements ItemVisitor {
 			sumSupply += supply;
 		}
 		
-		return sumSupply / totalDays;
+		return new DecimalFormat("#.#").format(sumSupply / totalDays);
 	}
 	
 	/**
 	 * Get the min number of items in the system
 	 * @return
 	 */
-	public int getMinSupply(){
+	public String getMinSupply(){
 		int minSupply = Integer.MAX_VALUE;
 		
 		for(Integer supply : supplyOnDate.values()) {
@@ -94,14 +95,14 @@ public class ItemStatsVisitor implements ItemVisitor {
 			}
 		}
 		
-		return minSupply;
+		return Integer.toString(minSupply);
 	}
 	
 	/**
 	 * Get the max number of items in the system
 	 * @return
 	 */
-	public int getMaxSupply(){
+	public String getMaxSupply(){
 		int maxSupply = 0;
 		
 		for(Integer supply : supplyOnDate.values()) {
@@ -110,23 +111,23 @@ public class ItemStatsVisitor implements ItemVisitor {
 			}
 		}
 		
-		return maxSupply;
+		return Integer.toString(maxSupply);
 	}
 	
 	/**
 	 * Get the total used items
 	 * @return
 	 */
-	public int getUsedSupply(){
-		return usedItemAges.size();
+	public String getUsedSupply(){
+		return Integer.toString(usedItemAges.size());
 	}
 	
 	/**
 	 * Get the added items
 	 * @return
 	 */
-	public int getAddedSupply(){
-		return numAddedItems;
+	public String getAddedSupply(){
+		return Integer.toString(numAddedItems);
 	}
 	
 	/**
@@ -166,7 +167,7 @@ public class ItemStatsVisitor implements ItemVisitor {
 		if(numAges == 0){
 			result += "0 days";
 		} else {
-			result += Float.toString(totalAge / numAges) + " days";
+			result += new DecimalFormat("#.#").format(Float.toString(totalAge / numAges)) + " days";
 		}
 		return result;
 	}

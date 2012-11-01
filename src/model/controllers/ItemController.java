@@ -77,7 +77,7 @@ public class ItemController extends ModelController {
 			throw new IllegalArgumentException("Item still does not have a specified container");
 		}
 		IM.addItem(i);
-				PC.addItemToProduct(i.getProduct(), i);
+		PC.addItemToProduct(i.getProduct(), i);
 		
 		this.setChanged();
 		this.notifyObservers(new Hint(i, Hint.Value.Add));

@@ -5,6 +5,11 @@ import java.util.ArrayList;
 public class TestBuilder extends Builder {
 	
 	private ArrayList<Object> list;
+	
+	public TestBuilder(ArrayList<Object> list) {
+		this.list = list;
+	}
+	
 	@Override
 	public void drawTitle(String title) {
 		// TODO Auto-generated method stub
@@ -64,4 +69,9 @@ public class TestBuilder extends Builder {
 		return;
 	}
 
+	@Override
+	public void finish() {
+		
+	}
+	
 }

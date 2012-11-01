@@ -6,55 +6,23 @@ package gui.reports;
  * A class that represents a cell for a table
  */
 public class Cell {
-	private Object value;
+	private String value;
 	private Cell partnerCell;
 	
-	public Cell(Object value){
-		this.value = value;
-		this.partnerCell = null;
-	}
-	
-	public Cell(Object value, Cell partnerCell){
-		this.value = value;
-		this.partnerCell = partnerCell;
-	}
-	
-	public Cell(Object value, Object partnerValue){
-		this.value = value;
-		this.partnerCell = new Cell(partnerValue);
-	}
-	
-	public void setValue(Object value){
+	public Cell(String value){
 		this.value = value;
 	}
 	
-	public void setPartnerCell(Cell partnerCell){
-		this.partnerCell = partnerCell;
+	public void setValue(String value){
+		this.value = value;
 	}
 	
 	public Object getValue(){
 		return value;
 	}
 	
-	public Cell getPartnerCell(){
-		return partnerCell;
-	}
-	
 	@Override
 	public String toString(){
-		String result = "";
-//		if(value instanceof Float) {
-//			result = Float.toString((float)value);
-//		} else if(value instanceof Integer) {
-//			result = Integer.toString((int)value);
-//		} else if(value instanceof String) {
-//			result = (String)value;
-//		}
-		
-		if(partnerCell != null){
-			result += "/" + partnerCell.toString();
-		}
-		
-		return result;
+		return value;
 	}
 }

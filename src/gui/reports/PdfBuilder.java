@@ -54,4 +54,8 @@ public class PdfBuilder extends Builder {
 		
 	}
 
+	@Override
+	public void finish() {
+		
+	}
 }
