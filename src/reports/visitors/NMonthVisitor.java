@@ -21,6 +21,7 @@ public class NMonthVisitor implements ProductVisitor, Visitor {
 	/** All of the visited ProductGroups*/
 	private List<ProductGroup> productGroups;
 	private int months;
+	
 	public NMonthVisitor(int months){
 		this.months = months;
 		this.products = new ArrayList<Product>();
@@ -51,6 +52,10 @@ public class NMonthVisitor implements ProductVisitor, Visitor {
 		if(nMonthSupply.getSize() > 0){
 			productGroups.add(group);
 		}
+	}
+	
+	public List<Product> getProducts(){
+		return products;
 	}
 
 }
