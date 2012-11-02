@@ -6,6 +6,8 @@ import gui.reports.Table;
 import gui.reports.Row;
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import model.CoreObjectModel;
 import model.entities.Item;
@@ -44,6 +46,11 @@ public class SupplyDirector extends Director {
 		//visitor stores the info from where he visits 
 		manager.accept(visitor);
 		List<Product> products = visitor.getProducts();
+		Collections.sort(products, new Comparator<Product>(){
+			public int compare(Product product1, Product product2) {
+				return product1.getDescription().compareTo(product2.getDescription());
+			}
+		});
 		
 		StorageUnitManager suManager = CoreObjectModel.getInstance().getStorageUnitManager();
 		suManager.acceptPreOrder(visitor);
@@ -117,13 +124,13 @@ public class SupplyDirector extends Director {
 		Row row = new Row();
 		row.addCell(new Cell(product.getDescription()));
 		row.addCell(new Cell(product.getBarCode().toString()));
-		Size size = product.getSize();
+		Size size = product.getThreeMonthSize();
 		row.addCell(new Cell(size.getSize() * months/3f + " " + size.getUnits().toString()));
 		
 		Collection<Item> items = CoreObjectModel.getInstance()
 											.getProductManager()
 											.getItemsByProduct(product);
-		
+		size = product.getSize();
 		row.addCell(new Cell(items.size() * size.getSize() + " " + size.getUnits().toString()));
 		return row;
 	}

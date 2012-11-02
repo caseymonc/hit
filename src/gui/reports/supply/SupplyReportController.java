@@ -95,9 +95,13 @@ import reports.directors.SupplyDirector;
 	 */
 	@Override
 	public void display() {
-//		Builder builder = new HtmlBuilder();
-		
-//		SupplyDirector director = new SupplyDirector(builder, 3);
+		Builder builder = new HtmlBuilder("N-Month-Supply");
+		SupplyDirector director = new SupplyDirector(builder, getMonths());
+		director.createReport();
+	}
+	
+	private int getMonths(){
+		return Integer.parseInt(getView().getMonths());
 	}
 
 }
