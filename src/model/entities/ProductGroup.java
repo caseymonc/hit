@@ -92,6 +92,18 @@ public class ProductGroup extends ProductContainer{
 		visitor.visitProductGroup(this);
 	}
 
+	public Size getCurrentSupply() {
+		Size size = new Size(this.getThreeMonthSupply().getUnits(), 0);
+		for(Item item : this.getAllItems()){
+			size.add(item.getProduct().getSize());
+		}
+		
+		for(ProductGroup group : this.getAllProductGroup()){
+			size.add(group.getCurrentSupply());
+		}
+		return size;
+	}
+
 	/*@Override
 	public void accept(ProductGroupVisitor visitor) {
 		visitor.visitGroup(this);

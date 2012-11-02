@@ -37,4 +37,58 @@ public enum Unit{
 	public String toString() {
 		return _string;
 	}
+	
+	public float getConversionFactor(Unit unit){
+		if(this == unit){
+			return 1;
+		}
+		
+		if(unit.isVolume() && this.isVolume()){
+			return this.getFactor()/unit.getFactor();
+		}
+		
+		if(unit.isWeight() && this.isWeight()){
+			return this.getFactor()/unit.getFactor();
+		}
+		
+		return 0;
+	}
+	
+	public float getFactor(){
+		switch(this){
+		case grams:
+			return 1;
+		case kilograms:
+			return 1000;
+		case ounces:
+			return .03527396211f;
+		case pounds:
+			return 453.59233f;
+		case fluidOunces:
+			return 1;
+		case pints:
+			return 16;
+		case quarts:
+			return 32;
+		case gallons:
+			return 64;
+		case liters:
+			return 33.814022702f;
+		default:
+			return -1;
+		}
+		
+		
+	}
+
+	public boolean isWeight(){
+		return this == pounds
+			|| this == ounces
+			|| this == kilograms
+			|| this == grams;
+	}
+	
+	public boolean isVolume(){
+		return !isWeight() && this != count;
+	}
 }
