@@ -1,11 +1,17 @@
 package reports.directors;
 
 import gui.reports.Builder;
+import gui.reports.Cell;
 import gui.reports.Table;
 import gui.reports.Row;
+
+import java.util.Collection;
 import java.util.List;
 import model.CoreObjectModel;
+import model.entities.Item;
 import model.entities.Product;
+import model.entities.ProductGroup;
+import model.entities.Size;
 import model.managers.ProductManager;
 import model.managers.StorageUnitManager;
 import reports.visitors.NMonthVisitor;
@@ -42,10 +48,12 @@ public class SupplyDirector extends Director {
 		StorageUnitManager suManager = CoreObjectModel.getInstance().getStorageUnitManager();
 		suManager.acceptPreOrder(visitor);
 		
-		
+		List<ProductGroup> groups = visitor.getProductGroups();
 		
 		//Start Drawing the report
 		getBuilder().drawTitle("Expired Items");
+		
+		getBuilder().drawText("Products", 20);
 		
 		Table table = new Table();
 		table.addRow(getProductTitleRow());
@@ -54,14 +62,51 @@ public class SupplyDirector extends Director {
 		}
 		
 		getBuilder().drawTable(table);
+		
+		getBuilder().drawText("Product Groups", 20);
+		
+		Table productGroupTable = new Table();
+		productGroupTable.addRow(getProductGroupTitleRow());
+		for(ProductGroup group : groups){
+			productGroupTable.addRow(getProductGroupRow(group));
+		}
+		
+		getBuilder().drawTable(table);
 	}
 	
+	private Row getProductGroupRow(ProductGroup group) {
+		Row row = new Row();
+		row.addCell(new Cell(group.getName()));
+		row.addCell(new Cell(group.getStorageUnit().getName()));
+		Size size = group.getThreeMonthSupply();
+		row.addCell(new Cell(size.getSize() * months/3f + " " + size.getUnits().toString()));
+		size = group.getCurrentSupply();
+		row.addCell(new Cell(size.getSize() + " " + size.getUnits().toString()));
+		return row;
+	}
+
+
+	private Row getProductGroupTitleRow() {
+		Row row = new Row();
+		row.addCell(new Cell("Product Group"));
+		row.addCell(new Cell("Storage Unit"));
+		row.addCell(new Cell(months + "-Month-Supply"));
+		row.addCell(new Cell("Current Supply"));
+		return row;
+	}
+
+
 	/**
 	 * 
 	 * @return 
 	 */
 	private Row getProductTitleRow() {
-		return new Row();
+		Row row = new Row();
+		row.addCell(new Cell("Description"));
+		row.addCell(new Cell("Barcode"));
+		row.addCell(new Cell(months + "-Month-Supply"));
+		row.addCell(new Cell("Current Supply"));
+		return row;
 	}
 	/**
 	 * 
@@ -69,6 +114,17 @@ public class SupplyDirector extends Director {
 	 * @return 
 	 */
 	private Row getProductRow(Product product) {
-		return new Row();
+		Row row = new Row();
+		row.addCell(new Cell(product.getDescription()));
+		row.addCell(new Cell(product.getBarCode().toString()));
+		Size size = product.getSize();
+		row.addCell(new Cell(size.getSize() * months/3f + " " + size.getUnits().toString()));
+		
+		Collection<Item> items = CoreObjectModel.getInstance()
+											.getProductManager()
+											.getItemsByProduct(product);
+		
+		row.addCell(new Cell(items.size() * size.getSize() + " " + size.getUnits().toString()));
+		return row;
 	}
 }
