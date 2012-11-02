@@ -59,6 +59,14 @@ public class CoreObjectModel implements PersistentItem{
 		lastBarCode = 0;
 	}
 
+	public void resetInstance(){
+		_instance = null;
+		ProductController.resetInstance();
+		ItemController.resetInstance();
+		ProductGroupController.resetInstance();
+		StorageUnitController.resetInstance();
+	}
+	
 	public ProductManager getProductManager() {
 		return productManager;
 	}
@@ -98,5 +106,4 @@ public class CoreObjectModel implements PersistentItem{
 	public void incLastBarCode(){
 		lastBarCode++;
 	}
-
 }

@@ -5,6 +5,7 @@
 package model.controllers;
 
 import gui.item.ItemData;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import model.BarCodePrinter;
@@ -18,7 +19,6 @@ import model.managers.ItemManager;
  * @author davidpatty
  */
 public class ItemController extends ModelController {
-
 	
 	/**
 	 *  the Core Object Model will interface between the controllers and the Managers.
@@ -52,6 +52,10 @@ public class ItemController extends ModelController {
 		PC = COM.getProductController();
 	}
 
+	public static void resetInstance() {
+		instance = null;
+	}
+	
 	public static ItemController getInstance() {
 		if(instance == null){
 			instance = new ItemController();

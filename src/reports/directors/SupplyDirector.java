@@ -9,13 +9,6 @@ public class SupplyDirector extends Director {
 		// TODO Auto-generated constructor stub
 	}
 
-	@Override
-	public void createReport() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public void createReport(int months) {
 		throw new UnsupportedOperationException("Not supported yet.");
 	}

@@ -17,6 +17,7 @@ public class ProductController extends ModelController {
 	 * shared between many different Controllers
 	 */
 	private static ProductController instance;
+
 	private CoreObjectModel model;
 	private ProductManager productManager;
 
@@ -29,7 +30,11 @@ public class ProductController extends ModelController {
 		model = CoreObjectModel.getInstance();
 		productManager = model.getProductManager();
 	}
-
+	
+	public static void resetInstance() {
+		instance = null;
+	}
+	
 	/**
 	 * gets the ProductController instance
 	 * 

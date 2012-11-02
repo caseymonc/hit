@@ -4,6 +4,8 @@ import gui.common.*;
 import gui.reports.Builder;
 import gui.reports.HtmlBuilder;
 import gui.reports.PdfBuilder;
+import java.util.Calendar;
+import java.util.Date;
 import reports.directors.ProductStatsDirector;
 
 /**
@@ -107,7 +109,14 @@ public class ProductStatsReportController extends Controller implements
 		
 		ProductStatsDirector director = new ProductStatsDirector(builder);
 		
-		director.createReport(Integer.parseInt(getView().getMonths()));
+		int months = Integer.parseInt(getView().getMonths());
+		
+		Calendar calendar = Calendar.getInstance();
+		Date endDate = calendar.getTime();
+		calendar.add(Calendar.MONTH, -months);
+		Date startDate = calendar.getTime();
+		
+		director.createReport(endDate, months);
 	}
 
 }

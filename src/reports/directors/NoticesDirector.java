@@ -8,16 +8,8 @@ public class NoticesDirector extends Director {
 		super(builder);
 	}
 
-	@Override
 	public void createReport() {
 		// TODO Auto-generated method stub
 		
-	}
-
-	@Override
-	public void createReport(int months) {
-
-	}
-
-	
+	}	
 }

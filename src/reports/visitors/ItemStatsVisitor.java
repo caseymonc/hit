@@ -7,6 +7,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 import java.util.TreeMap;
 import model.entities.Item;
 
@@ -27,25 +28,26 @@ public class ItemStatsVisitor implements ItemVisitor {
 	 * create this report
 	 * @param months
 	 */
-	public ItemStatsVisitor(int months) {
+	public ItemStatsVisitor(Date endDate, int months) {
 		
-		Calendar calendar = Calendar.getInstance();
-		endDate = formatDate(calendar.getTime());
+		Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
+		calendar.setTime(endDate);
+		this.endDate = formatDate(calendar.getTime());
 		calendar.add(Calendar.MONTH, -months);
-		startDate = formatDate(calendar.getTime());
+		this.startDate = formatDate(calendar.getTime());
 		
-		supplyOnDate = new TreeMap<Date, Integer>();
+		this.supplyOnDate = new TreeMap();
 		
 		while(formatDate(calendar.getTime()).compareTo(endDate) <= 0) {
 			supplyOnDate.put(formatDate(calendar.getTime()), new Integer(0));
 			calendar.add(Calendar.DATE, 1);
 		}
 		
-		usedItemAges = new ArrayList<Integer>();
-		currentItemAges = new ArrayList<Integer>();
-		maxUsedAge = 0;
-		maxCurrentAge = 0;
-		numAddedItems = 0;
+		this.usedItemAges = new ArrayList<Integer>();
+		this.currentItemAges = new ArrayList<Integer>();
+		this.maxUsedAge = 0;
+		this.maxCurrentAge = 0;
+		this.numAddedItems = 0;
 	}
 
 	@Override
@@ -63,7 +65,7 @@ public class ItemStatsVisitor implements ItemVisitor {
 	 * @return
 	 */
 	public String getCurrentSupply(){
-		return Integer.toString(supplyOnDate.get(formatDate(new Date())));
+		return Integer.toString(supplyOnDate.get(endDate));
 	}
 	
 	/**
@@ -167,7 +169,7 @@ public class ItemStatsVisitor implements ItemVisitor {
 		if(numAges == 0){
 			result += "0 days";
 		} else {
-			result += new DecimalFormat("#.#").format(Float.toString(totalAge / numAges)) + " days";
+			result += new DecimalFormat("#.#").format(totalAge / numAges) + " days";
 		}
 		return result;
 	}
@@ -191,7 +193,7 @@ public class ItemStatsVisitor implements ItemVisitor {
 			exitDate = formatDate(item.getExitDate());
 		}
 		
-		Calendar calendar = Calendar.getInstance();
+		Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
 		if(entryDate.before(startDate)) {
 			calendar.setTime(startDate);
 		} else {
@@ -221,9 +223,8 @@ public class ItemStatsVisitor implements ItemVisitor {
 				maxUsedAge = numDays;
 			}
 		} else {
-			Date today = formatDate(Calendar.getInstance().getTime());
 			Date entryDate = formatDate(item.getEntryDate());
-			long timeDiff = today.getTime() - entryDate.getTime();
+			long timeDiff = endDate.getTime() - entryDate.getTime();
 			int numDays = (int)Math.ceil((double)timeDiff / 86400000);
 			currentItemAges.add(numDays);
 			

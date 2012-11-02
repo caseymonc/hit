@@ -4,6 +4,7 @@
  */
 package model.managers;
 
+import java.util.Collection;
 import java.util.HashMap;
 import reports.visitors.ItemVisitor;
 import model.entities.BarCode;

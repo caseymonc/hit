@@ -4,6 +4,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,23 +19,25 @@ public class ProductStatsVisitor implements ProductVisitor {
 	/** A list of all ItemStats acquired per Product*/
 	private Map<Product, ItemStatsVisitor> itemStats;
 
+	Date endDate;
 	private int months;
 	
 	/**
 	 * The number of months for which to create this report
 	 * @param months
 	 */
-	public ProductStatsVisitor(int months){
+	public ProductStatsVisitor(Date endDate, int months){
+		this.endDate = endDate;
 		this.months = months;
-		products = new ArrayList<Product>();
-		itemStats = new HashMap<Product, ItemStatsVisitor>();
+		products = new ArrayList();
+		itemStats = new HashMap();
 	}
 	
 	@Override
 	public void visitProduct(Product product) {
 		products.add(product);
 		
-		ItemStatsVisitor itemVisitor = new ItemStatsVisitor(months);
+		ItemStatsVisitor itemVisitor = new ItemStatsVisitor(endDate, months);
 		CoreObjectModel model = CoreObjectModel.getInstance();
 		model.getProductManager().accept(itemVisitor, product);
 		itemStats.put(product, itemVisitor);

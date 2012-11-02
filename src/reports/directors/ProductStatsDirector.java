@@ -4,6 +4,8 @@ import gui.reports.Builder;
 import gui.reports.Cell;
 import gui.reports.Row;
 import gui.reports.Table;
+import java.util.Calendar;
+import java.util.Date;
 import model.CoreObjectModel;
 import model.entities.Product;
 import reports.visitors.ProductStatsVisitor;
@@ -14,14 +16,9 @@ public class ProductStatsDirector extends Director {
 		super(builder);
 	}
 
-	@Override
-	public void createReport() {
+	public void createReport(Date endDate, int months)  {
 		
-	}
-
-	@Override
-	public void createReport(int months) {
-		ProductStatsVisitor productVisitor = new ProductStatsVisitor(months);
+		ProductStatsVisitor productVisitor = new ProductStatsVisitor(endDate, months);
 		CoreObjectModel model = CoreObjectModel.getInstance();
 		model.getProductManager().accept(productVisitor);
 		

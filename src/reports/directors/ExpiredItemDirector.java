@@ -16,14 +16,14 @@ import gui.reports.Builder;
 import gui.reports.Cell;
 import gui.reports.Row;
 import gui.reports.Table;
+import java.util.Date;
 
 public class ExpiredItemDirector extends Director {
 
 	public ExpiredItemDirector(Builder builder){
 		super(builder);
 	}
-	
-	@Override
+
 	public void createReport() {
 		ExpiredItemsVisitor visitor = new ExpiredItemsVisitor();
 		
@@ -71,10 +71,4 @@ public class ExpiredItemDirector extends Director {
 		row.addCell(new Cell(item.getBarCode().toString()));
 		return row;
 	}
-
-	@Override
-	public void createReport(int months) {
-		
-	}
-
 }

@@ -17,7 +17,7 @@ import model.managers.StorageUnitManager;
  * @author cmoncur
  */
 public class StorageUnitController extends ModelController{
-	
+
 	/**
 	 * CoreObjectModel singleton reference
 	 */
@@ -36,6 +36,10 @@ public class StorageUnitController extends ModelController{
 		}
 		
 		return instance;
+	}
+	
+	public static void resetInstance() {
+		instance = null;
 	}
 	
 	/** Oversees moving an item from one container to another
