@@ -7,6 +7,7 @@ import java.util.List;
 import model.CoreObjectModel;
 import model.entities.Product;
 import model.managers.ProductManager;
+import model.managers.StorageUnitManager;
 import reports.visitors.NMonthVisitor;
 
 public class SupplyDirector extends Director {
@@ -37,6 +38,11 @@ public class SupplyDirector extends Director {
 		//visitor stores the info from where he visits 
 		manager.accept(visitor);
 		List<Product> products = visitor.getProducts();
+		
+		StorageUnitManager suManager = CoreObjectModel.getInstance().getStorageUnitManager();
+		suManager.acceptPreOrder(visitor);
+		
+		
 		
 		//Start Drawing the report
 		getBuilder().drawTitle("Expired Items");
