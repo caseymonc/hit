@@ -89,9 +89,20 @@ public class ItemController extends ModelController {
 
 	/** Moves the item to removed items 
 	 * 
+	 * @param i - Item to be removed
 	 * @throws IllegalArgumentException
 	 */
 	public void removeItem(Item i) throws IllegalArgumentException {
+		removeItem(i, new Date());
+	}
+	
+	/** Moves the item to removed items 
+	 * 
+	 * @param i - Item to be removed
+	 * @param exitDate - the new exitDate of the item
+	 * @throws IllegalArgumentException
+	 */
+	public void removeItem(Item i, Date exitDate) {
 		if(i == null) {
 			throw new IllegalArgumentException("Null item");
 		}
@@ -100,11 +111,9 @@ public class ItemController extends ModelController {
 			throw new IllegalArgumentException("Cannot Remove Item");
 		} else {
 			i.getContainer().removeItem(i);
-			IM.removeItem(i);
+			IM.removeItem(i, exitDate);
 			PC.removeItemFromProduct(i.getProduct(), i);
 		}
-		this.setChanged();
-		this.notifyObservers(new Hint(i, Hint.Value.Delete));
 	}
 	
 	public void unRemoveItem(Item item, ProductContainer container){

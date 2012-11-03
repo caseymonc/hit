@@ -32,19 +32,19 @@ public class ItemStatsVisitor implements ItemVisitor {
 		
 		Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
 		calendar.setTime(endDate);
-		this.endDate = formatDate(calendar.getTime());
+		this.endDate = calendar.getTime();
 		calendar.add(Calendar.MONTH, -months);
-		this.startDate = formatDate(calendar.getTime());
+		this.startDate = calendar.getTime();
 		
 		this.supplyOnDate = new TreeMap();
 		
-		while(formatDate(calendar.getTime()).compareTo(endDate) <= 0) {
+		while(formatDate(calendar.getTime()).compareTo(formatDate(endDate)) <= 0) {
 			supplyOnDate.put(formatDate(calendar.getTime()), new Integer(0));
 			calendar.add(Calendar.DATE, 1);
 		}
 		
-		this.usedItemAges = new ArrayList<Integer>();
-		this.currentItemAges = new ArrayList<Integer>();
+		this.usedItemAges = new ArrayList();
+		this.currentItemAges = new ArrayList();
 		this.maxUsedAge = 0;
 		this.maxCurrentAge = 0;
 		this.numAddedItems = 0;
@@ -55,7 +55,7 @@ public class ItemStatsVisitor implements ItemVisitor {
 		updateSupplyOnDate(item);
 		updateItemAges(item);
 		
-		if(item.getEntryDate().after(startDate)) {
+		if(item.getEntryDate().compareTo(startDate) >= 0) {
 			numAddedItems++;
 		}
 	}
@@ -65,7 +65,7 @@ public class ItemStatsVisitor implements ItemVisitor {
 	 * @return
 	 */
 	public String getCurrentSupply(){
-		return Integer.toString(supplyOnDate.get(endDate));
+		return Integer.toString(supplyOnDate.get(formatDate(endDate)));
 	}
 	
 	/**
@@ -73,8 +73,8 @@ public class ItemStatsVisitor implements ItemVisitor {
 	 * @return
 	 */
 	public String getAverageSupply(){
-		int totalDays = 0;
-		int sumSupply = 0;
+		float totalDays = 0;
+		float sumSupply = 0;
 		
 		for(Integer supply : supplyOnDate.values()) {
 			totalDays++;
@@ -157,8 +157,8 @@ public class ItemStatsVisitor implements ItemVisitor {
 	}
 	
 	private String getAverageAge(List<Integer> ages) {
-		int totalAge = 0;
-		int numAges = 0;
+		float totalAge = 0;
+		float numAges = 0;
 		
 		for(Integer i : ages) {
 			totalAge += i;
@@ -184,13 +184,13 @@ public class ItemStatsVisitor implements ItemVisitor {
 
 	private void updateSupplyOnDate(Item item) {
 
-		Date entryDate = formatDate(item.getEntryDate());
+		Date entryDate = item.getEntryDate();
 		Date exitDate;
 		
 		if(item.getExitDate() == null) {
-			exitDate = formatDate(endDate);
+			exitDate = endDate;
 		} else {
-			exitDate = formatDate(item.getExitDate());
+			exitDate = item.getExitDate();
 		}
 		
 		Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
@@ -212,9 +212,19 @@ public class ItemStatsVisitor implements ItemVisitor {
 	}
 	
 	private void updateItemAges(Item item) {
+		Date entryDate = formatDate(item.getEntryDate());
+		
+		if(entryDate.before(startDate)) {
+			entryDate = startDate;
+		}
+		
 		if(item.getExitDate() != null) {	
 			Date exitDate = formatDate(item.getExitDate());
-			Date entryDate = formatDate(item.getEntryDate());
+			
+			if(exitDate.before(startDate)){
+				return;
+			}
+			
 			long timeDiff = exitDate.getTime() - entryDate.getTime();
 			int numDays = (int)Math.ceil((double)timeDiff / 86400000);
 			usedItemAges.add(numDays);
@@ -223,8 +233,7 @@ public class ItemStatsVisitor implements ItemVisitor {
 				maxUsedAge = numDays;
 			}
 		} else {
-			Date entryDate = formatDate(item.getEntryDate());
-			long timeDiff = endDate.getTime() - entryDate.getTime();
+			long timeDiff = formatDate(endDate).getTime() - entryDate.getTime();
 			int numDays = (int)Math.ceil((double)timeDiff / 86400000);
 			currentItemAges.add(numDays);
 			
