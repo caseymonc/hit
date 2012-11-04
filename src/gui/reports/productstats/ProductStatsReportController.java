@@ -55,7 +55,7 @@ public class ProductStatsReportController extends Controller implements
 	protected void enableComponents() {
 		try{
 			int months = Integer.parseInt(getView().getMonths());
-			if(months < 1){
+			if(months < 1 || months > 100){
 				getView().enableOK(false);
 			} else {
 				getView().enableOK(true);
