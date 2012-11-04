@@ -14,7 +14,7 @@ public class HtmlBuilder extends Builder {
 			out = new PrintWriter(new FileWriter(fileName));
 		} catch (IOException e) 
 		{
-			System.out.println("Unable to write to file: " + fileName);// TODO Auto-generated catch block
+			System.out.println("Unable to write to file: " + fileName);
 			e.printStackTrace();
 		}
 		out.println("<html>");

@@ -114,7 +114,8 @@ public class ProductController extends ModelController {
 	 * @param targetContainer - the container the product is being moved to
 	 * @param currentContainer - the container that the product is currently in
 	 */
-	public void moveProductToContainer(Product product, ProductContainer targetContainer, ProductContainer currentContainer) {
+	public void moveProductToContainer(Product product, ProductContainer targetContainer, 
+														ProductContainer currentContainer) {
 		if (targetContainer == currentContainer) {
 			return;
 		}

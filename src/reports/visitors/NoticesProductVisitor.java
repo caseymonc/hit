@@ -22,19 +22,13 @@ public class NoticesProductVisitor implements ProductVisitor {
 	
 	@Override
 	public void visitProduct(Product product) {
-		if((product.getThreeMonthSize().getUnits().isVolume() &&
-			!group.getThreeMonthSupply().getUnits().isVolume()) ||
-			(!product.getThreeMonthSize().getUnits().isVolume() &&
-			 group.getThreeMonthSupply().getUnits().isVolume()) ||
-			(product.getThreeMonthSize().getUnits().isVolume() &&
-			!group.getThreeMonthSupply().getUnits().isVolume()) ||
-			(!product.getThreeMonthSize().getUnits().isVolume() &&
-			 group.getThreeMonthSupply().getUnits().isVolume()) ||
+		if(!((product.getThreeMonthSize().getUnits().isVolume() &&
+			group.getThreeMonthSupply().getUnits().isVolume()) ||
+			(product.getThreeMonthSize().getUnits().isWeight() &&
+			group.getThreeMonthSupply().getUnits().isWeight()) ||
 			(product.getThreeMonthSize().getUnits() == Unit.count &&
-			group.getThreeMonthSupply().getUnits() != Unit.count ||
-			(product.getThreeMonthSize().getUnits() != Unit.count &&
-			 group.getThreeMonthSupply().getUnits() == Unit.count))){
-			inconsistentProducts.add(product);
+			group.getThreeMonthSupply().getUnits() == Unit.count))){
+				inconsistentProducts.add(product);
 		}
 	}
 	
