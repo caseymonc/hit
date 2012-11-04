@@ -54,6 +54,10 @@ public class NMonthVisitor implements ProductVisitor, Visitor {
 		}
 	}
 	
+	public List<ProductGroup> getProductGroups(){
+		return productGroups;
+	}
+	
 	public List<Product> getProducts(){
 		return products;
 	}

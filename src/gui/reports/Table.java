@@ -22,5 +22,13 @@ public class Table {
 		return rows.get(i);
 	}
 	
+	public String toString(){
+		
+		String string = "";
+		for(Row row : rows){
+			string += row.toString() + "\n";
+		}
+		return string;
+	}
 	
 }

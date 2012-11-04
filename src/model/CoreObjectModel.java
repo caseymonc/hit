@@ -5,6 +5,10 @@
 package model;
 
 
+import java.util.Date;
+
+import common.util.DateUtils;
+
 import model.controllers.*;
 import model.entities.*;
 import model.managers.*;
@@ -33,6 +37,7 @@ public class CoreObjectModel implements PersistentItem{
 	private ProductGroupManager productGroupManager;
 	private StorageUnitManager storageUnitManager;
 	private ItemManager itemManager;
+	private Date sinceDate;
 	  
 	public static CoreObjectModel getInstance()
 	{
@@ -105,5 +110,18 @@ public class CoreObjectModel implements PersistentItem{
 	
 	public void incLastBarCode(){
 		lastBarCode++;
+	}
+	
+	public Date getSinceDate() {
+		Date toReturn;
+		if(sinceDate == null){
+			sinceDate = new Date();
+			sinceDate.setYear(0);
+			toReturn = sinceDate;
+		}else{
+			toReturn = sinceDate;
+			sinceDate = new Date();
+		}
+		return toReturn;
 	}
 }

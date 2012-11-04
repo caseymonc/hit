@@ -3,6 +3,7 @@ package gui.reports.supply;
 import gui.common.*;
 import gui.reports.Builder;
 import gui.reports.HtmlBuilder;
+import gui.reports.PdfBuilder;
 import reports.directors.SupplyDirector;
 
 /**
@@ -95,10 +96,20 @@ import reports.directors.SupplyDirector;
 	 */
 	@Override
 	public void display() {
-//		Builder builder = new HtmlBuilder();
-		
-//		SupplyDirector director = new SupplyDirector(builder, 3);
+		SupplyDirector director = new SupplyDirector(getBuilder(), getMonths());
+		director.createReport();
+	}
+	
+	private int getMonths(){
+		return Integer.parseInt(getView().getMonths());
 	}
 
+	public Builder getBuilder(){
+		if(getView().getFormat() == FileFormat.HTML){
+			return new HtmlBuilder(getMonths() + "-Month-Supply");
+		}else{
+			return new PdfBuilder(getMonths() + "-Month-Supply");
+		}
+	}
 }
 
