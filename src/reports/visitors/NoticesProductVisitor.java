@@ -5,13 +5,14 @@ import java.util.Set;
 
 import model.entities.Product;
 import model.entities.ProductGroup;
+import model.entities.Unit;
 
 public class NoticesProductVisitor implements ProductVisitor {
 
 	/** The group that we were visiting*/
 	private ProductGroup group;
 	
-	/** The inconsistend products in group*/
+	/** The inconsistent products in group*/
 	private Set<Product> inconsistentProducts;
 	
 	public NoticesProductVisitor(ProductGroup group){
@@ -21,8 +22,18 @@ public class NoticesProductVisitor implements ProductVisitor {
 	
 	@Override
 	public void visitProduct(Product product) {
-		if(product.getThreeMonthSize().getUnits() !=
-			group.getThreeMonthSupply().getUnits()){
+		if((product.getThreeMonthSize().getUnits().isVolume() &&
+			!group.getThreeMonthSupply().getUnits().isVolume()) ||
+			(!product.getThreeMonthSize().getUnits().isVolume() &&
+			 group.getThreeMonthSupply().getUnits().isVolume()) ||
+			(product.getThreeMonthSize().getUnits().isVolume() &&
+			!group.getThreeMonthSupply().getUnits().isVolume()) ||
+			(!product.getThreeMonthSize().getUnits().isVolume() &&
+			 group.getThreeMonthSupply().getUnits().isVolume()) ||
+			(product.getThreeMonthSize().getUnits() == Unit.count &&
+			group.getThreeMonthSupply().getUnits() != Unit.count ||
+			(product.getThreeMonthSize().getUnits() != Unit.count &&
+			 group.getThreeMonthSupply().getUnits() == Unit.count))){
 			inconsistentProducts.add(product);
 		}
 	}

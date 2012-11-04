@@ -43,6 +43,7 @@ public class ExpiredItemDirector extends Director {
 		}
 		
 		getBuilder().drawTable(table);
+		getBuilder().finish();
 	}
 
 	private Row getTitleRow() {

@@ -1,7 +1,9 @@
 package reports.visitors;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -9,8 +11,9 @@ import java.util.Set;
 import model.CoreObjectModel;
 import model.entities.Product;
 import model.entities.ProductGroup;
+import model.entities.StorageUnit;
 
-public class NoticesVisitor implements ProductGroupVisitor {
+public class NoticesVisitor implements Visitor {
 
 	/** A list of all groups with inconsistent */
 	private List<ProductGroup> groups;
@@ -24,14 +27,36 @@ public class NoticesVisitor implements ProductGroupVisitor {
 	}
 	
 	@Override
-	public void visitGroup(ProductGroup group) {
+	public void visitStorageUnit(StorageUnit unit) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void visitProductGroup(ProductGroup group) {
 		CoreObjectModel model = CoreObjectModel.getInstance();
 		NoticesProductVisitor productVisitor = new NoticesProductVisitor(group);
 		model.getProductManager().accept(productVisitor, group);
 		
+		boolean hasInconsistencies = false;
 		if(productVisitor.hasInconsistencies()){
 			groups.add(group);
 			incorrectProducts.put(group, productVisitor.getInconsistentProducts());
+			hasInconsistencies = true;
+		}
+		
+		Collection<ProductGroup> children = group.getAllProductGroup();
+		if(children != null){
+			for(ProductGroup child : children){
+				if(groups.contains(child)){
+					if(!hasInconsistencies){
+						groups.add(group);
+						incorrectProducts.put(group, new HashSet<Product>());
+						hasInconsistencies = true;
+					}
+					incorrectProducts.get(group).addAll(incorrectProducts.get(child));
+				}
+			}
 		}
 	}
 	
@@ -61,5 +86,7 @@ public class NoticesVisitor implements ProductGroupVisitor {
 	public Set<Product> getInconsistentProducts(ProductGroup group){
 		return incorrectProducts.get(group);
 	}
+
+	
 
 }

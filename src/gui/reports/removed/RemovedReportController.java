@@ -1,6 +1,14 @@
 package gui.reports.removed;
 
+import java.util.Date;
+
+import model.CoreObjectModel;
+
+import reports.directors.RemovedItemsDirector;
 import gui.common.*;
+import gui.reports.Builder;
+import gui.reports.HtmlBuilder;
+import gui.reports.PdfBuilder;
 
 /**
  * Controller class for the removed items report view.
@@ -58,6 +66,7 @@ public class RemovedReportController extends Controller implements
 	 */
 	@Override
 	protected void loadValues() {
+		getView().setSinceLast(true);
 	}
 
 	//
@@ -78,6 +87,25 @@ public class RemovedReportController extends Controller implements
 	 */
 	@Override
 	public void display() {
+		RemovedItemsDirector director = new RemovedItemsDirector(getBuilder(), getDate());
+		director.createReport();
+	}
+	
+	private Date getDate() {
+		if(getView().getSinceDate()){
+			return getView().getSinceDateValue();
+		}else if(getView().getSinceLast()){
+			return CoreObjectModel.getInstance().getSinceDate();
+		}
+		return null;
+	}
+
+	public Builder getBuilder(){
+		if(getView().getFormat() == FileFormat.HTML){
+			return new HtmlBuilder("Removed Items Report");
+		}else{
+			return new PdfBuilder("Removed Items Report");
+		}
 	}
 
 }
