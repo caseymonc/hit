@@ -86,6 +86,7 @@ public class ExpiredReportController extends Controller implements
 	public void display() {
 		ExpiredItemDirector director = new ExpiredItemDirector(getBuilder());
 		director.createReport();
+		director.displayReport();
 	}
 	
 	public Builder getBuilder(){

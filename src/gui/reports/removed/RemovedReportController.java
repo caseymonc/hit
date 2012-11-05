@@ -89,6 +89,7 @@ public class RemovedReportController extends Controller implements
 	public void display() {
 		RemovedItemsDirector director = new RemovedItemsDirector(getBuilder(), getDate());
 		director.createReport();
+		director.displayReport();
 	}
 	
 	private Date getDate() {

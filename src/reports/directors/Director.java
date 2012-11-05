@@ -29,4 +29,8 @@ public abstract class Director {
 	public Builder getBuilder(){
 		return builder;
 	}
+	
+	public void displayReport(){
+		builder.display();
+	}
 }

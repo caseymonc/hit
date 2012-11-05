@@ -98,6 +98,7 @@ import reports.directors.SupplyDirector;
 	public void display() {
 		SupplyDirector director = new SupplyDirector(getBuilder(), getMonths());
 		director.createReport();
+		director.displayReport();
 	}
 	
 	private int getMonths(){

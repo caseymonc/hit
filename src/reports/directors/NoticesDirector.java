@@ -37,7 +37,6 @@ public class NoticesDirector extends Director {
 		}
 		
 		getBuilder().finish();
-		getBuilder().display();
 	}
 
 	private String getProductText(Product product, ProductGroup group) {

@@ -84,6 +84,7 @@ public class NoticesReportController extends Controller implements
 	public void display() {
 		NoticesDirector director = new NoticesDirector(getBuilder());
 		director.createReport();
+		director.displayReport();
 	}
 	
 	public Builder getBuilder(){

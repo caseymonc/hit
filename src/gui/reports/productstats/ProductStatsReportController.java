@@ -117,6 +117,7 @@ public class ProductStatsReportController extends Controller implements
 		Date startDate = calendar.getTime();
 		
 		director.createReport(endDate, months);
+		director.displayReport();
 	}
 
 }
