@@ -38,8 +38,9 @@ public class NMonthVisitor implements ProductVisitor, Visitor {
 		if(items == null)
 			items = new ArrayList<Item>();
 		
-		if(items.size() < nMonthSupply)
+		if(items.size() < nMonthSupply){
 			products.add(product);
+		}
 	}
 
 	@Override
@@ -50,7 +51,12 @@ public class NMonthVisitor implements ProductVisitor, Visitor {
 		Size size = group.getThreeMonthSupply();
 		Size nMonthSupply = new Size(size.getUnits(), size.getSize() * ((float)months/3f));
 		if(nMonthSupply.getSize() > 0){
-			productGroups.add(group);
+			
+			Size s = group.getCurrentSupply();
+			
+			if(s.getSize() < nMonthSupply.getSize()){
+				productGroups.add(group);
+			}
 		}
 	}
 	
