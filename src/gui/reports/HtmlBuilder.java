@@ -69,6 +69,7 @@ public class HtmlBuilder extends Builder {
 	@Override
 	public void endDocument() {
 		// TODO Auto-generated method stub
+		out.println("</html>");
 		out.close();
 	}
 

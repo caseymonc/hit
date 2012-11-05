@@ -16,6 +16,7 @@ public class PdfBuilder extends Builder {
 	private Document document;
 	private PdfWriter writer;
 	
+	
 	public PdfBuilder(String reportName) {
 		reportName += ".pdf";
 		document = new Document(new Rectangle(340, 468));
@@ -36,6 +37,14 @@ public class PdfBuilder extends Builder {
 	@Override
 	public void drawTitle(String title) {
 		// TODO Auto-generated method stub
+		Font font = new Font(FontFamily.HELVETICA, 6);
+		try {
+			document.add(new Paragraph(title,font));
+		} catch (DocumentException e) {
+			// TODO Auto-generated catch block
+			System.out.println("Can't draw a title in pdf");
+			e.printStackTrace();
+		}
 		
 	}
 
