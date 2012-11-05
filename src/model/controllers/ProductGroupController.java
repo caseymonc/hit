@@ -15,6 +15,7 @@ import model.managers.ProductGroupManager;
  * 
  */
 public class ProductGroupController extends ModelController{
+
 	/**
 	 * Reference to the Singleton Core Object Model used for accessing the managers
 	 */
@@ -41,6 +42,10 @@ public class ProductGroupController extends ModelController{
 			instance = new ProductGroupController();
 		}
 		return instance;
+	}
+	
+	public static void resetInstance() {
+		instance = null;
 	}
 	
 	/**

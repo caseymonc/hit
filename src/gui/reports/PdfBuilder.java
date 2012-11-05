@@ -112,4 +112,8 @@ public class PdfBuilder extends Builder {
 		document.close();
 	}
 
+	@Override
+	public void finish() {
+		
+	}
 }

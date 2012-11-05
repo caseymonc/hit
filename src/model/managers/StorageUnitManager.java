@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.Set;
 
 import reports.visitors.ItemVisitor;
+import reports.visitors.Visitor;
 import model.entities.Item;
 import model.entities.Product;
 import model.entities.ProductGroup;
@@ -133,16 +134,29 @@ public class StorageUnitManager implements PersistentItem{
 		storageUnits.put(newName, unit);
 	}
 
-	public void acceptPreOrder(ItemVisitor visitor){
+	public void acceptPreOrder(Visitor visitor){
 		List<StorageUnit> units = this.getAllStorageUnits();
+		sortUnitsByName(units);
+		
+		for(StorageUnit unit : units){
+			unit.acceptOrder(visitor, true);
+		}
+	}
+	
+	public void acceptPostOrder(Visitor visitor){
+		List<StorageUnit> units = this.getAllStorageUnits();
+		sortUnitsByName(units);
+		
+		for(StorageUnit unit : units){
+			unit.acceptOrder(visitor, false);
+		}
+	}
+	
+	private void sortUnitsByName(List<StorageUnit> units) {
 		Collections.sort(units, new Comparator<StorageUnit>(){
 			public int compare(StorageUnit unit1, StorageUnit unit2) {
 				return unit1.getName().compareTo(unit2.getName());
 			}
 		});
-		
-		for(StorageUnit unit : units){
-			unit.acceptPreOrder(visitor);
-		}
 	}
 }

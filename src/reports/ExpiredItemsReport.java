@@ -1,7 +1,6 @@
 package reports;
 
 import java.util.List;
-
 import model.entities.Item;
 
 public class ExpiredItemsReport extends Report {

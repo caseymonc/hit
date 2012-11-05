@@ -1,6 +1,10 @@
 package gui.reports.notices;
 
+import reports.directors.NoticesDirector;
 import gui.common.*;
+import gui.reports.Builder;
+import gui.reports.HtmlBuilder;
+import gui.reports.PdfBuilder;
 
 /**
  * Controller class for the notices report view.
@@ -78,6 +82,16 @@ public class NoticesReportController extends Controller implements
 	 */
 	@Override
 	public void display() {
+		NoticesDirector director = new NoticesDirector(getBuilder());
+		director.createReport();
+	}
+	
+	public Builder getBuilder(){
+		if(getView().getFormat() == FileFormat.HTML){
+			return new HtmlBuilder("Notices Report");
+		}else{
+			return new PdfBuilder("Notices Report");
+		}
 	}
 
 }

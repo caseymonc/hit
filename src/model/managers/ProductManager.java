@@ -34,7 +34,8 @@ public class ProductManager implements PersistentItem {
 	/**
 	 * Map of Item Collections indexed by their product
 	 */
-	Map<Product, Set<Item>> itemsByProduct;
+	Map<Product, Set<Item>> currentItemsByProduct;
+	Map<Product, Set<Item>> allItemsByProduct;
 
 	/**
 	 * Constructor
@@ -42,8 +43,9 @@ public class ProductManager implements PersistentItem {
 	 * Creates a new ProductManager
 	 */
 	public ProductManager() {
-		productsByBarCode = new HashMap<BarCode, Product>();
-		itemsByProduct = new HashMap<Product, Set<Item>>();
+		productsByBarCode = new HashMap();
+		currentItemsByProduct = new HashMap();
+		allItemsByProduct = new HashMap();
 	}
 
 	/**
@@ -76,7 +78,8 @@ public class ProductManager implements PersistentItem {
 			throw new IllegalArgumentException("Not a valid Product");
 		}
 		productsByBarCode.put(p.getBarCode(), p);
-		itemsByProduct.put(p, new HashSet<Item>());
+		currentItemsByProduct.put(p, new HashSet<Item>());
+		allItemsByProduct.put(p, new HashSet<Item>());
 	}
 
 	/**
@@ -229,7 +232,7 @@ public class ProductManager implements PersistentItem {
 	public boolean canRemoveProduct(Product p) {
 		assert (p != null);
 
-		Set<Item> items = itemsByProduct.get(p);
+		Set<Item> items = currentItemsByProduct.get(p);
 
 		for (Item item : items) {
 			if (item.getExitDate() == null) {
@@ -257,7 +260,7 @@ public class ProductManager implements PersistentItem {
 		}
 
 		productsByBarCode.remove(p.getBarCode());
-		itemsByProduct.remove(p);
+		currentItemsByProduct.remove(p);
 	}
 
 	/**
@@ -273,15 +276,16 @@ public class ProductManager implements PersistentItem {
 
 		assert (p != null);
 		assert (i != null);
-		assert (itemsByProduct.containsKey(p));
+		assert (currentItemsByProduct.containsKey(p));
+		assert (allItemsByProduct.containsKey(p));
 
 		if (p == null || i == null) {
 			throw new IllegalArgumentException();
 		}
 
-		if (itemsByProduct.containsKey(p)) {
-			itemsByProduct.get(p).add(i);
-
+		if (currentItemsByProduct.containsKey(p) && allItemsByProduct.containsKey(p)) {
+			currentItemsByProduct.get(p).add(i);
+			allItemsByProduct.get(p).add(i);
 			// A product's creation date is equal to the earliest entry
 			// date of any its items.
 			if (p.getCreationDate().compareTo(i.getEntryDate()) > 0) {
@@ -304,21 +308,21 @@ public class ProductManager implements PersistentItem {
 	public void removeItemFromProduct(Product p, Item i) throws IllegalArgumentException {
 		assert (p != null);
 		assert (i != null);
-		assert (itemsByProduct.containsKey(p));
+		assert (currentItemsByProduct.containsKey(p));
 
 		if (p == null || i == null) {
 			throw new IllegalArgumentException();
 		}
 
-		if (itemsByProduct.containsKey(p)) {
-			itemsByProduct.get(p).remove(i);
+		if (currentItemsByProduct.containsKey(p)) {
+			currentItemsByProduct.get(p).remove(i);
 
 			// A product's creation date is equal to the earliest entry
 			// date of any its items.
 			//
 			// This code may not be necessary
 			if (p.getCreationDate().compareTo(i.getEntryDate()) > 0) {
-				Collection<Item> items = itemsByProduct.get(p);
+				Collection<Item> items = currentItemsByProduct.get(p);
 
 				Date min = new Date();
 				for (Item item : items) {
@@ -427,9 +431,28 @@ public class ProductManager implements PersistentItem {
 			throw new IllegalArgumentException("Product does not exist");
 		}
 
-		return itemsByProduct.get(p);
+		return currentItemsByProduct.get(p);
 	}
 
+	/**
+	 * gets a collection of all items (removed or current) that point to a product
+	 * 
+	 * @param p - the product whose items will be returned.
+	 * @return a collection of items that point to p
+	 * 
+	 * @throws IllegalArgumentException 
+	 */
+	public Collection<Item> getAllItemsByProduct(Product p) throws IllegalArgumentException {
+		assert (p != null);
+		assert (hasProduct(p));
+		
+		if (p == null || !hasProduct(p)) {
+			throw new IllegalArgumentException("Product does not exist");
+		}
+
+		return allItemsByProduct.get(p);
+	}
+	
 	public void accept(ProductVisitor visitor) {
 		for (Product product : productsByBarCode.values()) {
 			visitor.visitProduct(product);
@@ -437,7 +460,7 @@ public class ProductManager implements PersistentItem {
 	}
 
 	public void accept(ItemVisitor visitor, Product product) {
-		Collection<Item> items = this.getItemsByProduct(product);
+		Collection<Item> items = this.getAllItemsByProduct(product);
 		if (items != null) {
 			for (Item item : items) {
 				visitor.visitItem(item);

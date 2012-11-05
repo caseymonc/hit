@@ -5,6 +5,7 @@
 package model.controllers;
 
 import gui.item.ItemData;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import model.BarCodePrinter;
@@ -18,7 +19,6 @@ import model.managers.ItemManager;
  * @author davidpatty
  */
 public class ItemController extends ModelController {
-
 	
 	/**
 	 *  the Core Object Model will interface between the controllers and the Managers.
@@ -52,6 +52,10 @@ public class ItemController extends ModelController {
 		PC = COM.getProductController();
 	}
 
+	public static void resetInstance() {
+		instance = null;
+	}
+	
 	public static ItemController getInstance() {
 		if(instance == null){
 			instance = new ItemController();
@@ -77,7 +81,7 @@ public class ItemController extends ModelController {
 			throw new IllegalArgumentException("Item still does not have a specified container");
 		}
 		IM.addItem(i);
-				PC.addItemToProduct(i.getProduct(), i);
+		PC.addItemToProduct(i.getProduct(), i);
 		
 		this.setChanged();
 		this.notifyObservers(new Hint(i, Hint.Value.Add));
@@ -85,9 +89,20 @@ public class ItemController extends ModelController {
 
 	/** Moves the item to removed items 
 	 * 
+	 * @param i - Item to be removed
 	 * @throws IllegalArgumentException
 	 */
 	public void removeItem(Item i) throws IllegalArgumentException {
+		removeItem(i, new Date());
+	}
+	
+	/** Moves the item to removed items 
+	 * 
+	 * @param i - Item to be removed
+	 * @param exitDate - the new exitDate of the item
+	 * @throws IllegalArgumentException
+	 */
+	public void removeItem(Item i, Date exitDate) {
 		if(i == null) {
 			throw new IllegalArgumentException("Null item");
 		}
@@ -96,11 +111,9 @@ public class ItemController extends ModelController {
 			throw new IllegalArgumentException("Cannot Remove Item");
 		} else {
 			i.getContainer().removeItem(i);
-			IM.removeItem(i);
+			IM.removeItem(i, exitDate);
 			PC.removeItemFromProduct(i.getProduct(), i);
 		}
-		this.setChanged();
-		this.notifyObservers(new Hint(i, Hint.Value.Delete));
 	}
 	
 	public void unRemoveItem(Item item, ProductContainer container){

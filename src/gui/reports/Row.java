@@ -43,4 +43,8 @@ public class Row {
 	public Cell getCell(int i){
 		return cells.get(i);
 	}
+	
+	public String toString(){
+		return cells.toString();
+	}
 }

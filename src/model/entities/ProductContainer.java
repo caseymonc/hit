@@ -18,6 +18,7 @@ import java.util.List;
 
 import reports.visitors.ItemVisitor;
 import reports.visitors.ProductGroupVisitor;
+import reports.visitors.Visitor;
 
 
 
@@ -572,31 +573,12 @@ public abstract class ProductContainer implements PersistentItem{
 		productGroups.put(newName, group);
 	}
 	
-	public abstract void accept(ProductGroupVisitor visitor);
+	//public abstract void accept(ProductGroupVisitor visitor);
 	
-	public void acceptPreOrder(ItemVisitor visitor){
-		Collection<Item> itemsCollection = this.getAllItems();
-		List<Item> items = new ArrayList<Item>();
-		items.addAll(itemsCollection);
-		Collections.sort(items, new Comparator<Item>(){
-			public int compare(Item item1, Item item2) {
-				String descr0 = item1.getProduct().getDescription();
-				String descr1 = item2.getProduct().getDescription();
-				if(!descr0.equals(descr1)){
-					return descr0.compareTo(descr1);
-				}
+	public abstract void accept(Visitor visitor);
+	
+	public void acceptOrder(Visitor visitor, boolean preOrder){
 				
-				Date entry0 = item1.getEntryDate();
-				Date entry1 = item2.getEntryDate();
-				return entry0.compareTo(entry1);
-			}
-		});
-		if(items != null){
-			for(Item item : items){
-				visitor.visitItem(item);
-			}
-		}
-		
 		Collection<ProductGroup> groupsCollection = this.getAllProductGroup();
 		List<ProductGroup> groups = new ArrayList<ProductGroup>();
 		groups.addAll(groupsCollection);
@@ -606,8 +588,14 @@ public abstract class ProductContainer implements PersistentItem{
 			}
 		});
 		
+		if(preOrder)
+			accept(visitor);
+		
 		for(ProductGroup group : groups){
-			group.acceptPreOrder(visitor);
+			group.acceptOrder(visitor, preOrder);
 		}
+		
+		if(!preOrder)
+			accept(visitor);
 	}
 }

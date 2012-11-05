@@ -1,11 +1,13 @@
 package reports.visitors;
 
+import common.util.DateUtils;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import common.util.DateUtils;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 import java.util.TreeMap;
 import model.entities.Item;
 
@@ -26,25 +28,26 @@ public class ItemStatsVisitor implements ItemVisitor {
 	 * create this report
 	 * @param months
 	 */
-	public ItemStatsVisitor(int months) {
+	public ItemStatsVisitor(Date endDate, int months) {
 		
-		Calendar calendar = Calendar.getInstance();
-		endDate = formatDate(calendar.getTime());
+		Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
+		calendar.setTime(endDate);
+		this.endDate = calendar.getTime();
 		calendar.add(Calendar.MONTH, -months);
-		startDate = formatDate(calendar.getTime());
+		this.startDate = calendar.getTime();
 		
-		supplyOnDate = new TreeMap<Date, Integer>();
+		this.supplyOnDate = new TreeMap();
 		
-		while(formatDate(calendar.getTime()).compareTo(endDate) <= 0) {
+		while(formatDate(calendar.getTime()).compareTo(formatDate(endDate)) <= 0) {
 			supplyOnDate.put(formatDate(calendar.getTime()), new Integer(0));
 			calendar.add(Calendar.DATE, 1);
 		}
 		
-		usedItemAges = new ArrayList<Integer>();
-		currentItemAges = new ArrayList<Integer>();
-		maxUsedAge = 0;
-		maxCurrentAge = 0;
-		numAddedItems = 0;
+		this.usedItemAges = new ArrayList();
+		this.currentItemAges = new ArrayList();
+		this.maxUsedAge = 0;
+		this.maxCurrentAge = 0;
+		this.numAddedItems = 0;
 	}
 
 	@Override
@@ -52,7 +55,7 @@ public class ItemStatsVisitor implements ItemVisitor {
 		updateSupplyOnDate(item);
 		updateItemAges(item);
 		
-		if(item.getEntryDate().after(startDate)) {
+		if(item.getEntryDate().compareTo(startDate) >= 0) {
 			numAddedItems++;
 		}
 	}
@@ -61,31 +64,31 @@ public class ItemStatsVisitor implements ItemVisitor {
 	 * Get the current number of items in the system
 	 * @return
 	 */
-	public int getCurrentSupply(){
-		return supplyOnDate.get(formatDate(new Date()));
+	public String getCurrentSupply(){
+		return Integer.toString(supplyOnDate.get(formatDate(endDate)));
 	}
 	
 	/**
 	 * Get the average number of items in the system
 	 * @return
 	 */
-	public float getAverageSupply(){
-		int totalDays = 0;
-		int sumSupply = 0;
+	public String getAverageSupply(){
+		float totalDays = 0;
+		float sumSupply = 0;
 		
 		for(Integer supply : supplyOnDate.values()) {
 			totalDays++;
 			sumSupply += supply;
 		}
 		
-		return sumSupply / totalDays;
+		return new DecimalFormat("#.#").format(sumSupply / totalDays);
 	}
 	
 	/**
 	 * Get the min number of items in the system
 	 * @return
 	 */
-	public int getMinSupply(){
+	public String getMinSupply(){
 		int minSupply = Integer.MAX_VALUE;
 		
 		for(Integer supply : supplyOnDate.values()) {
@@ -94,14 +97,14 @@ public class ItemStatsVisitor implements ItemVisitor {
 			}
 		}
 		
-		return minSupply;
+		return Integer.toString(minSupply);
 	}
 	
 	/**
 	 * Get the max number of items in the system
 	 * @return
 	 */
-	public int getMaxSupply(){
+	public String getMaxSupply(){
 		int maxSupply = 0;
 		
 		for(Integer supply : supplyOnDate.values()) {
@@ -110,23 +113,23 @@ public class ItemStatsVisitor implements ItemVisitor {
 			}
 		}
 		
-		return maxSupply;
+		return Integer.toString(maxSupply);
 	}
 	
 	/**
 	 * Get the total used items
 	 * @return
 	 */
-	public int getUsedSupply(){
-		return usedItemAges.size();
+	public String getUsedSupply(){
+		return Integer.toString(usedItemAges.size());
 	}
 	
 	/**
 	 * Get the added items
 	 * @return
 	 */
-	public int getAddedSupply(){
-		return numAddedItems;
+	public String getAddedSupply(){
+		return Integer.toString(numAddedItems);
 	}
 	
 	/**
@@ -154,8 +157,8 @@ public class ItemStatsVisitor implements ItemVisitor {
 	}
 	
 	private String getAverageAge(List<Integer> ages) {
-		int totalAge = 0;
-		int numAges = 0;
+		float totalAge = 0;
+		float numAges = 0;
 		
 		for(Integer i : ages) {
 			totalAge += i;
@@ -166,7 +169,7 @@ public class ItemStatsVisitor implements ItemVisitor {
 		if(numAges == 0){
 			result += "0 days";
 		} else {
-			result += Float.toString(totalAge / numAges) + " days";
+			result += new DecimalFormat("#.#").format(totalAge / numAges) + " days";
 		}
 		return result;
 	}
@@ -181,16 +184,16 @@ public class ItemStatsVisitor implements ItemVisitor {
 
 	private void updateSupplyOnDate(Item item) {
 
-		Date entryDate = formatDate(item.getEntryDate());
+		Date entryDate = item.getEntryDate();
 		Date exitDate;
 		
 		if(item.getExitDate() == null) {
-			exitDate = formatDate(endDate);
+			exitDate = endDate;
 		} else {
-			exitDate = formatDate(item.getExitDate());
+			exitDate = item.getExitDate();
 		}
 		
-		Calendar calendar = Calendar.getInstance();
+		Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
 		if(entryDate.before(startDate)) {
 			calendar.setTime(startDate);
 		} else {
@@ -209,9 +212,19 @@ public class ItemStatsVisitor implements ItemVisitor {
 	}
 	
 	private void updateItemAges(Item item) {
+		Date entryDate = formatDate(item.getEntryDate());
+		
+		if(entryDate.before(startDate)) {
+			entryDate = startDate;
+		}
+		
 		if(item.getExitDate() != null) {	
 			Date exitDate = formatDate(item.getExitDate());
-			Date entryDate = formatDate(item.getEntryDate());
+			
+			if(exitDate.before(startDate)){
+				return;
+			}
+			
 			long timeDiff = exitDate.getTime() - entryDate.getTime();
 			int numDays = (int)Math.ceil((double)timeDiff / 86400000);
 			usedItemAges.add(numDays);
@@ -220,9 +233,7 @@ public class ItemStatsVisitor implements ItemVisitor {
 				maxUsedAge = numDays;
 			}
 		} else {
-			Date today = formatDate(Calendar.getInstance().getTime());
-			Date entryDate = formatDate(item.getEntryDate());
-			long timeDiff = today.getTime() - entryDate.getTime();
+			long timeDiff = formatDate(endDate).getTime() - entryDate.getTime();
 			int numDays = (int)Math.ceil((double)timeDiff / 86400000);
 			currentItemAges.add(numDays);
 			

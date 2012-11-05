@@ -14,7 +14,7 @@ public class HtmlBuilder extends Builder {
 			out = new PrintWriter(new FileWriter(fileName));
 		} catch (IOException e) 
 		{
-			System.out.println("Unable to write to file: " + fileName);// TODO Auto-generated catch block
+			System.out.println("Unable to write to file: " + fileName);
 			e.printStackTrace();
 		}
 		out.println("<html>");
@@ -38,7 +38,7 @@ public class HtmlBuilder extends Builder {
 		for (int i = 0; i<numCells; ++i){
 			out.println("<td>"+row.getCell(i).toString()+"</td>");
 		}
-		out.println("</tr>");		
+		out.println("</tr>");
 	}
 
 	@Override
@@ -62,11 +62,17 @@ public class HtmlBuilder extends Builder {
 	}
 
 	@Override
+<<<<<<< HEAD
 	public void endDocument() {
 		// TODO Auto-generated method stub
 		out.close();
 	}
 
 	
+=======
+	public void finish() {
+		out.close();
+	}
+>>>>>>> 6ba00fa85af11396cb034e9afce7d5dd6686e286
 
 }

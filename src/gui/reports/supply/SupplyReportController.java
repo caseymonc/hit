@@ -1,6 +1,10 @@
 package gui.reports.supply;
 
 import gui.common.*;
+import gui.reports.Builder;
+import gui.reports.HtmlBuilder;
+import gui.reports.PdfBuilder;
+import reports.directors.SupplyDirector;
 
 /**
  * Controller class for the N-month supply report view.
@@ -17,6 +21,7 @@ import gui.common.*;
 	public SupplyReportController(IView view) {
 		super(view);
 		
+		getView().setMonths("3");
 		construct();
 	}
 
@@ -48,8 +53,18 @@ import gui.common.*;
 	 */
 	@Override
 	protected void enableComponents() {
+		try {
+			int months = Integer.parseInt(getView().getMonths());
+			if (months >= 1 && months <= 100) {
+				getView().enableOK(true);
+			} else {
+				getView().enableOK(false);
+			}
+		} catch(NumberFormatException e) {
+			getView().enableOK(false);
+		}
 	}
-
+	
 	/**
 	 * Loads data into the controller's view.
 	 * 
@@ -59,6 +74,7 @@ import gui.common.*;
 	 */
 	@Override
 	protected void loadValues() {
+		
 	}
 
 	//
@@ -71,6 +87,7 @@ import gui.common.*;
 	 */
 	@Override
 	public void valuesChanged() {
+		enableComponents();
 	}
 	
 	/**
@@ -79,7 +96,20 @@ import gui.common.*;
 	 */
 	@Override
 	public void display() {
+		SupplyDirector director = new SupplyDirector(getBuilder(), getMonths());
+		director.createReport();
+	}
+	
+	private int getMonths(){
+		return Integer.parseInt(getView().getMonths());
 	}
 
+	public Builder getBuilder(){
+		if(getView().getFormat() == FileFormat.HTML){
+			return new HtmlBuilder(getMonths() + "-Month-Supply");
+		}else{
+			return new PdfBuilder(getMonths() + "-Month-Supply");
+		}
+	}
 }
 

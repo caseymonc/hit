@@ -127,6 +127,18 @@ public class Item implements PersistentItem{
 		this.removed = true;
 	}
 	
+	public void remove(Date exitDate){
+		//constraint exitTime is only defined if the Item has been removed
+		assert(this.exitDate == null);
+		//Cannot be in the future
+		this.exitDate = exitDate; 
+		//Cannot be prior to 12AM on the Items Entry Date
+		assert(!exitDate.before(this.entryDate)); 
+		assert(this.container != null);// Non-empty if the item has not been removed from storage
+		this.container = null;
+		this.removed = true;
+	}
+	
 	public void delete(){
 		//this.container = null;
 	}

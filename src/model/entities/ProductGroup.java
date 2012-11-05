@@ -1,6 +1,7 @@
 package model.entities;
 
 import reports.visitors.ProductGroupVisitor;
+import reports.visitors.Visitor;
 
 /** ProductGroup
  * A user-defined group of Products.Product Groups are used by users to 
@@ -87,10 +88,27 @@ public class ProductGroup extends ProductContainer{
 	}
 
 	@Override
+	public void accept(Visitor visitor) {
+		visitor.visitProductGroup(this);
+	}
+
+	public Size getCurrentSupply() {
+		Size size = new Size(this.getThreeMonthSupply().getUnits(), 0);
+		for(Item item : this.getAllItems()){
+			size.add(item.getProduct().getSize());
+		}
+		
+		for(ProductGroup group : this.getAllProductGroup()){
+			size.add(group.getCurrentSupply());
+		}
+		return size;
+	}
+
+	/*@Override
 	public void accept(ProductGroupVisitor visitor) {
 		visitor.visitGroup(this);
 		for(ProductGroup group : this.getAllProductGroup()){
 			group.accept(visitor);
 		}
-	}
+	}*/
 }

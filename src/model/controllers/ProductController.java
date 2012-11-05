@@ -17,6 +17,7 @@ public class ProductController extends ModelController {
 	 * shared between many different Controllers
 	 */
 	private static ProductController instance;
+
 	private CoreObjectModel model;
 	private ProductManager productManager;
 
@@ -29,7 +30,11 @@ public class ProductController extends ModelController {
 		model = CoreObjectModel.getInstance();
 		productManager = model.getProductManager();
 	}
-
+	
+	public static void resetInstance() {
+		instance = null;
+	}
+	
 	/**
 	 * gets the ProductController instance
 	 * 
@@ -109,7 +114,8 @@ public class ProductController extends ModelController {
 	 * @param targetContainer - the container the product is being moved to
 	 * @param currentContainer - the container that the product is currently in
 	 */
-	public void moveProductToContainer(Product product, ProductContainer targetContainer, ProductContainer currentContainer) {
+	public void moveProductToContainer(Product product, ProductContainer targetContainer, 
+														ProductContainer currentContainer) {
 		if (targetContainer == currentContainer) {
 			return;
 		}

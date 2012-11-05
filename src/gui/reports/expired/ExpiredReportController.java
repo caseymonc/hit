@@ -5,6 +5,7 @@ import reports.directors.ExpiredItemDirector;
 import gui.common.*;
 import gui.reports.Builder;
 import gui.reports.HtmlBuilder;
+import gui.reports.PdfBuilder;
 
 
 /**
@@ -83,9 +84,16 @@ public class ExpiredReportController extends Controller implements
 	 */
 	@Override
 	public void display() {
-		Builder builder = new HtmlBuilder("Expired Items Report");
-		ExpiredItemDirector director = new ExpiredItemDirector(builder);
+		ExpiredItemDirector director = new ExpiredItemDirector(getBuilder());
 		director.createReport();
+	}
+	
+	public Builder getBuilder(){
+		if(getView().getFormat() == FileFormat.HTML){
+			return new HtmlBuilder("Expired Items Report");
+		}else{
+			return new PdfBuilder("Expired Items Report");
+		}
 	}
 
 }

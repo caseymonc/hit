@@ -1,6 +1,7 @@
 package reports.directors;
 
 import gui.reports.Builder;
+import java.util.Date;
 
 /**
  * 
@@ -20,13 +21,6 @@ public abstract class Director {
 	public Director(Builder builder){
 		this.builder = builder;
 	}
-	
-	/**
-	 * Run the algorithm to build the report
-	 */
-	public abstract void createReport();
-	
-	public abstract void createReport(int months);
 	
 	/**
 	 * Get the builder

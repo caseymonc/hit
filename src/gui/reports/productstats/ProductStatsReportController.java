@@ -4,6 +4,8 @@ import gui.common.*;
 import gui.reports.Builder;
 import gui.reports.HtmlBuilder;
 import gui.reports.PdfBuilder;
+import java.util.Calendar;
+import java.util.Date;
 import reports.directors.ProductStatsDirector;
 
 /**
@@ -53,7 +55,7 @@ public class ProductStatsReportController extends Controller implements
 	protected void enableComponents() {
 		try{
 			int months = Integer.parseInt(getView().getMonths());
-			if(months < 1){
+			if(months < 1 || months > 100){
 				getView().enableOK(false);
 			} else {
 				getView().enableOK(true);
@@ -61,7 +63,6 @@ public class ProductStatsReportController extends Controller implements
 		}
 		catch(Exception e){
 			getView().enableOK(false);
-			getView().setMonths("3");
 		}
 	}
 
@@ -108,7 +109,14 @@ public class ProductStatsReportController extends Controller implements
 		
 		ProductStatsDirector director = new ProductStatsDirector(builder);
 		
-		director.createReport(Integer.parseInt(getView().getMonths()));
+		int months = Integer.parseInt(getView().getMonths());
+		
+		Calendar calendar = Calendar.getInstance();
+		Date endDate = calendar.getTime();
+		calendar.add(Calendar.MONTH, -months);
+		Date startDate = calendar.getTime();
+		
+		director.createReport(endDate, months);
 	}
 
 }

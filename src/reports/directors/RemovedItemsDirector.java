@@ -25,7 +25,6 @@ public class RemovedItemsDirector extends Director {
 		this.since = since;
 	}
 
-	@Override
 	public void createReport() {
 		RemovedItemsVisitor visitor = new RemovedItemsVisitor(since);
 		RemovedItemsVisitor currentVisitor = new RemovedItemsVisitor(since);
@@ -47,6 +46,7 @@ public class RemovedItemsDirector extends Director {
 		}
 		
 		getBuilder().drawTable(table);
+		getBuilder().finish();
 	}
 
 	private Row getRemovedItemRow(Product product, Set<Item> removedItems, Set<Item> currentItems) {
@@ -74,10 +74,4 @@ public class RemovedItemsDirector extends Director {
 		row.addCell(new Cell("Current Supply"));
 		return row;
 	}
-
-	@Override
-	public void createReport(int months) {
-		throw new UnsupportedOperationException("Not supported yet.");
-	}
-
 }

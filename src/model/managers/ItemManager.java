@@ -4,6 +4,8 @@
  */
 package model.managers;
 
+import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import reports.visitors.ItemVisitor;
 import model.entities.BarCode;
@@ -72,10 +74,13 @@ public class ItemManager implements PersistentItem
 	 * @param itemToRemove 
 	 */
 	public void removeItem(Item itemToRemove) {
-		
+		removeItem(itemToRemove, new Date());
+	}
+	
+	public void removeItem(Item itemToRemove, Date exitDate) {
 		assert(itemsByBarCode.containsKey(itemToRemove.getBarCode()));
 		//tell the item to change its state
-		itemToRemove.remove();
+		itemToRemove.remove(exitDate);
 		//pull out item from itemsByBarCode
 		itemsByBarCode.remove(itemToRemove.getBarCode());
 		//add item to removed items history stuff.
