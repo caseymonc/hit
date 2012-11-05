@@ -73,5 +73,11 @@ public class TestBuilder extends Builder {
 	public void finish() {
 		
 	}
+
+	@Override
+	public void endDocument() {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }

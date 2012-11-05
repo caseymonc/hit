@@ -62,17 +62,14 @@ public class HtmlBuilder extends Builder {
 	}
 
 	@Override
-<<<<<<< HEAD
 	public void endDocument() {
 		// TODO Auto-generated method stub
 		out.close();
 	}
 
 	
-=======
 	public void finish() {
 		out.close();
 	}
->>>>>>> 6ba00fa85af11396cb034e9afce7d5dd6686e286
 
 }

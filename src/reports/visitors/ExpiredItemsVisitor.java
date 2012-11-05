@@ -20,8 +20,6 @@ public class ExpiredItemsVisitor implements Visitor{
 	/** A set of all expired items*/
 	private List<Item> expiredItems = new ArrayList<Item>();
 	
-	
-	@Override
 	public void visitStorageUnit(StorageUnit unit) {
 		this.visitProductContainer(unit);
 	}
