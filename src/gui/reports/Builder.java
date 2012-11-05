@@ -1,5 +1,8 @@
 package gui.reports;
 
+import java.io.File;
+import java.io.IOException;
+
 public abstract class Builder {	
 	
 	/**
@@ -37,15 +40,24 @@ public abstract class Builder {
 			printTable(table.getRow(i));
 		}
 		endTable();
-	
+	}
+	public void display()
+	{
+		// Display the PDF
+		try {
+			java.awt.Desktop.getDesktop().open(new File("dfsml.txt"));
+		} catch (IOException e) {
+			System.out.println("Unable to display the file fksjdfkl.txt." + 
+					" Please close the file and try to rub the report again.");// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public abstract void endHeader();
-
 	public abstract void endTable();
 	public abstract void startTable();
-
 	public abstract void printTableHeader(Cell cell);
-
 	public abstract void printTable(Row row);
+	public abstract void endDocument();
+
 }

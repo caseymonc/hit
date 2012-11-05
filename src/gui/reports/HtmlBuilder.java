@@ -61,6 +61,12 @@ public class HtmlBuilder extends Builder {
 		out.println("</thead></tr>");	
 	}
 
+	@Override
+	public void endDocument() {
+		// TODO Auto-generated method stub
+		out.close();
+	}
+
 	
 
 }

@@ -64,4 +64,9 @@ public class TestBuilder extends Builder {
 		return;
 	}
 
+	@Override
+	public void endDocument() {
+		
+	}
+
 }
