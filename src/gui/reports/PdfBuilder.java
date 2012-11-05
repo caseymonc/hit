@@ -41,6 +41,7 @@ public class PdfBuilder extends Builder {
 		Font font = new Font(FontFamily.HELVETICA, 6);
 		try {
 			document.add(new Paragraph(title,font));
+			document.add(new Paragraph("",font));
 		} catch (DocumentException e) {
 			// TODO Auto-generated catch block
 			System.out.println("Can't draw a title in pdf");
@@ -51,8 +52,9 @@ public class PdfBuilder extends Builder {
 
 	@Override
 	public void drawTable(Table table) {
-		
 		PdfPTable tbl = buildTable(table);
+		tbl.setSpacingAfter(15);
+		tbl.setSpacingBefore(15);
 		
 		try {
 			document.add(tbl);
@@ -68,6 +70,7 @@ public class PdfBuilder extends Builder {
 		Font font = new Font(FontFamily.HELVETICA, fontSize);
 		try {
 			document.add(new Paragraph(text,font));
+			document.add(new Paragraph("",font));
 		} catch (DocumentException e) {
 			// TODO Auto-generated catch block
 			System.out.println("Can't draw text to a pdf");
