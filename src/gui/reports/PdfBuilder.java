@@ -19,6 +19,7 @@ public class PdfBuilder extends Builder {
 	
 	public PdfBuilder(String reportName) {
 		reportName += ".pdf";
+		fileName = reportName;
 		document = new Document(new Rectangle(340, 468));
 		try {
 			writer = PdfWriter.getInstance(document, new FileOutputStream(reportName));

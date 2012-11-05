@@ -9,8 +9,7 @@ public class HtmlBuilder extends Builder {
 	
 	public HtmlBuilder(String reportName)
 	{
-		String fileName = reportName + ".html";
-		System.out.println(fileName);
+		fileName = reportName + ".html";
 		try {
 			out = new PrintWriter(new FileWriter(fileName));
 		} catch (IOException e) 

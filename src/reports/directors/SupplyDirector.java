@@ -80,6 +80,7 @@ public class SupplyDirector extends Director {
 		
 		getBuilder().drawTable(table);
 		getBuilder().finish();
+		getBuilder().display();
 	}
 	
 	private Row getProductGroupRow(ProductGroup group) {

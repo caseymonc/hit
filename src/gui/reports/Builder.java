@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.IOException;
 
 public abstract class Builder {	
-	
+	protected String fileName;
 	/**
 	 * Draw the title of the report
 	 * @param title The title of the Report
@@ -45,10 +45,10 @@ public abstract class Builder {
 	{
 		// Display the PDF
 		try {
-			java.awt.Desktop.getDesktop().open(new File("dfsml.txt"));
+			java.awt.Desktop.getDesktop().open(new File(fileName));
 		} catch (IOException e) {
-			System.out.println("Unable to display the file fksjdfkl.txt." + 
-					" Please close the file and try to rub the report again.");// TODO Auto-generated catch block
+			System.out.println("Unable to display the file " + fileName +  " ." + 
+					" Please close the file and try to run the report again.");// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

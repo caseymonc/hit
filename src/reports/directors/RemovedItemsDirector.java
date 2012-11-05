@@ -47,6 +47,7 @@ public class RemovedItemsDirector extends Director {
 		
 		getBuilder().drawTable(table);
 		getBuilder().finish();
+		getBuilder().display();
 	}
 
 	private Row getRemovedItemRow(Product product, Set<Item> removedItems, Set<Item> currentItems) {

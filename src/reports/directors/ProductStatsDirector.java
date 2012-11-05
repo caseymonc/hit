@@ -58,6 +58,7 @@ public class ProductStatsDirector extends Director {
 		builder.drawTable(table);
 		
 		builder.finish();
+		builder.display();
 	}
 
 }
