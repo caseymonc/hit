@@ -94,6 +94,8 @@ public class ItemController extends ModelController {
 	 */
 	public void removeItem(Item i) throws IllegalArgumentException {
 		removeItem(i, new Date());
+		this.setChanged();
+		this.notifyObservers(new Hint(i, Hint.Value.Delete));
 	}
 	
 	/** Moves the item to removed items 
