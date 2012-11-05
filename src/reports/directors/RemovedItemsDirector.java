@@ -27,14 +27,14 @@ public class RemovedItemsDirector extends Director {
 
 	public void createReport() {
 		RemovedItemsVisitor visitor = new RemovedItemsVisitor(since);
-		RemovedItemsVisitor currentVisitor = new RemovedItemsVisitor(since);
+		CurrentItemsVisitor currentVisitor = new CurrentItemsVisitor();
 
 		ItemManager manager = CoreObjectModel.getInstance().getItemManager();
 		manager.acceptRemoved(visitor);
 		manager.accept(currentVisitor);
 		
 		Map<Product, Set<Item>> removedItems = visitor.getRemovedItems();
-		Map<Product, Set<Item>> currentItems = visitor.getRemovedItems();
+		Map<Product, Set<Item>> currentItems = currentVisitor.getCurrentItems();
 		
 		getBuilder().drawTitle("Removed Items");
 		
