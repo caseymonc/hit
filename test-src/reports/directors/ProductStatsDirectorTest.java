@@ -151,11 +151,12 @@ public class ProductStatsDirectorTest {
 		addProduct(product);
 		
 		Calendar calendar = Calendar.getInstance();
-		calendar.add(Calendar.DATE, -1);				// let the item be in system for one day
+		calendar.set(2011, Calendar.NOVEMBER, 4, 1, 0, 0);	// let the item be in system for one day
 		addItem(calendar.getTime(), null, product);
 		
 		// get report
-		ArrayList<Object> report = getReport(new Date(), 1);
+		calendar.set(2011, Calendar.NOVEMBER, 5, 1, 0, 0);
+		ArrayList<Object> report = getReport(calendar.getTime(), 1);
 		Table table = (Table)report.get(1);
 		Row row = table.getRow(1);
 		
