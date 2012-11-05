@@ -40,8 +40,10 @@ public class PdfBuilder extends Builder {
 		// TODO Auto-generated method stub
 		Font font = new Font(FontFamily.HELVETICA, 6);
 		try {
-			document.add(new Paragraph(title,font));
-			document.add(new Paragraph("",font));
+			Paragraph p = new Paragraph(title,font);
+			p.setExtraParagraphSpace(10);
+			document.add(p);
+			
 		} catch (DocumentException e) {
 			// TODO Auto-generated catch block
 			System.out.println("Can't draw a title in pdf");
@@ -69,8 +71,9 @@ public class PdfBuilder extends Builder {
 		// TODO Auto-generated method stub
 		Font font = new Font(FontFamily.HELVETICA, fontSize);
 		try {
-			document.add(new Paragraph(text,font));
-			document.add(new Paragraph("",font));
+			Paragraph p = new Paragraph(text,font);
+			p.setExtraParagraphSpace(10);
+			document.add(p);
 		} catch (DocumentException e) {
 			// TODO Auto-generated catch block
 			System.out.println("Can't draw text to a pdf");
