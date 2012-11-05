@@ -23,28 +23,32 @@ public class HtmlBuilder extends Builder {
 	
 	@Override
 	public void drawTitle(String title) {
-		String htmlTitle = "<head><title>" + title + "</title></head>";
+		String htmlTitle = "<head>\n<title>\n" + title + css() + "</title>\n</head>\n";
 		out.println(htmlTitle);
+	}
+	
+	private String css(){
+		return "";
 	}
 
 	@Override
 	public void drawText(String text, int fontSize) {
-		out.println("<p size=\"" + fontSize + "\">" + text + "</p>");
+		out.println("<p size=\"" + fontSize + "\">\n" + text + "</p>\n");
 	}
 
 	@Override
 	public void printTable(Row row) {
 		int numCells = row.size();
-		out.println("<tr>");
+		out.println("<tr>\n");
 		for (int i = 0; i<numCells; ++i){
-			out.println("<td>"+row.getCell(i).toString()+"</td>");
+			out.println("\t<td>\n"+row.getCell(i).toString()+"\t</td>\n");
 		}
-		out.println("</tr>");
+		out.println("</tr>\n");
 	}
 
 	@Override
 	public void printTableHeader(Cell cell) {
-		out.println("<th>" + cell.toString()+"</th>");
+		out.println("<th>" + cell.toString()+"</th>\n");
 	}
 
 	@Override

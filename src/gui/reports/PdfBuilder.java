@@ -8,7 +8,6 @@ import com.itextpdf.text.Font;
 import com.itextpdf.text.Font.FontFamily;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Rectangle;
-import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
@@ -93,14 +92,16 @@ public class PdfBuilder extends Builder {
 		Font font = new Font(FontFamily.HELVETICA, 4);
 		//PdfContentByte cb = writer.getDirectContent();
 		PdfPTable pdfTable = new PdfPTable(numCols);
-		pdfTable.setTotalWidth(numCols * colWidth);
+		pdfTable.setWidthPercentage(100);
+		//pdfTable.setTotalWidth(numCols * colWidth);
 		
 		for (int i = 0; i < table.size(); ++i) {
 			for(int j = 0; j < table.getRow(i).size(); ++j)
 			{
 				PdfPCell cell = new PdfPCell();
-				cell.setBorder(Rectangle.NO_BORDER);
-				cell.addElement(new Paragraph("", font));
+				Cell cellValue = table.getRow(i).getCell(j);
+				cell.setBorder(Rectangle.BOX);
+				cell.addElement(new Paragraph(cellValue.toString(), font));
 				pdfTable.addCell(cell);
 			}
 		}
@@ -114,6 +115,6 @@ public class PdfBuilder extends Builder {
 
 	@Override
 	public void finish() {
-		
+		document.close();
 	}
 }
