@@ -10,6 +10,7 @@ public class HtmlBuilder extends Builder {
 	public HtmlBuilder(String reportName)
 	{
 		String fileName = reportName + ".html";
+		System.out.println(fileName);
 		try {
 			out = new PrintWriter(new FileWriter(fileName));
 		} catch (IOException e) 
@@ -69,6 +70,7 @@ public class HtmlBuilder extends Builder {
 
 	
 	public void finish() {
+		out.println("</html>");	
 		out.close();
 	}
 
