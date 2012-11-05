@@ -58,7 +58,7 @@ public class SupplyDirector extends Director {
 		List<ProductGroup> groups = visitor.getProductGroups();
 		
 		//Start Drawing the report
-		getBuilder().drawTitle("Expired Items");
+		getBuilder().drawTitle(months + "-Month Supply");
 		
 		getBuilder().drawText("Products", 20);
 		
@@ -78,7 +78,7 @@ public class SupplyDirector extends Director {
 			productGroupTable.addRow(getProductGroupRow(group));
 		}
 		
-		getBuilder().drawTable(table);
+		getBuilder().drawTable(productGroupTable);
 		getBuilder().finish();
 	}
 	
