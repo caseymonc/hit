@@ -65,6 +65,14 @@ public class PdfBuilder extends Builder {
 	@Override
 	public void drawText(String text, int fontSize) {
 		// TODO Auto-generated method stub
+		Font font = new Font(FontFamily.HELVETICA, fontSize);
+		try {
+			document.add(new Paragraph(text,font));
+		} catch (DocumentException e) {
+			// TODO Auto-generated catch block
+			System.out.println("Can't draw text to a pdf");
+			e.printStackTrace();
+		}
 		
 	}
 
@@ -111,7 +119,7 @@ public class PdfBuilder extends Builder {
 				PdfPCell cell = new PdfPCell();
 				Cell cellValue = table.getRow(i).getCell(j);
 				cell.setBorder(Rectangle.BOX);
-				cell.addElement(new Paragraph(cellValue.toString(), font));
+				cell.addElement(new Paragraph(cellValue.toString(),font));
 				pdfTable.addCell(cell);
 			}
 		}
