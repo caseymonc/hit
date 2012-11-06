@@ -48,7 +48,7 @@ public abstract class Builder {
 			java.awt.Desktop.getDesktop().open(new File(fileName));
 		} catch (IOException e) {
 			System.out.println("Unable to display the file " + fileName +  " ." + 
-					" Please close the file and try to run the report again.");// TODO Auto-generated catch block
+					" Please close the file and try to run the report again.");
 			e.printStackTrace();
 		}
 	}
