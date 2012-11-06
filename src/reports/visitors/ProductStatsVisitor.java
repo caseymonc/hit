@@ -2,12 +2,14 @@ package reports.visitors;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 import model.CoreObjectModel;
 import model.entities.Product;
 
@@ -37,7 +39,18 @@ public class ProductStatsVisitor implements ProductVisitor {
 	public void visitProduct(Product product) {
 		products.add(product);
 		
-		ItemStatsVisitor itemVisitor = new ItemStatsVisitor(endDate, months);
+		Date productCreationDate = product.getCreationDate();
+		
+		Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
+		calendar.setTime(endDate);
+		calendar.add(Calendar.MONTH, -months);
+		Date startDate = calendar.getTime();
+		
+		if(startDate.before(productCreationDate)) {
+			startDate = productCreationDate;
+		}
+		
+		ItemStatsVisitor itemVisitor = new ItemStatsVisitor(startDate, endDate);
 		CoreObjectModel model = CoreObjectModel.getInstance();
 		model.getProductManager().accept(itemVisitor, product);
 		itemStats.put(product, itemVisitor);

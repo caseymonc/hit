@@ -28,13 +28,13 @@ public class ItemStatsVisitor implements ItemVisitor {
 	 * create this report
 	 * @param months
 	 */
-	public ItemStatsVisitor(Date endDate, int months) {
+	public ItemStatsVisitor(Date startDate, Date endDate) {
 		
 		Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
 		calendar.setTime(endDate);
 		this.endDate = calendar.getTime();
-		calendar.add(Calendar.MONTH, -months);
-		this.startDate = calendar.getTime();
+		calendar.setTime(startDate);
+		this.startDate = startDate;
 		
 		this.supplyOnDate = new TreeMap();
 		
