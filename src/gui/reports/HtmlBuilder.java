@@ -98,10 +98,18 @@ public class HtmlBuilder extends Builder {
 		out.println("<p size=\"" + fontSize + "\">\n" + text + "</p>\n");
 	}
 
+	boolean odd = false;
 	@Override
 	public void printTable(Row row) {
 		int numCells = row.size();
-		out.println("<tr>\n");
+		
+		if(odd){
+			out.println("<tr class=\"odd\">\n");
+			odd = false;
+		}else{
+			out.println("<tr>\n");
+			odd = true;
+		}
 		for (int i = 0; i<numCells; ++i){
 			out.println("\t<td>\n"+row.getCell(i).toString()+"\t</td>\n");
 		}
