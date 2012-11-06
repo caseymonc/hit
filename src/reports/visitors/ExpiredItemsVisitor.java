@@ -31,6 +31,7 @@ public class ExpiredItemsVisitor implements Visitor{
 	public void visitProductContainer(ProductContainer cont){
 		Collection<Item> itemCollection = cont.getAllItems();
 		List<Item> items  = new ArrayList<Item>();
+		items.addAll(itemCollection);
 		Collections.sort(items, new Comparator<Item>(){
 			public int compare(Item item1, Item item2) {
 				Product product1 = item1.getProduct();
@@ -46,6 +47,9 @@ public class ExpiredItemsVisitor implements Visitor{
 	}
 	
 	public void visitItem(Item item){
+		if(item.getExpirationDate() == null)
+			return;
+		
 		Calendar now = Calendar.getInstance();
 		Calendar expDate = Calendar.getInstance();
 		expDate.setTime(item.getExpirationDate());
