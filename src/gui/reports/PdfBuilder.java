@@ -1,5 +1,6 @@
 package gui.reports;
 
+import com.itextpdf.text.BaseColor;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import com.itextpdf.text.Document;
@@ -38,10 +39,13 @@ public class PdfBuilder extends Builder {
 	@Override
 	public void drawTitle(String title) {
 		// TODO Auto-generated method stub
-		Font font = new Font(FontFamily.HELVETICA, 6);
+		Font font = new Font(FontFamily.HELVETICA, 7);
+		font.setStyle(1);
 		try {
 			Paragraph p = new Paragraph(title,font);
-			p.setExtraParagraphSpace(10);
+			p.setExtraParagraphSpace(6);
+			p.setSpacingAfter(3);
+			p.setAlignment(1);
 			document.add(p);
 			
 		} catch (DocumentException e) {
@@ -55,9 +59,9 @@ public class PdfBuilder extends Builder {
 	@Override
 	public void drawTable(Table table) {
 		PdfPTable tbl = buildTable(table);
-		tbl.setSpacingAfter(15);
-		tbl.setSpacingBefore(15);
-		
+		tbl.setSpacingAfter(10);
+		tbl.setSpacingBefore(3);
+
 		try {
 			document.add(tbl);
 		} catch (DocumentException e) {
@@ -70,6 +74,7 @@ public class PdfBuilder extends Builder {
 	public void drawText(String text, int fontSize) {
 		// TODO Auto-generated method stub
 		Font font = new Font(FontFamily.HELVETICA, fontSize);
+		font.setStyle(1);
 		try {
 			Paragraph p = new Paragraph(text,font);
 			p.setExtraParagraphSpace(10);
@@ -85,7 +90,7 @@ public class PdfBuilder extends Builder {
 	@Override
 	public void printTableHeader(Cell cell) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -119,14 +124,43 @@ public class PdfBuilder extends Builder {
 		pdfTable.setWidthPercentage(100);
 		//pdfTable.setTotalWidth(numCols * colWidth);
 		
+		BaseColor headerColor = new BaseColor(92,68,58);
+		BaseColor oddColor = new BaseColor(211,228,229);
+		BaseColor evenColor = new BaseColor(255,255,255);
+
 		for (int i = 0; i < table.size(); ++i) {
+		
 			for(int j = 0; j < table.getRow(i).size(); ++j)
 			{
+				
 				PdfPCell cell = new PdfPCell();
 				Cell cellValue = table.getRow(i).getCell(j);
 				cell.setBorder(Rectangle.BOX);
-				cell.addElement(new Paragraph(cellValue.toString(),font));
+				Paragraph par;
+				if(i % 2 == 0) //even rows
+				{
+					if (i == 0) {
+						cell.setBackgroundColor(headerColor);
+						Font headerFont = new Font(FontFamily.HELVETICA, 5);
+						headerFont.setColor(BaseColor.WHITE);
+						par = new Paragraph(cellValue.toString(),headerFont);
+						headerFont.setStyle(1);
+						par.setFont(headerFont);
+					} else {
+						par = new Paragraph(cellValue.toString(), font);
+						cell.setBackgroundColor(evenColor);
+					}
+					
+				} else { //odd rows
+				
+					par = new Paragraph(cellValue.toString(),font);
+					cell.setBackgroundColor(oddColor);
+				}
+				
+				cell.addElement(par);
+
 				pdfTable.addCell(cell);
+
 			}
 		}
 		return pdfTable;

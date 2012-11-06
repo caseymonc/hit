@@ -123,9 +123,9 @@ public class Size implements Serializable {
 
 	public void add(Size size) {
 		float toAdd = size.getSize() * this.getUnits().getConversionFactor(size.getUnits());
-		System.out.println("Size before: " + this.size + "\nSize to add: " + toAdd);
+		//System.out.println("Size before: " + this.size + "\nSize to add: " + toAdd);
 		this.size += toAdd;
-		System.out.println("Size after: " + this.size);
+		//System.out.println("Size after: " + this.size);
 		
 	}
 }

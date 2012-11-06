@@ -25,6 +25,7 @@ public class SupplyDirector extends Director {
 	 */
 	int months;
 	
+	final int TITLE_SIZE = 6;
 	/**
 	 * 
 	 * @param builder 
@@ -58,28 +59,30 @@ public class SupplyDirector extends Director {
 		List<ProductGroup> groups = visitor.getProductGroups();
 		
 		//Start Drawing the report
-		getBuilder().drawTitle(months + "-Month Supply");
+		Builder builder = getBuilder();
+		builder.drawTitle(this.months + "-Month Supply");
 		
-		getBuilder().drawText("Products", 20);
-		
+		builder.drawText("Products", TITLE_SIZE);
+
 		Table table = new Table();
 		table.addRow(getProductTitleRow());
 		for(Product product : products){
 			table.addRow(getProductRow(product));
 		}
 		
-		getBuilder().drawTable(table);
-		
-		getBuilder().drawText("Product Groups", 20);
-		
+		builder.drawTable(table);
+
+		builder.drawText("Product Groups", TITLE_SIZE);
+				
 		Table productGroupTable = new Table();
 		productGroupTable.addRow(getProductGroupTitleRow());
 		for(ProductGroup group : groups){
 			productGroupTable.addRow(getProductGroupRow(group));
 		}
 		
-		getBuilder().drawTable(productGroupTable);
-		getBuilder().finish();
+		builder.drawTable(productGroupTable);
+		builder.finish();
+		builder.display();
 	}
 	
 	private Row getProductGroupRow(ProductGroup group) {
@@ -87,7 +90,7 @@ public class SupplyDirector extends Director {
 		row.addCell(new Cell(group.getName()));
 		row.addCell(new Cell(group.getStorageUnit().getName()));
 		Size size = group.getThreeMonthSupply();
-		row.addCell(new Cell(size.getSize() * months/3f + " " + size.getUnits().toString()));
+		row.addCell(new Cell(size.getSize() * this.months/3f + " " + size.getUnits().toString()));
 		size = group.getCurrentSupply();
 		row.addCell(new Cell(size.getSize() + " " + size.getUnits().toString()));
 		return row;
