@@ -23,6 +23,7 @@ import model.controllers.StorageUnitController;
 import model.entities.Item;
 import model.entities.Product;
 import model.entities.ProductContainer;
+import model.entities.StorageUnit;
 
 
 /**
@@ -171,23 +172,18 @@ public class TransferItemBatchController extends Controller implements
 			}
 			String barcodeOfItemToTransfer = getView().getBarcode();
 			final Item item = itemController.getItemByBarCode(barcodeOfItemToTransfer);
-			ProductContainer container = (ProductContainer)target.getTag();
-			Collection<Product> products = 	container.getAllProducts();
-			boolean temp;
-			if(products == null)
-				temp = false;
-			else
-				temp = products.contains(item.getProduct());
-			final boolean hadProductBefore = temp;
+			final StorageUnit unit = (StorageUnit)target.getTag();
+			final ProductContainer container = unit.getContainerByProduct(item.getProduct());
+			final boolean hadProductBefore = (container != null);
+			
 			Command command = new Command(){
 				private ProductContainer oldContainer;
-				private boolean hadProductBefore;
+				//private boolean hadProductBefore;
 				@Override
 				public void doAction() {
 					oldContainer = item.getContainer();
-					
-					ProductContainer container = (ProductContainer)target.getTag();
-					itemController.moveItem(item.getBarCode().toString(), container);
+
+					itemController.moveItem(item.getBarCode().toString(), unit);
 					addItemToView(item);
 				}
 
@@ -195,7 +191,6 @@ public class TransferItemBatchController extends Controller implements
 				public void undoAction() {
 					itemController.moveItem(item.getBarCode().toString(), oldContainer);
 					if(!hadProductBefore){
-						ProductContainer container = (ProductContainer)target.getTag();
 						pController.removeProductFromContainer(item.getProduct(), container);
 					}
 					removeItemFromView(item);
