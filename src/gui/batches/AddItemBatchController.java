@@ -159,7 +159,14 @@ public class AddItemBatchController extends Controller implements
 		String count = getView().getCount();
 		String barCode = getView().getBarcode(); //this is the product barcode
 		Date entryDate = getView().getEntryDate();
-		getView().enableItemAction(itemController.enableAddItem(count, entryDate, barCode));
+		
+		boolean enableAction = itemController.enableAddItem(count, entryDate, barCode);
+	
+		if(getView().getUseScanner() == true){
+			enableAction = false;
+		}
+		
+		getView().enableItemAction(enableAction);
 		
 		getView().enableUndo(commandManager.canUndo());
 		getView().enableRedo(commandManager.canRedo());
