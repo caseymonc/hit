@@ -24,10 +24,13 @@ public class HtmlBuilder extends Builder {
 	public void drawTitle(String title) {
 		String htmlTitle = "<head>\n<title>\n" + title + "</title>\n " + css() + "</head>\n";
 		out.println(htmlTitle);
+		String pageTitle = "<h2>" + title + "</h2>";
+		out.println(pageTitle);
 	}
 	
 	private String css(){
 		return "<style type=\"text/css\">" +
+		"h2 { text-align: center;}" +
 		"table { background:#D3E4E5;" +
 		 "border:1px solid gray;" +
 		 "border-collapse:collapse;" +
@@ -40,10 +43,10 @@ public class HtmlBuilder extends Builder {
 		 "letter-spacing:20px;" +
 		 "padding:6px 4px 8px 0px;" +
 		 "text-align:center;" +
-		 "text-transform:uppercase;" +
 		"}" +
 		"td, th { color:#363636;" +
 		 "padding:.4em;" +
+		 "border: 1px solid black;" +
 		"}" +
 		"tr { border:1px dotted gray;" +
 		"}" +
@@ -51,7 +54,6 @@ public class HtmlBuilder extends Builder {
 		 "color:#FFFFFF;" +
 		 "padding:3px 10px 3px 10px;" +
 		 "text-align:left;" +
-		 "text-transform:uppercase;" +
 		"}" +
 		"tbody td a { color:#363636;" +
 		 "text-decoration:none;" +
@@ -90,6 +92,7 @@ public class HtmlBuilder extends Builder {
 		 "border:1px solid #03476F;" +
 		 "color:#000000;" +
 		"}" +
+		"p { margin-bottom: 5px; }" +
 		"</style>";
 	}
 
