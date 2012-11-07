@@ -39,7 +39,7 @@ public class BarCodeGenerator implements PersistentItem {
 		// We know that every code we generate is unique 
 		// because the barcodegenerator class is a singleton class and
 		// it starts
-		// with 1 and increments everytime a new barcode is generated. 
+		// with 1 and increments every time a new barcode is generated. 
 		//So, it will never
 		// generate the same barCode twice;
 		
@@ -103,16 +103,16 @@ public class BarCodeGenerator implements PersistentItem {
 		int evenIndexDigits = 0;
 		int result = 0;
 		for(int i = 0; i < barcodeBuilder.length(); i+=2) {
-			oddIndexDigits += barcodeBuilder.charAt(i);
+			oddIndexDigits += Integer.parseInt(barcodeBuilder.substring(i,i+1));
 			if(i!=10) {
-				evenIndexDigits += barcodeBuilder.charAt(i+1);
+				evenIndexDigits += Integer.parseInt(barcodeBuilder.substring(i+1,i+2));
 			}	
 		}	
 		result = oddIndexDigits * 3;
 		result += evenIndexDigits;
 		result = result % 10;
 		if(result != 0) {
-			result = 10 - result;
+			//result = 10 - result;
 		}
 		
 		String retVal = "";
