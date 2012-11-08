@@ -112,7 +112,7 @@ public class BarCodeGenerator implements PersistentItem {
 		result += evenIndexDigits;
 		result = result % 10;
 		if(result != 0) {
-			result = 10 - result;
+			//result = 10 - result;
 		}
 		
 		String retVal = "";
