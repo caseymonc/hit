@@ -124,4 +124,8 @@ public class CoreObjectModel implements PersistentItem{
 		}
 		return toReturn;
 	}
+	
+	public boolean hasSinceDate(){
+		return sinceDate != null;
+	}
 }

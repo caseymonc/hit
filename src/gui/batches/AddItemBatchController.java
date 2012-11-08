@@ -358,6 +358,7 @@ public class AddItemBatchController extends Controller implements
 
 			private void deleteItem(Item item) {
 				itemController.deleteItem(item);
+				productController.removeItemFromProduct(item.getProduct(), item);
 			}
 
 			private void removeProduct() {

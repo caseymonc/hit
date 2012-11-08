@@ -82,7 +82,9 @@ public class CommandManager {
 	 * @param command the command to add and do
 	 */
 	public void doAction(Command command){
-		if(position < commands.size() - 1)
+		if(position == -1){
+			commands = new ArrayList<Command>();
+		}else if(position < commands.size() - 1)
 			commands = commands.subList(0, position);
 		commands.add(command);
 		redo();

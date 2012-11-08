@@ -12,6 +12,7 @@ import model.CoreObjectModel;
 import model.entities.Product;
 import model.entities.ProductGroup;
 import model.entities.StorageUnit;
+import model.entities.Unit;
 
 public class NoticesVisitor implements Visitor {
 
@@ -34,6 +35,9 @@ public class NoticesVisitor implements Visitor {
 
 	@Override
 	public void visitProductGroup(ProductGroup group) {
+		if(group.getThreeMonthSupply().getUnits() == Unit.count)
+			return;
+		
 		CoreObjectModel model = CoreObjectModel.getInstance();
 		NoticesProductVisitor productVisitor = new NoticesProductVisitor(group);
 		model.getProductManager().accept(productVisitor, group);

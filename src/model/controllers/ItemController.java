@@ -143,6 +143,7 @@ public class ItemController extends ModelController {
 		item.getContainer().removeItem(item);
 		IM.deleteItem(item);
 		
+		
 		this.setChanged();
 		this.notifyObservers(new Hint(item, Hint.Value.Delete));
 	}

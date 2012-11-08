@@ -66,7 +66,13 @@ public class RemovedReportController extends Controller implements
 	 */
 	@Override
 	protected void loadValues() {
-		getView().setSinceLast(true);
+		if(CoreObjectModel.getInstance().hasSinceDate()){
+			getView().setSinceLast(true);
+			getView().setSinceLastValue(CoreObjectModel.getInstance().getSinceDate());
+		}else{
+			getView().setSinceDate(true);
+			getView().enableSinceLast(false);
+		}
 	}
 
 	//
@@ -79,6 +85,11 @@ public class RemovedReportController extends Controller implements
 	 */
 	@Override
 	public void valuesChanged() {
+		if(getView().getSinceDate()){
+			getView().enableSinceDateValue(true);
+		}else{
+			getView().enableSinceDateValue(false);
+		}
 	}
 
 	/**

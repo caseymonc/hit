@@ -191,7 +191,7 @@ public class TransferItemBatchController extends Controller implements
 				public void undoAction() {
 					itemController.moveItem(item.getBarCode().toString(), oldContainer);
 					if(!hadProductBefore){
-						pController.removeProductFromContainer(item.getProduct(), container);
+						pController.removeProductFromContainer(item.getProduct(), unit);
 					}
 					removeItemFromView(item);
 				}
