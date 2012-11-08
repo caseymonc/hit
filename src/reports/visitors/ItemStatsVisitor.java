@@ -51,7 +51,11 @@ public class ItemStatsVisitor implements ItemVisitor {
 	}
 
 	@Override
-	public void visitItem(Item item) {		
+	public void visitItem(Item item) {	
+		if(item.getEntryDate().after(endDate)){
+			return;
+		}
+		
 		updateSupplyOnDate(item);
 		updateItemAges(item);
 		
@@ -215,7 +219,7 @@ public class ItemStatsVisitor implements ItemVisitor {
 		Date entryDate = formatDate(item.getEntryDate());
 		
 		if(entryDate.before(startDate)) {
-			entryDate = startDate;
+			entryDate = formatDate(startDate);
 		}
 		
 		if(item.getExitDate() != null) {	

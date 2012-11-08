@@ -4,7 +4,6 @@
  */
 package reports.directors;
 
-import common.util.DateUtils;
 import gui.reports.Builder;
 import gui.reports.Row;
 import gui.reports.Table;
@@ -12,6 +11,7 @@ import gui.reports.TestBuilder;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
 import model.BarCodeGenerator;
 import model.CoreObjectModel;
 import model.entities.*;
@@ -137,7 +137,7 @@ public class ProductStatsDirectorTest {
 		assertTrue(row.getCell(4).toString().equals("0/0"));					// Cur/Avg Supply
 		assertTrue(row.getCell(5).toString().equals("0/0"));					// Min/Max Supply
 		assertTrue(row.getCell(6).toString().equals("0/0"));					// Used/Added Supply
-		assertTrue(row.getCell(7).toString().equals("1"));						// Shelf Life
+		assertTrue(row.getCell(7).toString().equals("1 months"));				// Shelf Life
 		assertTrue(row.getCell(8).toString().equals("0 days/0 days"));			// Avg/Max Used Age
 		assertTrue(row.getCell(9).toString().equals("0 days/0 days"));			// Avg/Max Cur Age
 	}
@@ -168,7 +168,7 @@ public class ProductStatsDirectorTest {
 		assertTrue(row.getCell(4).toString().equals("1/1"));					// Cur/Avg Supply
 		assertTrue(row.getCell(5).toString().equals("1/1"));					// Min/Max Supply
 		assertTrue(row.getCell(6).toString().equals("0/1"));					// Used/Added Supply
-		assertTrue(row.getCell(7).toString().equals("1"));						// Shelf Life
+		assertTrue(row.getCell(7).toString().equals("1 months"));				// Shelf Life
 		assertTrue(row.getCell(8).toString().equals("0 days/0 days"));			// Avg/Max Used Age
 		assertTrue(row.getCell(9).toString().equals("1 days/1 days"));			// Avg/Max Cur Age
 	}
@@ -209,7 +209,7 @@ public class ProductStatsDirectorTest {
 		assertTrue(row.getCell(4).toString().equals("300/159.7"));				// Cur/Avg Supply
 		assertTrue(row.getCell(5).toString().equals("10/300"));					// Min/Max Supply
 		assertTrue(row.getCell(6).toString().equals("0/300"));					// Used/Added Supply
-		assertTrue(row.getCell(7).toString().equals("1"));						// Shelf Life
+		assertTrue(row.getCell(7).toString().equals("1 months"));				// Shelf Life
 		assertTrue(row.getCell(8).toString().equals("0 days/0 days"));			// Avg/Max Used Age
 		assertTrue(row.getCell(9).toString().equals("15.5 days/30 days"));		// Avg/Max Cur Age
 	}
@@ -227,7 +227,7 @@ public class ProductStatsDirectorTest {
 		Product product = new Product("Product 1", barcode, 1, 1, size);
 		addProduct(product);
 		
-		Calendar calendar = Calendar.getInstance();
+		Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
 		calendar.set(2011, Calendar.APRIL, 1, 0, 0, 0);
 		Date endDate = calendar.getTime(); // end of report period
 		
@@ -256,9 +256,9 @@ public class ProductStatsDirectorTest {
 		assertTrue(row.getCell(4).toString().equals("3/3"));				    // Cur/Avg Supply
 		assertTrue(row.getCell(5).toString().equals("3/3"));					// Min/Max Supply
 		assertTrue(row.getCell(6).toString().equals("0/3"));					// Used/Added Supply
-		assertTrue(row.getCell(7).toString().equals("1"));						// Shelf Life
+		assertTrue(row.getCell(7).toString().equals("1 months"));				// Shelf Life
 		assertTrue(row.getCell(8).toString().equals("0 days/0 days"));			// Avg/Max Used Age
-		assertTrue(row.getCell(9).toString().equals("19 days/19 days"));		// Avg/Max Cur Age
+		assertTrue(row.getCell(9).toString().equals("18 days/18 days"));		// Avg/Max Cur Age
 		
 		
 		/**************************************************************************************/
@@ -300,9 +300,9 @@ public class ProductStatsDirectorTest {
 		assertTrue(row.getCell(4).toString().equals("3/3"));				    // Cur/Avg Supply
 		assertTrue(row.getCell(5).toString().equals("3/3"));					// Min/Max Supply
 		assertTrue(row.getCell(6).toString().equals("0/3"));					// Used/Added Supply
-		assertTrue(row.getCell(7).toString().equals("1"));						// Shelf Life
+		assertTrue(row.getCell(7).toString().equals("1 months"));				// Shelf Life
 		assertTrue(row.getCell(8).toString().equals("0 days/0 days"));			// Avg/Max Used Age
-		assertTrue(row.getCell(9).toString().equals("31 days/31 days"));		// Avg/Max Cur Age
+		assertTrue(row.getCell(9).toString().equals("30 days/30 days"));		// Avg/Max Cur Age
 		
 		/**************************************************************************************/
 		/*                                                                                    */
@@ -340,10 +340,10 @@ public class ProductStatsDirectorTest {
 		assertTrue(row.getCell(1).toString().equals("3333"));					// BarCode
 		assertTrue(row.getCell(2).toString().equals("1.2 Pounds"));				// Size
 		assertTrue(row.getCell(3).toString().equals("1"));						// 3 Month Supply
-		assertTrue(row.getCell(4).toString().equals("3/3"));				    // Cur/Avg Supply
-		assertTrue(row.getCell(5).toString().equals("3/3"));					// Min/Max Supply
-		assertTrue(row.getCell(6).toString().equals("0/3"));					// Used/Added Supply
-		assertTrue(row.getCell(7).toString().equals("1"));						// Shelf Life
+		assertTrue(row.getCell(4).toString().equals("2/2"));				    // Cur/Avg Supply
+		assertTrue(row.getCell(5).toString().equals("2/2"));					// Min/Max Supply
+		assertTrue(row.getCell(6).toString().equals("0/2"));					// Used/Added Supply
+		assertTrue(row.getCell(7).toString().equals("1 months"));				// Shelf Life
 		assertTrue(row.getCell(8).toString().equals("0 days/0 days"));			// Avg/Max Used Age
 		assertTrue(row.getCell(9).toString().equals("0 days/0 days"));			// Avg/Max Cur Age
 	}
@@ -390,7 +390,7 @@ public class ProductStatsDirectorTest {
 		assertTrue(row.getCell(4).toString().equals("3/3"));				    // Cur/Avg Supply
 		assertTrue(row.getCell(5).toString().equals("3/3"));					// Min/Max Supply
 		assertTrue(row.getCell(6).toString().equals("0/3"));					// Used/Added Supply
-		assertTrue(row.getCell(7).toString().equals("1"));						// Shelf Life
+		assertTrue(row.getCell(7).toString().equals("1 months"));				// Shelf Life
 		assertTrue(row.getCell(8).toString().equals("0 days/0 days"));			// Avg/Max Used Age
 		assertTrue(row.getCell(9).toString().equals("25 days/25 days"));		// Avg/Max Cur Age
 		
@@ -434,7 +434,7 @@ public class ProductStatsDirectorTest {
 		assertTrue(row.getCell(4).toString().equals("3/3"));				    // Cur/Avg Supply
 		assertTrue(row.getCell(5).toString().equals("3/3"));					// Min/Max Supply
 		assertTrue(row.getCell(6).toString().equals("0/2"));					// Used/Added Supply
-		assertTrue(row.getCell(7).toString().equals("1"));						// Shelf Life
+		assertTrue(row.getCell(7).toString().equals("1 months"));				// Shelf Life
 		assertTrue(row.getCell(8).toString().equals("0 days/0 days"));			// Avg/Max Used Age
 		assertTrue(row.getCell(9).toString().equals("30 days/30 days"));		// Avg/Max Cur Age
 		
@@ -474,10 +474,10 @@ public class ProductStatsDirectorTest {
 		assertTrue(row.getCell(1).toString().equals("3333"));					// BarCode
 		assertTrue(row.getCell(2).toString().equals("1.2 Pounds"));				// Size
 		assertTrue(row.getCell(3).toString().equals("1"));						// 3 Month Supply
-		assertTrue(row.getCell(4).toString().equals("3/3"));				    // Cur/Avg Supply
-		assertTrue(row.getCell(5).toString().equals("3/3"));					// Min/Max Supply
-		assertTrue(row.getCell(6).toString().equals("0/3"));					// Used/Added Supply
-		assertTrue(row.getCell(7).toString().equals("1"));						// Shelf Life
+		assertTrue(row.getCell(4).toString().equals("2/2"));				    // Cur/Avg Supply
+		assertTrue(row.getCell(5).toString().equals("2/2"));					// Min/Max Supply
+		assertTrue(row.getCell(6).toString().equals("0/2"));					// Used/Added Supply
+		assertTrue(row.getCell(7).toString().equals("1 months"));				// Shelf Life
 		assertTrue(row.getCell(8).toString().equals("0 days/0 days"));			// Avg/Max Used Age
 		assertTrue(row.getCell(9).toString().equals("0 days/0 days"));			// Avg/Max Cur Age
 	}
@@ -736,7 +736,7 @@ public class ProductStatsDirectorTest {
 		Row row = table.getRow(1);
 		
 		// check all columns in the product row
-		assertTrue(row.getCell(4).toString().equals("0/0.1"));				    // Cur/Avg Supply
+		assertTrue(row.getCell(4).toString().equals("0/0"));				    // Cur/Avg Supply
 		assertTrue(row.getCell(5).toString().equals("0/1"));					// Min/Max Supply
 		assertTrue(row.getCell(6).toString().equals("1/1"));					// Used/Added Supply
 		assertTrue(row.getCell(8).toString().equals("1 days/1 days"));			// Avg/Max Used Age
@@ -770,7 +770,7 @@ public class ProductStatsDirectorTest {
 		row = table.getRow(2);
 		
 		// check all columns in the product row
-		assertTrue(row.getCell(4).toString().equals("0/0.1"));				    // Cur/Avg Supply
+		assertTrue(row.getCell(4).toString().equals("0/0"));				    // Cur/Avg Supply
 		assertTrue(row.getCell(5).toString().equals("0/1"));					// Min/Max Supply
 		assertTrue(row.getCell(6).toString().equals("1/0"));					// Used/Added Supply
 		assertTrue(row.getCell(8).toString().equals("1 days/1 days"));			// Avg/Max Used Age
