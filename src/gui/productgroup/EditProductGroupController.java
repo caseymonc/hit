@@ -58,6 +58,33 @@ public class EditProductGroupController extends Controller
 	 */
 	@Override
 	protected void enableComponents() {
+		float supplyVal;
+		Unit supplyUnit = getView().getSupplyUnit().toUnit();
+		Size size;
+		
+		try{
+			supplyVal = Float.parseFloat(getView().getSupplyValue());
+		} catch(Exception e){
+			getView().enableOK(false);
+			return;
+		}
+		
+		try{
+			size = new Size(supplyUnit, supplyVal);
+		} catch(Exception e){
+			getView().enableOK(false);
+			return;
+		}
+		
+		this.group.setThreeMonthSupply(size);
+		ProductGroup group = getProductGroup();
+		
+		if(group == null || !pgController.canEditProductGroup(group, this.group)){
+			getView().enableOK(false);
+			return;
+		}
+		
+		getView().enableOK(true);
 	}
 
 	/**
@@ -86,12 +113,7 @@ public class EditProductGroupController extends Controller
 	 */
 	@Override
 	public void valuesChanged() {
-		ProductGroup group = getProductGroup();
-		if(group != null && pgController.canEditProductGroup(group, this.group)){
-			getView().enableOK(true);
-		}else{
-			getView().enableOK(false);
-		}
+		enableComponents();
 	}
 	
 	private ProductGroup getProductGroup(){

@@ -18,7 +18,7 @@ public enum SizeUnits {
 	Gallons("gallons"),
 	Quarts("quarts"),
 	Pints("pints"),
-	FluidOunces("fluid ounces"),
+	FluidOunces("fluidOunces"),
 	Liters("liters"),
 	
 	// Count units
@@ -44,11 +44,15 @@ public enum SizeUnits {
 	
 	@Override
 	public String toString() {
+		if (_string.compareTo("fluidOunces") == 0) {
+			return "fluid ounces";
+		}
+		
 		return _string;
 	}
 	
 	public Unit toUnit(){
-		return Unit.valueOf(this.toString());
+		return Unit.valueOf(_string);
 	}
 
 	public static SizeUnits fromUnit(Unit units) {

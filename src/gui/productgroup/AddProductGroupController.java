@@ -1,14 +1,12 @@
 package gui.productgroup;
 
+import gui.common.*;
+import gui.inventory.*;
 import model.controllers.ProductGroupController;
-import model.controllers.StorageUnitController;
 import model.entities.ProductContainer;
 import model.entities.ProductGroup;
 import model.entities.Size;
-import model.entities.StorageUnit;
 import model.entities.Unit;
-import gui.common.*;
-import gui.inventory.*;
 
 /**
  * Controller class for the add product group view.
@@ -16,7 +14,6 @@ import gui.inventory.*;
 public class AddProductGroupController extends Controller implements
 		IAddProductGroupController {
 	private ProductGroupController pgController;
-	private StorageUnitController suController;
 	private ProductContainerData container;
 	/**
 	 * Constructor.
@@ -27,7 +24,6 @@ public class AddProductGroupController extends Controller implements
 	public AddProductGroupController(IView view, ProductContainerData container) {
 		super(view);
 		pgController = ProductGroupController.getInstance();
-		suController = StorageUnitController.getInstance();
 		this.container = container;
 		construct();
 	}
@@ -71,6 +67,7 @@ public class AddProductGroupController extends Controller implements
 	 */
 	@Override
 	protected void loadValues() {
+		getView().setSupplyValue("0");
 		valuesChanged();
 	}
 
