@@ -159,7 +159,7 @@ public class ItemControllerTest {
 		assertTrue(destination1.getAllProducts().contains(p));
 		
 		Product p2 = new Product("NewProduct", new BarCode("222222222222"),0,5,new Size(Unit.quarts, 5));
-		Item i2 = new Item(new BarCode("000000000013"), new Date(), null, p2, rootUnit);
+		Item i2 = new Item(new BarCode("000000000260"), new Date(), null, p2, rootUnit);
 		rootUnit.setContainerByProduct(p2,rootUnit);
                 PC.addProduct(p2);
 		IC.addItem(i2, rootUnit);
