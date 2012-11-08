@@ -14,7 +14,7 @@ public enum Unit{
 	quarts("Quarts"),
 	pints("Pints"),
 	liters("Liters"),
-	fluidOunces("Fluid ounces");
+	fluidOunces("FluidOunces");
 		
 		/**
 	 * String value to be returned by toString.
