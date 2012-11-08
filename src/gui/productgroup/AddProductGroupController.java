@@ -67,6 +67,7 @@ public class AddProductGroupController extends Controller implements
 	 */
 	@Override
 	protected void loadValues() {
+		getView().setSupplyValue("0");
 		valuesChanged();
 	}
 
