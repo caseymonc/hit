@@ -190,7 +190,7 @@ public class ItemStatsVisitor implements ItemVisitor {
 		if(item.getExitDate() == null) {
 			exitDate = endDate;
 		} else {
-			exitDate = item.getExitDate();
+			exitDate = formatDate(item.getExitDate());
 		}
 		
 		Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
@@ -202,7 +202,7 @@ public class ItemStatsVisitor implements ItemVisitor {
 		
 		Date curTime = formatDate(calendar.getTime());
 		
-		while(curTime.compareTo(exitDate) <= 0) {
+		while(curTime.compareTo(exitDate) < 0) {
 			Integer count = supplyOnDate.get(curTime);
 			count++;
 			supplyOnDate.put(curTime, count);
@@ -226,7 +226,7 @@ public class ItemStatsVisitor implements ItemVisitor {
 			}
 			
 			long timeDiff = exitDate.getTime() - entryDate.getTime();
-			int numDays = (int)Math.ceil((double)timeDiff / 86400000);
+			int numDays = (int)Math.floor((double)timeDiff / 86400000);
 			usedItemAges.add(numDays);
 			
 			if(numDays > maxUsedAge) {
@@ -234,7 +234,7 @@ public class ItemStatsVisitor implements ItemVisitor {
 			}
 		} else {
 			long timeDiff = formatDate(endDate).getTime() - entryDate.getTime();
-			int numDays = (int)Math.ceil((double)timeDiff / 86400000);
+			int numDays = (int)Math.floor((double)timeDiff / 86400000);
 			currentItemAges.add(numDays);
 			
 			if(numDays > maxCurrentAge) {

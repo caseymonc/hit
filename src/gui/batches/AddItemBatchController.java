@@ -272,8 +272,10 @@ public class AddItemBatchController extends Controller implements
 			//open the other dialogue box to prompt for a new product.
 			getView().displayAddProductView();
 			addedProduct = productController.getProductByBarCode(productBarcode);
-			assert(addedProduct != null);
-			assert(addedProduct.getBarCode().isValid());
+			if(addedProduct == null){
+				setFieldsToDefault();
+				return;
+			}
 		}
 		final Product product = addedProduct;
 		final ProductData prodData = new ProductData(product);

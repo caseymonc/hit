@@ -1,8 +1,10 @@
 package reports.visitors;
 
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Set;
-
 import model.entities.Product;
 import model.entities.ProductGroup;
 import model.entities.Unit;
@@ -13,11 +15,11 @@ public class NoticesProductVisitor implements ProductVisitor {
 	private ProductGroup group;
 	
 	/** The inconsistent products in group*/
-	private Set<Product> inconsistentProducts;
+	private List<Product> inconsistentProducts;
 	
 	public NoticesProductVisitor(ProductGroup group){
 		this.group = group;
-		inconsistentProducts = new HashSet<Product>();
+		inconsistentProducts = new ArrayList<Product>();
 	}
 	
 	@Override
@@ -45,7 +47,17 @@ public class NoticesProductVisitor implements ProductVisitor {
 	 * Get a set of all inconsistent products in group
 	 * @return Set of all inconsistent products in group
 	 */
-	public Set<Product> getInconsistentProducts(){
+	public List<Product> getInconsistentProducts(){
+		Collections.sort(inconsistentProducts,  new Comparator(){
+			@Override
+			public int compare(Object o1, Object o2) {
+				Product product1 = (Product)o1;
+				Product product2 = (Product)o2;
+				return product1.getDescription().compareTo(product2.getDescription());
+			}
+			
+		});
+		
 		return inconsistentProducts;
 	}
 

@@ -14,12 +14,12 @@ public class NoticesPreOrderVisitor implements Visitor{
 
 	private List<ProductGroup> groups;
 	private NoticesVisitor visitor;
-	private Map<ProductGroup, Set<Product>> incorrectProducts;
+	private Map<ProductGroup, List<Product>> incorrectProducts;
 	
 	public NoticesPreOrderVisitor(NoticesVisitor visitor){
 		this.visitor = visitor;
 		this.groups = new ArrayList<ProductGroup>();
-		this.incorrectProducts = new HashMap<ProductGroup, Set<Product>>();
+		this.incorrectProducts = new HashMap<ProductGroup, List<Product>>();
 	}
 	
 	@Override
@@ -40,7 +40,7 @@ public class NoticesPreOrderVisitor implements Visitor{
 		return groups;
 	}
 	
-	public Set<Product> getProductsForGroup(ProductGroup group){
+	public List<Product> getProductsForGroup(ProductGroup group){
 		return incorrectProducts.get(group);
 	}
 

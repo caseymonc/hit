@@ -19,11 +19,11 @@ public class NoticesVisitor implements Visitor {
 	private List<ProductGroup> groups;
 	
 	/** A map of all inconsistent products in each group*/
-	private Map<ProductGroup, Set<Product>> incorrectProducts;
+	private Map<ProductGroup, List<Product>> incorrectProducts;
 	
 	public NoticesVisitor(){
 		groups = new ArrayList<ProductGroup>();
-		incorrectProducts = new HashMap<ProductGroup, Set<Product>>();
+		incorrectProducts = new HashMap<ProductGroup, List<Product>>();
 	}
 	
 	@Override
@@ -51,7 +51,7 @@ public class NoticesVisitor implements Visitor {
 				if(groups.contains(child)){
 					if(!hasInconsistencies){
 						groups.add(group);
-						incorrectProducts.put(group, new HashSet<Product>());
+						incorrectProducts.put(group, new ArrayList<Product>());
 						hasInconsistencies = true;
 					}
 					incorrectProducts.get(group).addAll(incorrectProducts.get(child));
@@ -83,7 +83,7 @@ public class NoticesVisitor implements Visitor {
 	 * @return a Set of all of the inconsistent products in a particular
 	 * ProductGroup
 	 */
-	public Set<Product> getInconsistentProducts(ProductGroup group){
+	public List<Product> getInconsistentProducts(ProductGroup group){
 		return incorrectProducts.get(group);
 	}
 

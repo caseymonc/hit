@@ -49,7 +49,7 @@ public class ProductStatsDirector extends Director {
 			row.addCell(new Cell(productVisitor.getCurAvgSupply(product)));
 			row.addCell(new Cell(productVisitor.getMinMaxSupply(product)));
 			row.addCell(new Cell(productVisitor.getUsedAddedSupply(product)));
-			row.addCell(new Cell(Integer.toString(product.getShelfLife())));
+			row.addCell(new Cell(Integer.toString(product.getShelfLife()) + " months"));
 			row.addCell(new Cell(productVisitor.getAvgMaxUsedAge(product)));
 			row.addCell(new Cell(productVisitor.getAvgMaxCurrentAge(product)));
 			table.addRow(row);

@@ -257,7 +257,7 @@ public class Product implements PersistentItem {
 
 		Date curDate = calendar.getTime();
 
-		if (date.compareTo(curDate) >= 0) {
+		if (date.compareTo(curDate) > 0) {
 			throw new IllegalArgumentException("creation date is in the future");
 		}
 
