@@ -75,9 +75,9 @@ public class BarCode implements Serializable {
 		int oddIndexDigits = 0;
 		int evenIndexDigits = 0;
 		for(int i = 0; i < barCode.length()-1; i+=2) {
-			oddIndexDigits += barCode.charAt(i);
+			oddIndexDigits += Integer.parseInt(barCode.substring(i,i+1));
 			if(i!=10) {
-				evenIndexDigits += barCode.charAt(i+1);
+				evenIndexDigits += Integer.parseInt(barCode.substring(i+1,i+2));
 			}	
 		}	
 		int result = oddIndexDigits * 3;
