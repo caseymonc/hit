@@ -87,6 +87,7 @@ public class CommandManager {
 		}else if(position < commands.size() - 1)
 			commands = commands.subList(0, position);
 		commands.add(command);
+		position = commands.size() - 2;
 		redo();
 	}
 }

@@ -71,7 +71,7 @@ public enum Unit{
 		case quarts:
 			return 32;
 		case gallons:
-			return 64;
+			return 128;
 		case liters:
 			return 33.814022702f;
 		default:

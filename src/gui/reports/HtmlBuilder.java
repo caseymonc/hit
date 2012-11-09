@@ -2,6 +2,9 @@ package gui.reports;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Date;
+
+import common.util.DateUtils;
 
 public class HtmlBuilder extends Builder {
 
@@ -9,7 +12,7 @@ public class HtmlBuilder extends Builder {
 	
 	public HtmlBuilder(String reportName)
 	{
-		fileName = reportName + ".html";
+		fileName = reportName + new Date().getTime() + ".html";
 		try {
 			out = new PrintWriter(new FileWriter(fileName));
 		} catch (IOException e) 

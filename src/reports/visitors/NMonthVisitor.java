@@ -49,7 +49,11 @@ public class NMonthVisitor implements ProductVisitor, Visitor {
 	@Override
 	public void visitProductGroup(ProductGroup group) {
 		Size size = group.getThreeMonthSupply();
-		Size nMonthSupply = new Size(size.getUnits(), size.getSize() * ((float)months/3f));
+		float threeS = size.getSize() * ((float)months/3f);
+		if(size.getUnits() == Unit.count){
+			threeS = (int)threeS;
+		}
+		Size nMonthSupply = new Size(size.getUnits(), threeS);
 		if(nMonthSupply.getSize() > 0){
 			
 			Size s = group.getCurrentSupply();
