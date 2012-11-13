@@ -54,12 +54,10 @@ public abstract class Builder {
 	}
 	
 	public abstract void finish();
-	
 	public abstract void endHeader();
 	public abstract void endTable();
 	public abstract void startTable();
 	public abstract void printTableHeader(Cell cell);
 	public abstract void printTable(Row row);
-	public abstract void endDocument();
 
 }

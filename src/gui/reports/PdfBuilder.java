@@ -170,11 +170,6 @@ public class PdfBuilder extends Builder {
 	}
 
 	@Override
-	public void endDocument() {
-		document.close();
-	}
-
-	@Override
 	public void finish() {
 		document.close();
 	}
