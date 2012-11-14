@@ -68,6 +68,10 @@ public class TestBuilder extends Builder {
 	public void startTable() {
 		return;
 	}
+	
+	public void endDocument(){
+		
+	}
 
 	@Override
 	public void finish() {
