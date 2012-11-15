@@ -8,6 +8,7 @@ import model.entities.Product;
 import model.entities.Size;
 import model.entities.Unit;
 import model.barcode.*;
+import java.util.Map;
 
 /**
  * Controller class for the add item view.
