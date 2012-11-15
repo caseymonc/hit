@@ -8,6 +8,18 @@ package model.barcode;
  *
  * @author davidpatty
  */
-public class GoogleHandler implements BarCodeLookupHandler {
+public class GoogleHandler extends BarCodeLookupHandler {
+
+	public GoogleHandler() {
+		super();
+	}
+
+	public GoogleHandler(HandlerDescriptor descriptor) {
+		super(descriptor);
+	}
 	
+	@Override
+	public String lookup(String barcode) {
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
 }

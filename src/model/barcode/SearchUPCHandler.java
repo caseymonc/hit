@@ -8,6 +8,18 @@ package model.barcode;
  *
  * @author davidpatty
  */
-public class SearchUPCHandler implements BarCodeLookupHandler {
+public class SearchUPCHandler extends BarCodeLookupHandler {
+
+	public SearchUPCHandler() {
+		super();
+	}
 	
+	public SearchUPCHandler(HandlerDescriptor descriptor) {
+		super(descriptor);
+	}
+
+	@Override
+	public String lookup(String barcode) {
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
 }

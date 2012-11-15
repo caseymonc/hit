@@ -16,13 +16,15 @@ public class BarCodeLookupRegistry {
 
 	private Map<String, BarCodeLookupHandler> handlers;
 	private Map<String, HandlerDescriptor> descriptors;
-
+	private BarCodeLookupHandler last;
 	/**
 	 * Constructor
 	 */
 	public BarCodeLookupRegistry() {
 		handlers = new HashMap<String, BarCodeLookupHandler>();
 		descriptors = new HashMap<String, HandlerDescriptor>();
+		last = null;
+		LoadConfig();
 	}
 	
 	/**
@@ -31,10 +33,14 @@ public class BarCodeLookupRegistry {
 	 */
 	public void RegisterHandler(HandlerDescriptor descriptor) {
 		BarCodeLookupHandler handler = CreateHandler(descriptor);
-		
+
 		if (handler != null) {
+			if(last != null)
+				last.setNext(handler);
+			last = handler;
 			handlers.put(descriptor.getClassName(), handler);
 			descriptors.put(descriptor.getClassName(), descriptor);
+			//register the next for the previous one?
 		} else {
 			System.err.println("Unable to Register" + descriptor.getClassName());
 		}
@@ -68,16 +74,17 @@ public class BarCodeLookupRegistry {
 	 */
 	public BarCodeLookupHandler CreateHandler(HandlerDescriptor descriptor) {
 		
-		String name = descriptor.getName();
+//		String name = descriptor.getName();
 		String className = descriptor.getClassName();
-		String description = descriptor.getDescription();
+//		String description = descriptor.getDescription();
 		BarCodeLookupHandler handler;
 
 		try {
 		
 			Class cls = Class.forName(className);
 			handler = (BarCodeLookupHandler) cls.newInstance();
-		
+			handler.setDescriptor(descriptor);
+			
 		} catch(Exception e) {
 			
 			System.err.println(e.getMessage());

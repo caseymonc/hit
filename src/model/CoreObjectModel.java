@@ -7,10 +7,8 @@ package model;
 
 import java.util.Date;
 
-import common.util.DateUtils;
-
+import model.barcode.BarCodeLookupRegistry;
 import model.controllers.*;
-import model.entities.*;
 import model.managers.*;
 import model.persistence.PersistentItem;
 import model.persistence.PersistentStore;
@@ -38,7 +36,8 @@ public class CoreObjectModel implements PersistentItem{
 	private StorageUnitManager storageUnitManager;
 	private ItemManager itemManager;
 	private Date sinceDate;
-	  
+	private BarCodeLookupRegistry registry;
+	
 	public static CoreObjectModel getInstance()
 	{
 		if(_instance == null)
@@ -62,6 +61,7 @@ public class CoreObjectModel implements PersistentItem{
 		storageUnitManager = new StorageUnitManager();
 		itemManager = new ItemManager();
 		lastBarCode = 0;
+		registry = new BarCodeLookupRegistry();
 	}
 
 	public void resetInstance(){
@@ -128,4 +128,9 @@ public class CoreObjectModel implements PersistentItem{
 	public boolean hasSinceDate(){
 		return sinceDate != null;
 	}
+
+	public BarCodeLookupRegistry getRegistry() {
+		return registry;
+	}
+	
 }
