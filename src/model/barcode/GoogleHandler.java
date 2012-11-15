@@ -8,6 +8,6 @@ package model.barcode;
  *
  * @author davidpatty
  */
-public class GoogleHandler implements BarcodeLookupHandler {
+public class GoogleHandler implements BarCodeLookupHandler {
 	
 }

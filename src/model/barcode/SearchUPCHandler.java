@@ -8,6 +8,6 @@ package model.barcode;
  *
  * @author davidpatty
  */
-public class SearchUPCHandler implements BarcodeLookupHandler {
+public class SearchUPCHandler implements BarCodeLookupHandler {
 	
 }

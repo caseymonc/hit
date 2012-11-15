@@ -8,6 +8,5 @@ package model.barcode;
  *
  * @author davidpatty
  */
-public abstract interface BarcodeLookupHandler {
-	
+public abstract interface BarCodeLookupHandler {
 }

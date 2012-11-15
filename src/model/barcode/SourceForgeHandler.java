@@ -8,6 +8,6 @@ package model.barcode;
  *
  * @author davidpatty
  */
-public class SourceForgeHandler implements BarcodeLookupHandler {
+public class SourceForgeHandler implements BarCodeLookupHandler {
 	
 }

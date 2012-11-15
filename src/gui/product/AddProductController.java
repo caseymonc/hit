@@ -7,6 +7,7 @@ import model.entities.BarCode;
 import model.entities.Product;
 import model.entities.Size;
 import model.entities.Unit;
+import model.barcode.*;
 
 /**
  * Controller class for the add item view.
@@ -30,7 +31,7 @@ public class AddProductController extends Controller implements
 	 * flag to determine the previous unit of the size.
 	 */
 	private boolean unitIsCount;
-		
+	
 	/**
 	 * Constructor.
 	 * 
@@ -39,10 +40,15 @@ public class AddProductController extends Controller implements
 	 */
 	public AddProductController(IView view, String barcode) {
 		super(view);
+		
+		//talks to barcode lookup Handler here
+		String description = lookupBarcode(barcode);
+		getView().setDescription(description);
+		
 		this.barcode = barcode;
-				COM = CoreObjectModel.getInstance();
-				productController = COM.getProductController();
-				unitIsCount = false;
+		COM = CoreObjectModel.getInstance();
+		productController = COM.getProductController();
+		unitIsCount = false;
 				
 		construct();
 	}
@@ -158,6 +164,17 @@ public class AddProductController extends Controller implements
 				getView().displayErrorMessage("The product could not be added.");
 			}
 	}
+	
+	private String lookupBarcode(String barCode) {
+		
+		BarCodeLookupRegistry registry = new BarCodeLookupRegistry();
+		Map<String, BarCodeLookupHandler> handlers = registry.GetAvailableHandlers();
+
+//		if(handlers != null && handlers.size() > 0) //?? do we need this?
+//		foreach?
+		return "";
+	}
+		
 		
 }
 
