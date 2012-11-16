@@ -83,7 +83,7 @@ public class StorageUnitManager implements PersistentItem{
 		
 		if(!canAddStorageUnit(unit))
 			throw new IllegalArgumentException();
-		PersistentFactory.getFactory().getStorageUnitDAO().create(unit.getDataObject());
+		//PersistentFactory.getFactory().getStorageUnitDAO().create(unit.getDataObject());
 		storageUnits.put(unit.getName(), unit);
 	}
 	
