@@ -1,8 +1,8 @@
 package gui.main;
 
 import model.CoreObjectModel;
-import model.persistence.PersistentSerializer;
-import model.persistence.PersistentStore;
+import model.persistence.SerializerFactory;
+import model.persistence.PersistentFactory;
 import gui.common.*;
 
 /**
@@ -48,7 +48,7 @@ public class MainController extends Controller implements IMainController {
 	 */
 	@Override
 	public void exit() {
-		PersistentStore.getSelectedStore().save(CoreObjectModel.getInstance());
+		PersistentFactory.getFactory().save(CoreObjectModel.getInstance());
 	}
 
 	/**

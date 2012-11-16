@@ -1,16 +1,29 @@
 package model.persistence;
 
+import java.util.List;
+
+import model.CoreObjectModel;
+import model.entities.Item;
+import model.entities.Product;
+import model.entities.ProductContainer;
 import model.persistence.DAO.ItemDAO;
 import model.persistence.DAO.ProductDAO;
 import model.persistence.DAO.ProductGroupDAO;
 import model.persistence.DAO.StorageUnitDAO;
 
-public class SerializablePersistenceFactory extends AbstractPersistenceFactory {
+public class DatabaseFactory extends PersistentFactory {
 
 	@Override
-	public AbstractConnectionManager getConnectionManager() {
+	public CoreObjectModel getCoreObjectModel() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void save(PersistentItem item) {
+		if(item instanceof CoreObjectModel){
+			return;
+		}
 	}
 
 	@Override

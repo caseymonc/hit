@@ -4,6 +4,15 @@ import model.CoreObjectModel;
 import model.entities.ProductContainer;
 import model.entities.Item;
 import model.entities.Product;
+import model.persistence.DAO.ItemDAO;
+import model.persistence.DAO.ProductDAO;
+import model.persistence.DAO.ProductGroupDAO;
+import model.persistence.DAO.SerializeItemDAO;
+import model.persistence.DAO.SerializeProductDAO;
+import model.persistence.DAO.SerializeProductGroupDAO;
+import model.persistence.DAO.SerializeStorageUnitDAO;
+import model.persistence.DAO.StorageUnitDAO;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -21,7 +30,7 @@ import java.util.List;
  * @author Casey Moncur
  *
  */
-public class PersistentSerializer extends PersistentStore {
+public class SerializerFactory extends PersistentFactory {
 
 	private static final String PERSISTENT_STORE = "persistent_store.txt";
 
@@ -48,24 +57,6 @@ public class PersistentSerializer extends PersistentStore {
 	}
 
 	@Override
-	public List<ProductContainer> getAllContainers() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<Product> getAllProducts() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<Item> getAllItems() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public void save(PersistentItem item) {
 		if(item instanceof CoreObjectModel){
 			try {
@@ -78,6 +69,28 @@ public class PersistentSerializer extends PersistentStore {
 			}
 		}
 
+	}
+
+	@Override
+	public StorageUnitDAO getStorageUnitDAO() {
+		return new SerializeStorageUnitDAO();
+	}
+
+	@Override
+	public ProductGroupDAO getProductGroupDAO() {
+		// TODO Auto-generated method stub
+		return new SerializeProductGroupDAO();
+	}
+
+	@Override
+	public ProductDAO getProductDAO() {
+		return new SerializeProductDAO();
+	}
+
+	@Override
+	public ItemDAO getItemDAO() {
+		// TODO Auto-generated method stub
+		return new SerializeItemDAO();
 	}
 
 }

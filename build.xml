@@ -315,6 +315,7 @@
 				<include name="gui/**"/>
 				<include name="model/**"/>
 				<include name="reports/visitors/**"/>
+				<include name="reports/directors/**"/>
 			</packageset>
 			<taglet name="tools.PreTaglet" path="${build}"/>
 			<taglet name="tools.PostTaglet" path="${build}"/>
