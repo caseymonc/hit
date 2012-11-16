@@ -6,6 +6,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import model.persistence.PersistentItem;
+import model.persistence.DataObjects.DataObject;
 
 /** Item
  * A physical instance of a particular Product. An Item 
@@ -370,6 +371,12 @@ public class Item implements PersistentItem{
 			}
 			return ret;
 		}
+	}
+
+	@Override
+	public DataObject getDataObject() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }

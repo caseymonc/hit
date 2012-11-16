@@ -18,6 +18,8 @@ import model.entities.Product;
 import model.entities.ProductGroup;
 import model.entities.StorageUnit;
 import model.persistence.PersistentItem;
+import model.persistence.PersistentFactory;
+import model.persistence.DataObjects.DataObject;
 
 /**
  *
@@ -81,7 +83,7 @@ public class StorageUnitManager implements PersistentItem{
 		
 		if(!canAddStorageUnit(unit))
 			throw new IllegalArgumentException();
-		
+		PersistentFactory.getFactory().getStorageUnitDAO().create(unit.getDataObject());
 		storageUnits.put(unit.getName(), unit);
 	}
 	
@@ -158,5 +160,11 @@ public class StorageUnitManager implements PersistentItem{
 				return unit1.getName().compareTo(unit2.getName());
 			}
 		});
+	}
+
+	@Override
+	public DataObject getDataObject() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

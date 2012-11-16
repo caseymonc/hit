@@ -15,6 +15,7 @@ import model.entities.ProductContainer;
 import model.entities.ProductGroup;
 import model.entities.StorageUnit;
 import model.persistence.PersistentItem;
+import model.persistence.DataObjects.DataObject;
 
 /**
  *
@@ -196,5 +197,11 @@ public class ProductGroupManager implements PersistentItem{
 		productGroupsByStorageUnit.get(oldGroup.getStorageUnit()).add(oldGroup);
 		productGroups.add(oldGroup);
 		
+	}
+
+	@Override
+	public DataObject getDataObject() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

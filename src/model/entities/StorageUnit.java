@@ -9,6 +9,7 @@ import java.util.Map;
 import reports.visitors.ProductGroupVisitor;
 import reports.visitors.Visitor;
 import model.persistence.PersistentItem;
+import model.persistence.DataObjects.DataObject;
 
 /** StorageUnit
  * A Storage Unit is a room, closet, pantry, cupboard, 
@@ -103,6 +104,12 @@ private Map<Product, ProductContainer> productContainerByProduct;
 	@Override
 	public void accept(Visitor visitor) {
 		visitor.visitStorageUnit(this);
+	}
+
+	@Override
+	public DataObject getDataObject() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	/*@Override

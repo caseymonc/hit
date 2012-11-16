@@ -12,6 +12,7 @@ import model.entities.BarCode;
 import model.entities.Item;
 import model.entities.ProductContainer;
 import model.persistence.PersistentItem;
+import model.persistence.DataObjects.DataObject;
 
 
 /**
@@ -141,5 +142,11 @@ public class ItemManager implements PersistentItem
 		for(Item item : removedItemsByBarCode.values()){
 			visitor.visitItem(item);
 		}
+	}
+
+	@Override
+	public DataObject getDataObject() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

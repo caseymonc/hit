@@ -2,6 +2,7 @@ package model;
 
 import model.entities.BarCode;
 import model.persistence.PersistentItem;
+import model.persistence.DataObjects.DataObject;
 
 /**
  * Generates Valid UPC-A BarCodes
@@ -118,5 +119,11 @@ public class BarCodeGenerator implements PersistentItem {
 		String retVal = "";
 		retVal +=  result;
 		return retVal;
+	}
+
+	@Override
+	public DataObject getDataObject() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

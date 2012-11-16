@@ -11,7 +11,8 @@ import model.barcode.BarCodeLookupRegistry;
 import model.controllers.*;
 import model.managers.*;
 import model.persistence.PersistentItem;
-import model.persistence.PersistentStore;
+import model.persistence.PersistentFactory;
+import model.persistence.DataObjects.DataObject;
 
 /** CoreObjectModel
  * This class stores the rootUnit which is the root of a tree 
@@ -42,9 +43,9 @@ public class CoreObjectModel implements PersistentItem{
 	{
 		if(_instance == null)
 		{
-			if(PersistentStore.getSelectedStore() != null){
+			if(PersistentFactory.getFactory() != null){
 				//System.out.println("Get CoreObjectModel From Persistent Serializer");
-				_instance = PersistentStore.getSelectedStore().getCoreObjectModel();
+				_instance = PersistentFactory.getFactory().getCoreObjectModel();
 			}
 			
 			if(_instance == null){
@@ -133,4 +134,9 @@ public class CoreObjectModel implements PersistentItem{
 		return registry;
 	}
 	
+	@Override
+	public DataObject getDataObject() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

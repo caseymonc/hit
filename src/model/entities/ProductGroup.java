@@ -1,5 +1,6 @@
 package model.entities;
 
+import model.persistence.DataObjects.DataObject;
 import reports.visitors.ProductGroupVisitor;
 import reports.visitors.Visitor;
 
@@ -102,6 +103,12 @@ public class ProductGroup extends ProductContainer{
 			size.add(group.getCurrentSupply());
 		}
 		return size;
+	}
+
+	@Override
+	public DataObject getDataObject() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	/*@Override

@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import model.persistence.PersistentItem;
+import model.persistence.DataObjects.DataObject;
 
 /**
  * Product A bar-coded product that can be stored in a Storage Unit. Example
@@ -337,5 +338,11 @@ public class Product implements PersistentItem {
 	 */
 	public String toString(){
 		return this.getDescription();
+	}
+
+	@Override
+	public DataObject getDataObject() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

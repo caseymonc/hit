@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.Set;
 import model.entities.*;
 import model.persistence.PersistentItem;
+import model.persistence.DataObjects.DataObject;
 import reports.visitors.ItemVisitor;
 import reports.visitors.ProductVisitor;
 
@@ -481,5 +482,11 @@ public class ProductManager implements PersistentItem {
 				productVisitor.visitProduct(product);
 			}
 		}
+	}
+
+	@Override
+	public DataObject getDataObject() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
