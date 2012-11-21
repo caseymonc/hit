@@ -3,6 +3,7 @@
  * and open the template in the editor.
  */
 package model.managers;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -78,12 +79,13 @@ public class StorageUnitManager implements PersistentItem{
 	 * @param unit The StorageUnit to be added
 	 * @throws IllegalArgumentException if the StorageUnit cannot be added
 	 */
-	public void addStorageUnit(StorageUnit unit) {
+	public void addStorageUnit(StorageUnit unit) throws SQLException{
 		assert(canAddStorageUnit(unit));
 		
 		if(!canAddStorageUnit(unit))
 			throw new IllegalArgumentException();
-		//PersistentFactory.getFactory().getStorageUnitDAO().create(unit.getDataObject());
+		
+		PersistentFactory.getFactory().getStorageUnitDAO().create(unit.getDataObject());
 		storageUnits.put(unit.getName(), unit);
 	}
 	

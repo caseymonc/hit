@@ -3,6 +3,7 @@
  */
 package model.controllers;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Observable;
 
@@ -11,6 +12,7 @@ import model.Hint;
 import model.entities.*;
 import model.managers.ProductGroupManager;
 import model.managers.StorageUnitManager;
+import model.persistence.ConnectionManager;
 
 /** Controller that communicates with the controller in the MVC structure
  *	Acts like a facade in dealing with the rest of the model. 
@@ -96,7 +98,21 @@ public class StorageUnitController extends ModelController{
 		if(!canAddStorageUnit(unit)){
 			throw new IllegalArgumentException();
 		}
-		COM.getStorageUnitManager().addStorageUnit(unit);
+		
+		//Open Database Connection and start transaction
+		ConnectionManager manager = ConnectionManager.getConnectionManager();
+		manager.startTransaction();
+		
+		try{
+			COM.getStorageUnitManager().addStorageUnit(unit);
+			manager.setTransactionSuccessful();
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
+		
+		//Close the Database and close the connection
+		manager.endTransaction();
+		
 		this.setChanged();
 		this.notifyObservers(new Hint(unit, Hint.Value.Add));
 		

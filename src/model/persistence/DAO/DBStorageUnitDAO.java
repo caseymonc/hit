@@ -12,8 +12,7 @@ public class DBStorageUnitDAO extends StorageUnitDAO {
 
 	@Override
 	public void create(DataObject obj) {
-		// TODO Auto-generated method stub
-
+		
 	}
 
 	@Override

@@ -1,29 +1,21 @@
 package model.persistence;
 
-public class SerializableConnectionManager extends AbstractConnectionManager {
+import java.sql.Connection;
+
+public class SerializableConnectionManager extends ConnectionManager {
 
 	@Override
-	public void startTransaction() {
-		// TODO Auto-generated method stub
+	public void startTransaction() { }
 
+	@Override
+	public Connection getConnection() {
+		return null;
 	}
 
 	@Override
-	public void getConnection() {
-		// TODO Auto-generated method stub
-
-	}
+	public void setTransactionSuccessful() { }
 
 	@Override
-	public void setTransactionSuccessful() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void endTransaction() {
-		// TODO Auto-generated method stub
-
-	}
+	public void endTransaction() { }
 
 }

@@ -3,10 +3,15 @@ package gui.main;
 
 import javax.swing.*;
 
+import model.persistence.ConnectionManager;
+import model.persistence.DatabaseConnectionManager;
+import model.persistence.DatabaseFactory;
+import model.persistence.SerializableConnectionManager;
 import model.persistence.SerializerFactory;
 import model.persistence.PersistentFactory;
 
 import java.awt.event.*;
+import java.sql.SQLException;
 
 import gui.common.*;
 import gui.inventory.*;
@@ -28,7 +33,22 @@ public final class GUI extends JFrame implements IMainView {
 
 	private GUI(String[] args) {
 		super("Home Inventory Tracker");		
-		PersistentFactory.setSelectedStore(new SerializerFactory());
+		if(/*args.length > 0 && args[0].equals("sql")*/true){
+			PersistentFactory.setSelectedStore(new DatabaseFactory());
+			DatabaseConnectionManager manager = new DatabaseConnectionManager();
+			ConnectionManager.setConnectionManager(manager);
+			
+			try {
+				manager.createTables();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}else{
+			PersistentFactory.setSelectedStore(new SerializerFactory());
+			ConnectionManager.setConnectionManager(new SerializableConnectionManager());
+		}
+		
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent evt) {
