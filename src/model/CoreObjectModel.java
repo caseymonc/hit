@@ -55,6 +55,7 @@ public class CoreObjectModel implements PersistentItem{
 		}
 		return _instance;
 	}
+	
 	private CoreObjectModel()
 	{
 		productManager = new ProductManager();
@@ -65,6 +66,10 @@ public class CoreObjectModel implements PersistentItem{
 		registry = new BarCodeLookupRegistry();
 	}
 
+	public static CoreObjectModel getNewInstance() {
+		return new CoreObjectModel();
+	}
+	
 	public void resetInstance(){
 		_instance = null;
 		ProductController.resetInstance();

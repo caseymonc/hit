@@ -21,6 +21,7 @@ import model.entities.StorageUnit;
 import model.persistence.PersistentItem;
 import model.persistence.PersistentFactory;
 import model.persistence.DataObjects.DataObject;
+import model.persistence.DataObjects.StorageUnitDO;
 
 /**
  *
@@ -168,5 +169,10 @@ public class StorageUnitManager implements PersistentItem{
 	public DataObject getDataObject() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	public void addStorageUnit(StorageUnitDO unitObject) {
+		StorageUnit unit = unitObject.toStorageUnit();
+		storageUnits.put(unit.getName(), unit);
 	}
 }

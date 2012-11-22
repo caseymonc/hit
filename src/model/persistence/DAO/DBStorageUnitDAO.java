@@ -1,15 +1,48 @@
 package model.persistence.DAO;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import model.persistence.ConnectionManager;
 import model.persistence.DataObjects.DataObject;
+import model.persistence.DataObjects.StorageUnitDO;
 
 public class DBStorageUnitDAO extends StorageUnitDAO {
 
+	private static final String READ_ALL = "SELECT name FROM ProductContainers WHERE parent_id IS NULL";
+	
+	/**
+	 * gets a list of StorageUnit data objects
+	 * @return a list of StorageUnit data objects
+	 */
 	@Override
-	public DataObject[] readAll() {
-		// TODO Auto-generated method stub
-		return null;
+	public ArrayList<StorageUnitDO> readAll() throws SQLException {
+		
+		ConnectionManager connectionManager = ConnectionManager.getConnectionManager();
+		Connection connection = connectionManager.getConnection();
+		
+		Statement stmt = connection.createStatement();
+		ResultSet results = stmt.executeQuery(READ_ALL);
+		
+		ArrayList<StorageUnitDO> unitObjects = new ArrayList();
+		
+		while(results.next()){
+			String name = results.getString("name");
+			StorageUnitDO unitObject = new StorageUnitDO(name);
+			unitObjects.add(unitObject);
+		}
+		
+		return unitObjects;
 	}
 
+//	@Override
+//	public DataObject[] readAll() {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
+	
 	@Override
 	public void create(DataObject obj) {
 		

@@ -114,9 +114,9 @@ public class DatabaseConnectionManager extends ConnectionManager {
 	+"("
 	+		"\"container_id\" INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL  UNIQUE , "
 	+		"\"name\" TEXT NOT NULL , "
-	+		"\"three_month_supply_value\" FLOAT NOT NULL , "
-	+		"\"three_month_supply_unit\" TEXT NOT NULL , "
-	+		"\"parent_id\" INTEGER NOT NULL "
+	+		"\"three_month_supply_value\" FLOAT , "
+	+		"\"three_month_supply_unit\" TEXT , "
+	+		"\"parent_id\" INTEGER "
 	+	")";
 		
 	private static final String CREATE_P_PC = "CREATE TABLE IF NOT EXISTS \"p_pc\" "

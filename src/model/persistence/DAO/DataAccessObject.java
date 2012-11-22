@@ -10,7 +10,7 @@ public abstract class DataAccessObject {
 	 * Get an array of all of this type of object
 	 * @return DataObject[] of all items of this DAO type
 	 */
-	public abstract DataObject[] readAll() throws SQLException;
+//	public abstract DataObject[] readAll() throws SQLException;
 	
 	/**
 	 * Create a row in the table for obj
