@@ -8,8 +8,19 @@ public class ProductGroupDO extends DataObject {
 	/** The name of the product group*/
 	private String name;
 	
-	/** The three month supply of the producf group*/
-	private String threeMonthSupply;
+	/** The three month supply of the product group*/
+	private float threeMonthSupplyVal;
+	
+	private String threeMonthSupplyUnit;
+	
+	public ProductGroupDO(long id, String name, long containerId, 
+			float threeMonthSupplyVal, String threeMonthSupplyUnit) {
+		setId(id);
+		this.name = name;
+		this.containerId = containerId;
+		this.threeMonthSupplyVal = threeMonthSupplyVal;
+		this.threeMonthSupplyUnit = threeMonthSupplyUnit;
+	}
 	
 	/**
 	 * Set the container id
@@ -44,18 +55,34 @@ public class ProductGroupDO extends DataObject {
 	}
 	
 	/**
-	 * set the three month supply
-	 * @param threeMonthSupply
+	 * set the three month supply value
+	 * @param threeMonthSupplyVal
 	 */
-	public void setThreeMonthSupply(String threeMonthSupply) {
-		this.threeMonthSupply = threeMonthSupply;
+	public void setThreeMonthSupplyVal(float threeMonthSupplyVal) {
+		this.threeMonthSupplyVal = threeMonthSupplyVal;
 	}
 	
 	/**
-	 * get the three month supply
+	 * get the three month supply value
 	 * @return
 	 */
-	public String getThreeMonthSupply() {
-		return threeMonthSupply;
+	public float getThreeMonthSupplyVal() {
+		return threeMonthSupplyVal;
+	}
+	
+	/**
+	 * set the three month supply unit
+	 * @param threeMonthSupplyUnit
+	 */
+	public void setThreeMonthSupplyUnit(String threeMonthSupplyValUnit) {
+		this.threeMonthSupplyUnit = threeMonthSupplyUnit;
+	}
+	
+	/**
+	 * get the three month supply unit
+	 * @return
+	 */
+	public String getThreeMonthSupplyUnit() {
+		return threeMonthSupplyUnit;
 	}
 }

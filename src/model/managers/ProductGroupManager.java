@@ -16,6 +16,7 @@ import model.entities.ProductGroup;
 import model.entities.StorageUnit;
 import model.persistence.PersistentItem;
 import model.persistence.DataObjects.DataObject;
+import model.persistence.DataObjects.ProductGroupDO;
 
 /**
  *
@@ -203,5 +204,26 @@ public class ProductGroupManager implements PersistentItem{
 	public DataObject getDataObject() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	public void addProductGroupFromDB(ProductGroup group) {
+		
+		group.getContainer().addProductGroup(group);
+		
+		if(productGroupsByStorageUnit.get(group.getStorageUnit()) == null) {
+			productGroupsByStorageUnit.put(group.getStorageUnit(), new HashSet<ProductGroup>());
+		}
+		
+		productGroupsByStorageUnit.get(group.getStorageUnit()).add(group);
+		
+		Map<String, ProductGroup> groups = 
+				productGroupsByProductContainer.get(group.getContainer());
+		if(groups == null) {
+			productGroupsByProductContainer.put(group.getContainer(), 
+					new HashMap<String, ProductGroup>());
+			groups = productGroupsByProductContainer.get(group.getContainer());
+		}
+		groups.put(group.getName(), group);
+		productGroups.add(group);
 	}
 }

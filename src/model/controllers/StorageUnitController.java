@@ -12,6 +12,7 @@ import model.entities.*;
 import model.managers.ProductGroupManager;
 import model.managers.StorageUnitManager;
 import model.persistence.ConnectionManager;
+import model.persistence.DataObjects.StorageUnitDO;
 
 /** Controller that communicates with the controller in the MVC structure
  *	Acts like a facade in dealing with the rest of the model. 
@@ -181,6 +182,10 @@ public class StorageUnitController extends ModelController{
 		pgManager.removeProductGroups(unit);
 		this.setChanged();
 		this.notifyObservers(new Hint(unit, Hint.Value.Delete));
+	}
+
+	public void addStorageUnitFromDB(StorageUnit unit) {
+		COM.getStorageUnitManager().addStorageUnitFromDB(unit);
 	}
 
 }

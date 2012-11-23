@@ -6,7 +6,8 @@ public class StorageUnitDO extends DataObject {
 	/** The name of the storage unit*/
 	private String name;
 
-	public StorageUnitDO(String name) {
+	public StorageUnitDO(long id, String name) {
+		setId(id);
 		this.name = name;
 	}
 	
@@ -24,13 +25,5 @@ public class StorageUnitDO extends DataObject {
 	 */
 	public String getName() {
 		return name;
-	}
-	
-	/**
-	 * Converts a StrageUnitDO to an actual storageUnit
-	 * @return 
-	 */
-	public StorageUnit toStorageUnit(){
-		return new StorageUnit(name);
 	}
 }

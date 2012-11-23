@@ -67,7 +67,8 @@ public class CoreObjectModel implements PersistentItem{
 	}
 
 	public static CoreObjectModel getNewInstance() {
-		return new CoreObjectModel();
+		_instance = new CoreObjectModel();
+		return _instance;
 	}
 	
 	public void resetInstance(){

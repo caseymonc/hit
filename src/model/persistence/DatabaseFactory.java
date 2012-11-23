@@ -7,10 +7,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import model.CoreObjectModel;
+import model.controllers.ProductGroupController;
 import model.controllers.StorageUnitController;
-import model.entities.Item;
-import model.entities.Product;
 import model.entities.ProductContainer;
+import model.entities.*;
+import model.managers.ProductGroupManager;
 import model.managers.StorageUnitManager;
 import model.persistence.DAO.DBItemDAO;
 import model.persistence.DAO.DBProductDAO;
@@ -34,7 +35,7 @@ public class DatabaseFactory extends PersistentFactory {
 		connectionManager.startTransaction();
 		
 		try {
-			addStorageUnits(COM);
+			addProductContainers(COM);
 			connectionManager.setTransactionSuccessful();
 		} catch (SQLException ex) {
 			ex.printStackTrace();
@@ -46,15 +47,49 @@ public class DatabaseFactory extends PersistentFactory {
 		return COM;
 	}
 
-	private void addStorageUnits(CoreObjectModel COM) throws SQLException{
+	private void addProductContainers(CoreObjectModel COM) throws SQLException{
 		StorageUnitDAO unitDAO = new DBStorageUnitDAO();
-		ArrayList<StorageUnitDO> unitObjects;
-		StorageUnitManager suManager = COM.getStorageUnitManager();
+		ProductGroupDAO groupDAO = new DBProductGroupDAO();
+		StorageUnitController suController = COM.getStorageUnitController();
 		
-		unitObjects = unitDAO.readAll();
+		ArrayList<StorageUnitDO> unitDOs = unitDAO.readAll();
+		ArrayList<ProductGroupDO> groupDOs = groupDAO.readAll();
 		
-		for(StorageUnitDO unitObject : unitObjects){
-			suManager.addStorageUnit(unitObject);
+		for(StorageUnitDO unitDO : unitDOs){
+			StorageUnit unit = new StorageUnit(unitDO.getName());
+			suController.addStorageUnitFromDB(unit);
+			
+			for(ProductGroupDO groupDO : groupDOs){
+				if(groupDO.getContainerId() == unitDO.getId()){
+					addProductGroups(groupDO, unit, groupDOs, COM);
+				}
+			}
+		}
+	}
+	
+	private void addProductGroups(ProductGroupDO groupDO, ProductContainer container, 
+			ArrayList<ProductGroupDO> groupDOs, CoreObjectModel COM) {
+		
+		ProductGroupController pgController = COM.getProductGroupController();
+		
+		Size supply = new Size(Unit.valueOf(groupDO.getThreeMonthSupplyUnit()), 
+				groupDO.getThreeMonthSupplyVal());
+		
+		ProductGroup group = new ProductGroup(groupDO.getName(), container, supply);
+		
+		if(container instanceof StorageUnit){
+			group.setStorageUnit((StorageUnit)container);
+		} else {
+			group.setStorageUnit(container.getStorageUnit());
+		}
+		
+		pgController.addProductGroupFromDB(group);
+		
+		for(ProductGroupDO childGroupDO : groupDOs){
+			if(childGroupDO.getContainerId() == groupDO.getId() && 
+					childGroupDO.getId() != groupDO.getId()){
+				addProductGroups(childGroupDO, group, groupDOs, COM);
+			}
 		}
 	}
 	

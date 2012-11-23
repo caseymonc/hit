@@ -11,7 +11,7 @@ import model.persistence.DataObjects.StorageUnitDO;
 
 public class DBStorageUnitDAO extends StorageUnitDAO {
 
-	private static final String READ_ALL = "SELECT name FROM ProductContainers WHERE parent_id IS NULL";
+	private static final String READ_ALL = "SELECT container_id, name FROM ProductContainers WHERE parent_id IS NULL";
 	
 	/**
 	 * gets a list of StorageUnit data objects
@@ -29,9 +29,10 @@ public class DBStorageUnitDAO extends StorageUnitDAO {
 		ArrayList<StorageUnitDO> unitObjects = new ArrayList();
 		
 		while(results.next()){
+			long id = Long.parseLong(results.getString("container_id"));
 			String name = results.getString("name");
-			StorageUnitDO unitObject = new StorageUnitDO(name);
-			unitObjects.add(unitObject);
+			StorageUnitDO unitDO = new StorageUnitDO(id, name);
+			unitObjects.add(unitDO);
 		}
 		
 		return unitObjects;

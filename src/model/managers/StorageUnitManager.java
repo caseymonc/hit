@@ -171,8 +171,7 @@ public class StorageUnitManager implements PersistentItem{
 		return null;
 	}
 
-	public void addStorageUnit(StorageUnitDO unitObject) {
-		StorageUnit unit = unitObject.toStorageUnit();
+	public void addStorageUnitFromDB(StorageUnit unit) {
 		storageUnits.put(unit.getName(), unit);
 	}
 }

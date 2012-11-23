@@ -8,7 +8,13 @@ import model.CoreObjectModel;
 import model.Hint;
 import model.entities.ProductContainer;
 import model.entities.ProductGroup;
+import model.entities.Size;
+import model.entities.StorageUnit;
+import model.entities.Unit;
 import model.managers.ProductGroupManager;
+import model.persistence.DataObjects.DataObject;
+import model.persistence.DataObjects.ProductGroupDO;
+import model.persistence.DataObjects.StorageUnitDO;
 
 /**
  *
@@ -164,5 +170,9 @@ public class ProductGroupController extends ModelController{
 		this.setChanged();
 		this.notifyObservers(new Hint(group, Hint.Value.Delete));
 		
+	}
+
+	public void addProductGroupFromDB(ProductGroup group) {
+		COM.getProductGroupManager().addProductGroupFromDB(group);
 	}
 }
