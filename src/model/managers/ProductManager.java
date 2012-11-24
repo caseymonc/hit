@@ -511,4 +511,16 @@ public class ProductManager implements PersistentItem {
 		p.addProductContainer(c);
 		c.addProduct(p);
 	}
+
+	public void addItemToProductFromDB(Product p, Item i) {
+		if (currentItemsByProduct.containsKey(p) && allItemsByProduct.containsKey(p)) {
+			currentItemsByProduct.get(p).add(i);
+			allItemsByProduct.get(p).add(i);
+			// A product's creation date is equal to the earliest entry
+			// date of any its items.
+			if (p.getCreationDate().compareTo(i.getEntryDate()) > 0) {
+				p.setCreationDate(i.getEntryDate());
+			}
+		}
+	}
 }

@@ -149,4 +149,10 @@ public class ItemManager implements PersistentItem
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	public void addItemFromDB(Item i) {
+		if(canAddItem(i)) {
+			itemsByBarCode.put(i.getBarCode(), i);		
+		}
+	}
 }

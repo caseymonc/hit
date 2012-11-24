@@ -4,6 +4,8 @@ import java.text.*;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Utility class containing date/time functionality
@@ -117,6 +119,22 @@ public final class DateUtils {
 		String resultText = formatDateTime(result);
 		if (!resultText.equals(text)) {
 			throw new ParseException("Invalid date/time", 0);
+		}
+		return result;
+	}
+	
+	public static Date parseSQLDateTime(String text) {
+		
+		if(text == null){
+			return null;
+		}
+		
+		SimpleDateFormat dateformatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+		Date result;
+		try {
+			result = dateformatter.parse(text);
+		} catch (ParseException ex) {
+			result = new Date(0);
 		}
 		return result;
 	}

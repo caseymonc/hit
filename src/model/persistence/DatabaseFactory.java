@@ -1,12 +1,17 @@
 package model.persistence;
 
+import common.util.DateUtils;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import model.CoreObjectModel;
+import model.controllers.ItemController;
 import model.controllers.ProductController;
 import model.controllers.ProductGroupController;
 import model.controllers.StorageUnitController;
@@ -98,12 +103,12 @@ public class DatabaseFactory extends PersistentFactory {
 		addProducts(groupDO.getId(), group, COM);
 	}
 	
-	private void addProducts(long container_id, ProductContainer container, 
+	private void addProducts(long containerId, ProductContainer container, 
 			CoreObjectModel COM) throws SQLException{
 		ProductDAO productDAO = new DBProductDAO();
 		ProductController pController = COM.getProductController();
 		
-		ArrayList<ProductDO> productDOs = productDAO.readAllByContainer(container_id);
+		ArrayList<ProductDO> productDOs = productDAO.readAllByContainer(containerId);
 		
 		for(ProductDO productDO : productDOs){
 			BarCode barCode = new BarCode(productDO.getBarCode());
@@ -113,11 +118,35 @@ public class DatabaseFactory extends PersistentFactory {
 				String description = productDO.getDescription();
 				int shelfLife = productDO.getShelfLife();
 				int threeMonthSupply = productDO.getThreeMonthSupply();
+				Date creationDate = DateUtils.parseSQLDateTime((productDO.getCreationDate()));
+				
 				Size size = new Size(Unit.valueOf(productDO.getSizeUnit()), productDO.getSizeVal());
 				product = new Product(description, barCode, shelfLife, threeMonthSupply, size);
+				product.setCreationDate(creationDate);
 			}
 			
 			pController.addProductToContainerFromDB(product, container);
+			
+			addItems(productDO.getId(), product, containerId, container, COM);
+		}
+	}
+	
+	private void addItems(long productId, Product product, long containerId,
+			ProductContainer container, CoreObjectModel COM) throws SQLException {
+		ItemDAO itemDAO = new DBItemDAO();
+		ItemController iController = COM.getItemController();
+		
+		ArrayList<ItemDO> itemDOs = itemDAO.readAllByProduct(productId, containerId);
+		
+		for(ItemDO itemDO : itemDOs){
+			BarCode barCode = new BarCode(itemDO.getBarCode());
+			Date entryDate = DateUtils.parseSQLDateTime(itemDO.getEntryDate());
+			Date expirationDate = DateUtils.parseSQLDateTime(itemDO.getExpirationDate());
+			Date exitDate = DateUtils.parseSQLDateTime(itemDO.getExitDate());
+			Item item = new Item(barCode, entryDate, expirationDate, product, container);
+			item.setExitDate(exitDate);
+
+			iController.addItemFromDB(item, container.getStorageUnit());
 		}
 	}
 	

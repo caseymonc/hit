@@ -240,6 +240,14 @@ public class Item implements PersistentItem{
 		entryDate = newDate;
 	}
 	
+	public void setExitDate(Date exitDate){
+		this.exitDate = exitDate;	
+	}
+	
+	public void setExpirationDate(Date expirationDate){
+		this.expirationDate = expirationDate;
+	}
+	
 	/**
 	 * calculates the expiration date from the shelf life and the entry date.  
 	 *

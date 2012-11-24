@@ -1,5 +1,7 @@
 package model.persistence.DataObjects;
 
+import java.util.Date;
+
 public class ItemDO extends DataObject {
 
 	/** String representation of the bar code*/
@@ -23,6 +25,17 @@ public class ItemDO extends DataObject {
 	/** Reference to the ProductContainer of this Item*/
 	private long containerId;
 
+	public ItemDO(long id, String barCode, String entryDate, String exitDate, 
+			String expirationDate, long productId, long containerId){
+		setId(id);
+		this.barCode = barCode;
+		this.entryDate = entryDate;
+		this.exitDate = exitDate;
+		this.expirationDate = expirationDate;
+		this.productId = productId;
+		this.containerId = containerId;
+	}
+	
 	/**
 	 * Set the String Representation of the barcode
 	 * @param barCode The barcode as a string

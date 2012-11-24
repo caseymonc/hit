@@ -240,4 +240,10 @@ public class ItemController extends ModelController {
 		return IM.getItemByBarCode(new BarCode(barcode));
 	}
 
+	public void addItemFromDB(Item i, StorageUnit su) {
+		su.addItemFromDB(i);
+		IM.addItemFromDB(i);
+		PC.addItemToProductFromDB(i.getProduct(), i);
+	}
+
 }

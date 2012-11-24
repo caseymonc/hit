@@ -7,4 +7,7 @@ import model.persistence.DataObjects.ItemDO;
 public abstract class ItemDAO extends DataAccessObject {
 
 	public abstract ArrayList<ItemDO> readAll() throws SQLException;
+
+	public abstract ArrayList<ItemDO> readAllByProduct(long productId, long containerId) 
+			throws SQLException;
 }
