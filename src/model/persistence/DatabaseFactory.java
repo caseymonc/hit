@@ -7,6 +7,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import model.CoreObjectModel;
+import model.controllers.ProductController;
 import model.controllers.ProductGroupController;
 import model.controllers.StorageUnitController;
 import model.entities.ProductContainer;
@@ -64,11 +65,13 @@ public class DatabaseFactory extends PersistentFactory {
 					addProductGroups(groupDO, unit, groupDOs, COM);
 				}
 			}
+			
+			addProducts(unitDO.getId(), unit, COM);
 		}
 	}
 	
 	private void addProductGroups(ProductGroupDO groupDO, ProductContainer container, 
-			ArrayList<ProductGroupDO> groupDOs, CoreObjectModel COM) {
+			ArrayList<ProductGroupDO> groupDOs, CoreObjectModel COM) throws SQLException {
 		
 		ProductGroupController pgController = COM.getProductGroupController();
 		
@@ -90,6 +93,31 @@ public class DatabaseFactory extends PersistentFactory {
 					childGroupDO.getId() != groupDO.getId()){
 				addProductGroups(childGroupDO, group, groupDOs, COM);
 			}
+		}
+		
+		addProducts(groupDO.getId(), group, COM);
+	}
+	
+	private void addProducts(long container_id, ProductContainer container, 
+			CoreObjectModel COM) throws SQLException{
+		ProductDAO productDAO = new DBProductDAO();
+		ProductController pController = COM.getProductController();
+		
+		ArrayList<ProductDO> productDOs = productDAO.readAllByContainer(container_id);
+		
+		for(ProductDO productDO : productDOs){
+			BarCode barCode = new BarCode(productDO.getBarCode());
+			Product product = pController.getProductByBarCode(barCode);
+			
+			if(product == null) {
+				String description = productDO.getDescription();
+				int shelfLife = productDO.getShelfLife();
+				int threeMonthSupply = productDO.getThreeMonthSupply();
+				Size size = new Size(Unit.valueOf(productDO.getSizeUnit()), productDO.getSizeVal());
+				product = new Product(description, barCode, shelfLife, threeMonthSupply, size);
+			}
+			
+			pController.addProductToContainerFromDB(product, container);
 		}
 	}
 	

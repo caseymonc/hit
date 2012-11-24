@@ -17,9 +17,23 @@ public class ProductDO extends DataObject {
 	/** The three month supply of the product*/
 	private int threeMonthSupply;
 	
-	/** The size of the product as a JSON String*/
-	private String size;
+	/** The size value of the product */
+	private float sizeVal;
 
+	/** The size unit of the product */
+	private String sizeUnit;
+	
+	public ProductDO(long id, String description, String creationDate, String barCode, 
+			int shelfLife, int threeMonthSupply, float sizeVal, String sizeUnit) {
+		setId(id);
+		this.description = description;
+		this.creationDate = creationDate;
+		this.barCode = barCode;
+		this.shelfLife = shelfLife;
+		this.threeMonthSupply = threeMonthSupply;
+		this.sizeVal = sizeVal;
+		this.sizeUnit = sizeUnit;
+	}
 	
 	/**
 	 * Set the description
@@ -102,18 +116,34 @@ public class ProductDO extends DataObject {
 	}
 
 	/**
-	 * Set the size
+	 * Set the size unit
 	 * @param size
 	 */
-	public void setSize(String size) {
-		this.size = size;
+	public void setSizeUnit(String sizeUnit) {
+		this.sizeUnit = sizeUnit;
 	}
 
 	/**
-	 * get the size
-	 * @return
+	 * get the size unit
+	 * @return size unit
 	 */
-	public String getSize() {
-		return size;
+	public String getSizeUnit() {
+		return sizeUnit;
+	}
+	
+	/**
+	 * Set the size value
+	 * @param size value
+	 */
+	public void setSizeVal(float sizeVal) {
+		this.sizeVal = sizeVal;
+	}
+
+	/**
+	 * get the size value
+	 * @return the size value
+	 */
+	public float getSizeVal() {
+		return sizeVal;
 	}
 }

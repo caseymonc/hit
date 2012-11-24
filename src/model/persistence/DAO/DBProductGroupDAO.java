@@ -27,7 +27,7 @@ public class DBProductGroupDAO extends ProductGroupDAO {
 		Statement stmt = connection.createStatement();
 		ResultSet results = stmt.executeQuery(READ_ALL);
 		
-		ArrayList<ProductGroupDO> unitObjects = new ArrayList();
+		ArrayList<ProductGroupDO> groupDos = new ArrayList();
 		
 		while(results.next()){
 			long id = results.getLong("container_id");
@@ -36,10 +36,10 @@ public class DBProductGroupDAO extends ProductGroupDAO {
 			float supplyVal = results.getFloat("three_month_supply_value");
 			String supplyUnit = results.getString("three_month_supply_unit");
 			ProductGroupDO groupDO = new ProductGroupDO(id, name, contId, supplyVal, supplyUnit);
-			unitObjects.add(groupDO);
+			groupDos.add(groupDO);
 		}
 		
-		return unitObjects;
+		return groupDos;
 	}
 
 //	@Override

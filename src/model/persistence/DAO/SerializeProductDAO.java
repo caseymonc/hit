@@ -1,5 +1,6 @@
 package model.persistence.DAO;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import model.persistence.DataObjects.DataObject;
 import model.persistence.DataObjects.ProductDO;
@@ -38,6 +39,11 @@ public class SerializeProductDAO extends ProductDAO {
 	public void update(DataObject obj) {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public ArrayList<ProductDO> readAllByContainer(long container_id) throws SQLException {
+		return null;
 	}
 
 }

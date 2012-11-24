@@ -489,4 +489,26 @@ public class ProductManager implements PersistentItem {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	public void addProductToContainerFromDB(Product p, ProductContainer c) {
+		if (productsByBarCode.containsKey(p.getBarCode()) == false) {
+			addProduct(p);
+		}
+
+		// Check to see if p is already contained somewhere in c's storage unit
+		Set<ProductContainer> containerSet = p.getContainers();
+		ProductContainer[] containers = containerSet.toArray(new ProductContainer[0]);
+		System.out.println("Containers: " + containers);
+		for (ProductContainer container : containers) {
+			if (container.getStorageUnit().equals(c.getStorageUnit())) {
+				container.moveProduct(p);
+				p.removeProductContainer(container);
+			}
+		}
+		assert (!p.getContainers().contains(c));
+
+		c.getStorageUnit().setContainerByProduct(p, c);
+		p.addProductContainer(c);
+		c.addProduct(p);
+	}
 }
