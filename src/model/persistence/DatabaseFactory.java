@@ -62,6 +62,7 @@ public class DatabaseFactory extends PersistentFactory {
 		for(StorageUnitDO unitDO : unitDOs){
 			StorageUnit unit = new StorageUnit(unitDO.getName());
 			suManager.doAddStorageUnit(unit);
+			unit.setId(unitDO.getId());
 			
 			for(ProductGroupDO groupDO : groupDOs){
 				if(groupDO.getContainerId() == unitDO.getId()){
@@ -82,6 +83,7 @@ public class DatabaseFactory extends PersistentFactory {
 				groupDO.getThreeMonthSupplyVal());
 		
 		ProductGroup group = new ProductGroup(groupDO.getName(), container, supply);
+		group.setId(groupDO.getId());
 		
 		if(container instanceof StorageUnit){
 			group.setStorageUnit((StorageUnit)container);
@@ -121,6 +123,7 @@ public class DatabaseFactory extends PersistentFactory {
 				Size size = new Size(Unit.valueOf(productDO.getSizeUnit()), productDO.getSizeVal());
 				product = new Product(description, barCode, shelfLife, threeMonthSupply, size);
 				product.setCreationDate(creationDate);
+				product.setId(productDO.getId());
 			}
 			
 			pManager.doAddProductToContainer(product, container);

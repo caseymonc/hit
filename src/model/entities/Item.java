@@ -69,6 +69,8 @@ public class Item implements PersistentItem{
 	 */
 	private ProductContainer container;
 	
+	private long _id;
+	
 	/** Constructor - creates a new Item using the following params:
 	 * 
 	 * @param barCode
@@ -385,6 +387,14 @@ public class Item implements PersistentItem{
 	public DataObject getDataObject() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	public void setId(long _id) {
+		this._id = _id;
+	}
+
+	public long getId() {
+		return _id;
 	}
 	
 }

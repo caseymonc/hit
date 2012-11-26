@@ -61,6 +61,8 @@ public class Product implements PersistentItem {
 	 */
 	private Set<ProductContainer> containers;
 
+	private long _id;
+	
 	/**
 	 * Constructor
 	 *
@@ -344,5 +346,13 @@ public class Product implements PersistentItem {
 	public DataObject getDataObject() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	public void setId(long _id) {
+		this._id = _id;
+	}
+
+	public long getId() {
+		return _id;
 	}
 }

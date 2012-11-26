@@ -54,6 +54,8 @@ public abstract class ProductContainer implements PersistentItem{
 	/** The name of this ProductContainer*/
 	private String name; 
 	
+	private long _id;
+	
 	/**
 	 * Constructor
 	 * @param name the name of ProductContainer
@@ -598,5 +600,13 @@ public abstract class ProductContainer implements PersistentItem{
 		
 		if(!preOrder)
 			accept(visitor);
+	}
+
+	public void setId(long _id) {
+		this._id = _id;
+	}
+
+	public long getId() {
+		return _id;
 	}
 }
