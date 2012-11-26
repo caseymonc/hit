@@ -173,6 +173,6 @@ public class ProductGroupController extends ModelController{
 	}
 
 	public void addProductGroupFromDB(ProductGroup group) {
-		COM.getProductGroupManager().addProductGroupFromDB(group);
+		COM.getProductGroupManager().doAddProductGroup(group);
 	}
 }
