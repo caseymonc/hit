@@ -87,7 +87,7 @@ public class StorageUnitManager implements PersistentItem{
 			throw new IllegalArgumentException();
 		
 		PersistentFactory.getFactory().getStorageUnitDAO().create(unit.getDataObject());
-		storageUnits.put(unit.getName(), unit);
+		doAddStorageUnit(unit);
 	}
 	
 	/**
@@ -171,7 +171,12 @@ public class StorageUnitManager implements PersistentItem{
 		return null;
 	}
 
-	public void addStorageUnitFromDB(StorageUnit unit) {
+	public void doAddStorageUnit(StorageUnit unit) {
+		assert(canAddStorageUnit(unit));
+		
+		if(!canAddStorageUnit(unit))
+			throw new IllegalArgumentException();
+		
 		storageUnits.put(unit.getName(), unit);
 	}
 }

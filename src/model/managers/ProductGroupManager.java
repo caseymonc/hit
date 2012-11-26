@@ -77,23 +77,7 @@ public class ProductGroupManager implements PersistentItem{
 			throw new IllegalArgumentException();
 		}
 		
-		group.getContainer().addProductGroup(group);
-		
-		if(productGroupsByStorageUnit.get(group.getStorageUnit()) == null) {
-			productGroupsByStorageUnit.put(group.getStorageUnit(), new HashSet<ProductGroup>());
-		}
-		
-		productGroupsByStorageUnit.get(group.getStorageUnit()).add(group);
-		
-		Map<String, ProductGroup> groups = 
-				productGroupsByProductContainer.get(group.getContainer());
-		if(groups == null) {
-			productGroupsByProductContainer.put(group.getContainer(), 
-					new HashMap<String, ProductGroup>());
-			groups = productGroupsByProductContainer.get(group.getContainer());
-		}
-		groups.put(group.getName(), group);
-		productGroups.add(group);
+		doAddProductGroup(group);
 	}
 	
 	/**
@@ -206,7 +190,12 @@ public class ProductGroupManager implements PersistentItem{
 		return null;
 	}
 
-	public void addProductGroupFromDB(ProductGroup group) {
+	public void doAddProductGroup(ProductGroup group) {
+		assert(canAddProductGroup(group));
+		
+		if(!canAddProductGroup(group)) {
+			throw new IllegalArgumentException();
+		}
 		
 		group.getContainer().addProductGroup(group);
 		

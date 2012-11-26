@@ -185,7 +185,7 @@ public class StorageUnitController extends ModelController{
 	}
 
 	public void addStorageUnitFromDB(StorageUnit unit) {
-		COM.getStorageUnitManager().addStorageUnitFromDB(unit);
+		COM.getStorageUnitManager().doAddStorageUnit(unit);
 	}
 
 }
