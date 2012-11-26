@@ -64,9 +64,7 @@ public class ItemManager implements PersistentItem
 			throw new IllegalArgumentException("Cannot add Item: " + i);
 		}
 		
-		if(canAddItem(i)) {
-			itemsByBarCode.put(i.getBarCode(), i);		
-		}
+		doAddItem(i);
 
 	}
 
@@ -150,9 +148,17 @@ public class ItemManager implements PersistentItem
 		return null;
 	}
 
-	public void addItemFromDB(Item i) {
-		if(canAddItem(i)) {
-			itemsByBarCode.put(i.getBarCode(), i);		
+	public void doAddItem(Item i) {
+		if(i == null) {
+			throw new IllegalArgumentException();
 		}
+		
+		assert(canAddItem(i));
+		
+		if(!canAddItem(i)){
+			throw new IllegalArgumentException("Cannot add Item: " + i);
+		}
+		
+		itemsByBarCode.put(i.getBarCode(), i);		
 	}
 }

@@ -284,18 +284,11 @@ public class ProductManager implements PersistentItem {
 			throw new IllegalArgumentException();
 		}
 
-		if (currentItemsByProduct.containsKey(p) && allItemsByProduct.containsKey(p)) {
-			currentItemsByProduct.get(p).add(i);
-			allItemsByProduct.get(p).add(i);
-			// A product's creation date is equal to the earliest entry
-			// date of any its items.
-			if (p.getCreationDate().compareTo(i.getEntryDate()) > 0) {
-				p.setCreationDate(i.getEntryDate());
-			}
-			assert (p.getCreationDate().compareTo(i.getEntryDate()) <= 0);
-		} else {
+		if (!currentItemsByProduct.containsKey(p) || !allItemsByProduct.containsKey(p)) {
 			throw new IllegalArgumentException("The product doesn't exist");
 		}
+		
+		doAddItemToProduct(p, i);
 	}
 
 	/**
@@ -512,15 +505,27 @@ public class ProductManager implements PersistentItem {
 		c.addProduct(p);
 	}
 
-	public void addItemToProductFromDB(Product p, Item i) {
-		if (currentItemsByProduct.containsKey(p) && allItemsByProduct.containsKey(p)) {
-			currentItemsByProduct.get(p).add(i);
-			allItemsByProduct.get(p).add(i);
-			// A product's creation date is equal to the earliest entry
-			// date of any its items.
-			if (p.getCreationDate().compareTo(i.getEntryDate()) > 0) {
-				p.setCreationDate(i.getEntryDate());
-			}
+	public void doAddItemToProduct(Product p, Item i) {
+		assert (p != null);
+		assert (i != null);
+		assert (currentItemsByProduct.containsKey(p));
+		assert (allItemsByProduct.containsKey(p));
+
+		if (p == null || i == null) {
+			throw new IllegalArgumentException();
 		}
+
+		if (!currentItemsByProduct.containsKey(p) || !allItemsByProduct.containsKey(p)) {
+			throw new IllegalArgumentException("The product doesn't exist");
+		}
+		
+		currentItemsByProduct.get(p).add(i);
+		allItemsByProduct.get(p).add(i);
+		// A product's creation date is equal to the earliest entry
+		// date of any its items.
+		if (p.getCreationDate().compareTo(i.getEntryDate()) > 0) {
+			p.setCreationDate(i.getEntryDate());
+		}
+		assert (p.getCreationDate().compareTo(i.getEntryDate()) <= 0);
 	}
 }
