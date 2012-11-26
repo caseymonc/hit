@@ -9,6 +9,7 @@ import java.util.Set;
 
 import model.persistence.PersistentItem;
 import model.persistence.DataObjects.DataObject;
+import model.persistence.DataObjects.ProductDO;
 
 /**
  * Product A bar-coded product that can be stored in a Storage Unit. Example
@@ -344,8 +345,7 @@ public class Product implements PersistentItem {
 
 	@Override
 	public DataObject getDataObject() {
-		// TODO Auto-generated method stub
-		return null;
+		return null;//return new ProductDO(getId(), getDescription(), getCreationDate(), );
 	}
 
 	public void setId(long _id) {
