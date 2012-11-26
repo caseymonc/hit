@@ -11,13 +11,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import model.CoreObjectModel;
-import model.controllers.ItemController;
-import model.controllers.ProductController;
-import model.controllers.ProductGroupController;
-import model.controllers.StorageUnitController;
 import model.entities.ProductContainer;
 import model.entities.*;
+import model.managers.ItemManager;
 import model.managers.ProductGroupManager;
+import model.managers.ProductManager;
 import model.managers.StorageUnitManager;
 import model.persistence.DAO.DBItemDAO;
 import model.persistence.DAO.DBProductDAO;
@@ -56,14 +54,14 @@ public class DatabaseFactory extends PersistentFactory {
 	private void addProductContainers(CoreObjectModel COM) throws SQLException{
 		StorageUnitDAO unitDAO = new DBStorageUnitDAO();
 		ProductGroupDAO groupDAO = new DBProductGroupDAO();
-		StorageUnitController suController = COM.getStorageUnitController();
+		StorageUnitManager suManager = COM.getStorageUnitManager();
 		
 		ArrayList<StorageUnitDO> unitDOs = unitDAO.readAll();
 		ArrayList<ProductGroupDO> groupDOs = groupDAO.readAll();
 		
 		for(StorageUnitDO unitDO : unitDOs){
 			StorageUnit unit = new StorageUnit(unitDO.getName());
-			suController.addStorageUnitFromDB(unit);
+			suManager.doAddStorageUnit(unit);
 			
 			for(ProductGroupDO groupDO : groupDOs){
 				if(groupDO.getContainerId() == unitDO.getId()){
@@ -78,7 +76,7 @@ public class DatabaseFactory extends PersistentFactory {
 	private void addProductGroups(ProductGroupDO groupDO, ProductContainer container, 
 			ArrayList<ProductGroupDO> groupDOs, CoreObjectModel COM) throws SQLException {
 		
-		ProductGroupController pgController = COM.getProductGroupController();
+		ProductGroupManager pgManager = COM.getProductGroupManager();
 		
 		Size supply = new Size(Unit.valueOf(groupDO.getThreeMonthSupplyUnit()), 
 				groupDO.getThreeMonthSupplyVal());
@@ -91,7 +89,7 @@ public class DatabaseFactory extends PersistentFactory {
 			group.setStorageUnit(container.getStorageUnit());
 		}
 		
-		pgController.addProductGroupFromDB(group);
+		pgManager.doAddProductGroup(group);
 		
 		for(ProductGroupDO childGroupDO : groupDOs){
 			if(childGroupDO.getContainerId() == groupDO.getId() && 
@@ -106,13 +104,13 @@ public class DatabaseFactory extends PersistentFactory {
 	private void addProducts(long containerId, ProductContainer container, 
 			CoreObjectModel COM) throws SQLException{
 		ProductDAO productDAO = new DBProductDAO();
-		ProductController pController = COM.getProductController();
+		ProductManager pManager = COM.getProductManager();
 		
 		ArrayList<ProductDO> productDOs = productDAO.readAllByContainer(containerId);
 		
 		for(ProductDO productDO : productDOs){
 			BarCode barCode = new BarCode(productDO.getBarCode());
-			Product product = pController.getProductByBarCode(barCode);
+			Product product = pManager.getProductByBarCode(barCode);
 			
 			if(product == null) {
 				String description = productDO.getDescription();
@@ -125,7 +123,7 @@ public class DatabaseFactory extends PersistentFactory {
 				product.setCreationDate(creationDate);
 			}
 			
-			pController.addProductToContainerFromDB(product, container);
+			pManager.doAddProductToContainer(product, container);
 			
 			addItems(productDO.getId(), product, containerId, container, COM);
 		}
@@ -134,7 +132,7 @@ public class DatabaseFactory extends PersistentFactory {
 	private void addItems(long productId, Product product, long containerId,
 			ProductContainer container, CoreObjectModel COM) throws SQLException {
 		ItemDAO itemDAO = new DBItemDAO();
-		ItemController iController = COM.getItemController();
+		ItemManager iManager = COM.getItemManager();
 		
 		ArrayList<ItemDO> itemDOs = itemDAO.readAllByProduct(productId, containerId);
 		
@@ -146,7 +144,10 @@ public class DatabaseFactory extends PersistentFactory {
 			Item item = new Item(barCode, entryDate, expirationDate, product, container);
 			item.setExitDate(exitDate);
 
-			iController.addItemFromDB(item, container.getStorageUnit());
+			StorageUnit unit = container.getStorageUnit();
+			unit.doAddItem(item);
+			iManager.doAddItem(item);
+			COM.getProductManager().doAddItemToProduct(item.getProduct(), item);
 		}
 	}
 	

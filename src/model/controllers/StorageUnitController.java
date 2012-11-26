@@ -183,9 +183,4 @@ public class StorageUnitController extends ModelController{
 		this.setChanged();
 		this.notifyObservers(new Hint(unit, Hint.Value.Delete));
 	}
-
-	public void addStorageUnitFromDB(StorageUnit unit) {
-		COM.getStorageUnitManager().doAddStorageUnit(unit);
-	}
-
 }

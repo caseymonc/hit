@@ -171,8 +171,4 @@ public class ProductGroupController extends ModelController{
 		this.notifyObservers(new Hint(group, Hint.Value.Delete));
 		
 	}
-
-	public void addProductGroupFromDB(ProductGroup group) {
-		COM.getProductGroupManager().doAddProductGroup(group);
-	}
 }

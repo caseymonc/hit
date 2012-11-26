@@ -119,7 +119,7 @@ private Map<Product, ProductContainer> productContainerByProduct;
 		}
 	}*/
 
-	public void addItemFromDB(Item item) {
+	public void doAddItem(Item item) {
 		ProductContainer container = productContainerByProduct.get(item.getProduct());
 		if(container == null || container == this){
 			super.addItem(item);

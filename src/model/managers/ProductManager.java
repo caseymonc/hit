@@ -124,26 +124,8 @@ public class ProductManager implements PersistentItem {
 		if (canAddProductToContainer(p, c) == false) {
 			throw new IllegalArgumentException("Product cannot be added to container");
 		}
-
-		if (productsByBarCode.containsKey(p.getBarCode()) == false) {
-			addProduct(p);
-		}
-
-		// Check to see if p is already contained somewhere in c's storage unit
-		Set<ProductContainer> containerSet = p.getContainers();
-		ProductContainer[] containers = containerSet.toArray(new ProductContainer[0]);
-		System.out.println("Containers: " + containers);
-		for (ProductContainer container : containers) {
-			if (container.getStorageUnit().equals(c.getStorageUnit())) {
-				container.moveProduct(p);
-				p.removeProductContainer(container);
-			}
-		}
-		assert (!p.getContainers().contains(c));
-
-		c.getStorageUnit().setContainerByProduct(p, c);
-		p.addProductContainer(c);
-		c.addProduct(p);
+		
+		doAddProductToContainer(p, c);
 	}
 
 	/**
@@ -483,7 +465,19 @@ public class ProductManager implements PersistentItem {
 		return null;
 	}
 
-	public void addProductToContainerFromDB(Product p, ProductContainer c) {
+	public void doAddProductToContainer(Product p, ProductContainer c) {
+		assert (p != null);
+		assert (c != null);
+		assert (canAddProductToContainer(p, c));
+
+		if (p == null || c == null) {
+			throw new IllegalArgumentException();
+		}
+
+		if (canAddProductToContainer(p, c) == false) {
+			throw new IllegalArgumentException("Product cannot be added to container");
+		}
+
 		if (productsByBarCode.containsKey(p.getBarCode()) == false) {
 			addProduct(p);
 		}
