@@ -1,15 +1,10 @@
 package model.entities;
 
-import static org.junit.Assert.*;
-
-import java.util.Collection;
 import java.util.Date;
-
 import model.BarCodeGenerator;
-import model.managers.StorageUnitManager;
-
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;

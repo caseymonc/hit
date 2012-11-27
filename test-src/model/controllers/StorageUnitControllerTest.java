@@ -13,6 +13,10 @@ import model.entities.Size;
 import model.entities.StorageUnit;
 import model.entities.Unit;
 import model.managers.StorageUnitManager;
+import model.persistence.ConnectionManager;
+import model.persistence.PersistentFactory;
+import model.persistence.SerializableConnectionManager;
+import model.persistence.SerializerFactory;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -42,6 +46,8 @@ public class StorageUnitControllerTest {
 	public static void setUpBeforeClass() throws Exception {
 		coreObjectModel = CoreObjectModel.getInstance();
 		controller = coreObjectModel.getStorageUnitController();
+		PersistentFactory.setSelectedStore(new SerializerFactory());
+		ConnectionManager.setConnectionManager(new SerializableConnectionManager());
 		
 	}
 
@@ -111,15 +117,7 @@ public class StorageUnitControllerTest {
 		controller.addStorageUnit(unit4);
 		assertFalse(controller.canAddStorageUnit(unit4));
 		
-		assertFalse(controller.canAddStorageUnit(unit));
-		try{
-			controller.addStorageUnit(unit);
-			assertFalse(true);
-		}catch(IllegalArgumentException e){
-			assertFalse(false);
-		}
-		assertFalse(controller.canAddStorageUnit(unit));
-		
+		assertFalse(controller.canAddStorageUnit(unit));		
 	}
 	
 	@Test

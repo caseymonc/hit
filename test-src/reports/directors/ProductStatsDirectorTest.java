@@ -15,6 +15,10 @@ import java.util.TimeZone;
 import model.BarCodeGenerator;
 import model.CoreObjectModel;
 import model.entities.*;
+import model.persistence.ConnectionManager;
+import model.persistence.PersistentFactory;
+import model.persistence.SerializableConnectionManager;
+import model.persistence.SerializerFactory;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.*;
@@ -39,6 +43,8 @@ public class ProductStatsDirectorTest {
 	@BeforeClass
 	public static void setUpClass() {	
 		COM = CoreObjectModel.getInstance();
+		PersistentFactory.setSelectedStore(new SerializerFactory());
+		ConnectionManager.setConnectionManager(new SerializableConnectionManager());
 	}
 	
 	@AfterClass
@@ -185,6 +191,7 @@ public class ProductStatsDirectorTest {
 		calendar.set(2012, Calendar.JANUARY, 31, 0, 0, 0);
 		Date endDate = calendar.getTime();
 		calendar.add(Calendar.DATE, -30);
+		Date startDate = calendar.getTime();
 		Date tmpDate = calendar.getTime();
 
 		// add 10 items per day for 30 days
@@ -808,6 +815,48 @@ public class ProductStatsDirectorTest {
 		assertTrue(row.getCell(5).toString().equals("0/0"));					// Min/Max Supply
 		assertTrue(row.getCell(6).toString().equals("0/0"));					// Used/Added Supply
 		assertTrue(row.getCell(8).toString().equals("0 days/0 days"));			// Avg/Max Used Age
+		assertTrue(row.getCell(9).toString().equals("0 days/0 days"));			// Avg/Max Cur Age
+		
+		/***************************************************************************************/
+		/*                                                                                     */
+		/*  Product had two item added and removed                                             */
+		/*                                                                                     */
+		/***************************************************************************************/
+		
+		barcode = new BarCode("4444");
+		product = new Product("Product 4", barcode, 1, 1, size);
+		addProduct(product);
+		
+		calendar = Calendar.getInstance();
+		calendar.set(2012, Calendar.MARCH, 1, 0, 0, 0);
+		endDate = calendar.getTime(); // end of report period
+		
+		calendar.set(2012, Calendar.FEBRUARY, 10, 0, 0, 0);
+		entrydate = calendar.getTime();
+		item1 = addItem(entrydate, null, product);
+		
+		calendar.set(2012, Calendar.FEBRUARY, 13, 0, 0, 0);
+		exitDate = calendar.getTime();
+		removeItem(item1, exitDate);
+		
+		calendar.set(2012, Calendar.FEBRUARY, 10, 0, 0, 0);
+		entrydate = calendar.getTime();
+		Item item2 = addItem(entrydate, null, product);
+		
+		calendar.set(2012, Calendar.FEBRUARY, 11, 0, 0, 0);
+		exitDate = calendar.getTime();
+		removeItem(item2, exitDate);
+		
+		// get report
+		report = getReport(endDate, 1);
+		table = (Table)report.get(1);
+		row = table.getRow(4);
+		
+		// check all columns in the product row
+		assertTrue(row.getCell(4).toString().equals("0/0.2"));				    // Cur/Avg Supply
+		assertTrue(row.getCell(5).toString().equals("0/2"));					// Min/Max Supply
+		assertTrue(row.getCell(6).toString().equals("2/2"));					// Used/Added Supply
+		assertTrue(row.getCell(8).toString().equals("2 days/3 days"));			// Avg/Max Used Age
 		assertTrue(row.getCell(9).toString().equals("0 days/0 days"));			// Avg/Max Cur Age
 	}
 	

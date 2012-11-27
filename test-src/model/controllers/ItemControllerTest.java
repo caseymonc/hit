@@ -18,6 +18,10 @@ import model.*;
 import model.entities.*;
 import model.managers.*;
 import model.controllers.*;
+import model.persistence.ConnectionManager;
+import model.persistence.PersistentFactory;
+import model.persistence.SerializableConnectionManager;
+import model.persistence.SerializerFactory;
 
 //import model.entities.Item;
 //import model.entities.Product;
@@ -52,7 +56,8 @@ public class ItemControllerTest {
 	
 	@BeforeClass
 	public static void setUpClass() {
-		
+		PersistentFactory.setSelectedStore(new SerializerFactory());
+		ConnectionManager.setConnectionManager(new SerializableConnectionManager());
 	}
 	
 	@AfterClass
