@@ -1,7 +1,5 @@
 package model.persistence.DataObjects;
 
-import model.entities.StorageUnit;
-
 public class StorageUnitDO extends DataObject {
 	/** The name of the storage unit*/
 	private String name;

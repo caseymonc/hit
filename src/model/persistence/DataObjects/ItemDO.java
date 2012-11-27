@@ -1,7 +1,5 @@
 package model.persistence.DataObjects;
 
-import java.util.Date;
-
 public class ItemDO extends DataObject {
 
 	/** String representation of the bar code*/

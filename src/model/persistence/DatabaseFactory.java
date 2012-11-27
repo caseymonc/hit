@@ -2,16 +2,9 @@ package model.persistence;
 
 import common.util.DateUtils;
 import java.sql.SQLException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import model.CoreObjectModel;
-import model.entities.ProductContainer;
 import model.entities.*;
 import model.managers.ItemManager;
 import model.managers.ProductGroupManager;

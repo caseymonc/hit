@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import model.persistence.ConnectionManager;
 import model.persistence.DataObjects.DataObject;
 import model.persistence.DataObjects.ProductGroupDO;
-import model.persistence.DataObjects.StorageUnitDO;
 
 public class DBProductGroupDAO extends ProductGroupDAO {
 

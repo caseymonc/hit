@@ -1,7 +1,6 @@
 package model.persistence.DAO;
 
 import java.sql.SQLException;
-
 import model.persistence.DataObjects.DataObject;
 
 public abstract class DataAccessObject {

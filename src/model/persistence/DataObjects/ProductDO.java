@@ -1,7 +1,5 @@
 package model.persistence.DataObjects;
 
-import java.util.Date;
-
 public class ProductDO extends DataObject {
 	
 	/** The description of the Product*/

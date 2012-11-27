@@ -1,17 +1,13 @@
 package model.persistence.DAO;
 
-import common.util.DateUtils;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Date;
 import model.persistence.ConnectionManager;
 import model.persistence.DataObjects.DataObject;
 import model.persistence.DataObjects.ItemDO;
-import model.persistence.DataObjects.ProductDO;
 
 public class DBItemDAO extends ItemDAO {
 
