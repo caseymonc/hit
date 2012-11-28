@@ -8,10 +8,12 @@ import model.persistence.DAO.ItemDAO;
 import model.persistence.DAO.ProductDAO;
 import model.persistence.DAO.ProductGroupDAO;
 import model.persistence.DAO.SerializeItemDAO;
+import model.persistence.DAO.SerializePpcDAO;
 import model.persistence.DAO.SerializeProductDAO;
 import model.persistence.DAO.SerializeProductGroupDAO;
 import model.persistence.DAO.SerializeStorageUnitDAO;
 import model.persistence.DAO.StorageUnitDAO;
+import model.persistence.DAO.ppcDAO;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -91,6 +93,11 @@ public class SerializerFactory extends PersistentFactory {
 	public ItemDAO getItemDAO() {
 		// TODO Auto-generated method stub
 		return new SerializeItemDAO();
+	}
+
+	@Override
+	public ppcDAO getPpcDAO() {
+		return new SerializePpcDAO();
 	}
 
 }

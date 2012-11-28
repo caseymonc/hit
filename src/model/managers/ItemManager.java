@@ -4,6 +4,7 @@
  */
 package model.managers;
 
+import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -11,6 +12,7 @@ import reports.visitors.ItemVisitor;
 import model.entities.BarCode;
 import model.entities.Item;
 import model.entities.ProductContainer;
+import model.persistence.PersistentFactory;
 import model.persistence.PersistentItem;
 import model.persistence.DataObjects.DataObject;
 
@@ -51,9 +53,10 @@ public class ItemManager implements PersistentItem
 	}
 	
 	/** adds the item
+	 * @throws SQLException 
 	 * @throws CantAddItemException
 	 */
-	public void addItem(Item i) {
+	public void addItem(Item i) throws SQLException {
 		if(i == null) {
 			throw new IllegalArgumentException();
 		}
@@ -64,6 +67,9 @@ public class ItemManager implements PersistentItem
 			throw new IllegalArgumentException("Cannot add Item: " + i);
 		}
 		
+		DataObject iDO = i.getDataObject();
+		PersistentFactory.getFactory().getItemDAO().create(iDO);
+		i.setId(iDO.getId());
 		doAddItem(i);
 
 	}
@@ -92,7 +98,9 @@ public class ItemManager implements PersistentItem
 		removedItemsByBarCode.remove(item.getBarCode());
 	}
 	
-	public void deleteItem(Item itemToDelete){
+	public void deleteItem(Item itemToDelete) throws SQLException{
+		PersistentFactory.getFactory().getItemDAO().delete(itemToDelete.getDataObject());
+		
 		itemToDelete.delete();
 		itemsByBarCode.remove(itemToDelete.getBarCode());
 	}
@@ -160,5 +168,13 @@ public class ItemManager implements PersistentItem
 		}
 		
 		itemsByBarCode.put(i.getBarCode(), i);		
+	}
+	
+	public void doAddRemovedItem(Item i){
+		if(i == null) {
+			throw new IllegalArgumentException();
+		}
+		
+		removedItemsByBarCode.put(i.getBarCode(), i);
 	}
 }

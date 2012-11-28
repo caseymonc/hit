@@ -7,6 +7,8 @@ import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.Set;
 
+import common.util.DateUtils;
+
 import model.persistence.PersistentItem;
 import model.persistence.DataObjects.DataObject;
 import model.persistence.DataObjects.ProductDO;
@@ -345,7 +347,21 @@ public class Product implements PersistentItem {
 
 	@Override
 	public DataObject getDataObject() {
-		return null;//return new ProductDO(getId(), getDescription(), getCreationDate(), );
+		long[] relationships = new long[containers.size()];
+		int i = 0;
+		for(ProductContainer container : containers){
+			relationships[i] = container.getId();
+			i++;
+		}
+		return new ProductDO(getId(), 
+				getDescription(), 
+				DateUtils.formatSQLDateTime(getCreationDate()), 
+				getBarCode().toString(), 
+				getShelfLife(), 
+				getThreeMonthSupply(), 
+				getSize().getSize(), 
+				getSize().getUnits().name(),
+				relationships);
 	}
 
 	public void setId(long _id) {

@@ -4,6 +4,10 @@ import common.util.DateUtils;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
+import model.BarCodeGenerator;
 import model.CoreObjectModel;
 import model.entities.*;
 import model.managers.ItemManager;
@@ -14,17 +18,21 @@ import model.persistence.DAO.DBItemDAO;
 import model.persistence.DAO.DBProductDAO;
 import model.persistence.DAO.DBProductGroupDAO;
 import model.persistence.DAO.DBStorageUnitDAO;
+import model.persistence.DAO.DBppcDAO;
 import model.persistence.DAO.ItemDAO;
 import model.persistence.DAO.ProductDAO;
 import model.persistence.DAO.ProductGroupDAO;
 import model.persistence.DAO.StorageUnitDAO;
+import model.persistence.DAO.ppcDAO;
 import model.persistence.DataObjects.*;
 
 public class DatabaseFactory extends PersistentFactory {
 
+	
+	private Map<Long, Product> productsById;
 	@Override
 	public CoreObjectModel getCoreObjectModel() {
-		
+		productsById = new HashMap<Long, Product>();
 		CoreObjectModel COM = CoreObjectModel.getNewInstance();		
 		
 		//Open Database Connection and start transaction
@@ -33,6 +41,15 @@ public class DatabaseFactory extends PersistentFactory {
 		
 		try {
 			addProductContainers(COM);
+			DBItemDAO itemDAO = new DBItemDAO();
+			try{
+				String barcode = itemDAO.readNewestItemBarcode();
+				BarCodeGenerator.getInstance(barcode);
+			}catch(SQLException e){
+				BarCodeGenerator.getInstance();
+			}
+			
+			addRemovedItems(COM);
 			connectionManager.setTransactionSuccessful();
 		} catch (SQLException ex) {
 			ex.printStackTrace();
@@ -117,6 +134,7 @@ public class DatabaseFactory extends PersistentFactory {
 				product = new Product(description, barCode, shelfLife, threeMonthSupply, size);
 				product.setCreationDate(creationDate);
 				product.setId(productDO.getId());
+				productsById.put(product.getId(), product);
 			}
 			
 			pManager.doAddProductToContainer(product, container);
@@ -139,10 +157,32 @@ public class DatabaseFactory extends PersistentFactory {
 			Date exitDate = DateUtils.parseSQLDateTime(itemDO.getExitDate());
 			Item item = new Item(barCode, entryDate, expirationDate, product, container);
 			item.setExitDate(exitDate);
-
+			item.setId(itemDO.getId());
 			StorageUnit unit = container.getStorageUnit();
 			unit.doAddItem(item);
 			iManager.doAddItem(item);
+			COM.getProductManager().doAddItemToProduct(item.getProduct(), item);
+		}
+	}
+	
+	private void addRemovedItems(CoreObjectModel COM) throws SQLException{
+		DBItemDAO itemDAO = new DBItemDAO();
+		ItemManager iManager = COM.getItemManager();
+		
+		ArrayList<ItemDO> itemDOs = itemDAO.readAllRemoved();
+		
+		for(ItemDO itemDO : itemDOs){
+			BarCode barCode = new BarCode(itemDO.getBarCode());
+			Date entryDate = DateUtils.parseSQLDateTime(itemDO.getEntryDate());
+			Date expirationDate = DateUtils.parseSQLDateTime(itemDO.getExpirationDate());
+			Date exitDate = DateUtils.parseSQLDateTime(itemDO.getExitDate());
+			if(!productsById.containsKey(itemDO.getProductId()))
+				continue;
+			Item item = new Item(barCode, entryDate, expirationDate, exitDate, 
+					productsById.get(itemDO.getProductId()));
+			item.setExitDate(exitDate);
+			item.setId(itemDO.getId());
+			iManager.doAddRemovedItem(item);
 			COM.getProductManager().doAddItemToProduct(item.getProduct(), item);
 		}
 	}
@@ -174,6 +214,11 @@ public class DatabaseFactory extends PersistentFactory {
 	@Override
 	public ItemDAO getItemDAO() {
 		return new DBItemDAO();
+	}
+
+	@Override
+	public ppcDAO getPpcDAO() {
+		return new DBppcDAO();
 	}
 
 }

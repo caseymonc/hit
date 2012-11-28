@@ -32,8 +32,8 @@ public final class GUI extends JFrame implements IMainView {
 	private InventoryView _inventoryView;
 
 	private GUI(String[] args) {
-		super("Home Inventory Tracker");		
-		if(/*args.length > 0 && args[0].equals("sql")*/true){
+		super("Home Inventory Tracker");
+		if(args.length > 0 && args[0].equals("-sql")){
 			PersistentFactory.setSelectedStore(new DatabaseFactory());
 			DatabaseConnectionManager manager = new DatabaseConnectionManager();
 			ConnectionManager.setConnectionManager(manager);

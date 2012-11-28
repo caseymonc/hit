@@ -1,11 +1,16 @@
 package model.controllers;
 
+import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Set;
 import model.CoreObjectModel;
 import model.Hint;
 import model.entities.*;
 import model.managers.ProductManager;
+import model.persistence.ConnectionManager;
+import model.persistence.DatabaseFactory;
+import model.persistence.PersistentFactory;
+import model.persistence.DataObjects.ProductDO;
 
 /**
  * @author davidmathis
@@ -84,8 +89,19 @@ public class ProductController extends ModelController {
 		if (p == null || (canAddProduct(p) == false)) {
 			throw new IllegalArgumentException("Not a valid Product");
 		}
-
-		productManager.addProduct(p);
+		//Open Database Connection and start transaction
+		ConnectionManager manager = ConnectionManager.getConnectionManager();
+		manager.startTransaction();
+		
+		try{
+			productManager.addProduct(p);
+			manager.setTransactionSuccessful();
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
+		
+		//Close the Database and close the connection
+		manager.endTransaction();
 		this.setChanged();
 		this.notifyObservers(new Hint(p, Hint.Value.Add));
 	}
@@ -142,20 +158,34 @@ public class ProductController extends ModelController {
 	private void moveProductToTargetContainer(Product product,
 			ProductContainer targetContainer, StorageUnit targetUnit,
 			ProductContainer currentContainerInTargetUnit) {
-		Set<Item> itemSet = currentContainerInTargetUnit.getItemsByProduct(product);
-		addProductToContainer(product, targetContainer);
-		if (itemSet != null) {
-			Item[] items = new Item[itemSet.size()];
-			int i = 0;
-			for (Item item : itemSet) {
-				items[i] = item;
-				i++;
+		ConnectionManager manager = ConnectionManager.getConnectionManager();
+		manager.startTransaction();
+		try{
+			Set<Item> itemSet = currentContainerInTargetUnit.getItemsByProduct(product);
+			addProductToContainer(product, targetContainer);
+			
+			if (itemSet != null) {
+				Item[] items = new Item[itemSet.size()];
+				int i = 0;
+				for (Item item : itemSet) {
+					items[i] = item;
+					i++;
+				}
+	
+				for (Item item : items) {
+					model.getStorageUnitController().moveItem(item, targetUnit);
+					DatabaseFactory.getFactory().getItemDAO().update(item.getDataObject());
+				}
 			}
-
-			for (Item item : items) {
-				model.getStorageUnitController().moveItem(item, targetUnit);
-			}
+			DatabaseFactory.getFactory().getPpcDAO().delete((ProductDO)product.getDataObject(), 
+													currentContainerInTargetUnit.getId());
+			manager.setTransactionSuccessful();
+		}catch(SQLException e){
+			e.printStackTrace();
 		}
+		
+		//Close the Database and close the connection
+		manager.endTransaction();
 	}
 
 	/**
@@ -180,7 +210,18 @@ public class ProductController extends ModelController {
 	 */
 	public void removeProductFromContainer(Product p, ProductContainer c)
 			throws IllegalArgumentException {
-		productManager.removeProductFromContainer(p, c);
+		ConnectionManager manager = ConnectionManager.getConnectionManager();
+		manager.startTransaction();
+		
+		try{
+			productManager.removeProductFromContainer(p, c);
+			manager.setTransactionSuccessful();
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
+		
+		//Close the Database and close the connection
+		manager.endTransaction();
 		this.setChanged();
 		this.notifyObservers(new Hint(p, Hint.Value.Delete));
 	}
@@ -201,16 +242,28 @@ public class ProductController extends ModelController {
 	 * @param p
 	 */
 	public void removeProduct(Product p) {
-		Set<ProductContainer> containers = p.getContainers();
-		if (containers != null) {
-			for (ProductContainer container : containers) {
-				if (this.canRemoveProductFromContainer(p, container)) {
-					this.removeProductFromContainer(p, container);
+		//Open Database Connection and start transaction
+		ConnectionManager manager = ConnectionManager.getConnectionManager();
+		manager.startTransaction();
+		
+		try{
+			Set<ProductContainer> containers = p.getContainers();
+			if (containers != null) {
+				for (ProductContainer container : containers) {
+					if (this.canRemoveProductFromContainer(p, container)) {
+						this.removeProductFromContainer(p, container);
+					}
 				}
 			}
+	
+			productManager.removeProduct(p);
+			manager.setTransactionSuccessful();
+		}catch(SQLException e){
+			e.printStackTrace();
 		}
-
-		productManager.removeProduct(p);
+		
+		//Close the Database and close the connection
+		manager.endTransaction();
 	}
 
 	/**
@@ -223,8 +276,21 @@ public class ProductController extends ModelController {
 	 */
 	public void EditProduct(BarCode productBarCode, Product newProduct)
 			throws IllegalArgumentException {
-		productManager.editProduct(productBarCode, newProduct);
-
+		
+		//Open Database Connection and start transaction
+		ConnectionManager manager = ConnectionManager.getConnectionManager();
+		manager.startTransaction();
+		
+		try{
+			productManager.editProduct(productBarCode, newProduct);
+			manager.setTransactionSuccessful();
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
+		
+		//Close the Database and close the connection
+		manager.endTransaction();
+		
 		Product p = productManager.getProductByBarCode(productBarCode);
 		this.setChanged();
 		this.notifyObservers(new Hint(p, Hint.Value.Edit));
