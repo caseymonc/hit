@@ -4,6 +4,7 @@
  */
 package model.barcode;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,8 +13,12 @@ import java.util.Map;
  *
  * @author davidpatty
  */
-public class BarCodeLookupRegistry {
+public class BarCodeLookupRegistry implements Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7271944782536415034L;
 	private Map<String, BarCodeLookupHandler> handlers;
 	private Map<String, HandlerDescriptor> descriptors;
 	private BarCodeLookupHandler last;

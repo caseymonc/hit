@@ -139,6 +139,15 @@ public final class DateUtils {
 		return result;
 	}
 	
+	public static String formatSQLDateTime(Date date){
+		if(date == null){
+			return null;
+		}
+		
+		SimpleDateFormat dateformatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+		return dateformatter.format(date);
+	}
+	
 	/**
 	 * Normalizes the time portion of a Date object to midnight.
 	 * 

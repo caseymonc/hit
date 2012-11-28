@@ -19,6 +19,8 @@ public class DatabaseConnectionManager extends ConnectionManager {
 	
 	@Override
 	public void startTransaction() {
+		if(connection != null)
+			return;
 		try {
 			final String driver = "org.sqlite.JDBC";
 			this.driver = (Driver)Class.forName(driver).newInstance();
@@ -105,7 +107,7 @@ public class DatabaseConnectionManager extends ConnectionManager {
 	+		"\"barcode\" VARCHAR(12) NOT NULL  UNIQUE , "
 	+		"\"entry_date\" DATETIME NOT NULL , "
 	+		"\"exit_date\" DATETIME, "
-	+		"\"expiration_date\" DATETIME NOT NULL , "
+	+		"\"expiration_date\" DATETIME, "
 	+		"\"product_id\" INTEGER NOT NULL , "
 	+		"\"container_id\" INTEGER NOT NULL "
 	+	")";

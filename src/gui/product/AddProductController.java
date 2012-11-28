@@ -41,13 +41,13 @@ public class AddProductController extends Controller implements
 	 */
 	public AddProductController(IView view, String barcode) {
 		super(view);
-		
+		COM = CoreObjectModel.getInstance();
 		//talks to barcode lookup Handler here
 		String description = lookupBarcode(barcode);
 		getView().setDescription(description);
 		
 		this.barcode = barcode;
-		COM = CoreObjectModel.getInstance();
+		
 		productController = COM.getProductController();
 		unitIsCount = false;
 				

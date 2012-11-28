@@ -4,6 +4,7 @@
  */
 package model.entities;
 
+import java.sql.SQLException;
 import java.util.Calendar;
 import model.managers.*;
 import java.util.Date;
@@ -48,7 +49,15 @@ public class ProductTest {
         Item item1 = new Item(new BarCode("111111111111"), date1, date1, product1, null);
         Item item2 = new Item(new BarCode("111111111112"), date2, date2, product1, null);
         
-        productManager.addProduct(product1);
+        try {
+			productManager.addProduct(product1);
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         productManager.addItemToProduct(product1, item1);
         productManager.addItemToProduct(product1, item2);
         
@@ -80,7 +89,7 @@ public class ProductTest {
     }
     
     @Test
-    public void AddProductToContainer(){
+    public void AddProductToContainer() throws IllegalArgumentException, SQLException{
         StorageUnit unit1 = new StorageUnit("Test Unit 1");
         StorageUnit unit2 = new StorageUnit("Test Unit 2");
         
@@ -114,7 +123,7 @@ public class ProductTest {
     }
     
     @Test
-    public void testRemoveProduct(){
+    public void testRemoveProduct() throws IllegalArgumentException, SQLException{
         Product product1 = new Product("Test Product", new BarCode("123412341234"), 3, 3, new Size(Unit.count, 1));
         Product product2 = new Product("Test Product", new BarCode("567856785678"), 3, 3, new Size(Unit.gallons, 1));
         StorageUnit unit1 = new StorageUnit("Test Unit 1");

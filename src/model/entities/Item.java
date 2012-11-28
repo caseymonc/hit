@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import model.persistence.PersistentItem;
 import model.persistence.DataObjects.DataObject;
+import model.persistence.DataObjects.ItemDO;
 
 /** Item
  * A physical instance of a particular Product. An Item 
@@ -94,6 +95,14 @@ public class Item implements PersistentItem{
 		this.product = product;
 		this.container = container;
 		this.removed = false;
+	}
+	
+	public Item(BarCode barCode, Date entryDate, Date expirationDate, Date exitDate, Product product){
+		this.barCode = barCode;
+		this.entryDate = entryDate;
+		this.expirationDate = expirationDate;
+		this.exitDate = exitDate;
+		this.product = product;
 	}
 	
 	/**
@@ -385,8 +394,13 @@ public class Item implements PersistentItem{
 
 	@Override
 	public DataObject getDataObject() {
-		// TODO Auto-generated method stub
-		return null;
+		return new ItemDO(getId(), 
+			getBarCode().toString(), 
+			DateUtils.formatSQLDateTime(getEntryDate()), 
+			getExitDate() == null ? null : DateUtils.formatSQLDateTime(getExitDate()), 
+			getExpirationDate() == null ? null :DateUtils.formatSQLDateTime(getExpirationDate()), 
+			getProduct().getId(), 
+			getContainer() == null ? -1 : getContainer().getId());
 	}
 
 	public void setId(long _id) {

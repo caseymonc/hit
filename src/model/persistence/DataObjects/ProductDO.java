@@ -23,8 +23,18 @@ public class ProductDO extends DataObject {
 	/** The size unit of the product */
 	private String sizeUnit;
 	
+	private long[] relationships;
+	
 	public ProductDO(long id, String description, String creationDate, String barCode, 
-			int shelfLife, int threeMonthSupply, float sizeVal, String sizeUnit) {
+			int shelfLife, int threeMonthSupply, float sizeVal, 
+			String sizeUnit, long[] relationships) {
+		this(id, description, creationDate, barCode, shelfLife, threeMonthSupply, sizeVal, sizeUnit);
+		this.relationships = relationships;
+	}
+	
+	public ProductDO(long id, String description, String creationDate, String barCode, 
+			int shelfLife, int threeMonthSupply, float sizeVal, 
+			String sizeUnit) {
 		setId(id);
 		this.description = description;
 		this.creationDate = creationDate;
@@ -145,5 +155,13 @@ public class ProductDO extends DataObject {
 	 */
 	public float getSizeVal() {
 		return sizeVal;
+	}
+
+	public void setRelationships(long[] relationships) {
+		this.relationships = relationships;
+	}
+
+	public long[] getRelationships() {
+		return relationships;
 	}
 }

@@ -145,4 +145,8 @@ public class CoreObjectModel implements PersistentItem{
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	public void setLastBarCodeInt(int lastBarCode) {
+		this.lastBarCode = lastBarCode;
+	}
 }
