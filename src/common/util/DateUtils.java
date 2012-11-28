@@ -37,6 +37,7 @@ public final class DateUtils {
 	private static SimpleDateFormat dateFormatter;
 	private static SimpleDateFormat shortDateFormatter;
 	private static SimpleDateFormat dateTimeFormatter;
+	private static SimpleDateFormat iso8601 = new SimpleDateFormat("yyyy-mm-dd'T'HH:mm'Z'");
 	
 	static {
 		dateFormatter = new SimpleDateFormat(DATE_FORMAT);
@@ -55,6 +56,10 @@ public final class DateUtils {
 	 */
 	public static String formatDate(Date d) {
 		return dateFormatter.format(d);
+	}
+	
+	public static String formatISO8601Date(Date d) {
+		return iso8601.format(d);
 	}
 	
 	/**

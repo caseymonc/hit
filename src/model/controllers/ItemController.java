@@ -88,7 +88,8 @@ public class ItemController extends ModelController {
 		try{
 			su.addItem(i);
 			if(i.getContainer() == null) {
-				throw new IllegalArgumentException("Item still does not have a specified container");
+				throw new IllegalArgumentException("Item still does not have a " +
+						"specified container");
 			}
 			IM.addItem(i);
 			PC.addItemToProduct(i.getProduct(), i);

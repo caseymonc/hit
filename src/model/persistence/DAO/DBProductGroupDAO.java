@@ -18,7 +18,8 @@ public class DBProductGroupDAO extends ProductGroupDAO {
 			"three_month_supply_value, three_month_supply_unit, parent_id) values (?, ?, ?, ?)";
 	
 	private static final String UPDATE = "UPDATE ProductContainers SET name=?, " +
-			"three_month_supply_value=?, three_month_supply_unit=?, parent_id=? WHERE container_id=?";
+			"three_month_supply_value=?, three_month_supply_unit=?, parent_id=? WHERE " +
+			"container_id=?";
 	private static final String DELETE = "DELETE FROM ProductContainers WHERE container_id=?";
 	/**
 	 * gets a list of all ProductGroup data objects in the database
