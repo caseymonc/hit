@@ -47,16 +47,14 @@ public class SearchUPCHandler extends BarCodeLookupHandler {
 				BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 				String response = reader.readLine();
 
-
 				JSONParser parser = new JSONParser();
 
 				JSONObject obj = (JSONObject)parser.parse(response);
 				JSONObject obj2 = (JSONObject)obj.get("0");
 				String productName = (String)obj2.get("productname");
-				return productName;
 
 			} catch (IOException ex) {
-				System.err.println("error in SUPC handler"+ex.getMessage());
+				System.err.println("error with the Buffered Reader" + ex.getMessage());
 			} catch (ParseException ex) {
 				System.out.println("Could not find Item in SUPC handler");
 			}
@@ -65,8 +63,8 @@ public class SearchUPCHandler extends BarCodeLookupHandler {
 			{
 				productDesc = next.lookup(barcode);
 			}
-		
 		}
+		
 		return productDesc;
 	}
 }
