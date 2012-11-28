@@ -42,7 +42,7 @@ public abstract class BarCodeLookupHandler {
 	 * Fetch the barcode description from the Internet
 	 * @return 
 	 */
-	public abstract String lookup(String barcode);
+	public abstract String lookup(String barcode) throws Exception;
 	
 	/**
 	 * This method is to assist in creating a singly linked list of
