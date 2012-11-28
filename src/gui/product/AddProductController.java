@@ -170,14 +170,15 @@ public class AddProductController extends Controller implements
 		
 		BarCodeLookupRegistry registry = COM.getRegistry();
 		Map<String, BarCodeLookupHandler> handlers = registry.GetAvailableHandlers();
-
-		if (handlers != null && handlers.size() > 0) { 
-			//?? do we need this?
+		String description = "";
+		if (handlers != null && handlers.size() > 0) {
+			
 			//foreach handler in line, or do the handlers have pointers to their next?
-			return "good";
 		} else {
-			return "";
+		
 		}
+		
+		return description;
 	}
 }
 

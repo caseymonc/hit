@@ -60,9 +60,12 @@ public class GoogleHandler extends BarCodeLookupHandler {
 					JSONParser parser = new JSONParser();
 					JSONObject obj = (JSONObject)parser.parse(result);
 					JSONArray obj2 = (JSONArray)obj.get("items");
-					JSONObject obj3 = (JSONObject) obj2.get(0);
-					JSONObject finalObj = (JSONObject) obj3.get("product");
-					productDesc = (String) finalObj.get("title");
+					if ((Long)obj.get("totalItems") > 0)
+					{
+						JSONObject obj3 = (JSONObject) obj2.get(0);
+						JSONObject finalObj = (JSONObject) obj3.get("product");
+						productDesc = (String) finalObj.get("title");
+					}
 				}
 			} catch (IOException ex) {
 				System.err.println("Error with the Buffered Reader"+ex.getMessage());
@@ -75,7 +78,7 @@ public class GoogleHandler extends BarCodeLookupHandler {
 				productDesc = next.lookup(barcode);
 			}
 		}
-		
+		System.out.println("description:"+ productDesc);
 		return productDesc;
 	}
 }
