@@ -30,35 +30,43 @@ public class SearchUPCHandler extends BarCodeLookupHandler {
 
 	@Override
 	public String lookup(String barcode) {
-		
-		if(barcode == null || barcode.equals("")){
-			return "";
-		}
-		
-		URL url;
-		HttpURLConnection connection;
-		
-		try {
-			url = new URL("http://www.searchupc.com/handlers/upcsearch.ashx?request_type=3&access_token=359D872A-2B27-4994-93A5-BEDEB613D1D5&upc=" + barcode);
-			connection = (HttpURLConnection)url.openConnection();
-			connection.setRequestMethod("GET");
-			
-			connection.connect();
-			
-			InputStream in = connection.getInputStream();
-			BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-			String response = reader.readLine();
-			
-			
-			JSONParser parser = new JSONParser();
 
-			JSONObject obj = (JSONObject)parser.parse(response);
-			JSONObject obj2 = (JSONObject)obj.get("0");
-			String productName = (String)obj2.get("productname");
-			return productName;
-			
-		} catch (IOException | ParseException ex) {
-			return "";
+		String productDesc = "";
+		
+		if(!(barcode == null || barcode.equals(""))){		
+			URL url;
+			HttpURLConnection connection;
+			try {
+				url = new URL("http://www.searchupc.com/handlers/upcsearch.ashx?request_type=3&access_token=359D872A-2B27-4994-93A5-BEDEB613D1D5&upc=" + barcode);
+				connection = (HttpURLConnection)url.openConnection();
+				connection.setRequestMethod("GET");
+
+				connection.connect();
+
+				InputStream in = connection.getInputStream();
+				BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+				String response = reader.readLine();
+
+
+				JSONParser parser = new JSONParser();
+
+				JSONObject obj = (JSONObject)parser.parse(response);
+				JSONObject obj2 = (JSONObject)obj.get("0");
+				String productName = (String)obj2.get("productname");
+				return productName;
+
+			} catch (IOException ex) {
+				System.err.println("error in SUPC handler"+ex.getMessage());
+			} catch (ParseException ex) {
+				System.out.println("Could not find Item in SUPC handler");
+			}
+
+			if(productDesc.equals("") && next != null)
+			{
+				productDesc = next.lookup(barcode);
+			}
+		
 		}
+		return productDesc;
 	}
 }
