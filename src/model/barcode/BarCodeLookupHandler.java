@@ -10,7 +10,7 @@ package model.barcode;
  */
 public abstract class BarCodeLookupHandler {
 
-	private BarCodeLookupHandler next;
+	protected BarCodeLookupHandler next;
 	private HandlerDescriptor descriptor;
 	
 	/**
