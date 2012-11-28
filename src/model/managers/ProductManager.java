@@ -4,6 +4,7 @@
  */
 package model.managers;
 
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
@@ -13,8 +14,10 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import model.entities.*;
+import model.persistence.PersistentFactory;
 import model.persistence.PersistentItem;
 import model.persistence.DataObjects.DataObject;
+import model.persistence.DataObjects.ProductDO;
 import reports.visitors.ItemVisitor;
 import reports.visitors.ProductVisitor;
 
@@ -70,14 +73,18 @@ public class ProductManager implements PersistentItem {
 	 * @param p - the product being added
 	 *
 	 * @throws IllegalArgumentException
+	 * @throws SQLException 
 	 */
-	public void addProduct(Product p) throws IllegalArgumentException {
+	public void addProduct(Product p) throws IllegalArgumentException, SQLException {
 		assert (p != null);
 		assert (canAddProduct(p));
 
 		if (p == null || (canAddProduct(p) == false)) {
 			throw new IllegalArgumentException("Not a valid Product");
 		}
+		DataObject pDO = p.getDataObject();
+		PersistentFactory.getFactory().getProductDAO().create(pDO);
+		p.setId(pDO.getId());
 		productsByBarCode.put(p.getBarCode(), p);
 		currentItemsByProduct.put(p, new HashSet<Item>());
 		allItemsByProduct.put(p, new HashSet<Item>());
@@ -109,9 +116,10 @@ public class ProductManager implements PersistentItem {
 	 * @param c - The ProductContainer to which the product is being added.
 	 *
 	 * @throws IllegalArgumentException
+	 * @throws SQLException 
 	 */
 	public void addProductToContainer(Product p, ProductContainer c)
-			throws IllegalArgumentException {
+			throws IllegalArgumentException, SQLException {
 
 		assert (p != null);
 		assert (c != null);
@@ -160,13 +168,17 @@ public class ProductManager implements PersistentItem {
 	 * @return return true if p can be removed, else return true
 	 *
 	 * @throws IllegalArgumentException if p or c are null
+	 * @throws SQLException 
 	 */
 	public void removeProductFromContainer(Product p, ProductContainer c)
-			throws IllegalArgumentException {
+			throws IllegalArgumentException, SQLException {
 
 		assert (p != null);
 		assert (c != null);
 		assert (canRemoveProductFromContainer(p, c));
+		
+		PersistentFactory.getFactory().getPpcDAO().delete((ProductDO)p.getDataObject(), c.getId());
+		
 		c.removeProduct(p);
 		p.removeProductContainer(c);
 
@@ -186,9 +198,10 @@ public class ProductManager implements PersistentItem {
 	 * @param productBarCode - the product being edited
 	 * @param newProduct - contains the data used to update the product being edited
 	 * @throws IllegalArgumentException 
+	 * @throws SQLException 
 	 */
 	public void editProduct(BarCode productBarCode, Product newProduct)
-			throws IllegalArgumentException {
+			throws IllegalArgumentException, SQLException {
 		assert (productBarCode != null);
 		assert (productBarCode.toString().equals(""));
 		assert (newProduct != null);
@@ -204,6 +217,8 @@ public class ProductManager implements PersistentItem {
 		product.setShelfLife(newProduct.getShelfLife());
 		product.setSize(newProduct.getSize());
 		product.setThreeMonthSupply(newProduct.getThreeMonthSupply());
+		
+		PersistentFactory.getFactory().getProductDAO().update(product.getDataObject());
 	}
 
 	/**
@@ -233,8 +248,9 @@ public class ProductManager implements PersistentItem {
 	 *
 	 * @param p - the product being removed
 	 * @throws IllegalArgumentException
+	 * @throws SQLException 
 	 */
-	public void removeProduct(Product p) throws IllegalArgumentException {
+	public void removeProduct(Product p) throws IllegalArgumentException, SQLException {
 		assert (p != null);
 		assert (canRemoveProduct(p));
 
@@ -242,6 +258,8 @@ public class ProductManager implements PersistentItem {
 			throw new IllegalArgumentException();
 		}
 
+		PersistentFactory.getFactory().getProductDAO().delete(p.getDataObject());
+		
 		productsByBarCode.remove(p.getBarCode());
 		currentItemsByProduct.remove(p);
 	}
@@ -465,7 +483,7 @@ public class ProductManager implements PersistentItem {
 		return null;
 	}
 
-	public void doAddProductToContainer(Product p, ProductContainer c) {
+	public void doAddProductToContainer(Product p, ProductContainer c) throws IllegalArgumentException, SQLException {
 		assert (p != null);
 		assert (c != null);
 		assert (canAddProductToContainer(p, c));
@@ -479,7 +497,9 @@ public class ProductManager implements PersistentItem {
 		}
 
 		if (productsByBarCode.containsKey(p.getBarCode()) == false) {
-			addProduct(p);
+			productsByBarCode.put(p.getBarCode(), p);
+			currentItemsByProduct.put(p, new HashSet<Item>());
+			allItemsByProduct.put(p, new HashSet<Item>());
 		}
 
 		// Check to see if p is already contained somewhere in c's storage unit

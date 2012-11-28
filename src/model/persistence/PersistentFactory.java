@@ -8,6 +8,7 @@ import model.persistence.DAO.ItemDAO;
 import model.persistence.DAO.ProductDAO;
 import model.persistence.DAO.ProductGroupDAO;
 import model.persistence.DAO.StorageUnitDAO;
+import model.persistence.DAO.ppcDAO;
 
 import java.util.List;
 
@@ -70,4 +71,6 @@ public abstract class PersistentFactory {
 	 * @param item - the PersistentItem to save
 	 */
 	public abstract void save(PersistentItem item);
+	
+	public abstract ppcDAO getPpcDAO();
 }

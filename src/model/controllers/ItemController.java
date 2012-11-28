@@ -5,6 +5,8 @@
 package model.controllers;
 
 import gui.item.ItemData;
+
+import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -13,6 +15,8 @@ import model.CoreObjectModel;
 import model.Hint;
 import model.entities.*;
 import model.managers.ItemManager;
+import model.persistence.ConnectionManager;
+import model.persistence.PersistentFactory;
 
 /** Oversees, controls or delegates everything to do with Items
  *
@@ -76,13 +80,23 @@ public class ItemController extends ModelController {
 		if(i == null || su ==  null) {
 			throw new IllegalArgumentException();
 		}
-		su.addItem(i);
-		if(i.getContainer() == null) {
-			throw new IllegalArgumentException("Item still does not have a specified container");
-		}
-		IM.addItem(i);
-		PC.addItemToProduct(i.getProduct(), i);
 		
+		//Open Database Connection and start transaction
+		ConnectionManager manager = ConnectionManager.getConnectionManager();
+		manager.startTransaction();
+		
+		try{
+			su.addItem(i);
+			if(i.getContainer() == null) {
+				throw new IllegalArgumentException("Item still does not have a specified container");
+			}
+			IM.addItem(i);
+			PC.addItemToProduct(i.getProduct(), i);
+			manager.setTransactionSuccessful();
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
+		manager.endTransaction();
 		this.setChanged();
 		this.notifyObservers(new Hint(i, Hint.Value.Add));
 	}
@@ -112,17 +126,38 @@ public class ItemController extends ModelController {
 		if(!i.getContainer().canRemoveItem(i)) {
 			throw new IllegalArgumentException("Cannot Remove Item");
 		} else {
-			i.getContainer().removeItem(i);
-			IM.removeItem(i, exitDate);
-			PC.removeItemFromProduct(i.getProduct(), i);
+			//Open Database Connection and start transaction
+			ConnectionManager manager = ConnectionManager.getConnectionManager();
+			manager.startTransaction();
+			
+			try{
+				i.getContainer().removeItem(i);
+				IM.removeItem(i, exitDate);
+				PC.removeItemFromProduct(i.getProduct(), i);
+				PersistentFactory.getFactory().getItemDAO().update(i.getDataObject());
+				manager.setTransactionSuccessful();
+			}catch(SQLException e){
+				e.printStackTrace();
+			}
+			manager.endTransaction();
 		}
 	}
 	
 	public void unRemoveItem(Item item, ProductContainer container){
-		container.unRemoveItem(item);
-		IM.unRemoveItem(item, container);
-		PC.unRemoveItemFromProduct(item.getProduct(), item);
+		//Open Database Connection and start transaction
+		ConnectionManager manager = ConnectionManager.getConnectionManager();
+		manager.startTransaction();
 		
+		try{
+			container.unRemoveItem(item);
+			IM.unRemoveItem(item, container);
+			PC.unRemoveItemFromProduct(item.getProduct(), item);
+			PersistentFactory.getFactory().getItemDAO().update(item.getDataObject());
+			manager.setTransactionSuccessful();
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
+		manager.endTransaction();
 		this.setChanged();
 		this.notifyObservers(new Hint(item, Hint.Value.Add));
 	}
@@ -139,10 +174,18 @@ public class ItemController extends ModelController {
 		if(!this.canDeleteItem(item)){
 			throw new IllegalArgumentException("Can Delete Item!");
 		}
+		//Open Database Connection and start transaction
+		ConnectionManager manager = ConnectionManager.getConnectionManager();
+		manager.startTransaction();
 		
-		item.getContainer().removeItem(item);
-		IM.deleteItem(item);
-		
+		try{
+			item.getContainer().removeItem(item);
+			IM.deleteItem(item);
+			manager.setTransactionSuccessful();
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
+		manager.endTransaction();
 		
 		this.setChanged();
 		this.notifyObservers(new Hint(item, Hint.Value.Delete));
@@ -159,9 +202,19 @@ public class ItemController extends ModelController {
 	 * @throws CannotMoveItemException 
 	 */
 	public void moveItem(String barcode, ProductContainer target) {
+		//Open Database Connection and start transaction
+		ConnectionManager manager = ConnectionManager.getConnectionManager();
+		manager.startTransaction();
 		BarCode bc = new BarCode(barcode);
 		Item i = IM.getItemByBarCode(bc);
-		SC.moveItem(i,target);
+		try{
+			SC.moveItem(i,target);
+			PersistentFactory.getFactory().getItemDAO().update(i.getDataObject());
+			manager.setTransactionSuccessful();
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
+		manager.endTransaction();
 		this.setChanged();
 		this.notifyObservers(new Hint(i, Hint.Value.Move));
 	}
@@ -224,8 +277,17 @@ public class ItemController extends ModelController {
 	 */
 	public void updateItemsEntryDate(Item modifableItem, Date newEntryDate) {
 		assert(modifableItem.canSetEntryDate(newEntryDate));
-		modifableItem.setEntryDate(newEntryDate);
-		modifableItem.calculateExpirationDate();
+		ConnectionManager manager = ConnectionManager.getConnectionManager();
+		manager.startTransaction();
+		try{
+			modifableItem.setEntryDate(newEntryDate);
+			modifableItem.calculateExpirationDate();
+			PersistentFactory.getFactory().getItemDAO().update(modifableItem.getDataObject());
+			manager.setTransactionSuccessful();
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
+		manager.endTransaction();
 		this.setChanged();
 		this.notifyObservers(new Hint(modifableItem, Hint.Value.Edit));
 	}

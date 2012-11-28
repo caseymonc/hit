@@ -32,6 +32,24 @@ public class BarCodeGenerator implements PersistentItem {
 		return _instance;
 	}
 	
+	public static BarCodeGenerator getInstance(String barcode){
+		CoreObjectModel.getInstance().setLastBarCodeInt(processBarCode(barcode));
+		return getInstance();
+	}
+	
+	private static int processBarCode(String barcode) {
+		while(barcode.charAt(0) == '0'){
+			barcode = barcode.substring(1);
+		}
+		
+		barcode = barcode.substring(0, barcode.length() - 1);
+		try{
+			return Integer.parseInt(barcode);
+		}catch(NumberFormatException e){
+			return 0;
+		}
+	}
+
 	/**
 	 * Private Constructor - The constructor starts the count of barcodes 
 	 * so each barcode is unique

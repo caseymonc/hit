@@ -1,15 +1,27 @@
 package model.persistence.DAO;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import model.persistence.ConnectionManager;
 import model.persistence.DataObjects.DataObject;
+import model.persistence.DataObjects.ItemDO;
 import model.persistence.DataObjects.ProductDO;
+import model.persistence.DataObjects.ProductGroupDO;
 
 public class DBProductDAO extends ProductDAO {
+	
+	private static final String CREATE = "INSERT INTO Products " +
+			"(creation_date, " +
+			"barcode, " +
+			"shelf_life, " +
+			"three_month_supply, " +
+			"size_val, " +
+			"size_unit, " +
+			"description) VALUES (?,?,?,?,?,?,?)";
 	
 	/**
 	 * gets a list of all Product data objects in the database
@@ -59,21 +71,118 @@ public class DBProductDAO extends ProductDAO {
 //	}
 	
 	@Override
-	public void create(DataObject obj) {
-		// TODO Auto-generated method stub
-
+	public void create(DataObject obj) throws SQLException {
+		if(!(obj instanceof ProductDO))
+			throw new IllegalArgumentException("Tried to save a non StorageUnit in " +
+					"DBStorageUnitDAO");
+		PreparedStatement stmt = null;
+		Statement keyStmt = null;
+		ResultSet keyRS = null;
+		SQLException exception = null;
+		try{
+			ProductDO product = (ProductDO)obj;
+			ConnectionManager connectionManager = ConnectionManager.getConnectionManager();
+			Connection connection = connectionManager.getConnection();
+			
+			stmt = connection.prepareStatement(CREATE);
+		    stmt.setString(1, product.getCreationDate());
+		    stmt.setString(2, product.getBarCode());
+		    stmt.setInt(3, product.getShelfLife());
+		    stmt.setInt(4, product.getThreeMonthSupply());
+		    stmt.setFloat(5, product.getSizeVal());
+		    stmt.setString(6, product.getSizeUnit());
+		    stmt.setString(7, product.getDescription());
+		    
+		    if (stmt.executeUpdate() == 1) {
+		        keyStmt = connection.createStatement();
+		        keyRS = keyStmt.executeQuery("select last_insert_rowid()");
+		        keyRS.next();
+		        int id = keyRS.getInt(1);   // ID of the new book
+		        product.setId(id);
+		    }else{
+		    	throw new SQLException("Failed to insert StorageUnit");
+		    }
+		    
+		    //updateProductRelationships(product);
+		}catch(SQLException e){
+			exception = e;
+		}finally {
+		    if (stmt != null) stmt.close();
+		    if (keyRS != null) keyRS.close();
+		    if (keyStmt != null) keyStmt.close();
+		    if (exception != null) throw exception;
+		}
+	}
+	
+	private static final String DELETE = "DELETE FROM Products WHERE product_id=?";
+	@Override
+	public void delete(DataObject obj) throws SQLException {
+		if(!(obj instanceof ProductDO))
+			throw new IllegalArgumentException("Tried to create a non StorageUnit in " +
+					"DBStorageUnitDAO");
+		PreparedStatement stmt = null;
+		Statement keyStmt = null;
+		ResultSet keyRS = null;
+		SQLException exception = null;
+		try{
+			ProductDO product = (ProductDO)obj;
+			ConnectionManager connectionManager = ConnectionManager.getConnectionManager();
+			Connection connection = connectionManager.getConnection();
+			
+			stmt = connection.prepareStatement(DELETE);
+		    stmt.setLong(1, product.getId());
+		    int rowsAffected = stmt.executeUpdate();
+		    rowsAffected = 0;
+		}catch(SQLException e){
+			exception = e;
+		}finally {
+		    if (stmt != null) stmt.close();
+		    if (keyRS != null) keyRS.close();
+		    if (keyStmt != null) keyStmt.close();
+		    if (exception != null) throw exception;
+		}
 	}
 
+	private static final String UPDATE = "UPDATE Products SET creation_date=?, " +
+			"barcode=?, " +
+			"shelf_life=?, " +
+			"three_month_supply=?, " +
+			"size_val=?, " +
+			"size_unit=?, " +
+			"description=? WHERE product_id=?";
 	@Override
-	public void delete(DataObject obj) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void update(DataObject obj) {
-		// TODO Auto-generated method stub
-
+	public void update(DataObject obj) throws SQLException {
+		if(!(obj instanceof ProductDO))
+			throw new IllegalArgumentException("Tried to update a non StorageUnit in " +
+					"DBStorageUnitDAO");
+		PreparedStatement stmt = null;
+		Statement keyStmt = null;
+		ResultSet keyRS = null;
+		SQLException exception = null;
+		try{
+			ProductDO product = (ProductDO)obj;
+			ConnectionManager connectionManager = ConnectionManager.getConnectionManager();
+			Connection connection = connectionManager.getConnection();
+			
+			stmt = connection.prepareStatement(UPDATE);
+			stmt.setString(1, product.getCreationDate());
+		    stmt.setString(2, product.getBarCode());
+		    stmt.setInt(3, product.getShelfLife());
+		    stmt.setInt(4, product.getThreeMonthSupply());
+		    stmt.setFloat(5, product.getSizeVal());
+		    stmt.setString(6, product.getSizeUnit());
+		    stmt.setString(7, product.getDescription());
+		    stmt.setLong(8, product.getId());
+		    stmt.executeUpdate();
+		    
+		}catch(SQLException e){
+			exception = e;
+		}finally {
+		    if (stmt != null) stmt.close();
+		    if (keyRS != null) keyRS.close();
+		    if (keyStmt != null) keyStmt.close();
+		    if (exception != null) throw exception;
+		}
 	}
 
 }
