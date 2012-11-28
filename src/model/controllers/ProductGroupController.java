@@ -4,6 +4,8 @@
  */
 package model.controllers;
 
+import java.sql.SQLException;
+
 import model.CoreObjectModel;
 import model.Hint;
 import model.entities.ProductContainer;
@@ -12,6 +14,7 @@ import model.entities.Size;
 import model.entities.StorageUnit;
 import model.entities.Unit;
 import model.managers.ProductGroupManager;
+import model.persistence.ConnectionManager;
 import model.persistence.DataObjects.DataObject;
 import model.persistence.DataObjects.ProductGroupDO;
 import model.persistence.DataObjects.StorageUnitDO;
@@ -93,7 +96,18 @@ public class ProductGroupController extends ModelController{
 			throw new IllegalArgumentException();
 		}
 		
-		COM.getProductGroupManager().addProductGroup(group);
+		ConnectionManager manager = ConnectionManager.getConnectionManager();
+		manager.startTransaction();
+		
+		try{
+			COM.getProductGroupManager().addProductGroup(group);
+			manager.setTransactionSuccessful();
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
+		
+		//Close the Database and close the connection
+		manager.endTransaction();
 		this.setChanged();
 		this.notifyObservers(new Hint(group, Hint.Value.Add));
 	}
@@ -135,10 +149,20 @@ public class ProductGroupController extends ModelController{
 			throw new IllegalArgumentException();
 		}
 		
-		oldUnit = COM.getProductGroupManager()
-					.getProductGroupByName(oldUnit.getName(), oldUnit.getContainer());
-		COM.getProductGroupManager().updateProductGroup(editedUnit, oldUnit);
+		ConnectionManager manager = ConnectionManager.getConnectionManager();
+		manager.startTransaction();
 		
+		try{
+			oldUnit = COM.getProductGroupManager()
+						.getProductGroupByName(oldUnit.getName(), oldUnit.getContainer());
+			COM.getProductGroupManager().updateProductGroup(editedUnit, oldUnit);
+			manager.setTransactionSuccessful();
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
+		
+		//Close the Database and close the connection
+		manager.endTransaction();
 		this.setChanged();
 		this.notifyObservers(new Hint(oldUnit, Hint.Value.Edit));
 	}
@@ -164,9 +188,21 @@ public class ProductGroupController extends ModelController{
 		if(!canDeleteProductGroup(group)){
 			throw new IllegalArgumentException("This ProductGroup is not empty");
 		}
-		ProductGroupManager pgManager = COM.getProductGroupManager();
-		pgManager.removeProductGroup(group);
-		//pgManager.removeProductGroups(unit);
+		
+		ConnectionManager manager = ConnectionManager.getConnectionManager();
+		manager.startTransaction();
+		
+		try{
+			ProductGroupManager pgManager = COM.getProductGroupManager();
+			pgManager.removeProductGroups(group);
+			manager.setTransactionSuccessful();
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
+		
+		//Close the Database and close the connection
+		manager.endTransaction();
+		
 		this.setChanged();
 		this.notifyObservers(new Hint(group, Hint.Value.Delete));
 		

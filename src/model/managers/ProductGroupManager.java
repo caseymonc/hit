@@ -4,6 +4,7 @@
  */
 package model.managers;
 
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -14,6 +15,7 @@ import model.entities.Product;
 import model.entities.ProductContainer;
 import model.entities.ProductGroup;
 import model.entities.StorageUnit;
+import model.persistence.PersistentFactory;
 import model.persistence.PersistentItem;
 import model.persistence.DataObjects.DataObject;
 import model.persistence.DataObjects.ProductGroupDO;
@@ -69,14 +71,18 @@ public class ProductGroupManager implements PersistentItem{
 	/**
 	 * Adds the group to the manager
 	 * @param group the group to be added
+	 * @throws SQLException 
 	 */
-	public void addProductGroup(ProductGroup group) {
+	public void addProductGroup(ProductGroup group) throws SQLException {
 		assert(canAddProductGroup(group));
 		
 		if(!canAddProductGroup(group)) {
 			throw new IllegalArgumentException();
 		}
 		
+		DataObject unitDO = group.getDataObject();
+		PersistentFactory.getFactory().getProductGroupDAO().create(unitDO);
+		group.setId(unitDO.getId());
 		doAddProductGroup(group);
 	}
 	
@@ -96,14 +102,17 @@ public class ProductGroupManager implements PersistentItem{
 	/**
 	 * Remove the group from the system
 	 * @param group The group to remove
+	 * @throws SQLException 
 	 */
-	public void removeProductGroup(ProductGroup group) {
+	public void removeProductGroup(ProductGroup group) throws SQLException {
 		assert(canRemoveProductGroup(group));
 		
 		if(!canRemoveProductGroup(group)) {
 			throw new IllegalArgumentException();
 		}
-
+		
+		PersistentFactory.getFactory().getProductGroupDAO().delete(group.getDataObject());
+		
 		ProductContainer container = group.getContainer();
 		container.removeProductGroup(group);
 		
@@ -139,8 +148,9 @@ public class ProductGroupManager implements PersistentItem{
 	/**
 	 * Remove all of the ProductGroups in unit
 	 * @param unit The unit to remove all of the ProductGroups from
+	 * @throws SQLException 
 	 */
-	public void removeProductGroups(StorageUnit unit){
+	public void removeProductGroups(StorageUnit unit) throws SQLException{
 		Set<ProductGroup> groups = productGroupsByStorageUnit.get(unit);
 		if(groups == null) {
 			return;
@@ -158,6 +168,14 @@ public class ProductGroupManager implements PersistentItem{
 		}
 	}
 
+	public void removeProductGroups(ProductGroup group) throws SQLException {
+		Set<ProductGroup> groups = new HashSet<ProductGroup>();
+		groups.addAll(group.getAllProductGroupRecursive());
+		for(ProductGroup g : groups) {
+			this.removeProductGroup(g);
+		}
+	}
+	
 	private void updateProductGroupByName(String newName, String oldName,
 			ProductContainer container) {
 		Map<String, ProductGroup> groups = productGroupsByProductContainer.get(container);
@@ -173,7 +191,7 @@ public class ProductGroupManager implements PersistentItem{
 		
 	}
 
-	public void updateProductGroup(ProductGroup group, ProductGroup oldGroup) {
+	public void updateProductGroup(ProductGroup group, ProductGroup oldGroup) throws SQLException {
 		updateProductGroupByName(group.getName(), oldGroup.getName() , oldGroup.getContainer());
 		oldGroup.getContainer().updateProductGroupByName(group.getName(), oldGroup.getName());
 		productGroups.remove(oldGroup);
@@ -182,6 +200,7 @@ public class ProductGroupManager implements PersistentItem{
 		productGroupsByStorageUnit.get(oldGroup.getStorageUnit()).add(oldGroup);
 		productGroups.add(oldGroup);
 		
+		PersistentFactory.getFactory().getProductGroupDAO().update(oldGroup.getDataObject());
 	}
 
 	@Override
@@ -215,4 +234,6 @@ public class ProductGroupManager implements PersistentItem{
 		groups.put(group.getName(), group);
 		productGroups.add(group);
 	}
+
+	
 }

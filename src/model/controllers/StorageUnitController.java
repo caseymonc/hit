@@ -12,6 +12,8 @@ import model.entities.*;
 import model.managers.ProductGroupManager;
 import model.managers.StorageUnitManager;
 import model.persistence.ConnectionManager;
+import model.persistence.PersistentFactory;
+import model.persistence.DataObjects.DataObject;
 import model.persistence.DataObjects.StorageUnitDO;
 
 /** Controller that communicates with the controller in the MVC structure
@@ -149,9 +151,23 @@ public class StorageUnitController extends ModelController{
 			throw new IllegalArgumentException();
 		}
 		
-		oldUnit = COM.getStorageUnitManager().getStorageUnitByName(oldUnit.getName());
-		COM.getStorageUnitManager().updateStorageUnitByName(unit.getName(), oldUnit.getName());
-		oldUnit.update(unit);
+		
+		ConnectionManager manager = ConnectionManager.getConnectionManager();
+		manager.startTransaction();
+		
+		try{
+			oldUnit = COM.getStorageUnitManager().getStorageUnitByName(oldUnit.getName());
+			COM.getStorageUnitManager().updateStorageUnitByName(unit.getName(), oldUnit.getName());
+			oldUnit.update(unit);
+			DataObject unitDO = oldUnit.getDataObject();
+			PersistentFactory.getFactory().getStorageUnitDAO().update(unitDO);
+			manager.setTransactionSuccessful();
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
+		
+		//Close the Database and close the connection
+		manager.endTransaction();
 		this.setChanged();
 		this.notifyObservers(new Hint(oldUnit, Hint.Value.Edit));
 	}
@@ -176,10 +192,22 @@ public class StorageUnitController extends ModelController{
 		if(!canDeleteStorageUnit(unit)){
 			throw new IllegalArgumentException("This StorageUnit is not empty");
 		}
-		StorageUnitManager suManager = COM.getStorageUnitManager();
-		ProductGroupManager pgManager = COM.getProductGroupManager();
-		suManager.removeStorageUnit(unit);
-		pgManager.removeProductGroups(unit);
+		
+		ConnectionManager manager = ConnectionManager.getConnectionManager();
+		manager.startTransaction();
+		
+		try{
+			StorageUnitManager suManager = COM.getStorageUnitManager();
+			ProductGroupManager pgManager = COM.getProductGroupManager();
+			suManager.removeStorageUnit(unit);
+			pgManager.removeProductGroups(unit);
+			manager.setTransactionSuccessful();
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
+		
+		//Close the Database and close the connection
+		manager.endTransaction();
 		this.setChanged();
 		this.notifyObservers(new Hint(unit, Hint.Value.Delete));
 	}

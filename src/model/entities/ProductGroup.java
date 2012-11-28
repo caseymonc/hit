@@ -1,6 +1,11 @@
 package model.entities;
 
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+
 import model.persistence.DataObjects.DataObject;
+import model.persistence.DataObjects.ProductGroupDO;
 import reports.visitors.ProductGroupVisitor;
 import reports.visitors.Visitor;
 
@@ -107,8 +112,23 @@ public class ProductGroup extends ProductContainer{
 
 	@Override
 	public DataObject getDataObject() {
-		// TODO Auto-generated method stub
-		return null;
+		ProductGroupDO group = new ProductGroupDO(getId(), getName(), 
+				this.getContainer().getId(), 
+				this.getThreeMonthSupply().getSize(), 
+				this.getThreeMonthSupply().getUnits().name());
+		return group;
+	}
+
+	public Set<ProductGroup> getAllProductGroupRecursive() {
+		Set<ProductGroup> groups = new HashSet<ProductGroup>();
+		groups.add(this);
+		if(getAllProductGroup() != null){
+			for(ProductGroup group : getAllProductGroup()){
+				groups.addAll(group.getAllProductGroupRecursive());
+			}
+		}
+		
+		return groups;
 	}
 
 	/*@Override

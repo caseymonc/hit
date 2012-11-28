@@ -10,6 +10,7 @@ import reports.visitors.ProductGroupVisitor;
 import reports.visitors.Visitor;
 import model.persistence.PersistentItem;
 import model.persistence.DataObjects.DataObject;
+import model.persistence.DataObjects.StorageUnitDO;
 
 /** StorageUnit
  * A Storage Unit is a room, closet, pantry, cupboard, 
@@ -108,8 +109,8 @@ private Map<Product, ProductContainer> productContainerByProduct;
 
 	@Override
 	public DataObject getDataObject() {
-		// TODO Auto-generated method stub
-		return null;
+		StorageUnitDO unit = new StorageUnitDO(getId(), getName());
+		return unit;
 	}
 
 	/*@Override

@@ -86,7 +86,9 @@ public class StorageUnitManager implements PersistentItem{
 		if(!canAddStorageUnit(unit))
 			throw new IllegalArgumentException();
 		
-		PersistentFactory.getFactory().getStorageUnitDAO().create(unit.getDataObject());
+		DataObject unitDO = unit.getDataObject();
+		PersistentFactory.getFactory().getStorageUnitDAO().create(unitDO);
+		unit.setId(unitDO.getId());
 		doAddStorageUnit(unit);
 	}
 	
@@ -109,13 +111,16 @@ public class StorageUnitManager implements PersistentItem{
 	/**
 	 * Remove the StorageUnit from the system
 	 * @param unit The StorageUnit to be removed
+	 * @throws SQLException 
 	 * @throws IllegalArgumentException if the StorageUnit cannot be removed
 	 */
-	public void removeStorageUnit(StorageUnit unit) {
+	public void removeStorageUnit(StorageUnit unit) throws SQLException {
 		assert(canRemoveStorageUnit(unit));
 		
 		if(!canRemoveStorageUnit(unit))
 			throw new IllegalArgumentException();
+		
+		PersistentFactory.getFactory().getStorageUnitDAO().delete(unit.getDataObject());
 		
 		storageUnits.remove(unit.getName());
 	}
