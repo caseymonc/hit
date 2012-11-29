@@ -4,11 +4,13 @@
  */
 package model.barcode;
 
+import java.io.Serializable;
+
 /**
  *
  * @author davidpatty
  */
-public abstract class BarCodeLookupHandler {
+public abstract class BarCodeLookupHandler implements Serializable{
 
 	protected BarCodeLookupHandler next;
 	private HandlerDescriptor descriptor;

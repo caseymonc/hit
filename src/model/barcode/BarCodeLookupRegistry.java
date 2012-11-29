@@ -27,6 +27,7 @@ public class BarCodeLookupRegistry implements Serializable{
 	private Map<String, BarCodeLookupHandler> handlers;
 	private Map<String, HandlerDescriptor> descriptors;
 	private BarCodeLookupHandler last;
+	private BarCodeLookupHandler first;
 	/**
 	 * Constructor
 	 */
@@ -34,6 +35,7 @@ public class BarCodeLookupRegistry implements Serializable{
 		handlers = new HashMap<String, BarCodeLookupHandler>();
 		descriptors = new HashMap<String, HandlerDescriptor>();
 		last = null;
+		first = null;
 		LoadConfig();
 	}
 	
@@ -45,6 +47,8 @@ public class BarCodeLookupRegistry implements Serializable{
 		BarCodeLookupHandler handler = CreateHandler(descriptor);
 
 		if (handler != null) {
+			if(first == null)
+				first = handler;
 			if(last != null)
 				last.setNext(handler);
 			last = handler;
@@ -77,7 +81,9 @@ public class BarCodeLookupRegistry implements Serializable{
 	public Map<String, BarCodeLookupHandler> GetAvailableHandlers() {
 		return handlers;
 	}
-	
+	public BarCodeLookupHandler GetFirstHandler() {
+		return first;
+	}
 	/**
 	 * Creates a new handler to be used
 	 * @return the created Handler?
@@ -166,4 +172,5 @@ public class BarCodeLookupRegistry implements Serializable{
 			}
 		}
 	}
+	
 }
