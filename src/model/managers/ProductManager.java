@@ -483,7 +483,8 @@ public class ProductManager implements PersistentItem {
 		return null;
 	}
 
-	public void doAddProductToContainer(Product p, ProductContainer c) throws IllegalArgumentException, SQLException {
+	public void doAddProductToContainer(Product p, ProductContainer c) 
+							throws IllegalArgumentException, SQLException {
 		assert (p != null);
 		assert (c != null);
 		assert (canAddProductToContainer(p, c));

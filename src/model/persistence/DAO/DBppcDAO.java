@@ -33,8 +33,10 @@ public class DBppcDAO extends ppcDAO {
 		}
 	}
 	
-	private static final String INSERT_RELATIONSHIPS = "INSERT INTO p_pc (product_id, container_id) VALUES (?, ?)";
-	private void insertProductRelationship(long product_id, long container_id) throws SQLException{
+	private static final String INSERT_RELATIONSHIPS = "INSERT INTO p_pc " +
+			"(product_id, container_id) VALUES (?, ?)";
+	private void insertProductRelationship(long product_id, long container_id) 
+															throws SQLException{
 		PreparedStatement stmt = null;
 		Statement keyStmt = null;
 		ResultSet keyRS = null;
@@ -64,7 +66,8 @@ public class DBppcDAO extends ppcDAO {
 		}
 	}
 	
-	private static final String QUERY_ITEM = "SELECT * FROM p_pc WHERE product_id=? AND container_id=?";
+	private static final String QUERY_ITEM = "SELECT * FROM p_pc WHERE product_id=? " +
+			"AND container_id=?";
 	private boolean hasProductRelationship(ItemDO item) throws SQLException {
 		PreparedStatement stmt = null;
 		Statement keyStmt = null;

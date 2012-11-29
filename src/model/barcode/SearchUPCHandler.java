@@ -37,7 +37,8 @@ public class SearchUPCHandler extends BarCodeLookupHandler {
 			URL url;
 			HttpURLConnection connection;
 			try {
-				url = new URL("http://www.searchupc.com/handlers/upcsearch.ashx?request_type=3&access_token=359D872A-2B27-4994-93A5-BEDEB613D1D5&upc=" + barcode);
+				url = new URL("http://www.searchupc.com/handlers/upcsearch.ashx?request_type=" +
+						"3&access_token=359D872A-2B27-4994-93A5-BEDEB613D1D5&upc=" + barcode);
 				connection = (HttpURLConnection)url.openConnection();
 				connection.setRequestMethod("GET");
 
