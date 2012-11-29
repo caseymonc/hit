@@ -189,7 +189,7 @@
 			<java classname="gui.main.GUI" fork="yes">
 				<sysproperty key="com.sun.management.jmxremote" value=""/>
 				<assertions>
-					<enable/>
+					<disable/>
 				</assertions>
 				<classpath>
 					<pathelement location="${dist}/lib/inventory-tracker.jar"/>
