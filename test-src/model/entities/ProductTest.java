@@ -8,10 +8,15 @@ import java.sql.SQLException;
 import java.util.Calendar;
 import model.managers.*;
 import java.util.Date;
+import model.persistence.ConnectionManager;
+import model.persistence.PersistentFactory;
+import model.persistence.SerializableConnectionManager;
+import model.persistence.SerializerFactory;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.BeforeClass;
 
 /**
  *
@@ -25,6 +30,12 @@ public class ProductTest {
     public ProductTest() {
     }
 
+	@BeforeClass
+	public static void setUpClass() {
+		PersistentFactory.setSelectedStore(new SerializerFactory());
+		ConnectionManager.setConnectionManager(new SerializableConnectionManager());
+	}
+	
     @Before
     public void setUp() {
         productManager = new ProductManager();
