@@ -12,14 +12,12 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLDecoder;
 import org.apache.commons.lang3.StringEscapeUtils;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
 /**
+ *
  * @author dmathis
  */
-public class UPCDatabaseHandler extends BarCodeLookupHandler {
+public class UPCDatabaseComHandler extends BarCodeLookupHandler {
 
 	@Override
 	public String lookup(String barcode) {
@@ -28,7 +26,7 @@ public class UPCDatabaseHandler extends BarCodeLookupHandler {
 		String productDesc = "";
 		
 		try {
-			url = new URL("http://upcdatabase.org/api/json/5f1b4be20dc157def65cc1e03ab7f0c7/" + barcode);
+			url = new URL("http://www.upcdatabase.com/item/" + barcode);
 			connection = (HttpURLConnection)url.openConnection();
 			connection.setRequestMethod("GET");
 			
@@ -36,19 +34,31 @@ public class UPCDatabaseHandler extends BarCodeLookupHandler {
 			
 			InputStream in = connection.getInputStream();
 			BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-			String response = reader.readLine();
+			String response;
+			String result = "";
+			while((response = reader.readLine()) != null)
+			{
+				if(response.contains("<tr><td>Description</td><td></td><td>")){
+					result = response;
+					break;
+				}
+			}
 			
-			JSONParser parser = new JSONParser();
-
-			JSONObject obj = (JSONObject)parser.parse(response);
-			productDesc = (String)obj.get("itemname");
+			if(!result.equals("")){
+				result = result.replace("<tr>", "");
+				result = result.replace("</tr>", "");
+				result = result.replace("<td>", "");
+				result = result.replace("</td>", "");
+				result = result.replace("Description", "");
+			}
 			
-			productDesc = URLDecoder.decode(productDesc, "UTF-8");
-			productDesc = StringEscapeUtils.unescapeHtml4(productDesc);			
+			productDesc = URLDecoder.decode(result, "UTF-8");
+			productDesc = StringEscapeUtils.unescapeHtml4(productDesc);
+			
+			System.out.println(productDesc);
+			
 		} catch (IOException ex) {
-			System.err.println("Unable to connect in UPCDatabaseHandler: " + ex);
-		} catch (ParseException ex) {
-			System.err.println("Unable to parse respone in UPCDatabaseHandler: " + ex);
+			System.err.println("Unable to connect in UPCDatabaseComHandler: " + ex);
 		}
 		
 		if(productDesc.equals("") && next != null){
