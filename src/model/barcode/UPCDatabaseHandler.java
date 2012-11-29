@@ -28,7 +28,8 @@ public class UPCDatabaseHandler extends BarCodeLookupHandler {
 		String productDesc = "";
 		
 		try {
-			url = new URL("http://upcdatabase.org/api/json/5f1b4be20dc157def65cc1e03ab7f0c7/" + barcode);
+			url = new URL("http://upcdatabase.org/api/json/5f1b4be20dc157def65cc1e03ab7f0c7/"
+					+ barcode);
 			connection = (HttpURLConnection)url.openConnection();
 			connection.setRequestMethod("GET");
 			
