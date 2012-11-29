@@ -128,9 +128,9 @@ public class BarCodeLookupRegistry implements Serializable{
 		} catch (IOException ex) {
 			HandlerDescriptor descriptor1 = new HandlerDescriptor("GoogleHandler","model.barcode.GoogleHandler","Google");
 			HandlerDescriptor descriptor2 = new HandlerDescriptor("SearchUPCHandler","model.barcode.SearchUPCHandler","Search Upc");
-			HandlerDescriptor descriptor4 = new HandlerDescriptor("UPCDatabase","model.barcode.UPCDatabase","UPC database");
+			HandlerDescriptor descriptor4 = new HandlerDescriptor("UPCDatabase","model.barcode.UPCDatabaseHandler","UPC database");
 			//screen scraper so it should go last...
-			HandlerDescriptor descriptor3 = new HandlerDescriptor("UPCDatabaseCom","model.barcode.UPCDatabaseCom","UPCDatabaseCom");
+			HandlerDescriptor descriptor3 = new HandlerDescriptor("UPCDatabaseCom","model.barcode.UPCDatabaseComHandler","UPCDatabaseCom");
 			RegisterHandler(descriptor1);
 			RegisterHandler(descriptor2);
 			RegisterHandler(descriptor3);

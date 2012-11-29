@@ -49,9 +49,11 @@ public class UPCDatabaseHandler extends BarCodeLookupHandler {
 			System.err.println("Unable to connect in UPCDatabaseHandler: " + ex);
 		} catch (ParseException ex) {
 			System.err.println("Unable to parse respone in UPCDatabaseHandler: " + ex);
+		} catch (NullPointerException ex) {
+			System.out.println("No product from UPCHandler");
 		}
-		
-		if(productDesc.equals("") && next != null){
+
+		if ((productDesc == null || productDesc.equals("")) && next != null){
 			productDesc = next.lookup(barcode);
 		}
 		

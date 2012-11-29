@@ -38,22 +38,20 @@ public class GoogleHandler extends BarCodeLookupHandler {
 	@Override
 	public String lookup(String barcode) {
 
-		if(barcode == null || barcode.equals(""))
+		String productDesc = "";
+		if(!(barcode == null || barcode.equals("")))
 		{
-			return "";			
-		}
-		String productDesc = null;
-		try 
-		// There are max lookup of 2500 requests per day //if(numberOfRequests < 2500) 
-		//Max lookups per day
-		{
-			
-			String result = "";
-			String finalVal = "";
-			result = getResultString(barcode, result);
+			try 
+			{
+				//Max lookups per day
+				// There are max lookup of 2500 requests per day //if(numberOfRequests < 2500) 
 
-			JSONParser parser = new JSONParser();
-			JSONObject obj = (JSONObject)parser.parse(result);
+				String result = "";
+				String finalVal = "";
+				result = getResultString(barcode, result);
+
+				JSONParser parser = new JSONParser();
+				JSONObject obj = (JSONObject)parser.parse(result);
 				if((Long)obj.get("totalItems") > 0)
 				{
 					JSONArray obj2 = (JSONArray)obj.get("items");
@@ -65,10 +63,11 @@ public class GoogleHandler extends BarCodeLookupHandler {
 						System.out.println("found in GoogleHandler" + productDesc);
 					}
 				}
-		} catch (IOException ex) {
-			System.err.println("Error with the Buffered Reader"+ex.getMessage());
-		} catch (ParseException ex) {
-			System.out.println("Could not find Item in Google handler");
+			} catch (IOException ex) {
+				System.err.println("Error with the Buffered Reader"+ex.getMessage());
+			} catch (ParseException ex) {
+				System.out.println("Could not find Item in Google handler");
+			}
 		}
 
 		if(productDesc.equals("") && next != null)
