@@ -78,6 +78,12 @@
 		</fileset>
 	</path>
 	
+	<path id="commons-classpath">
+		<fileset dir="${lib}">
+			<include name="commons-lang3-3.1.jar" />
+		</fileset>
+	</path>
+	
 	<path id="sqlite-classpath">
 		<fileset dir="${sqlite-home}">
 			<include name="sqlitejdbc-v056.jar" />
@@ -134,6 +140,7 @@
 			<classpath refid="itext-classpath" />
 			<classpath refid="sqlite-classpath" />
 			<classpath refid="json-classpath" />
+			<classpath refid="commons-classpath" />
 		</javac>
 	</target>
 	
@@ -279,6 +286,7 @@
 			<classpath refid="itext-classpath" />
 			<classpath refid="sqlite-classpath" />
 			<classpath refid="json-classpath" />
+			<classpath refid="commons-classpath" />
 
 			<sysproperty key="net.sourceforge.cobertura.datafile"
 				value="${coverage-data-file}"/>
