@@ -51,8 +51,8 @@ public class SearchUPCHandler extends BarCodeLookupHandler {
 
 				JSONObject obj = (JSONObject)parser.parse(response);
 				JSONObject obj2 = (JSONObject)obj.get("0");
-				String productName = (String)obj2.get("productname");
-
+				productDesc = (String)obj2.get("productname");
+				System.out.println("found in SearchUPC" + productDesc);
 			} catch (IOException ex) {
 				System.err.println("error with the Buffered Reader" + ex.getMessage());
 			} catch (ParseException ex) {

@@ -65,6 +65,7 @@ public class GoogleHandler extends BarCodeLookupHandler {
 						JSONObject obj3 = (JSONObject) obj2.get(0);
 						JSONObject finalObj = (JSONObject) obj3.get("product");
 						productDesc = (String) finalObj.get("title");
+						System.out.println("found in GoogleHandler" + productDesc);
 					}
 				}
 			} catch (IOException ex) {
