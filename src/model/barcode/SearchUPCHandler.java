@@ -59,7 +59,7 @@ public class SearchUPCHandler extends BarCodeLookupHandler {
 			} catch (ParseException ex) {
 				System.out.println("Could not find Item in SUPC handler");
 			} catch (NullPointerException ex) {
-				System.out.println("No Product exists in database");
+				System.out.println("No Product exists in SearchUPC");
 			}
 
 			if(productDesc.equals("") && next != null)

@@ -66,7 +66,7 @@ public class GoogleHandler extends BarCodeLookupHandler {
 			} catch (IOException ex) {
 				System.err.println("Error with the Buffered Reader"+ex.getMessage());
 			} catch (ParseException ex) {
-				System.out.println("Could not find Item in Google handler");
+				System.out.println("No product in GoogleHandler");
 			}
 		}
 
