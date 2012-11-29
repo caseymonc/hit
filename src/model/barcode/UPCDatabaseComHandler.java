@@ -55,8 +55,6 @@ public class UPCDatabaseComHandler extends BarCodeLookupHandler {
 			productDesc = URLDecoder.decode(result, "UTF-8");
 			productDesc = StringEscapeUtils.unescapeHtml4(productDesc);
 			
-			System.out.println(productDesc);
-			
 		} catch (IOException ex) {
 			System.err.println("Unable to connect in UPCDatabaseComHandler: " + ex);
 		}

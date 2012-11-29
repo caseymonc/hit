@@ -175,7 +175,6 @@ public class AddProductController extends Controller implements
 		{
 			description = handler.lookup(barCode);
 		}
-		System.out.println("desc"+description);
 		return description;
 	}
 }
