@@ -1,7 +1,6 @@
 # Ignore the following #
 ########################
 *.class
-*.jar
 /nbproject/private/
 /build/
 /nbdist/
