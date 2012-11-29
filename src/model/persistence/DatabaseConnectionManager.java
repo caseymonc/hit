@@ -112,7 +112,8 @@ public class DatabaseConnectionManager extends ConnectionManager {
 	+		"\"container_id\" INTEGER NOT NULL "
 	+	")";
 		
-	private static final String CREATE_PRODUCT_CONTS = "CREATE TABLE IF NOT EXISTS \"ProductContainers\" "
+	private static final String CREATE_PRODUCT_CONTS = "CREATE TABLE IF NOT EXISTS " +
+			"\"ProductContainers\" "
 	+"("
 	+		"\"container_id\" INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL  UNIQUE , "
 	+		"\"name\" TEXT NOT NULL , "

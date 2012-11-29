@@ -97,7 +97,8 @@ public class Item implements PersistentItem{
 		this.removed = false;
 	}
 	
-	public Item(BarCode barCode, Date entryDate, Date expirationDate, Date exitDate, Product product){
+	public Item(BarCode barCode, Date entryDate, Date expirationDate, 
+			Date exitDate, Product product){
 		this.barCode = barCode;
 		this.entryDate = entryDate;
 		this.expirationDate = expirationDate;

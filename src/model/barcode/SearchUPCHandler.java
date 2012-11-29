@@ -37,7 +37,8 @@ public class SearchUPCHandler extends BarCodeLookupHandler {
 			URL url;
 			HttpURLConnection connection;
 			try {
-				url = new URL("http://www.searchupc.com/handlers/upcsearch.ashx?request_type=3&access_token=359D872A-2B27-4994-93A5-BEDEB613D1D5&upc=" + barcode);
+				url = new URL("http://www.searchupc.com/handlers/upcsearch.ashx?request_type=" +
+						"3&access_token=359D872A-2B27-4994-93A5-BEDEB613D1D5&upc=" + barcode);
 				connection = (HttpURLConnection)url.openConnection();
 				connection.setRequestMethod("GET");
 
@@ -57,6 +58,8 @@ public class SearchUPCHandler extends BarCodeLookupHandler {
 				System.err.println("error with the Buffered Reader" + ex.getMessage());
 			} catch (ParseException ex) {
 				System.out.println("Could not find Item in SUPC handler");
+			} catch (NullPointerException ex) {
+				System.out.println("No Product exists in database");
 			}
 
 			if(productDesc.equals("") && next != null)

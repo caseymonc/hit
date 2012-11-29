@@ -4,7 +4,12 @@
  */
 package model.barcode;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
 import java.io.Serializable;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,6 +27,7 @@ public class BarCodeLookupRegistry implements Serializable{
 	private Map<String, BarCodeLookupHandler> handlers;
 	private Map<String, HandlerDescriptor> descriptors;
 	private BarCodeLookupHandler last;
+	private BarCodeLookupHandler first;
 	/**
 	 * Constructor
 	 */
@@ -29,6 +35,7 @@ public class BarCodeLookupRegistry implements Serializable{
 		handlers = new HashMap<String, BarCodeLookupHandler>();
 		descriptors = new HashMap<String, HandlerDescriptor>();
 		last = null;
+		first = null;
 		LoadConfig();
 	}
 	
@@ -40,6 +47,8 @@ public class BarCodeLookupRegistry implements Serializable{
 		BarCodeLookupHandler handler = CreateHandler(descriptor);
 
 		if (handler != null) {
+			if(first == null)
+				first = handler;
 			if(last != null)
 				last.setNext(handler);
 			last = handler;
@@ -72,9 +81,11 @@ public class BarCodeLookupRegistry implements Serializable{
 	public Map<String, BarCodeLookupHandler> GetAvailableHandlers() {
 		return handlers;
 	}
-	
+	public BarCodeLookupHandler GetFirstHandler() {
+		return first;
+	}
 	/**
-	 *	Creates a new handler to be used
+	 * Creates a new handler to be used
 	 * @return the created Handler?
 	 */
 	public BarCodeLookupHandler CreateHandler(HandlerDescriptor descriptor) {
@@ -103,21 +114,63 @@ public class BarCodeLookupRegistry implements Serializable{
 	 * loads the registered handlers from previous runs
 	 */
 	public void LoadConfig() {
-		//TODO: finish this method
-//		foreach (classname in the file) {
-//			HandlerDescriptor descriptor = new HandlerDescriptor(name,className,description);
-//			RegisterHandler(descriptor);
-//		}
+		BufferedReader br = null;
+		
+		try {
+			br = new BufferedReader(new FileReader("registry.txt"));
+			String line;
+			while ((line = br.readLine()) != null)
+			{
+				String[] l = line.split(",");
+				HandlerDescriptor descriptor = new HandlerDescriptor(l[0],l[1],l[2]);
+				RegisterHandler(descriptor);
+			}
+		} catch (IOException ex) {
+			HandlerDescriptor descriptor1 = new HandlerDescriptor("GoogleHandler","model.barcode.GoogleHandler","Google");
+			HandlerDescriptor descriptor2 = new HandlerDescriptor("SearchUPCHandler","model.barcode.SearchUPCHandler","Search Upc");
+			HandlerDescriptor descriptor3 = new HandlerDescriptor("Amazon","model.barcode.AmazonHandler","Amazon");
+			HandlerDescriptor descriptor4 = new HandlerDescriptor("UPCDatabase","model.barcode.UPCDatabase","UPC database");
+			RegisterHandler(descriptor1);
+			RegisterHandler(descriptor2);
+			RegisterHandler(descriptor3);
+			RegisterHandler(descriptor4);
+		} finally {
+			try {
+				if(br != null)
+					br.close();
+			} catch (IOException ex) {
+				System.out.println(BarCodeLookupRegistry.class.getName() + ex.getMessage());
+			}
+		}
 	}
 	
 	/**
 	 *  saves the registered handlers for persistence
 	 */
 	public void SaveConfig() {
-		//TODO: finish this method
-//		foreach (HandlerDescriptor descriptor : descriptors.values()) {
-//			store into a file	
-//			name,className,description
-//		}
+		BufferedWriter bw = null;
+		try {
+			String output = "";
+			for (HandlerDescriptor descriptor : descriptors.values()) {
+				
+				output+=descriptor.getName() +",";
+				output+=descriptor.getClassName()+",";
+				output+=descriptor.getDescription()+"\n";
+			}
+			System.out.println("output"+output);
+			
+			bw = new BufferedWriter(new FileWriter("registry.txt"));
+			bw.write(output);
+
+		} catch (IOException ex) {
+			System.out.println(BarCodeLookupRegistry.class.getName() + ex.getMessage());
+		} finally {
+			try {
+				bw.close();
+			} catch (IOException ex) {
+				System.out.println(BarCodeLookupRegistry.class.getName() + ex.getMessage());
+			}
+		}
 	}
+	
 }

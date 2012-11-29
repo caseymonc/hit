@@ -28,7 +28,8 @@ public class ProductDO extends DataObject {
 	public ProductDO(long id, String description, String creationDate, String barCode, 
 			int shelfLife, int threeMonthSupply, float sizeVal, 
 			String sizeUnit, long[] relationships) {
-		this(id, description, creationDate, barCode, shelfLife, threeMonthSupply, sizeVal, sizeUnit);
+		this(id, description, creationDate, barCode, shelfLife, threeMonthSupply, 
+				sizeVal, sizeUnit);
 		this.relationships = relationships;
 	}
 	

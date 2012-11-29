@@ -4,11 +4,13 @@
  */
 package model.barcode;
 
+import java.io.Serializable;
+
 /**
  *
  * @author davidpatty
  */
-public class HandlerDescriptor {
+public class HandlerDescriptor implements Serializable {
 	
 	/**
 	 *	

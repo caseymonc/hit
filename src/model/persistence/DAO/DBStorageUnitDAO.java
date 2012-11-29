@@ -12,9 +12,11 @@ import model.persistence.DataObjects.StorageUnitDO;
 
 public class DBStorageUnitDAO extends StorageUnitDAO {
 
-	private static final String READ_ALL = "SELECT container_id, name FROM ProductContainers WHERE parent_id IS NULL";
+	private static final String READ_ALL = "SELECT container_id, name FROM ProductContainers " +
+			"WHERE parent_id IS NULL";
 	private static final String INSERT = "INSERT INTO ProductContainers (name) values (?)";
-	private static final String UPDATE = "UPDATE ProductContainers SET name=? WHERE container_id=?;";
+	private static final String UPDATE = "UPDATE ProductContainers SET name=?" +
+			" WHERE container_id=?;";
 	private static final String DELETE = "DELETE FROM ProductContainers WHERE container_id=?";
 	
 	/**

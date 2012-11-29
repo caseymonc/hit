@@ -169,15 +169,14 @@ public class AddProductController extends Controller implements
 	private String lookupBarcode(String barCode) {
 		
 		BarCodeLookupRegistry registry = COM.getRegistry();
-		Map<String, BarCodeLookupHandler> handlers = registry.GetAvailableHandlers();
-
-		if (handlers != null && handlers.size() > 0) { 
-			//?? do we need this?
-			//foreach handler in line, or do the handlers have pointers to their next?
-			return "good";
-		} else {
-			return "";
+		BarCodeLookupHandler handler = registry.GetFirstHandler();
+		String description = "";
+		if (handler!=null)
+		{
+			description = handler.lookup(barCode);
 		}
+		System.out.println("desc"+description);
+		return description;
 	}
 }
 
