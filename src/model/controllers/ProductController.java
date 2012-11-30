@@ -116,11 +116,19 @@ public class ProductController extends ModelController {
 	 */
 	public void addProductToContainer(Product p, ProductContainer c)
 			throws IllegalArgumentException {
+		ConnectionManager manager = ConnectionManager.getConnectionManager();
+		manager.startTransaction();
 		try {
 			productManager.addProductToContainer(p, c);
+			manager.setTransactionSuccessful();
+		}catch(SQLException e){
+			e.printStackTrace();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+		//Close the Database and close the connection
+		manager.endTransaction();
 	}
 
 	/**

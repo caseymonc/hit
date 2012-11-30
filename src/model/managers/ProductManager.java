@@ -134,6 +134,7 @@ public class ProductManager implements PersistentItem {
 		}
 		
 		doAddProductToContainer(p, c);
+		PersistentFactory.getFactory().getPpcDAO().create(p.getDataObject());
 	}
 
 	/**

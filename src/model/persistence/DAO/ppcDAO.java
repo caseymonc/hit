@@ -8,4 +8,6 @@ import model.persistence.DataObjects.ProductDO;
 public abstract class ppcDAO extends DataAccessObject {
 
 	public abstract void delete(ProductDO product, long container_id) throws SQLException;
+	
+	public abstract void add(ProductDO product, long container_id) throws SQLException;
 }

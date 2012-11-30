@@ -32,4 +32,10 @@ public class SerializePpcDAO extends ppcDAO{
 		
 	}
 
+	@Override
+	public void add(ProductDO product, long container_id) throws SQLException {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

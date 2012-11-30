@@ -161,4 +161,9 @@ public class DBppcDAO extends ppcDAO {
 		}
 	}
 
+	@Override
+	public void add(ProductDO product, long container_id) throws SQLException {
+		this.insertProductRelationship(product.getId(), container_id);
+	}
+
 }
