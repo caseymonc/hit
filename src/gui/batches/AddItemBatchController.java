@@ -212,25 +212,28 @@ public class AddItemBatchController extends Controller implements
 	 * 
 	 */
 	private boolean isValidEntry() {
-			int count;
- 		
-			if(getView().getBarcode().equals("")) {
-				return false;
-			}
+		if(getView().getBarcode().equals("")) {
+			return false;
+		}
 
-			try{
-				count = Integer.parseInt(getView().getCount());
-			}
-			catch(Exception e){
-				count = 0;
-			}
+		int count;
 
-			if(count < 1){
-				return false;
-			}
+		try{
+			count = Integer.parseInt(getView().getCount());
+		}
+		catch(Exception e){
+			count = 0;
+		}
 
-			return true;
+		if(count < 1){
+			getView().displayErrorMessage("Invalid count");
+			setFieldsToDefault();
+			return false;
+		}
+
+		return true;
 	}
+
 	/**
 	 * This method is called when the "Use Barcode Scanner" setting in the
 	 * add item batch view is changed by the user.
@@ -262,7 +265,8 @@ public class AddItemBatchController extends Controller implements
 		 *  the AddItemBatchView are correct
 	 */
 	@Override
-	public void addItem() {
+	public void addItem() {	
+
 		//Get the Product
 		boolean temp = true;
 		final BarCode productBarcode = new BarCode(getView().getBarcode());
