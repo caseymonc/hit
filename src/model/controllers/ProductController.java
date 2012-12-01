@@ -166,12 +166,13 @@ public class ProductController extends ModelController {
 	private void moveProductToTargetContainer(Product product,
 			ProductContainer targetContainer, StorageUnit targetUnit,
 			ProductContainer currentContainerInTargetUnit) {
+		
+		Set<Item> itemSet = currentContainerInTargetUnit.getItemsByProduct(product);
+		addProductToContainer(product, targetContainer);
+		
 		ConnectionManager manager = ConnectionManager.getConnectionManager();
 		manager.startTransaction();
-		try{
-			Set<Item> itemSet = currentContainerInTargetUnit.getItemsByProduct(product);
-			addProductToContainer(product, targetContainer);
-			
+		try{			
 			if (itemSet != null) {
 				Item[] items = new Item[itemSet.size()];
 				int i = 0;

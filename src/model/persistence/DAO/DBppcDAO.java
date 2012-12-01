@@ -33,7 +33,7 @@ public class DBppcDAO extends ppcDAO {
 		}
 	}
 	
-	private static final String INSERT_RELATIONSHIPS = "INSERT INTO p_pc " +
+	private static String INSERT_RELATIONSHIPS = "INSERT INTO p_pc " +
 			"(product_id, container_id) VALUES (?, ?)";
 	private void insertProductRelationship(long product_id, long container_id) 
 															throws SQLException{
@@ -66,7 +66,7 @@ public class DBppcDAO extends ppcDAO {
 		}
 	}
 	
-	private static final String QUERY_ITEM = "SELECT * FROM p_pc WHERE product_id=? " +
+	private static String QUERY_ITEM = "SELECT * FROM p_pc WHERE product_id=? " +
 			"AND container_id=?";
 	private boolean hasProductRelationship(ItemDO item) throws SQLException {
 		PreparedStatement stmt = null;
@@ -95,7 +95,7 @@ public class DBppcDAO extends ppcDAO {
 		return hasProductRelationship;
 	}
 
-	private static final String DELETE_RELATIONSHIPS = "DELETE FROM p_pc WHERE product_id=?";
+	private static String DELETE_RELATIONSHIPS = "DELETE FROM p_pc WHERE product_id=?";
 	private void deleteProductRelationships(ProductDO product) throws SQLException{
 		PreparedStatement stmt = null;
 		Statement keyStmt = null;
@@ -134,7 +134,7 @@ public class DBppcDAO extends ppcDAO {
 		}
 	}
 
-	private static final String DELETE_RELATIONSHIP = "DELETE FROM p_pc " +
+	private static String DELETE_RELATIONSHIP = "DELETE FROM p_pc " +
 			"WHERE product_id=? AND container_id=?";
 	@Override
 	public void delete(ProductDO product, long container_id) throws SQLException {
