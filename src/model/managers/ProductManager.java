@@ -535,7 +535,9 @@ public class ProductManager implements PersistentItem {
 			throw new IllegalArgumentException("The product doesn't exist");
 		}
 		
-		currentItemsByProduct.get(p).add(i);
+		if(i.getExitDate() == null){
+			currentItemsByProduct.get(p).add(i);
+		}
 		allItemsByProduct.get(p).add(i);
 		// A product's creation date is equal to the earliest entry
 		// date of any its items.
