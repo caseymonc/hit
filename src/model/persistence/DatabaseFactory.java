@@ -1,6 +1,16 @@
 package model.persistence;
 
 import common.util.DateUtils;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
+import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -29,6 +39,7 @@ import model.persistence.DataObjects.*;
 public class DatabaseFactory extends PersistentFactory {
 
 	
+	private static final String PERSISTENT_STORE = "extras.txt";
 	private Map<Long, Product> productsById;
 	@Override
 	public CoreObjectModel getCoreObjectModel() {
@@ -57,7 +68,7 @@ public class DatabaseFactory extends PersistentFactory {
 		
 		//Close the Database and close the connection
 		connectionManager.endTransaction();
-		
+		loadExtras(COM);
 		return COM;
 	}
 
@@ -187,9 +198,42 @@ public class DatabaseFactory extends PersistentFactory {
 		}
 	}
 	
+	private void saveExtras(Serializable item) {
+		try {
+			OutputStream os = new FileOutputStream(PERSISTENT_STORE);
+			ObjectOutputStream oos = new ObjectOutputStream(os);
+			oos.writeObject(item);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+	
+	private void loadExtras(CoreObjectModel COM){
+		try {
+			InputStream is = new FileInputStream(PERSISTENT_STORE);
+			ObjectInputStream ois = new ObjectInputStream(is);
+			Object o = ois.readObject();
+			if(o instanceof Date){
+				COM.setSinceDate((Date)o);
+			}
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			//e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	@Override
 	public void save(PersistentItem item) {
 		if(item instanceof CoreObjectModel){
+			saveExtras(((CoreObjectModel)item).getSinceDate());
 			return;
 		}
 	}

@@ -385,13 +385,15 @@ public class AddItemBatchController extends Controller implements
 			int count;
 
 			try {
-				count = Integer.parseInt(addedProducts.get(index).getCount());
+				String cString = addedProducts.get(index).getCount();
+				cString = cString.substring(0, cString.indexOf(" "));
+				count = Integer.parseInt(cString);
 			}catch (Exception e) {
 				count = 0;
 			}
 			
 			count--;
-			addedProducts.get(index).setCount(Integer.toString(count));
+			addedProducts.get(index).setCount(Integer.toString(count) + " count");
 			
 			if(count == 0){
 				addedProducts.remove(index);
@@ -407,16 +409,18 @@ public class AddItemBatchController extends Controller implements
 			int count;
 
 			try {
-				count = Integer.parseInt(addedProducts.get(index).getCount());
+				String cString = addedProducts.get(index).getCount();
+				cString = cString.substring(0, cString.indexOf(" "));
+				count = Integer.parseInt(cString);
 			}
 			catch (Exception e) {
 				count = 0;
 			}
 
 			count++;
-			addedProducts.get(index).setCount(Integer.toString(count));
+			addedProducts.get(index).setCount(Integer.toString(count) + " count");
 		} else {
-			prodData.setCount("1");
+			prodData.setCount("1 count");
 			addedProducts.add(prodData);
 		}
 	}
@@ -426,14 +430,16 @@ public class AddItemBatchController extends Controller implements
 		int count;
 
 		try {
-			count = Integer.parseInt(addedProducts.get(index).getCount());
+			String cString = addedProducts.get(index).getCount();
+			cString = cString.substring(0, cString.indexOf(" "));
+			count = Integer.parseInt(cString);
 		}
 		catch (Exception e) {
 			count = 0;
 		}
 
 		count--;
-		addedProducts.get(index).setCount(Integer.toString(count));
+		addedProducts.get(index).setCount(Integer.toString(count) + " count");
 		
 		if(count == 0){
 			addedProducts.remove(index);

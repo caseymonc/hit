@@ -62,10 +62,10 @@ public class ProductData extends Tagable {
 
 		public ProductData(Product product) {
 				_barcode = product.getBarCode().toString();
-				_count = "1";
+				_count = "1 count";
 				_description = product.getDescription();
-				_shelfLife = Integer.toString(product.getShelfLife());
-				_supply = Integer.toString(product.getThreeMonthSupply());
+				_shelfLife = Integer.toString(product.getShelfLife()) + " months";
+				_supply = Integer.toString(product.getThreeMonthSupply()) + " count";
 				_size = product.getSize().toString();
 				this.setTag(product);
 		}

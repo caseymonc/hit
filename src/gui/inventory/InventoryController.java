@@ -200,6 +200,8 @@ public class InventoryController extends Controller implements IInventoryControl
 	public void deleteStorageUnit() {
 		StorageUnit group = (StorageUnit) getView().getSelectedProductContainer().getTag();
 		suController.deleteStorageUnit(group);
+		this.getView().selectProductContainer(null);
+		productContainerSelectionChanged();
 	}
 
 	/**
@@ -249,6 +251,10 @@ public class InventoryController extends Controller implements IInventoryControl
 	 */
 	@Override
 	public void productContainerSelectionChanged() {
+		if(getView().getSelectedProductContainer() == null){
+			getView().setProducts(new ProductData[0]);
+			return;
+		}
 		ProductContainer selectedContainer =
 						(ProductContainer)getView().getSelectedProductContainer().getTag();
 		List<ProductData> productDataList = new ArrayList<ProductData>();
@@ -300,7 +306,7 @@ public class InventoryController extends Controller implements IInventoryControl
 				getView().setContextSupply(SizeFormatter.format(tmSupply));
 			}
 		} else {
-						getView().setContextUnit("All");
+			getView().setContextUnit("All");
 		}
 	}
 

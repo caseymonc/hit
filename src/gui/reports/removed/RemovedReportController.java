@@ -105,9 +105,12 @@ public class RemovedReportController extends Controller implements
 	
 	private Date getDate() {
 		if(getView().getSinceDate()){
+			if(!CoreObjectModel.getInstance().hasSinceDate()){
+				CoreObjectModel.getInstance().setSinceDate(getView().getSinceDateValue());
+			}
 			return getView().getSinceDateValue();
 		}else if(getView().getSinceLast()){
-			return CoreObjectModel.getInstance().getSinceDate();
+			return CoreObjectModel.getInstance().useSinceDate();
 		}
 		return null;
 	}

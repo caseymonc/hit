@@ -119,7 +119,11 @@ public class CoreObjectModel implements PersistentItem{
 		lastBarCode++;
 	}
 	
-	public Date getSinceDate() {
+	public Date getSinceDate(){
+		return sinceDate;
+	}
+	
+	public Date useSinceDate() {
 		Date toReturn;
 		if(sinceDate == null){
 			sinceDate = new Date();
@@ -148,5 +152,9 @@ public class CoreObjectModel implements PersistentItem{
 
 	public void setLastBarCodeInt(int lastBarCode) {
 		this.lastBarCode = lastBarCode;
+	}
+
+	public void setSinceDate(Date sinceDateValue) {
+		sinceDate = sinceDateValue;
 	}
 }
