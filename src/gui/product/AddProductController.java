@@ -1,6 +1,9 @@
 package gui.product;
 
 import gui.common.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.Timer;
 import model.CoreObjectModel;
 import model.controllers.ProductController;
 import model.entities.BarCode;
@@ -8,7 +11,6 @@ import model.entities.Product;
 import model.entities.Size;
 import model.entities.Unit;
 import model.barcode.*;
-import java.util.Map;
 
 /**
  * Controller class for the add item view.
@@ -17,7 +19,7 @@ public class AddProductController extends Controller implements
 		IAddProductController {
 		
 	private String barcode;
-	
+	private Timer timer;
 	/**
 	 * The facade interface to Model.  SIngleton class
 	 */
@@ -43,17 +45,33 @@ public class AddProductController extends Controller implements
 		super(view);
 		COM = CoreObjectModel.getInstance();
 		//talks to barcode lookup Handler here
-		String description = lookupBarcode(barcode);
-		getView().setDescription(description);
-		
 		this.barcode = barcode;
 		
 		productController = COM.getProductController();
 		unitIsCount = false;
-				
+		
 		construct();
+		getView().enableDescription(false);
+		getView().enableOK(false);
+		triggerLookup();
 	}
 
+	public void triggerLookup() {
+		getView().setDescription("looking up barcode...");
+
+		timer = new Timer(100, new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent evt) {
+				timer.stop();
+				String description = lookupBarcode(barcode);
+				getView().setDescription(description);
+				getView().enableDescription(true);
+				getView().enableOK(true);
+			}
+		});
+		timer.setInitialDelay(200);
+		timer.start();
+	}
 	//
 	// Controller overrides
 	//
@@ -167,7 +185,6 @@ public class AddProductController extends Controller implements
 	}
 	
 	private String lookupBarcode(String barCode) {
-		
 		BarCodeLookupRegistry registry = COM.getRegistry();
 		BarCodeLookupHandler handler = registry.GetFirstHandler();
 		String description = "";
